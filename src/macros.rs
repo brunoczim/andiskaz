@@ -1,5 +1,18 @@
-/// Creates a `TermString` from string literal. Panicks if the string is
-/// invalid.
+/// Creates a [`TermString`] from string literal. Currently, invalid string get
+/// the unicode replacement character in their invalid characters. However,
+/// implementation may change to panic in those cases.
+///
+/// # Example
+/// ```
+/// use andiskaz::tstring;
+/// use andiskaz::string::TermString;
+///
+/// // A string with many grapheme clusters and unicode special codepoints.
+/// let this_winter = tstring!["ðɪs wɪ̃ɾ̃ɚ"];
+///
+/// assert_eq!(this_winter, TermString::new("ðɪs wɪ̃ɾ̃ɚ").unwrap());
+/// assert_eq!(this_winter.as_str(), "ðɪs wɪ̃ɾ̃ɚ");
+/// ```
 #[macro_export]
 macro_rules! tstring {
     [] => {
@@ -11,8 +24,24 @@ macro_rules! tstring {
     };
 }
 
-/// Creates a `TermString` from various other `TermString`-like fragments by
-/// concatenation.
+/// Concatenates various [`TermString`] or [`TermString`]-like into a new
+/// [`TermString`].
+///
+/// # Example
+/// ```
+/// use andiskaz::{tstring, tstring_concat};
+/// use andiskaz::string::{TermGrapheme, TermString};
+///
+/// let tomatoes = tstring!["Totatoes"];
+/// let space = TermGrapheme::space();
+/// let are = tstring!["are"];
+/// let good = tstring!["good"];
+///
+/// let together: TermString = tstring_concat![tomatoes, space, are, space, good];
+///
+/// assert_eq!(together, TermString::new("Totatoes are good").unwrap());
+/// assert_eq!(together.as_str(), "Totatoes are good");
+/// ```
 #[macro_export]
 macro_rules! tstring_concat {
     [$($elem:expr,)*]  => {{
