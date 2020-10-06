@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Style","Alignment, margin and other settings for texts."]]});

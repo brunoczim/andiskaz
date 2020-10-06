@@ -1,0 +1,4 @@
+(function() {var implementors = {};
+implementors["andiskaz"] = [{"text":"impl&lt;'buf&gt; TryFrom&lt;&amp;'buf str&gt; for TermString","synthetic":false,"types":[]},{"text":"impl TryFrom&lt;String&gt; for TermString","synthetic":false,"types":[]},{"text":"impl&lt;'buf&gt; TryFrom&lt;&amp;'buf str&gt; for TermGrapheme","synthetic":false,"types":[]},{"text":"impl TryFrom&lt;String&gt; for TermGrapheme","synthetic":false,"types":[]},{"text":"impl TryFrom&lt;u8&gt; for BasicColor","synthetic":false,"types":[]}];
+implementors["crossterm"] = [{"text":"impl&lt;'_&gt; TryFrom&lt;&amp;'_ str&gt; for Color","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

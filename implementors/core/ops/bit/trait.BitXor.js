@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["crossterm"] = [{"text":"impl BitXor&lt;KeyModifiers&gt; for KeyModifiers","synthetic":false,"types":[]},{"text":"impl BitXor&lt;Attribute&gt; for Attributes","synthetic":false,"types":[]},{"text":"impl BitXor&lt;Attributes&gt; for Attributes","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

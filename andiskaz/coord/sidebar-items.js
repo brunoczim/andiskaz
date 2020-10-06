@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Coord2","A coordinate made of two components `x` and `y`. The `x` axis corresponds to its expected meaning."]],"type":[["Coord","A single scalar coordinate used in the terminal."]]});
