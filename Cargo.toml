@@ -10,6 +10,7 @@ edition = "2018"
 lastshot = { git = "https://github.com/brunoczim/lastshot", branch = "main" }
 unicode-segmentation = "^1.6.0"
 lazy_static = "^1.4"
+crossterm = "^0.18"
 
 [dependencies.tokio]
 version = "^0.2.22"
