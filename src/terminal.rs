@@ -59,12 +59,12 @@ impl Builder {
         }
     }
 
-    /// Builderures the minimum screen size for the application.
+    /// Builds the minimum screen size for the application.
     pub fn min_screen(self, min_screen: Coord2) -> Self {
         Self { min_screen, ..self }
     }
 
-    /// Builderures the rate that the screen is updated.
+    /// Builds the rate that the screen is updated.
     pub fn frame_time(self, frame_time: Duration) -> Self {
         Self { frame_time, ..self }
     }
