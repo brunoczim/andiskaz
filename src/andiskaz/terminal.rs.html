@@ -393,7 +393,7 @@
         <span class="self">Self</span> { <span class="ident">frame_time</span>, ..<span class="self">self</span> }
     }
 
-    <span class="doccomment">/// Starts the application and gives it a terminal to the terminal. When the</span>
+    <span class="doccomment">/// Starts the application and gives it a handle to the terminal. When the</span>
     <span class="doccomment">/// given start function finishes, the application&#39;s execution stops as</span>
     <span class="doccomment">/// well.</span>
     <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">start</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">TermError</span><span class="op">&gt;</span>
@@ -467,7 +467,7 @@
     <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Auxiliary task should not finish before main task unless it failed&quot;</span>)
 }
 
-<span class="doccomment">/// A terminal to the terminal. It uses atomic reference counting.</span>
+<span class="doccomment">/// A handle to the terminal. It uses atomic reference counting.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Terminal</span> {
     <span class="ident">shared</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Shared</span><span class="op">&gt;</span>,
