@@ -7,6 +7,8 @@ mod basic;
 mod eight_bit;
 mod rgb;
 
+pub mod transform;
+
 pub use self::{
     basic::BasicColor,
     brightness::{ApproxBrightness, Brightness},
