@@ -69,7 +69,7 @@ impl Builder {
         Self { frame_time, ..self }
     }
 
-    /// Starts the application and gives it a terminal to the terminal. When the
+    /// Starts the application and gives it a handle to the terminal. When the
     /// given start function finishes, the application's execution stops as
     /// well.
     pub async fn run<F, A, T>(self, start: F) -> Result<T, TermError>
@@ -143,7 +143,7 @@ fn aux_must_fail() -> ! {
     panic!("Auxiliary task should not finish before main task unless it failed")
 }
 
-/// A terminal to the terminal. It uses atomic reference counting.
+/// A handle to the terminal. It uses atomic reference counting.
 #[derive(Debug, Clone)]
 pub struct Terminal {
     shared: Arc<Shared>,
