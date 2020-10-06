@@ -1,6 +1,7 @@
-/// Creates a [`TermString`] from string literal. Currently, invalid string get
-/// the unicode replacement character in their invalid characters. However,
-/// implementation may change to panic in those cases.
+/// Creates a [`TermString`](crate::string::TermString) from string literal.
+/// Currently, invalid string get the unicode replacement character in their
+/// invalid characters. However, implementation may change to panic in those
+/// cases.
 ///
 /// # Example
 /// ```
@@ -24,9 +25,10 @@ macro_rules! tstring {
     };
 }
 
-/// Concatenates various [`TermString`] or [`TermString`]-like into a new
-/// [`TermString`]. It takes everything by reference, and it is possible to mix
-/// types.
+/// Concatenates various [`TermString`](crate::string::TermString) or
+/// [`TermString`](crate::string::TermString)-like into a new
+/// [`TermString`](crate::string::TermString). It takes everything by reference,
+/// and it is possible to mix types.
 ///
 /// # Example
 /// ```

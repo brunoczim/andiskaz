@@ -31,7 +31,7 @@ pub struct RgbColor {
 
 impl RgbColor {
     /// Translates this color to a crossterm color.
-    pub(crate) fn translate(self) -> CrosstermColor {
+    pub(crate) fn to_crossterm(self) -> CrosstermColor {
         CrosstermColor::Rgb { r: self.red, g: self.green, b: self.blue }
     }
 }

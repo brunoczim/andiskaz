@@ -62,11 +62,11 @@ pub enum Color {
 
 impl Color {
     /// Translates this color to a crossterm color.
-    pub(crate) fn translate(self) -> CrosstermColor {
+    pub(crate) fn to_crossterm(self) -> CrosstermColor {
         match self {
-            Color::Basic(color) => color.translate(),
-            Color::EightBit(color) => color.translate(),
-            Color::Rgb(color) => color.translate(),
+            Color::Basic(color) => color.to_crossterm(),
+            Color::EightBit(color) => color.to_crossterm(),
+            Color::Rgb(color) => color.to_crossterm(),
         }
     }
 }

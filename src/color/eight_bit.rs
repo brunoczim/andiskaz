@@ -326,7 +326,7 @@ impl Color8 {
     }
 
     /// Translates this color to a crossterm color.
-    pub(crate) fn translate(self) -> CrosstermColor {
+    pub(crate) fn to_crossterm(self) -> CrosstermColor {
         CrosstermColor::AnsiValue(self.code())
     }
 }

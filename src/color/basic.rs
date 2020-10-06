@@ -42,7 +42,7 @@ pub enum BasicColor {
 
 impl BasicColor {
     /// Translates this color to a crossterm color.
-    pub(crate) fn translate(self) -> CrosstermColor {
+    pub(crate) fn to_crossterm(self) -> CrosstermColor {
         match self {
             BasicColor::Black => CrosstermColor::Black,
             BasicColor::DarkRed => CrosstermColor::DarkRed,
