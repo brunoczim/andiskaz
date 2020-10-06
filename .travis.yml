@@ -6,12 +6,14 @@ rust:
 os:
   - windows
   - linux
-
 env:
   - RUST_BACKTRACE=1
 
 jobs:
   allow_failures:
+    - rust: nightly
+  exclude:
+    - os: windows
     - rust: nightly
 
 script:
