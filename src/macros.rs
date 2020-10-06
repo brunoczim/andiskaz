@@ -25,7 +25,8 @@ macro_rules! tstring {
 }
 
 /// Concatenates various [`TermString`] or [`TermString`]-like into a new
-/// [`TermString`].
+/// [`TermString`]. It takes everything by reference, and it is possible to mix
+/// types.
 ///
 /// # Example
 /// ```
