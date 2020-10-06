@@ -4,8 +4,8 @@ rust:
   - nightly
 
 os:
-  - linux
   - windows
+  - linux
 
 env:
   - RUST_BACKTRACE=1
