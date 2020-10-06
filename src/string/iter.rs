@@ -4,15 +4,15 @@ use unicode_segmentation::{GraphemeIndices, UnicodeSegmentation};
 
 /// Iterator over the `TermString`'s grapheme cluster ([`TermGrapheme`])s
 /// indices and over the grapheme cluster ([`TermGrapheme`])s themselves.
-pub struct TermStringIndices<'term_string> {
+pub struct TermStringIndices<'tstring> {
     base: TermString,
     prev_index: usize,
     next_index: usize,
-    indices: GraphemeIndices<'term_string>,
+    indices: GraphemeIndices<'tstring>,
 }
 
-impl<'term_string> TermStringIndices<'term_string> {
-    pub(crate) fn new(string: &'term_string TermString) -> Self {
+impl<'tstring> TermStringIndices<'tstring> {
+    pub(crate) fn new(string: &'tstring TermString) -> Self {
         let mut indices = string.as_str().grapheme_indices(true);
         let prev_index =
             indices.next().map_or(string.len(), |(index, _)| index);
@@ -22,7 +22,7 @@ impl<'term_string> TermStringIndices<'term_string> {
     }
 }
 
-impl<'term_string> Iterator for TermStringIndices<'term_string> {
+impl<'tstring> Iterator for TermStringIndices<'tstring> {
     type Item = (usize, TermGrapheme);
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -34,14 +34,14 @@ impl<'term_string> Iterator for TermStringIndices<'term_string> {
             let start = self.base.range.start + self.prev_index;
             let end = self.base.range.start + index;
             let alloc = self.base.alloc.clone();
-            let term_string = TermString { alloc, range: start .. end };
+            let tstring = TermString { alloc, range: start .. end };
             self.prev_index = index;
-            Some((term_string.range.start, TermGrapheme { term_string }))
+            Some((tstring.range.start, TermGrapheme { tstring }))
         }
     }
 }
 
-impl<'term_string> DoubleEndedIterator for TermStringIndices<'term_string> {
+impl<'tstring> DoubleEndedIterator for TermStringIndices<'tstring> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.prev_index == self.next_index {
             None
@@ -53,14 +53,14 @@ impl<'term_string> DoubleEndedIterator for TermStringIndices<'term_string> {
             let start = self.base.range.start + index;
             let end = self.base.range.start + self.next_index;
             let alloc = self.base.alloc.clone();
-            let term_string = TermString { alloc, range: start .. end };
+            let tstring = TermString { alloc, range: start .. end };
             self.next_index = index;
-            Some((term_string.range.start, TermGrapheme { term_string }))
+            Some((tstring.range.start, TermGrapheme { tstring }))
         }
     }
 }
 
-impl<'term_string> fmt::Debug for TermStringIndices<'term_string> {
+impl<'tstring> fmt::Debug for TermStringIndices<'tstring> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         fmt.debug_struct("TermStringIndices")
             .field("base", &self.base)
@@ -73,11 +73,11 @@ impl<'term_string> fmt::Debug for TermStringIndices<'term_string> {
 /// Iterator only over the grapheme cluster ([`TermGrapheme`])s of a
 /// `TermString`.
 #[derive(Debug)]
-pub struct TermStringIter<'term_string> {
-    inner: TermStringIndices<'term_string>,
+pub struct TermStringIter<'tstring> {
+    inner: TermStringIndices<'tstring>,
 }
 
-impl<'term_string> Iterator for TermStringIter<'term_string> {
+impl<'tstring> Iterator for TermStringIter<'tstring> {
     type Item = TermGrapheme;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -85,15 +85,15 @@ impl<'term_string> Iterator for TermStringIter<'term_string> {
     }
 }
 
-impl<'term_string> DoubleEndedIterator for TermStringIter<'term_string> {
+impl<'tstring> DoubleEndedIterator for TermStringIter<'tstring> {
     fn next_back(&mut self) -> Option<Self::Item> {
         self.inner.next_back().map(|(_, grapheme)| grapheme)
     }
 }
 
-impl<'term_string> IntoIterator for &'term_string TermString {
+impl<'tstring> IntoIterator for &'tstring TermString {
     type Item = TermGrapheme;
-    type IntoIter = TermStringIter<'term_string>;
+    type IntoIter = TermStringIter<'tstring>;
 
     fn into_iter(self) -> Self::IntoIter {
         TermStringIter { inner: self.indices() }

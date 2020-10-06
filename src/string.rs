@@ -1,5 +1,5 @@
 //! This module provides a string type used to be printed to the terminal. It is
-//! called "[`TermString`]". You can use the macro [`term_string!`] to build a
+//! called "[`TermString`]". You can use the macro [`tstring!`] to build a
 //! [`TermString`] as a shortcut for [`TermString::new_lossy`].
 //!
 //! This module also provides a type [`TermGrapheme`], which corresponds to what
@@ -11,7 +11,7 @@
 //! single grapheme cluster.
 //!
 //! To concat [`TermString`]s and [`TermGrapheme`]s together you can use the
-//! macro [`term_string_concat!`].
+//! macro [`tstring_concat!`].
 
 mod index;
 mod iter;
@@ -306,7 +306,7 @@ impl TryFrom<String> for TermString {
 /// A grapheme cluster. Represents what a human visually sees as a character.
 #[derive(Debug, Clone, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct TermGrapheme {
-    term_string: TermString,
+    tstring: TermString,
 }
 
 impl Default for TermGrapheme {
@@ -317,13 +317,13 @@ impl Default for TermGrapheme {
         }
         let alloc = DEFAULT_GRAPHM.clone();
         let range = 0 .. alloc.len();
-        Self { term_string: TermString { alloc, range } }
+        Self { tstring: TermString { alloc, range } }
     }
 }
 
 impl fmt::Display for TermGrapheme {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        write!(fmt, "{}", self.term_string)
+        write!(fmt, "{}", self.tstring)
     }
 }
 
@@ -376,8 +376,8 @@ impl TermGrapheme {
         new_string.replace_range(0 .. 1, "");
 
         let range = 0 .. new_string.len();
-        let term_string = TermString { alloc: new_string.into(), range };
-        Ok(Self { term_string })
+        let tstring = TermString { alloc: new_string.into(), range };
+        Ok(Self { tstring })
     }
 
     /// Creates a new [`TermGrapheme`], but replaces error with the replacement
@@ -400,8 +400,8 @@ impl TermGrapheme {
         new_string.replace_range(0 .. 1, replacement);
 
         let range = 0 .. new_string.len();
-        let term_string = TermString { alloc: new_string.into(), range };
-        Self { term_string }
+        let tstring = TermString { alloc: new_string.into(), range };
+        Self { tstring }
     }
 
     /// Returns the grapheme for the space " ". This is the default grapheme,
@@ -412,17 +412,17 @@ impl TermGrapheme {
 
     /// Converts into a reference of a plain string.
     pub fn as_str(&self) -> &str {
-        &self.term_string
+        &self.tstring
     }
 
     /// Returns the underlying string buffer of this [`TermGrapheme`].
-    pub fn as_term_string(&self) -> &TermString {
-        &self.term_string
+    pub fn as_tstring(&self) -> &TermString {
+        &self.tstring
     }
 
     /// Converts into the underlying string buffer of this [`TermGrapheme`].
-    pub fn into_term_string(self) -> TermString {
-        self.term_string
+    pub fn into_tstring(self) -> TermString {
+        self.tstring
     }
 }
 
@@ -442,7 +442,7 @@ impl TryFrom<String> for TermGrapheme {
     }
 }
 
-/// Either a string or a grapheme reference. Used by [`term_string_concat!`].
+/// Either a string or a grapheme reference. Used by [`tstring_concat!`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum StringOrGraphm<'buf> {
     /// A terminal grapheme cluster.
@@ -462,9 +462,9 @@ impl<'buf> StringOrGraphm<'buf> {
 
     /// If it this is a [`TermString`], return it; if this is a
     /// [`TermGrapheme`], get the inherent [`TermString`].
-    pub fn as_term_string(self) -> &'buf TermString {
+    pub fn as_tstring(self) -> &'buf TermString {
         match self {
-            StringOrGraphm::Graphm(grapheme) => grapheme.as_term_string(),
+            StringOrGraphm::Graphm(grapheme) => grapheme.as_tstring(),
             StringOrGraphm::String(gstr) => gstr,
         }
     }
@@ -478,7 +478,7 @@ impl<'buf> AsRef<str> for StringOrGraphm<'buf> {
 
 impl<'buf> AsRef<TermString> for StringOrGraphm<'buf> {
     fn as_ref(&self) -> &TermString {
-        self.as_term_string()
+        self.as_tstring()
     }
 }
 
@@ -486,7 +486,7 @@ impl<'buf> Deref for StringOrGraphm<'buf> {
     type Target = str;
 
     fn deref(&self) -> &Self::Target {
-        &self.as_term_string()
+        &self.as_tstring()
     }
 }
 
@@ -497,7 +497,7 @@ impl<'buf> From<&'buf TermGrapheme> for StringOrGraphm<'buf> {
 }
 
 impl<'buf> From<&'buf TermString> for StringOrGraphm<'buf> {
-    fn from(term_string: &'buf TermString) -> StringOrGraphm<'buf> {
-        StringOrGraphm::String(term_string)
+    fn from(tstring: &'buf TermString) -> StringOrGraphm<'buf> {
+        StringOrGraphm::String(tstring)
     }
 }

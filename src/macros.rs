@@ -1,7 +1,7 @@
 /// Creates a `TermString` from string literal. Panicks if the string is
 /// invalid.
 #[macro_export]
-macro_rules! term_string {
+macro_rules! tstring {
     [] => {
         $crate::string::TermString::default()
     };
@@ -14,7 +14,7 @@ macro_rules! term_string {
 /// Creates a `TermString` from various other `TermString`-like fragments by
 /// concatenation.
 #[macro_export]
-macro_rules! term_string_concat {
+macro_rules! tstring_concat {
     [$($elem:expr,)*]  => {{
         (&[$($crate::string::StringOrGraphm::from(&$elem),)*])
             .iter()
@@ -22,6 +22,6 @@ macro_rules! term_string_concat {
             .collect::<$crate::string::TermString>()
     }};
     [$($elem:expr),+]  => {
-        term_string_concat![$($elem,)*]
+        tstring_concat![$($elem,)*]
     };
 }

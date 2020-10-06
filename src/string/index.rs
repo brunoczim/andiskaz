@@ -23,32 +23,32 @@ pub trait Index {
     type Output;
 
     /// Tries to index the `TermString` and returns `None` if out of bounds.
-    fn get(self, term_string: &TermString) -> Option<Self::Output>;
+    fn get(self, tstring: &TermString) -> Option<Self::Output>;
     /// Indexes the `TermString` or panics if out of bounds.
     ///
     /// # Panics
     /// Panics if out of bounds.
-    fn index(self, term_string: &TermString) -> Self::Output;
+    fn index(self, tstring: &TermString) -> Self::Output;
 }
 
 impl Index for usize {
     type Output = TermGrapheme;
 
-    fn get(self, term_string: &TermString) -> Option<Self::Output> {
-        term_string.into_iter().nth(self)
+    fn get(self, tstring: &TermString) -> Option<Self::Output> {
+        tstring.into_iter().nth(self)
     }
 
-    fn index(self, term_string: &TermString) -> Self::Output {
-        self.get(term_string)
-            .unwrap_or_else(|| index_panic(term_string.count_graphemes(), self))
+    fn index(self, tstring: &TermString) -> Self::Output {
+        self.get(tstring)
+            .unwrap_or_else(|| index_panic(tstring.count_graphemes(), self))
     }
 }
 
 impl Index for Range<usize> {
     type Output = TermString;
 
-    fn get(self, term_string: &TermString) -> Option<Self::Output> {
-        let mut iter = term_string.indices();
+    fn get(self, tstring: &TermString) -> Option<Self::Output> {
+        let mut iter = tstring.indices();
         for _ in 0 .. self.start {
             iter.next()?;
         }
@@ -56,64 +56,64 @@ impl Index for Range<usize> {
         for _ in self.start + 1 .. self.end {
             iter.next()?;
         }
-        let end = iter.next().map_or(term_string.len(), |(index, _)| index);
+        let end = iter.next().map_or(tstring.len(), |(index, _)| index);
         let range =
-            start + term_string.range.start .. end + term_string.range.start;
-        Some(TermString { alloc: term_string.alloc.clone(), range })
+            start + tstring.range.start .. end + tstring.range.start;
+        Some(TermString { alloc: tstring.alloc.clone(), range })
     }
 
-    fn index(self, term_string: &TermString) -> Self::Output {
+    fn index(self, tstring: &TermString) -> Self::Output {
         self.clone()
-            .get(term_string)
-            .unwrap_or_else(|| index_panic(term_string.count_graphemes(), self))
+            .get(tstring)
+            .unwrap_or_else(|| index_panic(tstring.count_graphemes(), self))
     }
 }
 
 impl Index for RangeTo<usize> {
     type Output = TermString;
 
-    fn get(self, term_string: &TermString) -> Option<Self::Output> {
-        (0 .. self.end).get(term_string)
+    fn get(self, tstring: &TermString) -> Option<Self::Output> {
+        (0 .. self.end).get(tstring)
     }
 
-    fn index(self, term_string: &TermString) -> Self::Output {
+    fn index(self, tstring: &TermString) -> Self::Output {
         self.clone()
-            .get(term_string)
-            .unwrap_or_else(|| index_panic(term_string.count_graphemes(), self))
+            .get(tstring)
+            .unwrap_or_else(|| index_panic(tstring.count_graphemes(), self))
     }
 }
 
 impl Index for RangeFrom<usize> {
     type Output = TermString;
 
-    fn get(self, term_string: &TermString) -> Option<Self::Output> {
-        let mut iter = term_string.indices();
+    fn get(self, tstring: &TermString) -> Option<Self::Output> {
+        let mut iter = tstring.indices();
         for _ in 0 .. self.start {
             iter.next()?;
         }
         let start =
-            iter.next().map_or(term_string.alloc.len(), |(index, _)| index);
-        let end = term_string.alloc.len();
+            iter.next().map_or(tstring.alloc.len(), |(index, _)| index);
+        let end = tstring.alloc.len();
         let range =
-            start + term_string.range.start .. end + term_string.range.start;
-        Some(TermString { alloc: term_string.alloc.clone(), range })
+            start + tstring.range.start .. end + tstring.range.start;
+        Some(TermString { alloc: tstring.alloc.clone(), range })
     }
 
-    fn index(self, term_string: &TermString) -> Self::Output {
+    fn index(self, tstring: &TermString) -> Self::Output {
         self.clone()
-            .get(term_string)
-            .unwrap_or_else(|| index_panic(term_string.count_graphemes(), self))
+            .get(tstring)
+            .unwrap_or_else(|| index_panic(tstring.count_graphemes(), self))
     }
 }
 
 impl Index for RangeFull {
     type Output = TermString;
 
-    fn get(self, term_string: &TermString) -> Option<Self::Output> {
-        Some(term_string.clone())
+    fn get(self, tstring: &TermString) -> Option<Self::Output> {
+        Some(tstring.clone())
     }
 
-    fn index(self, term_string: &TermString) -> Self::Output {
-        term_string.clone()
+    fn index(self, tstring: &TermString) -> Self::Output {
+        tstring.clone()
     }
 }

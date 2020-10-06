@@ -158,16 +158,6 @@ impl ApproxBrightness for CmyColor {
     }
 }
 
-#[cold]
-#[inline(never)]
-fn panic_gray_color(found: u8) -> ! {
-    panic!(
-        "Gray color must be at most {}, found {}.",
-        GrayColor::MAX.brightness(),
-        found
-    );
-}
-
 /// A gray-scale color. Goes from white, to gray, to black.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct GrayColor {
