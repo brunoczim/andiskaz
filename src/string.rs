@@ -17,6 +17,9 @@ mod index;
 mod iter;
 mod error;
 
+#[cfg(test)]
+mod test;
+
 pub use self::{
     error::{
         DiacriticAtStart,
