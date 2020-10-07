@@ -1,6 +1,9 @@
 //! This module provides colors that are usable with the terminal handle
 //! implemented by this library.
 
+#[cfg(test)]
+mod test;
+
 mod error;
 mod brightness;
 mod basic;

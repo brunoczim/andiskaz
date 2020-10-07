@@ -100,8 +100,7 @@ impl CmyColor {
 
     /// Spreads the given channel from the range `(0 .. Self::BASE)` to `(0 ..
     /// 256)`.
-    fn channel_spread(channel: u8) -> u32 {
-        let level = Self::BASE - 1 - channel;
+    fn channel_spread(level: u8) -> u32 {
         Brightness { level }.spread(Self::BASE - 1).level as u32
     }
 
@@ -134,7 +133,8 @@ impl ApproxBrightness for CmyColor {
         let magenta = Self::channel_spread(self.magenta()) * MAGENTA_WEIGHT;
         let yellow = Self::channel_spread(self.yellow()) * YELLOW_WEIGHT;
         let total = cyan + magenta + yellow;
-        let level = u8::try_from(total).expect("Color brightness bug");
+        let level =
+            u8::try_from(total / WEIGHT_TOTAL).expect("Color brightness bug");
 
         Brightness { level }
     }

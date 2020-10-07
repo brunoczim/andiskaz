@@ -21,8 +21,7 @@ impl Brightness {
         let level = self.level as u16;
         let max = max as u16;
         let max_byte = u8::max_value() as u16;
-        let correction = if max % max_byte > level { 1 } else { 0 };
-        let converted = level * max_byte / max + correction;
+        let converted = (level * max_byte + max / 2 + 1) / max;
 
         Self { level: u8::try_from(converted).expect("Color brigthness bug") }
     }
@@ -36,8 +35,7 @@ impl Brightness {
         let level = self.level as u16;
         let max = max as u16;
         let max_byte = u8::max_value() as u16;
-        let correction = if max % max_byte > level { 1 } else { 0 };
-        let converted = (level - correction) * max / max_byte;
+        let converted = (level * max + max_byte / 2 + 1) / max_byte;
 
         Self { level: u8::try_from(converted).expect("Color brigthness bug") }
     }

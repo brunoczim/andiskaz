@@ -13,12 +13,12 @@
 //! To concat [`TermString`]s and [`TermGrapheme`]s together you can use the
 //! macro [`tstring_concat!`].
 
+#[cfg(test)]
+mod test;
+
 mod index;
 mod iter;
 mod error;
-
-#[cfg(test)]
-mod test;
 
 pub use self::{
     error::{
