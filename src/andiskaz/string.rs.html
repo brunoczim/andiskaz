@@ -523,12 +523,12 @@
 <span class="doccomment">//! To concat [`TermString`]s and [`TermGrapheme`]s together you can use the</span>
 <span class="doccomment">//! macro [`tstring_concat!`].</span>
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">test</span>;
+
 <span class="kw">mod</span> <span class="ident">index</span>;
 <span class="kw">mod</span> <span class="ident">iter</span>;
 <span class="kw">mod</span> <span class="ident">error</span>;
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">test</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
     <span class="ident">error</span>::{

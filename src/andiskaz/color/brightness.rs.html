@@ -69,8 +69,6 @@
 <span id="66">66</span>
 <span id="67">67</span>
 <span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This module provides color brightness utilies.</span>
 
@@ -95,8 +93,7 @@
         <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">level</span> <span class="kw">as</span> <span class="ident">u16</span>;
         <span class="kw">let</span> <span class="ident">max</span> <span class="op">=</span> <span class="ident">max</span> <span class="kw">as</span> <span class="ident">u16</span>;
         <span class="kw">let</span> <span class="ident">max_byte</span> <span class="op">=</span> <span class="ident">u8</span>::<span class="ident">max_value</span>() <span class="kw">as</span> <span class="ident">u16</span>;
-        <span class="kw">let</span> <span class="ident">correction</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">max</span> <span class="op">%</span> <span class="ident">max_byte</span> <span class="op">&gt;</span> <span class="ident">level</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="number">0</span> };
-        <span class="kw">let</span> <span class="ident">converted</span> <span class="op">=</span> <span class="ident">level</span> <span class="op">*</span> <span class="ident">max_byte</span> <span class="op">/</span> <span class="ident">max</span> <span class="op">+</span> <span class="ident">correction</span>;
+        <span class="kw">let</span> <span class="ident">converted</span> <span class="op">=</span> (<span class="ident">level</span> <span class="op">*</span> <span class="ident">max_byte</span> <span class="op">+</span> <span class="ident">max</span> <span class="op">/</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">/</span> <span class="ident">max</span>;
 
         <span class="self">Self</span> { <span class="ident">level</span>: <span class="ident">u8</span>::<span class="ident">try_from</span>(<span class="ident">converted</span>).<span class="ident">expect</span>(<span class="string">&quot;Color brigthness bug&quot;</span>) }
     }
@@ -110,8 +107,7 @@
         <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">level</span> <span class="kw">as</span> <span class="ident">u16</span>;
         <span class="kw">let</span> <span class="ident">max</span> <span class="op">=</span> <span class="ident">max</span> <span class="kw">as</span> <span class="ident">u16</span>;
         <span class="kw">let</span> <span class="ident">max_byte</span> <span class="op">=</span> <span class="ident">u8</span>::<span class="ident">max_value</span>() <span class="kw">as</span> <span class="ident">u16</span>;
-        <span class="kw">let</span> <span class="ident">correction</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">max</span> <span class="op">%</span> <span class="ident">max_byte</span> <span class="op">&gt;</span> <span class="ident">level</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="number">0</span> };
-        <span class="kw">let</span> <span class="ident">converted</span> <span class="op">=</span> (<span class="ident">level</span> <span class="op">-</span> <span class="ident">correction</span>) <span class="op">*</span> <span class="ident">max</span> <span class="op">/</span> <span class="ident">max_byte</span>;
+        <span class="kw">let</span> <span class="ident">converted</span> <span class="op">=</span> (<span class="ident">level</span> <span class="op">*</span> <span class="ident">max</span> <span class="op">+</span> <span class="ident">max_byte</span> <span class="op">/</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">/</span> <span class="ident">max_byte</span>;
 
         <span class="self">Self</span> { <span class="ident">level</span>: <span class="ident">u8</span>::<span class="ident">try_from</span>(<span class="ident">converted</span>).<span class="ident">expect</span>(<span class="string">&quot;Color brigthness bug&quot;</span>) }
     }

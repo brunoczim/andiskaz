@@ -482,8 +482,7 @@
 
     <span class="doccomment">/// Spreads the given channel from the range `(0 .. Self::BASE)` to `(0 ..</span>
     <span class="doccomment">/// 256)`.</span>
-    <span class="kw">fn</span> <span class="ident">channel_spread</span>(<span class="ident">channel</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
-        <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">BASE</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">channel</span>;
+    <span class="kw">fn</span> <span class="ident">channel_spread</span>(<span class="ident">level</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
         <span class="ident">Brightness</span> { <span class="ident">level</span> }.<span class="ident">spread</span>(<span class="self">Self</span>::<span class="ident">BASE</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">level</span> <span class="kw">as</span> <span class="ident">u32</span>
     }
 
@@ -516,7 +515,8 @@
         <span class="kw">let</span> <span class="ident">magenta</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">channel_spread</span>(<span class="self">self</span>.<span class="ident">magenta</span>()) <span class="op">*</span> <span class="ident">MAGENTA_WEIGHT</span>;
         <span class="kw">let</span> <span class="ident">yellow</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">channel_spread</span>(<span class="self">self</span>.<span class="ident">yellow</span>()) <span class="op">*</span> <span class="ident">YELLOW_WEIGHT</span>;
         <span class="kw">let</span> <span class="ident">total</span> <span class="op">=</span> <span class="ident">cyan</span> <span class="op">+</span> <span class="ident">magenta</span> <span class="op">+</span> <span class="ident">yellow</span>;
-        <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span> <span class="ident">u8</span>::<span class="ident">try_from</span>(<span class="ident">total</span>).<span class="ident">expect</span>(<span class="string">&quot;Color brightness bug&quot;</span>);
+        <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span>
+            <span class="ident">u8</span>::<span class="ident">try_from</span>(<span class="ident">total</span> <span class="op">/</span> <span class="ident">WEIGHT_TOTAL</span>).<span class="ident">expect</span>(<span class="string">&quot;Color brightness bug&quot;</span>);
 
         <span class="ident">Brightness</span> { <span class="ident">level</span> }
     }
