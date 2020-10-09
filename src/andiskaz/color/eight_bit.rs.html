@@ -358,31 +358,11 @@
 <span id="355">355</span>
 <span id="356">356</span>
 <span id="357">357</span>
-<span id="358">358</span>
-<span id="359">359</span>
-<span id="360">360</span>
-<span id="361">361</span>
-<span id="362">362</span>
-<span id="363">363</span>
-<span id="364">364</span>
-<span id="365">365</span>
-<span id="366">366</span>
-<span id="367">367</span>
-<span id="368">368</span>
-<span id="369">369</span>
-<span id="370">370</span>
-<span id="371">371</span>
-<span id="372">372</span>
-<span id="373">373</span>
-<span id="374">374</span>
-<span id="375">375</span>
-<span id="376">376</span>
-<span id="377">377</span>
-<span id="378">378</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This module provides 8-bit color utilies.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">color</span>::{
+    <span class="ident">brightness</span>::{<span class="ident">Channel</span>, <span class="ident">ChannelVector</span>},
     <span class="ident">ApproxBrightness</span>,
     <span class="ident">BadCmyColor</span>,
     <span class="ident">BadGrayColor</span>,
@@ -392,19 +372,11 @@
 <span class="kw">use</span> <span class="ident">crossterm</span>::<span class="ident">style</span>::<span class="ident">Color</span> <span class="kw">as</span> <span class="ident">CrosstermColor</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert</span>::<span class="ident">TryFrom</span>, <span class="ident">ops</span>::<span class="ident">Not</span>};
 
-<span class="doccomment">/// Weight of cyan channel in brightness.</span>
-<span class="kw">const</span> <span class="ident">CYAN_WEIGHT</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">30</span>;
-<span class="doccomment">/// Weight of magenta channel in brightness.</span>
-<span class="kw">const</span> <span class="ident">MAGENTA_WEIGHT</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">59</span>;
-<span class="doccomment">/// Weight of yellow channel in brightness.</span>
-<span class="kw">const</span> <span class="ident">YELLOW_WEIGHT</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">11</span>;
-<span class="doccomment">/// Total sum of all weights.</span>
-<span class="kw">const</span> <span class="ident">WEIGHT_TOTAL</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="ident">CYAN_WEIGHT</span> <span class="op">+</span> <span class="ident">MAGENTA_WEIGHT</span> <span class="op">+</span> <span class="ident">YELLOW_WEIGHT</span>;
-
 <span class="doccomment">/// A CMY (Cyan-Magenta-Yellow) color. The lower one of its component is, the</span>
 <span class="doccomment">/// more it subtracts.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CmyColor</span> {
+    <span class="doccomment">/// `(0 .. 216)` Color code.</span>
     <span class="ident">code</span>: <span class="ident">u8</span>,
 }
 
@@ -480,20 +452,18 @@
         <span class="self">Self</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">cyan</span>(), <span class="self">self</span>.<span class="ident">magenta</span>(), <span class="ident">yellow</span>)
     }
 
-    <span class="doccomment">/// Spreads the given channel from the range `(0 .. Self::BASE)` to `(0 ..</span>
-    <span class="doccomment">/// 256)`.</span>
-    <span class="kw">fn</span> <span class="ident">channel_spread</span>(<span class="ident">level</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
-        <span class="ident">Brightness</span> { <span class="ident">level</span> }.<span class="ident">spread</span>(<span class="self">Self</span>::<span class="ident">BASE</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">level</span> <span class="kw">as</span> <span class="ident">u32</span>
+    <span class="doccomment">/// Creates a CMY color from the given channels.</span>
+    <span class="kw">fn</span> <span class="ident">from_channels</span>(<span class="ident">channels</span>: [<span class="ident">Channel</span>; <span class="number">3</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">new</span>(<span class="ident">channels</span>[<span class="number">0</span>].<span class="ident">value</span>(), <span class="ident">channels</span>[<span class="number">1</span>].<span class="ident">value</span>(), <span class="ident">channels</span>[<span class="number">2</span>].<span class="ident">value</span>())
     }
 
-    <span class="doccomment">/// Compress the given brightness from the range `(0 .. 256)` to `(0 ..</span>
-    <span class="doccomment">/// Self::BASE)`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">/// Panics if `raw_level &gt; u8::max_value()`.</span>
-    <span class="kw">fn</span> <span class="ident">channel_compress</span>(<span class="ident">raw_level</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
-        <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span> <span class="ident">u8</span>::<span class="ident">try_from</span>(<span class="ident">raw_level</span>).<span class="ident">expect</span>(<span class="string">&quot;Color brightness bug&quot;</span>);
-        <span class="ident">Brightness</span> { <span class="ident">level</span> }.<span class="ident">compress</span>(<span class="self">Self</span>::<span class="ident">BASE</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">level</span>
+    <span class="doccomment">/// Returns a CMY color&#39;s channels.</span>
+    <span class="kw">fn</span> <span class="ident">channels</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">Channel</span>; <span class="number">3</span>] {
+        [
+            <span class="ident">Channel</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">cyan</span>(), <span class="number">30</span>),
+            <span class="ident">Channel</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">magenta</span>(), <span class="number">59</span>),
+            <span class="ident">Channel</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">yellow</span>(), <span class="number">11</span>),
+        ]
     }
 }
 
@@ -511,38 +481,23 @@
 
 <span class="kw">impl</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">CmyColor</span> {
     <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Brightness</span> {
-        <span class="kw">let</span> <span class="ident">cyan</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">channel_spread</span>(<span class="self">self</span>.<span class="ident">cyan</span>()) <span class="op">*</span> <span class="ident">CYAN_WEIGHT</span>;
-        <span class="kw">let</span> <span class="ident">magenta</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">channel_spread</span>(<span class="self">self</span>.<span class="ident">magenta</span>()) <span class="op">*</span> <span class="ident">MAGENTA_WEIGHT</span>;
-        <span class="kw">let</span> <span class="ident">yellow</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">channel_spread</span>(<span class="self">self</span>.<span class="ident">yellow</span>()) <span class="op">*</span> <span class="ident">YELLOW_WEIGHT</span>;
-        <span class="kw">let</span> <span class="ident">total</span> <span class="op">=</span> <span class="ident">cyan</span> <span class="op">+</span> <span class="ident">magenta</span> <span class="op">+</span> <span class="ident">yellow</span>;
-        <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span>
-            <span class="ident">u8</span>::<span class="ident">try_from</span>(<span class="ident">total</span> <span class="op">/</span> <span class="ident">WEIGHT_TOTAL</span>).<span class="ident">expect</span>(<span class="string">&quot;Color brightness bug&quot;</span>);
-
-        <span class="ident">Brightness</span> { <span class="ident">level</span> }
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">channels</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">channels</span>();
+        <span class="kw">let</span> <span class="ident">vector</span> <span class="op">=</span> <span class="ident">ChannelVector</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">channels</span>, <span class="self">Self</span>::<span class="ident">BASE</span> <span class="op">-</span> <span class="number">1</span>);
+        <span class="ident">vector</span>.<span class="ident">approx_brightness</span>()
     }
 
     <span class="kw">fn</span> <span class="ident">set_approx_brightness</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">brightness</span>: <span class="ident">Brightness</span>) {
-        <span class="kw">let</span> <span class="ident">cyan</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">channel_spread</span>(<span class="self">self</span>.<span class="ident">cyan</span>()) <span class="op">*</span> <span class="ident">CYAN_WEIGHT</span>;
-        <span class="kw">let</span> <span class="ident">magenta</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">channel_spread</span>(<span class="self">self</span>.<span class="ident">magenta</span>()) <span class="op">*</span> <span class="ident">MAGENTA_WEIGHT</span>;
-        <span class="kw">let</span> <span class="ident">yellow</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">channel_spread</span>(<span class="self">self</span>.<span class="ident">yellow</span>()) <span class="op">*</span> <span class="ident">YELLOW_WEIGHT</span>;
-        <span class="kw">let</span> <span class="ident">total</span> <span class="op">=</span> <span class="ident">cyan</span> <span class="op">+</span> <span class="ident">magenta</span> <span class="op">+</span> <span class="ident">yellow</span>;
-        <span class="kw">let</span> <span class="ident">new_total</span> <span class="op">=</span> <span class="ident">brightness</span>.<span class="ident">level</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">*</span> <span class="ident">WEIGHT_TOTAL</span>;
-
-        <span class="kw">let</span> <span class="ident">new_cyan</span> <span class="op">=</span> (<span class="ident">cyan</span> <span class="op">*</span> <span class="ident">total</span> <span class="op">/</span> <span class="ident">new_total</span>) <span class="op">/</span> <span class="ident">CYAN_WEIGHT</span>;
-        <span class="kw">let</span> <span class="ident">new_magenta</span> <span class="op">=</span> (<span class="ident">magenta</span> <span class="op">*</span> <span class="ident">total</span> <span class="op">/</span> <span class="ident">new_total</span>) <span class="op">/</span> <span class="ident">MAGENTA_WEIGHT</span>;
-        <span class="kw">let</span> <span class="ident">new_yellow</span> <span class="op">=</span> (<span class="ident">yellow</span> <span class="op">*</span> <span class="ident">total</span> <span class="op">/</span> <span class="ident">new_total</span>) <span class="op">/</span> <span class="ident">YELLOW_WEIGHT</span>;
-
-        <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">new</span>(
-            <span class="self">Self</span>::<span class="ident">channel_compress</span>(<span class="ident">new_cyan</span>),
-            <span class="self">Self</span>::<span class="ident">channel_compress</span>(<span class="ident">new_magenta</span>),
-            <span class="self">Self</span>::<span class="ident">channel_compress</span>(<span class="ident">new_yellow</span>),
-        );
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">channels</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">channels</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vector</span> <span class="op">=</span> <span class="ident">ChannelVector</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">channels</span>, <span class="self">Self</span>::<span class="ident">BASE</span> <span class="op">-</span> <span class="number">1</span>);
+        <span class="ident">vector</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>);
+        <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">from_channels</span>(<span class="ident">channels</span>);
     }
 }
 
 <span class="doccomment">/// A gray-scale color. Goes from white, to gray, to black.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GrayColor</span> {
+    <span class="doccomment">/// Level of white.</span>
     <span class="ident">brightness</span>: <span class="ident">u8</span>,
 }
 
@@ -588,11 +543,14 @@
 
 <span class="kw">impl</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">GrayColor</span> {
     <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Brightness</span> {
-        <span class="ident">Brightness</span> { <span class="ident">level</span>: <span class="self">self</span>.<span class="ident">brightness</span> }.<span class="ident">spread</span>(<span class="self">Self</span>::<span class="ident">MAX</span>.<span class="ident">brightness</span>)
+        <span class="kw">let</span> <span class="ident">brightness</span> <span class="op">=</span> <span class="ident">Brightness</span> { <span class="ident">level</span>: <span class="ident">u16</span>::<span class="ident">from</span>(<span class="self">self</span>.<span class="ident">brightness</span>) };
+        <span class="ident">brightness</span>.<span class="ident">spread</span>(<span class="ident">u16</span>::<span class="ident">from</span>(<span class="self">Self</span>::<span class="ident">MAX</span>.<span class="ident">brightness</span>))
     }
 
     <span class="kw">fn</span> <span class="ident">set_approx_brightness</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">brightness</span>: <span class="ident">Brightness</span>) {
-        <span class="self">self</span>.<span class="ident">brightness</span> <span class="op">=</span> <span class="ident">brightness</span>.<span class="ident">compress</span>(<span class="self">Self</span>::<span class="ident">MAX</span>.<span class="ident">brightness</span>).<span class="ident">level</span>;
+        <span class="kw">let</span> <span class="ident">compressed</span> <span class="op">=</span> <span class="ident">brightness</span>.<span class="ident">compress</span>(<span class="ident">u16</span>::<span class="ident">from</span>(<span class="self">Self</span>::<span class="ident">MAX</span>.<span class="ident">brightness</span>));
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">u8</span>::<span class="ident">try_from</span>(<span class="ident">compressed</span>.<span class="ident">level</span>);
+        <span class="self">self</span>.<span class="ident">brightness</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">expect</span>(<span class="string">&quot;Color brightness bug&quot;</span>);
     }
 }
 
