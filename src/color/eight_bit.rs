@@ -1,6 +1,7 @@
 //! This module provides 8-bit color utilies.
 
 use crate::color::{
+    brightness::{Channel, ChannelVector},
     ApproxBrightness,
     BadCmyColor,
     BadGrayColor,
@@ -10,19 +11,11 @@ use crate::color::{
 use crossterm::style::Color as CrosstermColor;
 use std::{convert::TryFrom, ops::Not};
 
-/// Weight of cyan channel in brightness.
-const CYAN_WEIGHT: u32 = 30;
-/// Weight of magenta channel in brightness.
-const MAGENTA_WEIGHT: u32 = 59;
-/// Weight of yellow channel in brightness.
-const YELLOW_WEIGHT: u32 = 11;
-/// Total sum of all weights.
-const WEIGHT_TOTAL: u32 = CYAN_WEIGHT + MAGENTA_WEIGHT + YELLOW_WEIGHT;
-
 /// A CMY (Cyan-Magenta-Yellow) color. The lower one of its component is, the
 /// more it subtracts.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct CmyColor {
+    /// `(0 .. 216)` Color code.
     code: u8,
 }
 
@@ -98,20 +91,18 @@ impl CmyColor {
         Self::new(self.cyan(), self.magenta(), yellow)
     }
 
-    /// Spreads the given channel from the range `(0 .. Self::BASE)` to `(0 ..
-    /// 256)`.
-    fn channel_spread(level: u8) -> u32 {
-        Brightness { level }.spread(Self::BASE - 1).level as u32
+    /// Creates a CMY color from the given channels.
+    fn from_channels(channels: [Channel; 3]) -> Self {
+        Self::new(channels[0].value(), channels[1].value(), channels[2].value())
     }
 
-    /// Compress the given brightness from the range `(0 .. 256)` to `(0 ..
-    /// Self::BASE)`.
-    ///
-    /// # Panics
-    /// Panics if `raw_level > u8::max_value()`.
-    fn channel_compress(raw_level: u32) -> u8 {
-        let level = u8::try_from(raw_level).expect("Color brightness bug");
-        Brightness { level }.compress(Self::BASE - 1).level
+    /// Returns a CMY color's channels.
+    fn channels(self) -> [Channel; 3] {
+        [
+            Channel::new(self.cyan(), 30),
+            Channel::new(self.magenta(), 59),
+            Channel::new(self.yellow(), 11),
+        ]
     }
 }
 
@@ -129,38 +120,23 @@ impl Not for CmyColor {
 
 impl ApproxBrightness for CmyColor {
     fn approx_brightness(&self) -> Brightness {
-        let cyan = Self::channel_spread(self.cyan()) * CYAN_WEIGHT;
-        let magenta = Self::channel_spread(self.magenta()) * MAGENTA_WEIGHT;
-        let yellow = Self::channel_spread(self.yellow()) * YELLOW_WEIGHT;
-        let total = cyan + magenta + yellow;
-        let level =
-            u8::try_from(total / WEIGHT_TOTAL).expect("Color brightness bug");
-
-        Brightness { level }
+        let mut channels = self.channels();
+        let vector = ChannelVector::new(&mut channels, Self::BASE - 1);
+        vector.approx_brightness()
     }
 
     fn set_approx_brightness(&mut self, brightness: Brightness) {
-        let cyan = Self::channel_spread(self.cyan()) * CYAN_WEIGHT;
-        let magenta = Self::channel_spread(self.magenta()) * MAGENTA_WEIGHT;
-        let yellow = Self::channel_spread(self.yellow()) * YELLOW_WEIGHT;
-        let total = cyan + magenta + yellow;
-        let new_total = brightness.level as u32 * WEIGHT_TOTAL;
-
-        let new_cyan = (cyan * total / new_total) / CYAN_WEIGHT;
-        let new_magenta = (magenta * total / new_total) / MAGENTA_WEIGHT;
-        let new_yellow = (yellow * total / new_total) / YELLOW_WEIGHT;
-
-        *self = Self::new(
-            Self::channel_compress(new_cyan),
-            Self::channel_compress(new_magenta),
-            Self::channel_compress(new_yellow),
-        );
+        let mut channels = self.channels();
+        let mut vector = ChannelVector::new(&mut channels, Self::BASE - 1);
+        vector.set_approx_brightness(brightness);
+        *self = Self::from_channels(channels);
     }
 }
 
 /// A gray-scale color. Goes from white, to gray, to black.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct GrayColor {
+    /// Level of white.
     brightness: u8,
 }
 
@@ -206,11 +182,14 @@ impl Not for GrayColor {
 
 impl ApproxBrightness for GrayColor {
     fn approx_brightness(&self) -> Brightness {
-        Brightness { level: self.brightness }.spread(Self::MAX.brightness)
+        let brightness = Brightness { level: u16::from(self.brightness) };
+        brightness.spread(u16::from(Self::MAX.brightness))
     }
 
     fn set_approx_brightness(&mut self, brightness: Brightness) {
-        self.brightness = brightness.compress(Self::MAX.brightness).level;
+        let compressed = brightness.compress(u16::from(Self::MAX.brightness));
+        let res = u8::try_from(compressed.level);
+        self.brightness = res.expect("Color brightness bug");
     }
 }
 

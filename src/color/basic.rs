@@ -109,7 +109,7 @@ impl TryFrom<u8> for BasicColor {
 impl ApproxBrightness for BasicColor {
     fn approx_brightness(&self) -> Brightness {
         let min = Brightness { level: 0 };
-        let max = Brightness { level: u8::max_value() };
+        let max = Brightness { level: u16::max_value() };
         match self {
             BasicColor::Black => min,
             BasicColor::White => max,
@@ -131,7 +131,7 @@ impl ApproxBrightness for BasicColor {
     }
 
     fn set_approx_brightness(&mut self, brightness: Brightness) {
-        let half = Brightness { level: u8::max_value() / 2 };
+        let half = Brightness { level: u16::max_value() / 2 };
         let self_white = self.approx_brightness() >= half;
         let other_white = brightness >= half;
 

@@ -1,17 +1,12 @@
 //! This module provides an RGB color utilites.
 
-use crate::color::{ApproxBrightness, Brightness};
+use crate::color::{
+    brightness::{Channel, ChannelVector},
+    ApproxBrightness,
+    Brightness,
+};
 use crossterm::style::Color as CrosstermColor;
-use std::{convert::TryFrom, ops::Not};
-
-/// Weight of red channel in brightness.
-const RED_WEIGHT: u32 = 30;
-/// Weight of green channel in brightness.
-const GREEN_WEIGHT: u32 = 59;
-/// Weight of blue channel in brightness.
-const BLUE_WEIGHT: u32 = 11;
-/// Total sum of all weights.
-const WEIGHT_TOTAL: u32 = RED_WEIGHT + GREEN_WEIGHT + BLUE_WEIGHT;
+use std::ops::Not;
 
 /// An RGB color ((Red-Green-Blue)). This is an additive color model, where the
 /// value of a color channel is how much the channel is added to the color. All
@@ -34,35 +29,38 @@ impl RgbColor {
     pub(crate) fn to_crossterm(self) -> CrosstermColor {
         CrosstermColor::Rgb { r: self.red, g: self.green, b: self.blue }
     }
+
+    /// Creates an RGB color from the given channels.
+    fn from_channels(channels: [Channel; 3]) -> Self {
+        Self {
+            red: channels[0].value(),
+            green: channels[1].value(),
+            blue: channels[2].value(),
+        }
+    }
+
+    /// Returns an RGB color's channels.
+    fn channels(self) -> [Channel; 3] {
+        [
+            Channel::new(self.red, 30),
+            Channel::new(self.green, 59),
+            Channel::new(self.blue, 11),
+        ]
+    }
 }
 
 impl ApproxBrightness for RgbColor {
     fn approx_brightness(&self) -> Brightness {
-        let red = self.red as u32 * RED_WEIGHT;
-        let green = self.green as u32 * GREEN_WEIGHT;
-        let blue = self.blue as u32 * BLUE_WEIGHT;
-        let total = (red + green + blue) / WEIGHT_TOTAL;
-        let level = u8::try_from(total).expect("Color brightness bug");
-
-        Brightness { level }
+        let mut channels = self.channels();
+        let vector = ChannelVector::new(&mut channels, u8::max_value());
+        vector.approx_brightness()
     }
 
     fn set_approx_brightness(&mut self, brightness: Brightness) {
-        let red = self.red as u32 * RED_WEIGHT;
-        let green = self.green as u32 * GREEN_WEIGHT;
-        let blue = self.blue as u32 * BLUE_WEIGHT;
-        let total = red + green + blue;
-        let new_total = brightness.level as u32 * WEIGHT_TOTAL;
-
-        let new_red = (red * total / new_total) / RED_WEIGHT;
-        let new_blue = (blue * total / new_total) / BLUE_WEIGHT;
-        let new_green = (green * total / new_total) / GREEN_WEIGHT;
-
-        *self = Self {
-            red: u8::try_from(new_red).expect("Color brightness bug"),
-            green: u8::try_from(new_blue).expect("Color brightness bug"),
-            blue: u8::try_from(new_green).expect("Color brightness bug"),
-        };
+        let mut channels = self.channels();
+        let mut vector = ChannelVector::new(&mut channels, u8::max_value());
+        vector.set_approx_brightness(brightness);
+        *self = Self::from_channels(channels);
     }
 }
 
