@@ -57,3 +57,18 @@ macro_rules! tstring_concat {
         tstring_concat![$($elem,)*]
     };
 }
+
+#[allow(unused_macros)]
+macro_rules! tdebug {
+    ($($tok:tt)+) => {{
+        use std::fs::OpenOptions;
+        use std::io::Write;
+        let mut file = OpenOptions::new()
+            .append(true)
+            .truncate(false)
+            .create(true)
+            .open("debug.txt")
+            .unwrap();
+        write!(file, $($tok)+).unwrap();
+    }};
+}

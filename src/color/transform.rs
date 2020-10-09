@@ -11,6 +11,12 @@ pub trait Transformer {
     fn transform(&self, color: Color) -> Color;
 }
 
+impl Transformer for Color {
+    fn transform(&self, _color: Color) -> Color {
+        *self
+    }
+}
+
 impl<'this, T> Transformer for &'this T
 where
     T: Transformer,
@@ -25,6 +31,12 @@ pub trait PairTransformer {
     /// Given an input [`Color2`], generates a new color pair to replace the
     /// input.
     fn transform_pair(&self, colors: Color2) -> Color2;
+}
+
+impl PairTransformer for Color2 {
+    fn transform_pair(&self, _colors: Color2) -> Color2 {
+        *self
+    }
 }
 
 impl<'this, T> PairTransformer for &'this T
@@ -107,19 +119,6 @@ where
 {
     fn transform_pair(&self, colors: Color2) -> Color2 {
         (self.0)(colors)
-    }
-}
-
-/// Replaces a single color entirely.
-#[derive(Debug, Clone, Copy)]
-pub struct Const(
-    /// The new color.
-    pub Color,
-);
-
-impl Transformer for Const {
-    fn transform(&self, _color: Color) -> Color {
-        self.0
     }
 }
 

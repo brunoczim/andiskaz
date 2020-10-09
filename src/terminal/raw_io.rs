@@ -1,9 +1,10 @@
 //! This module provides some raw IO utilites for the terminal.
 
-use crossterm::{terminal, Command};
+use crossterm::Command;
 use std::{fmt, fmt::Write};
 use tokio::{io, io::AsyncWriteExt, sync::MutexGuard};
 
+/// Writes and flushes data to the standard output.
 pub async fn write_and_flush<'guard>(
     buf: &[u8],
     stdout: &mut MutexGuard<'guard, io::Stdout>,
@@ -16,8 +17,12 @@ pub async fn write_and_flush<'guard>(
 /// Saves the screen previous the application.
 #[cfg(windows)]
 pub fn save_screen(buf: &mut String) -> fmt::Result {
-    if terminal::EnterAlternateScreen.is_ansi_code_supported() {
-        write!(buf, "{}", terminal::EnterAlternateScreen.ansi_code())?;
+    if crossterm::terminal::EnterAlternateScreen.is_ansi_code_supported() {
+        write!(
+            buf,
+            "{}",
+            crossterm::terminal::EnterAlternateScreen.ansi_code()
+        )?;
     }
     Ok(())
 }
@@ -25,15 +30,19 @@ pub fn save_screen(buf: &mut String) -> fmt::Result {
 /// Saves the screen previous the application.
 #[cfg(unix)]
 pub fn save_screen(buf: &mut String) -> fmt::Result {
-    write!(buf, "{}", terminal::EnterAlternateScreen.ansi_code())?;
+    write!(buf, "{}", crossterm::terminal::EnterAlternateScreen.ansi_code())?;
     Ok(())
 }
 
 /// Restores the screen previous the application.
 #[cfg(windows)]
 pub fn restore_screen(buf: &mut String) -> fmt::Result {
-    if terminal::LeaveAlternateScreen.is_ansi_code_supported() {
-        write!(buf, "{}", terminal::LeaveAlternateScreen.ansi_code())?;
+    if crossterm::terminal::LeaveAlternateScreen.is_ansi_code_supported() {
+        write!(
+            buf,
+            "{}",
+            crossterm::terminal::LeaveAlternateScreen.ansi_code()
+        )?;
     }
     Ok(())
 }
@@ -41,6 +50,41 @@ pub fn restore_screen(buf: &mut String) -> fmt::Result {
 /// Restores the screen previous the application.
 #[cfg(unix)]
 pub fn restore_screen(buf: &mut String) -> fmt::Result {
-    write!(buf, "{}", terminal::LeaveAlternateScreen.ansi_code())?;
+    write!(buf, "{}", crossterm::terminal::LeaveAlternateScreen.ansi_code())?;
     Ok(())
+}
+
+#[cfg(windows)]
+/// Best-effort function to restore the terminal in a panic.
+pub fn emergency_restore() {
+    let _ = crossterm::terminal::disable_raw_mode();
+    print!("{}", crossterm::cursor::Show);
+    print!(
+        "{}",
+        crossterm::style::SetBackgroundColor(crossterm::style::Color::Reset)
+    );
+    print!(
+        "{}",
+        crossterm::style::SetForegroundColor(crossterm::style::Color::Reset)
+    );
+    if terminal::LeaveAlternateScreen.is_ansi_code_supported() {
+        print!("{}", crossterm::terminal::LeaveAlternateScreen.ansi_code());
+    }
+    println!();
+}
+
+#[cfg(unix)]
+/// Best-effort function to restore the terminal in a panic.
+pub fn emergency_restore() {
+    let _ = crossterm::terminal::disable_raw_mode();
+    print!("{}", crossterm::cursor::Show);
+    print!(
+        "{}",
+        crossterm::style::SetBackgroundColor(crossterm::style::Color::Reset)
+    );
+    print!(
+        "{}",
+        crossterm::style::SetForegroundColor(crossterm::style::Color::Reset)
+    );
+    println!("{}", crossterm::terminal::LeaveAlternateScreen.ansi_code());
 }

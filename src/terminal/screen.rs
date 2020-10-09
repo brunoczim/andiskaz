@@ -90,7 +90,7 @@ impl ScreenBuffer {
     pub fn make_index(&self, point: Coord2) -> Option<usize> {
         let x = coord::to_index(point.x);
         let y = coord::to_index(point.y);
-        if x >= self.width || self.curr.len() / self.width < y {
+        if x >= self.width || self.curr.len() / self.width <= y {
             None
         } else {
             Some(y * self.width + x % self.width)
@@ -186,14 +186,15 @@ impl<'terminal> Screen<'terminal> {
     // TODO: break in smaller functions.
     pub fn styled_text<P>(
         &mut self,
-        gstring: &TermString,
+        tstring: &TermString,
         style: Style<P>,
     ) -> Coord
     where
         P: PairTransformer,
     {
-        let mut len = gstring.count_graphemes();
-        let mut slice = gstring.index(..);
+        tdebug!("{}\n", tstring);
+        let mut len = tstring.count_graphemes();
+        let mut slice = tstring.index(..);
         let screen_size = self.terminal.screen_size();
         let size = style.make_size(screen_size);
 
@@ -223,7 +224,7 @@ impl<'terminal> Screen<'terminal> {
             for grapheme in &slice.index(.. pos) {
                 self.update(cursor, |tile| {
                     let colors = style.colors.transform_pair(tile.colors);
-                    Tile { grapheme: grapheme.clone(), colors };
+                    *tile = Tile { grapheme: grapheme.clone(), colors };
                 });
                 cursor.x += 1;
             }
@@ -232,7 +233,7 @@ impl<'terminal> Screen<'terminal> {
                 self.update(cursor, |tile| {
                     let grapheme = TermGrapheme::new_lossy("…");
                     let colors = style.colors.transform_pair(tile.colors);
-                    Tile { grapheme, colors };
+                    *tile = Tile { grapheme, colors };
                 });
             }
 
@@ -244,7 +245,6 @@ impl<'terminal> Screen<'terminal> {
     }
 
     /// Triggers the resize of the screen.
-    // TODO: break in smaller functions.
     pub(crate) async fn resize(&mut self, size: Coord2) -> io::Result<()> {
         let mut stdout = self.terminal.shared.stdout.lock().await;
         let buf = format!(
@@ -262,6 +262,7 @@ impl<'terminal> Screen<'terminal> {
     }
 
     /// Renders the buffer into the screen using the referred terminal.
+    // TODO: break in smaller functions.
     pub(crate) async fn render(
         &mut self,
         buf: &mut String,

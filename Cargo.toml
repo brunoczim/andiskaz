@@ -13,7 +13,7 @@ lazy_static = "^1.4"
 crossterm = "^0.18"
 
 [dependencies.tokio]
-version = "^0.2.22"
+version = "^0.2.11"
 features = [
     "macros",
     "io-util",

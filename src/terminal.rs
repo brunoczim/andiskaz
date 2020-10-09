@@ -6,6 +6,7 @@ mod screen;
 
 pub use self::{
     error::{ListenerFailed, TermError},
+    raw_io::emergency_restore,
     screen::{Screen, Tile},
 };
 
@@ -110,6 +111,7 @@ impl Builder {
         Ok(result?)
     }
 
+    /// Finishes the builder and produces a terminal handle.
     async fn finish(
         self,
         event_chan: watch::Receiver<Event>,
@@ -150,6 +152,21 @@ pub struct Terminal {
 }
 
 impl Terminal {
+    /// Starts the application and gives it a handle to the terminal. When the
+    /// given start function finishes, the application's execution stops as
+    /// well.
+    ///
+    /// This function uses the default configuration. See [`Builder`] for
+    /// terminal settings.
+    pub async fn run<F, A, T>(start: F) -> Result<T, TermError>
+    where
+        F: FnOnce(Terminal) -> A + Send + 'static,
+        A: Future<Output = T> + Send + 'static,
+        T: Send + 'static,
+    {
+        Builder::new().run(start).await
+    }
+
     /// Returns current screen size.
     pub fn screen_size(&self) -> Coord2 {
         let bits = self.shared.screen_size.load(Acquire);
