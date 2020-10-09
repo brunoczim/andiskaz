@@ -321,6 +321,23 @@
 <span id="318">318</span>
 <span id="319">319</span>
 <span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This crate exports a terminal terminal and its utilites.</span>
 
@@ -330,6 +347,7 @@
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
     <span class="ident">error</span>::{<span class="ident">ListenerFailed</span>, <span class="ident">TermError</span>},
+    <span class="ident">raw_io</span>::<span class="ident">emergency_restore</span>,
     <span class="ident">screen</span>::{<span class="ident">Screen</span>, <span class="ident">Tile</span>},
 };
 
@@ -434,6 +452,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">result</span><span class="question-mark">?</span>)
     }
 
+    <span class="doccomment">/// Finishes the builder and produces a terminal handle.</span>
     <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">finish</span>(
         <span class="self">self</span>,
         <span class="ident">event_chan</span>: <span class="ident">watch</span>::<span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span>,
@@ -474,6 +493,21 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Terminal</span> {
+    <span class="doccomment">/// Starts the application and gives it a handle to the terminal. When the</span>
+    <span class="doccomment">/// given start function finishes, the application&#39;s execution stops as</span>
+    <span class="doccomment">/// well.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This function uses the default configuration. See [`Builder`] for</span>
+    <span class="doccomment">/// terminal settings.</span>
+    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">start</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">TermError</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">A</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">A</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">T</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    {
+        <span class="ident">Builder</span>::<span class="ident">new</span>().<span class="ident">run</span>(<span class="ident">start</span>).<span class="ident">await</span>
+    }
+
     <span class="doccomment">/// Returns current screen size.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">screen_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord2</span> {
         <span class="kw">let</span> <span class="ident">bits</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">screen_size</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>);

@@ -282,7 +282,6 @@
 <span id="279">279</span>
 <span id="280">280</span>
 <span id="281">281</span>
-<span id="282">282</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This module defines color transformers. A color [`Transformer`] is simply a</span>
 <span class="doccomment">//! function over [`Color`]s. In fact, if you want to use a plain function as a</span>
@@ -295,6 +294,12 @@
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Transformer</span> {
     <span class="doccomment">/// Given an input [`Color`], generates a new color to replace the input.</span>
     <span class="kw">fn</span> <span class="ident">transform</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Color</span>;
+}
+
+<span class="kw">impl</span> <span class="ident">Transformer</span> <span class="kw">for</span> <span class="ident">Color</span> {
+    <span class="kw">fn</span> <span class="ident">transform</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Color</span> {
+        <span class="kw-2">*</span><span class="self">self</span>
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Transformer</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;this</span> <span class="ident">T</span>
@@ -311,6 +316,12 @@
     <span class="doccomment">/// Given an input [`Color2`], generates a new color pair to replace the</span>
     <span class="doccomment">/// input.</span>
     <span class="kw">fn</span> <span class="ident">transform_pair</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">colors</span>: <span class="ident">Color2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Color2</span>;
+}
+
+<span class="kw">impl</span> <span class="ident">PairTransformer</span> <span class="kw">for</span> <span class="ident">Color2</span> {
+    <span class="kw">fn</span> <span class="ident">transform_pair</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_colors</span>: <span class="ident">Color2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Color2</span> {
+        <span class="kw-2">*</span><span class="self">self</span>
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PairTransformer</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;this</span> <span class="ident">T</span>
@@ -393,19 +404,6 @@
 {
     <span class="kw">fn</span> <span class="ident">transform_pair</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">colors</span>: <span class="ident">Color2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Color2</span> {
         (<span class="self">self</span>.<span class="number">0</span>)(<span class="ident">colors</span>)
-    }
-}
-
-<span class="doccomment">/// Replaces a single color entirely.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Const</span>(
-    <span class="doccomment">/// The new color.</span>
-    <span class="kw">pub</span> <span class="ident">Color</span>,
-);
-
-<span class="kw">impl</span> <span class="ident">Transformer</span> <span class="kw">for</span> <span class="ident">Const</span> {
-    <span class="kw">fn</span> <span class="ident">transform</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Color</span> {
-        <span class="self">self</span>.<span class="number">0</span>
     }
 }
 

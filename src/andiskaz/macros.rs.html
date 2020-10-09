@@ -60,6 +60,21 @@
 <span id="57">57</span>
 <span id="58">58</span>
 <span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">/// Creates a [`TermString`](crate::string::TermString) from string literal.</span>
 <span class="doccomment">/// Currently, invalid string get the unicode replacement character in their</span>
@@ -119,6 +134,21 @@
     [$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">elem</span>:<span class="ident">expr</span>),<span class="op">+</span>]  <span class="op">=</span><span class="op">&gt;</span> {
         <span class="macro">tstring_concat</span><span class="macro">!</span>[$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">elem</span>,)<span class="kw-2">*</span>]
     };
+}
+
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_macros</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">tdebug</span> {
+    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tok</span>:<span class="ident">tt</span>)<span class="op">+</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+        <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fs</span>::<span class="ident">OpenOptions</span>;
+        <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Write</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">OpenOptions</span>::<span class="ident">new</span>()
+            .<span class="ident">append</span>(<span class="bool-val">true</span>)
+            .<span class="ident">truncate</span>(<span class="bool-val">false</span>)
+            .<span class="ident">create</span>(<span class="bool-val">true</span>)
+            .<span class="ident">open</span>(<span class="string">&quot;debug.txt&quot;</span>)
+            .<span class="ident">unwrap</span>();
+        <span class="macro">write</span><span class="macro">!</span>(<span class="ident">file</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tok</span>)<span class="op">+</span>).<span class="ident">unwrap</span>();
+    }};
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "andiskaz";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
