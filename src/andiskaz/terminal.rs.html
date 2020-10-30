@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/terminal.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>terminal.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/terminal.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>terminal.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
 <link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../andiskaz/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
                 <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
@@ -338,6 +338,24 @@
 <span id="335">335</span>
 <span id="336">336</span>
 <span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This crate exports a terminal terminal and its utilites.</span>
 
@@ -480,6 +498,7 @@
     }
 }
 
+<span class="doccomment">/// Panic used when an auxiliary task did not fail but finished before main.</span>
 <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
 <span class="attribute">#[<span class="ident">cold</span>]</span>
 <span class="kw">fn</span> <span class="ident">aux_must_fail</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="op">!</span> {
@@ -489,6 +508,7 @@
 <span class="doccomment">/// A handle to the terminal. It uses atomic reference counting.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Terminal</span> {
+    <span class="doccomment">/// The shared memory between copies of the terminal handle.</span>
     <span class="ident">shared</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Shared</span><span class="op">&gt;</span>,
 }
 
@@ -529,6 +549,7 @@
         <span class="ident">Screen</span>::<span class="ident">new</span>(<span class="self">self</span>, <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">screen_buffer</span>.<span class="ident">lock</span>().<span class="ident">await</span>)
     }
 
+    <span class="doccomment">/// Function that listens to events such as keys or resizes.</span>
     <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">event_listener</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">sender</span>: <span class="ident">watch</span>::<span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span>,
@@ -581,6 +602,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Function that periodically renders the screen buffer.</span>
     <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">renderer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">TermError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">interval</span> <span class="op">=</span> <span class="ident">time</span>::<span class="ident">interval</span>(<span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">frame_time</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">new</span>();
@@ -592,6 +614,9 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Checks if the screen size is adequate and if not, locks the stdout</span>
+    <span class="doccomment">/// (settings the parameter guard to a mutex guard to the stdout), and</span>
+    <span class="doccomment">/// also asks the user to resize.</span>
     <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">check_screen_size</span><span class="op">&lt;</span><span class="lifetime">&#39;guard</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="lifetime">&#39;guard</span> <span class="self">self</span>,
         <span class="ident">size</span>: <span class="ident">Coord2</span>,
@@ -620,6 +645,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Initialization of the terminal, such as cleaning the screen.</span>
     <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">setup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">TermError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">new</span>();
         <span class="ident">save_screen</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>)<span class="question-mark">?</span>;
@@ -640,6 +666,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Asynchronous cleanup. It is preferred to call this before dropping.</span>
     <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">cleanup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">TermError</span><span class="op">&gt;</span> {
         <span class="ident">task</span>::<span class="ident">block_in_place</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">crossterm</span>::<span class="ident">terminal</span>::<span class="ident">disable_raw_mode</span>())
             .<span class="ident">map_err</span>(<span class="ident">TermError</span>::<span class="ident">from_crossterm</span>)<span class="question-mark">?</span>;
@@ -653,14 +680,23 @@
     }
 }
 
+<span class="doccomment">/// Shared memory between terminal handle copies.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">struct</span> <span class="ident">Shared</span> {
+    <span class="doccomment">/// Whether the terminal handle has been cleaned up (using</span>
+    <span class="doccomment">/// terminal.cleanup).</span>
     <span class="ident">cleanedup</span>: <span class="ident">AtomicBool</span>,
+    <span class="doccomment">/// Minimum required screen size, configured in the builder.</span>
     <span class="ident">min_screen</span>: <span class="ident">Coord2</span>,
+    <span class="doccomment">/// Receiver of events channel.</span>
     <span class="ident">event_chan</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">watch</span>::<span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// A lock to the standard output.</span>
     <span class="ident">stdout</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Stdout</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Size of the screen, as an atomic variable (y &lt;&lt; 16 | x).</span>
     <span class="ident">screen_size</span>: <span class="ident">AtomicU32</span>,
+    <span class="doccomment">/// Buffer responsible for rendering the screen.</span>
     <span class="ident">screen_buffer</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">ScreenBuffer</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Interval between screen renderings.</span>
     <span class="ident">frame_time</span>: <span class="ident">Duration</span>,
 }
 
