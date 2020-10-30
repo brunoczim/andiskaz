@@ -1,6 +1,6 @@
 use andiskaz::{
     color::Color2,
-    input::Event,
+    event::Event,
     style::Style,
     terminal,
     terminal::Terminal,

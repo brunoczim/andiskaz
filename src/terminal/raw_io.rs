@@ -67,7 +67,7 @@ pub fn emergency_restore() {
         "{}",
         crossterm::style::SetForegroundColor(crossterm::style::Color::Reset)
     );
-    if terminal::LeaveAlternateScreen.is_ansi_code_supported() {
+    if crossterm::terminal::LeaveAlternateScreen.is_ansi_code_supported() {
         print!("{}", crossterm::terminal::LeaveAlternateScreen.ansi_code());
     }
     println!();

@@ -1,7 +1,7 @@
 use andiskaz::{
     color::{BasicColor, Color, Color2},
     coord::{Coord, Coord2},
-    input::{Event, Key, KeyEvent, ResizeEvent},
+    event::{Event, Key, KeyEvent, ResizeEvent},
     string::{TermGrapheme, TermString},
     style::Style,
     terminal,

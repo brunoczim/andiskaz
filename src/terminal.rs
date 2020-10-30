@@ -17,7 +17,7 @@ use self::{
 use crate::{
     coord,
     coord::{Coord, Coord2},
-    input::{key_from_crossterm, Event, KeyEvent, ResizeEvent},
+    event::{key_from_crossterm, Event, KeyEvent, ResizeEvent},
 };
 use crossterm::event::Event as CrosstermEvent;
 use std::{
