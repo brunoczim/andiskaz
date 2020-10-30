@@ -183,7 +183,6 @@ impl<'terminal> Screen<'terminal> {
 
     /// Prints a grapheme identifier-encoded text using some style options like
     /// ratio to the screen.
-    // TODO: break in smaller functions.
     pub fn styled_text<P>(
         &mut self,
         tstring: &TermString,
@@ -192,7 +191,6 @@ impl<'terminal> Screen<'terminal> {
     where
         P: PairTransformer,
     {
-        tdebug!("{}\n", tstring);
         let mut len = tstring.count_graphemes();
         let mut slice = tstring.index(..);
         let screen_size = self.terminal.screen_size();
@@ -204,30 +202,15 @@ impl<'terminal> Screen<'terminal> {
         while len > 0 && is_inside {
             is_inside = cursor.y - style.top_margin + 1 < size.y;
             let width = coord::to_index(size.x);
-            let pos = if width <= slice.len() {
-                let mut pos = slice
-                    .index(.. size.x as usize)
-                    .iter()
-                    .rev()
-                    .position(|grapheme| grapheme == TermGrapheme::space())
-                    .map_or(width, |rev| len - rev);
-                if !is_inside {
-                    pos -= 1;
-                }
-                pos
-            } else {
-                len
-            };
+            let pos = self.find_break_pos(width, len, size, &slice, is_inside);
+
             cursor.x = size.x - pos as Coord;
             cursor.x = cursor.x + style.left_margin - style.right_margin;
             cursor.x = cursor.x / style.align_denom * style.align_numer;
-            for grapheme in &slice.index(.. pos) {
-                self.update(cursor, |tile| {
-                    let colors = style.colors.transform_pair(tile.colors);
-                    *tile = Tile { grapheme: grapheme.clone(), colors };
-                });
-                cursor.x += 1;
-            }
+
+            slice = slice.index(.. pos);
+
+            self.write_styled_slice(&slice, &style, &mut cursor);
 
             if pos != len && !is_inside {
                 self.update(cursor, |tile| {
@@ -237,11 +220,53 @@ impl<'terminal> Screen<'terminal> {
                 });
             }
 
-            slice = slice.index(pos ..);
             cursor.y += 1;
             len -= pos;
         }
         cursor.y
+    }
+
+    /// Finds the position where a line should break in a styled text.
+    fn find_break_pos(
+        &self,
+        width: usize,
+        total_graphemes: usize,
+        term_size: Coord2,
+        slice: &TermString,
+        is_inside: bool,
+    ) -> usize {
+        if width <= slice.len() {
+            let mut pos = slice
+                .index(.. term_size.x as usize)
+                .iter()
+                .rev()
+                .position(|grapheme| grapheme == TermGrapheme::space())
+                .map_or(width, |rev| total_graphemes - rev);
+            if !is_inside {
+                pos -= 1;
+            }
+            pos
+        } else {
+            total_graphemes
+        }
+    }
+
+    /// Writes a slice using the given style. It should fit in one line.
+    fn write_styled_slice<P>(
+        &mut self,
+        slice: &TermString,
+        style: &Style<P>,
+        cursor: &mut Coord2,
+    ) where
+        P: PairTransformer,
+    {
+        for grapheme in slice {
+            self.update(*cursor, |tile| {
+                let colors = style.colors.transform_pair(tile.colors);
+                *tile = Tile { grapheme: grapheme.clone(), colors };
+            });
+            cursor.x += 1;
+        }
     }
 
     /// Triggers the resize of the screen.
@@ -262,7 +287,6 @@ impl<'terminal> Screen<'terminal> {
     }
 
     /// Renders the buffer into the screen using the referred terminal.
-    // TODO: break in smaller functions.
     pub(crate) async fn render(
         &mut self,
         buf: &mut String,
@@ -270,8 +294,34 @@ impl<'terminal> Screen<'terminal> {
         let screen_size = self.terminal.screen_size();
         buf.clear();
 
-        let mut cursor = Coord2 { x: 0, y: 0 };
         let mut colors = Color2::default();
+        let mut cursor = Coord2 { x: 0, y: 0 };
+        self.render_init_term(buf, colors, cursor)?;
+
+        for &coord in self.buffer.changed.iter() {
+            self.render_tile(
+                buf,
+                &mut colors,
+                &mut cursor,
+                screen_size,
+                coord,
+            )?;
+        }
+
+        let stdout = &mut self.terminal.shared.stdout.lock().await;
+        write_and_flush(buf.as_bytes(), stdout).await?;
+        self.buffer.next_tick();
+
+        Ok(())
+    }
+
+    /// Initializes terminal state into the buffer before rendering.
+    fn render_init_term(
+        &self,
+        buf: &mut String,
+        colors: Color2,
+        cursor: Coord2,
+    ) -> Result<(), TermError> {
         write!(
             buf,
             "{}{}{}",
@@ -287,40 +337,46 @@ impl<'terminal> Screen<'terminal> {
             ),
         )?;
 
-        for &coord in self.buffer.changed.iter() {
-            if cursor != coord {
-                write!(
-                    buf,
-                    "{}",
-                    crossterm::cursor::MoveTo(
-                        coord::to_crossterm(coord.x),
-                        coord::to_crossterm(coord.y)
-                    )
-                )?;
-            }
-            cursor = coord;
+        Ok(())
+    }
 
-            let tile = self.get(cursor);
-            if colors.background != tile.colors.background {
-                let color = tile.colors.background.to_crossterm();
-                write!(buf, "{}", crossterm::style::SetBackgroundColor(color))?;
-            }
-            if colors.foreground != tile.colors.foreground {
-                let color = tile.colors.foreground.to_crossterm();
-                write!(buf, "{}", crossterm::style::SetForegroundColor(color))?;
-            }
-            colors = tile.colors;
-
-            write!(buf, "{}", tile.grapheme)?;
-
-            if cursor.x <= screen_size.x {
-                cursor.x += 1;
-            }
+    /// Renders a single tile in the given coordinate.
+    fn render_tile(
+        &self,
+        buf: &mut String,
+        colors: &mut Color2,
+        cursor: &mut Coord2,
+        screen_size: Coord2,
+        coord: Coord2,
+    ) -> Result<(), TermError> {
+        if *cursor != coord {
+            write!(
+                buf,
+                "{}",
+                crossterm::cursor::MoveTo(
+                    coord::to_crossterm(coord.x),
+                    coord::to_crossterm(coord.y)
+                )
+            )?;
         }
+        *cursor = coord;
 
-        let stdout = &mut self.terminal.shared.stdout.lock().await;
-        write_and_flush(buf.as_bytes(), stdout).await?;
-        self.buffer.next_tick();
+        let tile = self.get(*cursor);
+        if colors.background != tile.colors.background {
+            let color = tile.colors.background.to_crossterm();
+            write!(buf, "{}", crossterm::style::SetBackgroundColor(color))?;
+        }
+        if colors.foreground != tile.colors.foreground {
+            let color = tile.colors.foreground.to_crossterm();
+            write!(buf, "{}", crossterm::style::SetForegroundColor(color))?;
+        }
+        *colors = tile.colors;
+
+        write!(buf, "{}", tile.grapheme)?;
+
+        if cursor.x <= screen_size.x {
+            cursor.x += 1;
+        }
 
         Ok(())
     }
