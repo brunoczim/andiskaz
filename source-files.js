@@ -1,5 +1,5 @@
 var N = null;var sourcesIndex = {};
-sourcesIndex["andiskaz"] = {"name":"","dirs":[{"name":"color","files":["basic.rs","brightness.rs","eight_bit.rs","error.rs","rgb.rs","transform.rs"]},{"name":"string","files":["error.rs","index.rs","iter.rs"]},{"name":"terminal","files":["error.rs","raw_io.rs","screen.rs"]}],"files":["color.rs","coord.rs","input.rs","lib.rs","macros.rs","string.rs","style.rs","terminal.rs"]};
+sourcesIndex["andiskaz"] = {"name":"","dirs":[{"name":"color","files":["basic.rs","brightness.rs","eight_bit.rs","error.rs","rgb.rs","transform.rs"]},{"name":"string","files":["error.rs","index.rs","iter.rs"]},{"name":"terminal","files":["error.rs","raw_io.rs","screen.rs"]}],"files":["color.rs","coord.rs","event.rs","lib.rs","macros.rs","string.rs","style.rs","terminal.rs"]};
 sourcesIndex["arc_swap"] = {"name":"","files":["access.rs","as_raw.rs","cache.rs","compile_fail_tests.rs","debt.rs","gen_lock.rs","lib.rs","ref_cnt.rs"]};
 sourcesIndex["bitflags"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["bytes"] = {"name":"","dirs":[{"name":"buf","dirs":[{"name":"ext","files":["chain.rs","limit.rs","mod.rs","reader.rs","take.rs","writer.rs"]}],"files":["buf_impl.rs","buf_mut.rs","iter.rs","mod.rs","vec_deque.rs"]},{"name":"fmt","files":["debug.rs","hex.rs","mod.rs"]}],"files":["bytes.rs","bytes_mut.rs","lib.rs","loom.rs"]};

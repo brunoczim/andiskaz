@@ -376,7 +376,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">coord</span>,
     <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">Coord2</span>},
-    <span class="ident">input</span>::{<span class="ident">key_from_crossterm</span>, <span class="ident">Event</span>, <span class="ident">KeyEvent</span>, <span class="ident">ResizeEvent</span>},
+    <span class="ident">event</span>::{<span class="ident">key_from_crossterm</span>, <span class="ident">Event</span>, <span class="ident">KeyEvent</span>, <span class="ident">ResizeEvent</span>},
 };
 <span class="kw">use</span> <span class="ident">crossterm</span>::<span class="ident">event</span>::<span class="ident">Event</span> <span class="kw">as</span> <span class="ident">CrosstermEvent</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -415,7 +415,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">min_screen</span>: <span class="ident">Coord2</span> { <span class="ident">x</span>: <span class="number">80</span>, <span class="ident">y</span>: <span class="number">25</span> },
-            <span class="ident">frame_time</span>: <span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">200</span>),
+            <span class="ident">frame_time</span>: <span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">20</span>),
         }
     }
 

@@ -161,7 +161,7 @@
         <span class="string">&quot;{}&quot;</span>,
         <span class="ident">crossterm</span>::<span class="ident">style</span>::<span class="ident">SetForegroundColor</span>(<span class="ident">crossterm</span>::<span class="ident">style</span>::<span class="ident">Color</span>::<span class="ident">Reset</span>)
     );
-    <span class="kw">if</span> <span class="ident">terminal</span>::<span class="ident">LeaveAlternateScreen</span>.<span class="ident">is_ansi_code_supported</span>() {
+    <span class="kw">if</span> <span class="ident">crossterm</span>::<span class="ident">terminal</span>::<span class="ident">LeaveAlternateScreen</span>.<span class="ident">is_ansi_code_supported</span>() {
         <span class="macro">print</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">crossterm</span>::<span class="ident">terminal</span>::<span class="ident">LeaveAlternateScreen</span>.<span class="ident">ansi_code</span>());
     }
     <span class="macro">println</span><span class="macro">!</span>();
