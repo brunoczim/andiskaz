@@ -139,6 +139,7 @@ impl Builder {
     }
 }
 
+/// Panic used when an auxiliary task did not fail but finished before main.
 #[inline(never)]
 #[cold]
 fn aux_must_fail() -> ! {
@@ -148,6 +149,7 @@ fn aux_must_fail() -> ! {
 /// A handle to the terminal. It uses atomic reference counting.
 #[derive(Debug, Clone)]
 pub struct Terminal {
+    /// The shared memory between copies of the terminal handle.
     shared: Arc<Shared>,
 }
 
@@ -188,6 +190,7 @@ impl Terminal {
         Screen::new(self, self.shared.screen_buffer.lock().await)
     }
 
+    /// Function that listens to events such as keys or resizes.
     async fn event_listener(
         &self,
         sender: watch::Sender<Event>,
@@ -240,6 +243,7 @@ impl Terminal {
         Ok(())
     }
 
+    /// Function that periodically renders the screen buffer.
     async fn renderer(&self) -> Result<(), TermError> {
         let mut interval = time::interval(self.shared.frame_time);
         let mut buf = String::new();
@@ -251,6 +255,9 @@ impl Terminal {
         Ok(())
     }
 
+    /// Checks if the screen size is adequate and if not, locks the stdout
+    /// (settings the parameter guard to a mutex guard to the stdout), and
+    /// also asks the user to resize.
     async fn check_screen_size<'guard>(
         &'guard self,
         size: Coord2,
@@ -279,6 +286,7 @@ impl Terminal {
         Ok(())
     }
 
+    /// Initialization of the terminal, such as cleaning the screen.
     async fn setup(&self) -> Result<(), TermError> {
         let mut buf = String::new();
         save_screen(&mut buf)?;
@@ -299,6 +307,7 @@ impl Terminal {
         Ok(())
     }
 
+    /// Asynchronous cleanup. It is preferred to call this before dropping.
     async fn cleanup(&self) -> Result<(), TermError> {
         task::block_in_place(|| crossterm::terminal::disable_raw_mode())
             .map_err(TermError::from_crossterm)?;
@@ -312,14 +321,23 @@ impl Terminal {
     }
 }
 
+/// Shared memory between terminal handle copies.
 #[derive(Debug)]
 struct Shared {
+    /// Whether the terminal handle has been cleaned up (using
+    /// terminal.cleanup).
     cleanedup: AtomicBool,
+    /// Minimum required screen size, configured in the builder.
     min_screen: Coord2,
+    /// Receiver of events channel.
     event_chan: Mutex<watch::Receiver<Event>>,
+    /// A lock to the standard output.
     stdout: Mutex<io::Stdout>,
+    /// Size of the screen, as an atomic variable (y << 16 | x).
     screen_size: AtomicU32,
+    /// Buffer responsible for rendering the screen.
     screen_buffer: Mutex<ScreenBuffer>,
+    /// Interval between screen renderings.
     frame_time: Duration,
 }
 
