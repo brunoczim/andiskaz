@@ -77,7 +77,7 @@ async fn term_main(mut game: Game, term: Terminal) {
 struct Game {
     /// The message we will show at the top of the terminal.
     message: TermString,
-    /// The cursor position in the screen (y is relative to the message).
+    /// The cursor position in the screen (y is always below the message).
     cursor: Coord2,
 }
 
@@ -86,7 +86,8 @@ impl Game {
     fn new() -> Self {
         Self {
             message: tstring!["Use arrows to control, press ESC to exit!"],
-            cursor: Coord2 { x: 0, y: 0 },
+            // Y never goes above 1, because 0 is the position of the message.
+            cursor: Coord2 { x: 0, y: 1 },
         }
     }
 
@@ -128,67 +129,77 @@ impl Game {
                 background: color,
             },
         };
-        // The absolute position in the screen.
-        let point = Coord2 { x: self.cursor.x, y: self.cursor.y + 1 };
         // Sets the cursor's character and colors.
-        screen.set(point, tile);
+        screen.set(self.cursor, tile);
     }
 
     /// Handles a key event.
     async fn handle_key(&mut self, key: KeyEvent, term: &Terminal) -> bool {
-        let new_cursor = if key.ctrl || key.alt || key.shift {
-            // We don't want any modifiers. Don't move the cursor.
-            None
-        } else {
+        // Locks the screen.
+        let mut screen = term.lock_screen().await;
+        // "Erases" the cursor using the same color as the background color
+        // of all the terminal.
+        self.render_cursor(&mut screen, BasicColor::Black.into()).await;
+
+        // Whether the "game" should keep executing.
+        let mut executing = true;
+
+        // We don't want any modifiers.
+        if !key.ctrl && !key.alt && !key.shift {
             // Matches the main key (i.e. the key that is not a modifier).
             match key.main_key {
+                // ESC. Stop executing.
+                Key::Esc => executing = false,
+
                 // Arrow up. Moves the cursor up.
-                Key::Up => Some(Coord2 {
-                    x: self.cursor.x,
-                    y: self.cursor.y.saturating_sub(1),
-                }),
+                Key::Up => {
+                    if self.cursor.y > 1 {
+                        self.cursor.y -= 1;
+                    }
+                },
+
                 // Arrow down. Moves the cursor down.
-                Key::Down => Some(Coord2 {
-                    x: self.cursor.x,
-                    y: (term.screen_size().y - 1).min(self.cursor.y + 1),
-                }),
+                Key::Down => {
+                    if self.cursor.y < screen.size().y - 1 {
+                        self.cursor.y += 1;
+                    }
+                },
+
                 // Arrow left. Moves the cursor left.
-                Key::Left => Some(Coord2 {
-                    y: self.cursor.y,
-                    x: self.cursor.x.saturating_sub(1),
-                }),
+                Key::Left => {
+                    if self.cursor.x > 0 {
+                        self.cursor.x -= 1;
+                    }
+                },
+
                 // Arrow right. Moves the cursor right.
-                Key::Right => Some(Coord2 {
-                    y: self.cursor.y,
-                    x: term.screen_size().x.min(self.cursor.x + 1),
-                }),
-                // Otherwise, don't move the cursor.
-                _ => None,
+                Key::Right => {
+                    if self.cursor.x < screen.size().x - 1 {
+                        self.cursor.x += 1;
+                    }
+                },
+
+                // Otherwise, do nothing.
+                _ => (),
             }
         };
 
-        // If there is a new cursor position...
-        if let Some(new_cursor) = new_cursor {
-            // Locks the screen.
-            let mut screen = term.lock_screen().await;
-            // "Erases" the cursor using the same color as the background color
-            // of all the terminal.
-            self.render_cursor(&mut screen, BasicColor::Black.into()).await;
-            // Sets the new cursor.
-            self.cursor = new_cursor;
-            // Renders the new cursor.
-            self.render_cursor(&mut screen, BasicColor::White.into()).await;
-        }
+        // Renders the new cursor.
+        self.render_cursor(&mut screen, BasicColor::White.into()).await;
 
-        // Keep executing if the main key was not ESC.
-        key.main_key != Key::Esc
+        executing
     }
 
     /// Handles a resize event.
     async fn handle_resize(&mut self, evt: ResizeEvent, term: &Terminal) {
         // Adjust the cursor position, if it would be outside of the terminal.
-        self.cursor.x = self.cursor.x.min(evt.size.x);
-        self.cursor.y = self.cursor.y.min(evt.size.y - 1);
+        if self.cursor.y >= evt.size.y {
+            self.cursor.y = evt.size.y - 1;
+        }
+        if self.cursor.x >= evt.size.x {
+            self.cursor.x = evt.size.x - 1;
+        }
+
         // Renders everything, since resizing scrambles the screen.
         self.render(term).await;
     }
