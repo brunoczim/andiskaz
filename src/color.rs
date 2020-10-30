@@ -49,6 +49,14 @@ impl Default for Color2 {
     }
 }
 
+impl Not for Color2 {
+    type Output = Color2;
+
+    fn not(self) -> Self::Output {
+        Color2 { foreground: !self.foreground, background: !self.background }
+    }
+}
+
 /// A color usable in the terminal.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Color {

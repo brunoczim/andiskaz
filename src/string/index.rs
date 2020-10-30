@@ -57,8 +57,7 @@ impl Index for Range<usize> {
             iter.next()?;
         }
         let end = iter.next().map_or(tstring.len(), |(index, _)| index);
-        let range =
-            start + tstring.range.start .. end + tstring.range.start;
+        let range = start + tstring.range.start .. end + tstring.range.start;
         Some(TermString { alloc: tstring.alloc.clone(), range })
     }
 
@@ -91,11 +90,9 @@ impl Index for RangeFrom<usize> {
         for _ in 0 .. self.start {
             iter.next()?;
         }
-        let start =
-            iter.next().map_or(tstring.alloc.len(), |(index, _)| index);
+        let start = iter.next().map_or(tstring.alloc.len(), |(index, _)| index);
         let end = tstring.alloc.len();
-        let range =
-            start + tstring.range.start .. end + tstring.range.start;
+        let range = start + tstring.range.start .. end + tstring.range.start;
         Some(TermString { alloc: tstring.alloc.clone(), range })
     }
 

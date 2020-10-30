@@ -56,7 +56,7 @@ impl Builder {
     pub fn new() -> Self {
         Self {
             min_screen: Coord2 { x: 80, y: 25 },
-            frame_time: Duration::from_millis(200),
+            frame_time: Duration::from_millis(20),
         }
     }
 
