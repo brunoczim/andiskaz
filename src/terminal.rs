@@ -2,38 +2,18 @@
 
 mod error;
 mod raw_io;
-mod screen;
 
-pub use self::{
-    error::{ListenerFailed, TermError},
-    raw_io::emergency_restore,
-    screen::{Screen, Tile},
-};
-
-use self::{
-    raw_io::{restore_screen, save_screen, write_and_flush},
-    screen::ScreenBuffer,
-};
 use crate::{
     coord,
-    coord::{Coord, Coord2},
-    event::{key_from_crossterm, Event, KeyEvent, ResizeEvent},
+    coord::Coord2,
+    error::Error,
+    event::{event_listener, Event, EventListener, ResizeEvent},
+    screen::{renderer, Screen},
 };
-use crossterm::event::Event as CrosstermEvent;
-use std::{
-    fmt::Write,
-    future::Future,
-    sync::{
-        atomic::{AtomicBool, AtomicU32, Ordering::*},
-        Arc,
-    },
-    time::Duration,
-};
+use std::{future::Future, sync::Arc, time::Duration};
 use tokio::{
-    io,
-    sync::{watch, Mutex, MutexGuard},
+    sync::{watch, Barrier},
     task,
-    time,
 };
 
 /// A terminal configuration builder.
@@ -43,6 +23,7 @@ pub struct Builder {
     min_screen: Coord2,
     /// Given time that the screen is updated.
     frame_time: Duration,
+    event_interval: Duration,
 }
 
 impl Default for Builder {
@@ -57,6 +38,7 @@ impl Builder {
         Self {
             min_screen: Coord2 { x: 80, y: 25 },
             frame_time: Duration::from_millis(20),
+            event_interval: Duration::from_millis(20),
         }
     }
 
@@ -70,30 +52,46 @@ impl Builder {
         Self { frame_time, ..self }
     }
 
+    /// Builds the rate that the screen is updated.
+    pub fn event_interval(self, event_interval: Duration) -> Self {
+        Self { event_interval, ..self }
+    }
+
     /// Starts the application and gives it a handle to the terminal. When the
     /// given start function finishes, the application's execution stops as
     /// well.
-    pub async fn run<F, A, T>(self, start: F) -> Result<T, TermError>
+    pub async fn run<F, A, T>(self, start: F) -> Result<T, Error>
     where
         F: FnOnce(Terminal) -> A + Send + 'static,
         A: Future<Output = T> + Send + 'static,
         T: Send + 'static,
     {
         let dummy = Event::Resize(ResizeEvent { size: Coord2 { x: 0, y: 0 } });
-        let (sender, mut receiver) = watch::channel(dummy);
-        receiver.recv().await;
+        let (sender, receiver) = watch::channel(dummy);
 
         let terminal = self.finish(receiver).await?;
-        terminal.setup().await?;
+        terminal.screen.setup().await?;
+
+        let mut barrier = Arc::new(Barrier::new(3));
 
         let main_fut = {
             let terminal = terminal.clone();
-            tokio::spawn(async move { start(terminal).await })
+            let barrier = barrier.clone();
+            tokio::spawn(async move {
+                let screen = terminal.screen.clone();
+                let _guard = screen.conn_guard();
+                barrier.wait().await;
+                start(terminal).await
+            })
         };
 
         let listener_fut = {
-            let terminal = terminal.clone();
-            tokio::spawn(async move { terminal.event_listener(sender).await })
+            let interval = self.event_interval;
+            let screen = terminal.screen.clone();
+            tokio::spawn(async move {
+                barrier.wait().await;
+                event_listener(interval, sender, &screen, &mut None).await
+            })
         };
 
         let renderer_fut = {
@@ -114,28 +112,20 @@ impl Builder {
     /// Finishes the builder and produces a terminal handle.
     async fn finish(
         self,
-        event_chan: watch::Receiver<Event>,
-    ) -> Result<Terminal, TermError> {
+        event_recv: watch::Receiver<Event>,
+    ) -> Result<Terminal, Error> {
         let res = task::block_in_place(|| {
             crossterm::terminal::enable_raw_mode()?;
             crossterm::terminal::size()
         });
-        let (width, height) = res.map_err(TermError::from_crossterm)?;
+        let (width, height) = res.map_err(Error::from_crossterm)?;
         let screen_size = Coord2 {
             y: coord::from_crossterm(height),
             x: coord::from_crossterm(width),
         };
-        let size_bits = AtomicU32::new(width as u32 | (height as u32) << 16);
-        let shared = Arc::new(Shared {
-            cleanedup: AtomicBool::new(false),
-            min_screen: self.min_screen,
-            event_chan: Mutex::new(event_chan),
-            screen_size: size_bits,
-            stdout: Mutex::new(io::stdout()),
-            frame_time: self.frame_time,
-            screen_buffer: Mutex::new(ScreenBuffer::blank(screen_size)),
-        });
-        Ok(Terminal { shared })
+        let screen = Screen::new(screen_size, self.min_screen, self.frame_time);
+        let events = EventListener { recv: event_recv };
+        Ok(Terminal { screen, events })
     }
 }
 
@@ -146,11 +136,10 @@ fn aux_must_fail() -> ! {
     panic!("Auxiliary task should not finish before main task unless it failed")
 }
 
-/// A handle to the terminal. It uses atomic reference counting.
 #[derive(Debug, Clone)]
 pub struct Terminal {
-    /// The shared memory between copies of the terminal handle.
-    shared: Arc<Shared>,
+    pub screen: Screen,
+    pub events: EventListener,
 }
 
 impl Terminal {
@@ -160,196 +149,12 @@ impl Terminal {
     ///
     /// This function uses the default configuration. See [`Builder`] for
     /// terminal settings.
-    pub async fn run<F, A, T>(start: F) -> Result<T, TermError>
+    pub async fn run<F, A, T>(start: F) -> Result<T, Error>
     where
-        F: FnOnce(Terminal) -> A + Send + 'static,
+        F: FnOnce(&mut Terminal) -> A + Send + 'static,
         A: Future<Output = T> + Send + 'static,
         T: Send + 'static,
     {
         Builder::new().run(start).await
-    }
-
-    /// Returns current screen size.
-    pub fn screen_size(&self) -> Coord2 {
-        let bits = self.shared.screen_size.load(Acquire);
-        Coord2 { x: bits as Coord, y: (bits >> 16) as Coord }
-    }
-
-    /// Returns the mininum screen size.
-    pub fn min_screen(&self) -> Coord2 {
-        self.shared.min_screen
-    }
-
-    /// Listens for an event to happen. Waits until an event is available.
-    pub async fn listen_event(&self) -> Result<Event, ListenerFailed> {
-        self.shared.event_chan.lock().await.recv().await.ok_or(ListenerFailed)
-    }
-
-    /// Sets tile contents at a given position.
-    pub async fn lock_screen<'terminal>(&'terminal self) -> Screen<'terminal> {
-        Screen::new(self, self.shared.screen_buffer.lock().await)
-    }
-
-    /// Function that listens to events such as keys or resizes.
-    async fn event_listener(
-        &self,
-        sender: watch::Sender<Event>,
-    ) -> Result<(), TermError> {
-        let mut stdout = None;
-        self.check_screen_size(self.screen_size(), &mut stdout).await?;
-
-        while !self.shared.cleanedup.load(Acquire) {
-            let evt = task::block_in_place(|| {
-                match crossterm::event::poll(Duration::from_millis(10))? {
-                    true => crossterm::event::read().map(Some),
-                    false => Ok(None),
-                }
-            });
-
-            match evt.map_err(TermError::from_crossterm)? {
-                Some(CrosstermEvent::Key(key)) => {
-                    let maybe_key = key_from_crossterm(key.code)
-                        .filter(|_| stdout.is_none());
-                    if let Some(main_key) = maybe_key {
-                        use crossterm::event::KeyModifiers as Mod;
-
-                        let evt = KeyEvent {
-                            main_key,
-                            ctrl: key.modifiers.intersects(Mod::CONTROL),
-                            alt: key.modifiers.intersects(Mod::ALT),
-                            shift: key.modifiers.intersects(Mod::SHIFT),
-                        };
-
-                        let _ = sender.broadcast(Event::Key(evt));
-                    }
-                },
-
-                Some(CrosstermEvent::Resize(width, height)) => {
-                    let size = Coord2 { x: width, y: height };
-                    self.check_screen_size(size, &mut stdout).await?;
-                    if stdout.is_none() {
-                        let mut screen = self.lock_screen().await;
-                        screen.resize(size).await?;
-
-                        let evt = ResizeEvent { size };
-                        let _ = sender.broadcast(Event::Resize(evt));
-                    }
-                },
-
-                _ => (),
-            }
-        }
-
-        Ok(())
-    }
-
-    /// Function that periodically renders the screen buffer.
-    async fn renderer(&self) -> Result<(), TermError> {
-        let mut interval = time::interval(self.shared.frame_time);
-        let mut buf = String::new();
-        while !self.shared.cleanedup.load(Acquire) {
-            interval.tick().await;
-            self.lock_screen().await.render(&mut buf).await?;
-        }
-
-        Ok(())
-    }
-
-    /// Checks if the screen size is adequate and if not, locks the stdout
-    /// (settings the parameter guard to a mutex guard to the stdout), and
-    /// also asks the user to resize.
-    async fn check_screen_size<'guard>(
-        &'guard self,
-        size: Coord2,
-        guard: &mut Option<MutexGuard<'guard, io::Stdout>>,
-    ) -> io::Result<()> {
-        if size.x < self.shared.min_screen.x
-            || size.y < self.shared.min_screen.y
-        {
-            if guard.is_none() {
-                let mut stdout = self.shared.stdout.lock().await;
-                let buf = format!(
-                    "{}{}RESIZE {}x{}",
-                    crossterm::terminal::Clear(
-                        crossterm::terminal::ClearType::All
-                    ),
-                    crossterm::cursor::MoveTo(0, 0),
-                    self.shared.min_screen.x,
-                    self.shared.min_screen.y,
-                );
-                write_and_flush(buf.as_bytes(), &mut stdout).await?;
-                *guard = Some(stdout);
-            }
-        } else {
-            *guard = None;
-        }
-        Ok(())
-    }
-
-    /// Initialization of the terminal, such as cleaning the screen.
-    async fn setup(&self) -> Result<(), TermError> {
-        let mut buf = String::new();
-        save_screen(&mut buf)?;
-        write!(
-            buf,
-            "{}{}{}{}",
-            crossterm::style::SetBackgroundColor(
-                crossterm::style::Color::Black
-            ),
-            crossterm::style::SetForegroundColor(
-                crossterm::style::Color::White
-            ),
-            crossterm::cursor::Hide,
-            crossterm::terminal::Clear(crossterm::terminal::ClearType::All),
-        )?;
-        let mut guard = self.shared.stdout.lock().await;
-        write_and_flush(buf.as_bytes(), &mut guard).await?;
-        Ok(())
-    }
-
-    /// Asynchronous cleanup. It is preferred to call this before dropping.
-    async fn cleanup(&self) -> Result<(), TermError> {
-        task::block_in_place(|| crossterm::terminal::disable_raw_mode())
-            .map_err(TermError::from_crossterm)?;
-        let mut buf = String::new();
-        write!(buf, "{}", crossterm::cursor::Show)?;
-        restore_screen(&mut buf)?;
-        let mut guard = self.shared.stdout.lock().await;
-        write_and_flush(buf.as_bytes(), &mut guard).await?;
-        self.shared.cleanedup.store(true, Release);
-        Ok(())
-    }
-}
-
-/// Shared memory between terminal handle copies.
-#[derive(Debug)]
-struct Shared {
-    /// Whether the terminal handle has been cleaned up (using
-    /// terminal.cleanup).
-    cleanedup: AtomicBool,
-    /// Minimum required screen size, configured in the builder.
-    min_screen: Coord2,
-    /// Receiver of events channel.
-    event_chan: Mutex<watch::Receiver<Event>>,
-    /// A lock to the standard output.
-    stdout: Mutex<io::Stdout>,
-    /// Size of the screen, as an atomic variable (y << 16 | x).
-    screen_size: AtomicU32,
-    /// Buffer responsible for rendering the screen.
-    screen_buffer: Mutex<ScreenBuffer>,
-    /// Interval between screen renderings.
-    frame_time: Duration,
-}
-
-impl Drop for Shared {
-    fn drop(&mut self) {
-        if !self.cleanedup.load(Relaxed) {
-            let _ = crossterm::terminal::disable_raw_mode();
-            let mut buf = String::new();
-            write!(buf, "{}", crossterm::cursor::Show)
-                .ok()
-                .and_then(|_| restore_screen(&mut buf).ok())
-                .map(|_| println!("{}", buf));
-        }
     }
 }

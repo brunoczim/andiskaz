@@ -10,16 +10,17 @@ edition = "2018"
 unicode-segmentation = "^1.6.0"
 lazy_static = "^1.4"
 crossterm = "^0.18"
+futures = "^0.3.7"
 
 [dependencies.tokio]
-version = "^0.2.11"
+version = "^0.3.2"
 features = [
     "macros",
     "io-util",
     "io-std",
-    "blocking",
     "sync",
-    "rt-threaded",
+    "rt",
+    "rt-multi-thread",
     "fs",
     "time"
 ]
