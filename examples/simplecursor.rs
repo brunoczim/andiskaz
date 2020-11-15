@@ -1,11 +1,14 @@
 use andiskaz::{
     color::{BasicColor, Color, Color2},
     coord::{Coord, Coord2},
+    emergency_restore,
+    error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
+    screen::{LockedScreen, Tile},
     string::{TermGrapheme, TermString},
     style::Style,
     terminal,
-    terminal::{Screen, Terminal, Tile},
+    terminal::Terminal,
     tstring,
 };
 use std::{panic, process::exit};
@@ -16,7 +19,7 @@ async fn main() {
     // Set panic hook so we can see the panic even if terminal was being used in
     // raw mode.
     panic::set_hook(Box::new(|info| {
-        let _ = terminal::emergency_restore();
+        let _ = emergency_restore();
         eprintln!("{}", info);
     }));
 
@@ -45,24 +48,24 @@ async fn main() {
 }
 
 /// The terminal main function.
-async fn term_main(mut game: Game, term: Terminal) {
+async fn term_main(mut game: Game, mut term: Terminal) -> Result<(), Error> {
     // Renders for the first time.
-    game.render(&term).await;
+    game.render(&term).await?;
 
     loop {
         // Awaits for an event.
-        match term.listen_event().await {
+        match term.events.listen().await {
             // This is a key event.
             Ok(Event::Key(evt)) => {
                 // Let the game state handle the key, and they will tell us if
                 // we should keep executing (i.e. ESC was not pressed).
-                if !game.handle_key(evt, &term).await {
+                if !game.handle_key(evt, &term).await? {
                     break;
                 }
             },
 
             // This is a resize event. Let the game state handle it.
-            Ok(Event::Resize(evt)) => game.handle_resize(evt, &term).await,
+            Ok(Event::Resize(evt)) => game.handle_resize(evt, &term).await?,
 
             // Only possible error is if the event listener failed. In this
             // case, Terminal::run or Builder::run will already tell us that
@@ -70,6 +73,8 @@ async fn term_main(mut game: Game, term: Terminal) {
             Err(_) => break,
         }
     }
+
+    Ok(())
 }
 
 /// Game state.
@@ -92,7 +97,7 @@ impl Game {
     }
 
     /// Renders the game state. Should be called only on resize or first render.
-    async fn render(&self, term: &Terminal) {
+    async fn render(&self, term: &Terminal) -> Result<(), Error> {
         // Colors of the message. Black foreground, green background.
         let colors = Color2 {
             foreground: BasicColor::Black.into(),
@@ -103,19 +108,21 @@ impl Game {
         let style = Style::with_colors(colors).align(1, 2);
 
         // Locking the screen.
-        let mut screen = term.lock_screen().await;
+        let mut screen = term.screen.lock().await?;
 
         // Puts our message.
         screen.styled_text(&self.message, style);
 
         // Renders the cursor with black foreground, white foreground.
         self.render_cursor(&mut screen, BasicColor::White.into()).await;
+
+        Ok(())
     }
 
     /// Renders the cursor with the given color.
     async fn render_cursor<'term>(
         &self,
-        screen: &mut Screen<'term>,
+        screen: &mut LockedScreen<'term>,
         color: Color,
     ) {
         // A space with the given colors.
@@ -134,9 +141,13 @@ impl Game {
     }
 
     /// Handles a key event.
-    async fn handle_key(&mut self, key: KeyEvent, term: &Terminal) -> bool {
+    async fn handle_key(
+        &mut self,
+        key: KeyEvent,
+        term: &Terminal,
+    ) -> Result<bool, Error> {
         // Locks the screen.
-        let mut screen = term.lock_screen().await;
+        let mut screen = term.screen.lock().await?;
         // "Erases" the cursor using the same color as the background color
         // of all the terminal.
         self.render_cursor(&mut screen, BasicColor::Black.into()).await;
@@ -187,11 +198,15 @@ impl Game {
         // Renders the new cursor.
         self.render_cursor(&mut screen, BasicColor::White.into()).await;
 
-        executing
+        Ok(executing)
     }
 
     /// Handles a resize event.
-    async fn handle_resize(&mut self, evt: ResizeEvent, term: &Terminal) {
+    async fn handle_resize(
+        &mut self,
+        evt: ResizeEvent,
+        term: &Terminal,
+    ) -> Result<(), Error> {
         // Adjust the cursor position, if it would be outside of the terminal.
         if self.cursor.y >= evt.size.y {
             self.cursor.y = evt.size.y - 1;
@@ -201,6 +216,8 @@ impl Game {
         }
 
         // Renders everything, since resizing scrambles the screen.
-        self.render(term).await;
+        self.render(term).await?;
+
+        Ok(())
     }
 }
