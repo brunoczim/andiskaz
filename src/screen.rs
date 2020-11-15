@@ -89,10 +89,7 @@ impl Screen {
     pub async fn lock<'screen>(
         &'screen self,
     ) -> Result<LockedScreen<'screen>, RendererOff> {
-        let locked = LockedScreen {
-            screen: self,
-            buffer: self.shared.buffer.lock().await,
-        };
+        let locked = LockedScreen::new(self, self.shared.buffer.lock().await);
         if self.shared.renderer_conn.load(Relaxed) {
             Ok(locked)
         } else {
@@ -195,25 +192,15 @@ impl Screen {
     }
 }
 
-impl Drop for Screen {
-    fn drop(&mut self) {
-        if Arc::strong_count(&self.shared) <= 2 {
-            let was_conn = self.shared.renderer_conn.swap(false, Release);
-            if was_conn {
-                self.shared.renderer_notif.notify_one();
-            }
-        }
-    }
-}
-
 #[derive(Debug)]
 pub(crate) struct ScreenGuard<'screen> {
-    pub screen: &'screen Screen,
+    pub(crate) screen: &'screen Screen,
 }
 
 impl<'screen> Drop for ScreenGuard<'screen> {
     fn drop(&mut self) {
         self.screen.shared.renderer_conn.store(false, Release);
+        self.screen.shared.renderer_notif.notify_one();
     }
 }
 
@@ -222,9 +209,9 @@ pub(crate) async fn renderer(screen: &Screen) -> Result<(), Error> {
     let mut buf = String::new();
 
     loop {
-        match screen.lock().await {
-            Ok(mut locked) => locked.render(&mut buf).await?,
-            Err(_) => break,
+        {
+            let mut locked = screen.lock().await?;
+            locked.render(&mut buf).await?;
         }
 
         tokio::select! {
@@ -232,6 +219,8 @@ pub(crate) async fn renderer(screen: &Screen) -> Result<(), Error> {
             _ = screen.shared.renderer_notif.notified() => break,
         };
     }
+
+    tdebug!("HE");
 
     Ok(())
 }

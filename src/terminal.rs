@@ -1,12 +1,9 @@
 //! This crate exports a terminal terminal and its utilites.
 
-mod error;
-mod raw_io;
-
 use crate::{
     coord,
     coord::Coord2,
-    error::Error,
+    error::{Error, ErrorKind},
     event::{event_listener, Event, EventListener, ResizeEvent},
     screen::{renderer, Screen},
 };
@@ -72,10 +69,10 @@ impl Builder {
         let terminal = self.finish(receiver).await?;
         terminal.screen.setup().await?;
 
+        let screen = terminal.screen.clone();
         let barrier = Arc::new(Barrier::new(3));
 
         let main_fut = {
-            let terminal = terminal.clone();
             let barrier = barrier.clone();
             tokio::spawn(async move {
                 let screen = terminal.screen.clone();
@@ -87,13 +84,13 @@ impl Builder {
 
         let events_fut = {
             let interval = self.event_interval;
-            let screen = terminal.screen.clone();
+            let screen = screen.clone();
             let barrier = barrier.clone();
             tokio::spawn(Self::events_task(barrier, interval, screen, sender))
         };
 
         let renderer_fut = {
-            let screen = terminal.screen.clone();
+            let screen = screen.clone();
             tokio::spawn(async move {
                 let _guard = screen.conn_guard();
                 barrier.wait().await;
@@ -104,10 +101,22 @@ impl Builder {
         let (main_ret, events_ret, renderer_ret) =
             tokio::join!(main_fut, events_fut, renderer_fut);
 
-        let _ = terminal.screen.cleanup().await;
+        let _ = screen.cleanup().await;
 
-        events_ret?;
-        renderer_ret?;
+        if let Err(error) = events_ret? {
+            match error.kind() {
+                ErrorKind::RendererOff(_) => (),
+                _ => Err(error)?,
+            }
+        }
+
+        if let Err(error) = renderer_ret? {
+            match error.kind() {
+                ErrorKind::RendererOff(_) => (),
+                _ => Err(error)?,
+            }
+        }
+
         Ok(main_ret?)
     }
 
@@ -126,7 +135,7 @@ impl Builder {
             x: coord::from_crossterm(width),
         };
         let screen = Screen::new(screen_size, self.min_screen, self.frame_time);
-        let events = EventListener { recv: event_recv };
+        let events = EventListener::new(event_recv);
         Ok(Terminal { screen, events })
     }
 
@@ -137,26 +146,21 @@ impl Builder {
         sender: watch::Sender<Event>,
     ) -> Result<(), Error> {
         let mut stdout = None;
-        let mut locked = screen
-            .lock()
-            .await
-            .expect("renderer can't have already disconnected");
-        let size = locked.size();
-        let min_size = locked.min_size();
-        if size.x < min_size.x || size.y < min_size.y {
-            locked.check_resize(min_size, &mut stdout);
-            locked.check_resize(size, &mut stdout);
+        {
+            let mut locked = screen
+                .lock()
+                .await
+                .expect("renderer can't have already disconnected");
+            let size = locked.size();
+            let min_size = locked.min_size();
+            if size.x < min_size.x || size.y < min_size.y {
+                locked.check_resize(min_size, &mut stdout).await?;
+                locked.check_resize(size, &mut stdout).await?;
+            }
         }
         barrier.wait().await;
         event_listener(interval, sender, &screen, &mut stdout).await
     }
-}
-
-/// Panic used when an auxiliary task did not fail but finished before main.
-#[inline(never)]
-#[cold]
-fn aux_must_fail() -> ! {
-    panic!("Auxiliary task should not finish before main task unless it failed")
 }
 
 #[derive(Debug, Clone)]

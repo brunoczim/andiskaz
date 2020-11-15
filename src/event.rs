@@ -86,7 +86,7 @@ pub(crate) async fn event_listener<'screen>(
     let mut interval = time::interval(event_interval);
 
     while !sender.is_closed() {
-        if poll(screen, &sender, stdout_guard).await? {
+        if !poll(screen, &sender, stdout_guard).await? {
             tokio::select! {
                 _ = interval.tick() => (),
                 _ = sender.closed() => (),

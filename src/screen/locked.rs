@@ -22,6 +22,13 @@ pub struct LockedScreen<'screen> {
 }
 
 impl<'screen> LockedScreen<'screen> {
+    pub(crate) fn new(
+        screen: &'screen Screen,
+        buffer: MutexGuard<'screen, ScreenBuffer>,
+    ) -> Self {
+        Self { screen, buffer }
+    }
+
     /// Size of the screen. In sync with [`Terminal::screen_size`].
     pub fn size(&self) -> Coord2 {
         self.buffer.size()

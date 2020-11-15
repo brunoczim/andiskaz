@@ -48,25 +48,25 @@ impl<'stdout> LockedStdout<'stdout> {
 
 impl<'stdout> AsyncWrite for LockedStdout<'stdout> {
     fn poll_write(
-        self: Pin<&mut Self>,
+        mut self: Pin<&mut Self>,
         cx: &mut Context<'_>,
         buf: &[u8],
     ) -> Poll<Result<usize, io::Error>> {
-        Pin::new(self.guard).as_mut().poll_write(cx, buf)
+        Pin::new(&mut *self.as_mut().guard).poll_write(cx, buf)
     }
 
     fn poll_flush(
-        self: Pin<&mut Self>,
+        mut self: Pin<&mut Self>,
         cx: &mut Context<'_>,
     ) -> Poll<Result<(), io::Error>> {
-        Pin::new(self.guard).as_mut().poll_flush(cx)
+        Pin::new(&mut *self.as_mut().guard).as_mut().poll_flush(cx)
     }
 
     fn poll_shutdown(
-        self: Pin<&mut Self>,
+        mut self: Pin<&mut Self>,
         cx: &mut Context<'_>,
     ) -> Poll<Result<(), io::Error>> {
-        Pin::new(self.guard).as_mut().poll_shutdown(cx)
+        Pin::new(&mut *self.as_mut().guard).as_mut().poll_shutdown(cx)
     }
 }
 
