@@ -41,7 +41,7 @@ async fn main() {
         .await;
 
     // If error, print it out and exit with bad code.
-    if let Err(error) = result {
+    if let Ok(Err(error)) | Err(error) = result {
         eprintln!("{}", error);
         exit(-1);
     }
