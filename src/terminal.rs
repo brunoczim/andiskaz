@@ -20,6 +20,7 @@ pub struct Builder {
     min_screen: Coord2,
     /// Given time that the screen is updated.
     frame_time: Duration,
+    /// Interval between a failed poll and the next poll.
     event_interval: Duration,
 }
 
@@ -49,7 +50,7 @@ impl Builder {
         Self { frame_time, ..self }
     }
 
-    /// Builds the rate that the screen is updated.
+    /// Interval waited when a poll for an event fails.
     pub fn event_interval(self, event_interval: Duration) -> Self {
         Self { event_interval, ..self }
     }
@@ -63,46 +64,45 @@ impl Builder {
         A: Future<Output = T> + Send + 'static,
         T: Send + 'static,
     {
+        // Events channel.
         let dummy = Event::Resize(ResizeEvent { size: Coord2 { x: 0, y: 0 } });
         let (sender, receiver) = watch::channel(dummy);
 
+        // Initializes terminal structures.
         let terminal = self.finish(receiver).await?;
+        let screen = terminal.screen.clone();
         terminal.screen.setup().await?;
 
-        let screen = terminal.screen.clone();
+        // Synchronization.
         let barrier = Arc::new(Barrier::new(3));
 
+        // Main task future.
         let main_fut = {
             let barrier = barrier.clone();
-            tokio::spawn(async move {
-                let screen = terminal.screen.clone();
-                let _guard = screen.conn_guard();
-                barrier.wait().await;
-                start(terminal).await
-            })
+            tokio::spawn(main_task(barrier, terminal, start))
         };
 
+        // Event listener task future.
         let events_fut = {
             let interval = self.event_interval;
             let screen = screen.clone();
             let barrier = barrier.clone();
-            tokio::spawn(Self::events_task(barrier, interval, screen, sender))
+            tokio::spawn(events_task(barrier, interval, screen, sender))
         };
 
+        // Renderer task future.
         let renderer_fut = {
             let screen = screen.clone();
-            tokio::spawn(async move {
-                let _guard = screen.conn_guard();
-                barrier.wait().await;
-                renderer(&screen).await
-            })
+            tokio::spawn(renderer_task(barrier, screen))
         };
 
         let (main_ret, events_ret, renderer_ret) =
             tokio::join!(main_fut, events_fut, renderer_fut);
 
+        // Cleans up screen configurations (such as raw mode).
         let _ = screen.cleanup().await;
 
+        // Matches the error of events task result.
         if let Err(error) = events_ret? {
             match error.kind() {
                 ErrorKind::RendererOff(_) => (),
@@ -110,6 +110,7 @@ impl Builder {
             }
         }
 
+        // Matches the error of renderer task result.
         if let Err(error) = renderer_ret? {
             match error.kind() {
                 ErrorKind::RendererOff(_) => (),
@@ -117,6 +118,7 @@ impl Builder {
             }
         }
 
+        // Finally returns main task return value.
         Ok(main_ret?)
     }
 
@@ -138,34 +140,69 @@ impl Builder {
         let events = EventListener::new(event_recv);
         Ok(Terminal { screen, events })
     }
-
-    async fn events_task(
-        barrier: Arc<Barrier>,
-        interval: Duration,
-        screen: Screen,
-        sender: watch::Sender<Event>,
-    ) -> Result<(), Error> {
-        let mut stdout = None;
-        {
-            let mut locked = screen
-                .lock()
-                .await
-                .expect("renderer can't have already disconnected");
-            let size = locked.size();
-            let min_size = locked.min_size();
-            if size.x < min_size.x || size.y < min_size.y {
-                locked.check_resize(min_size, &mut stdout).await?;
-                locked.check_resize(size, &mut stdout).await?;
-            }
-        }
-        barrier.wait().await;
-        event_listener(interval, sender, &screen, &mut stdout).await
-    }
 }
 
+/// The main task of a terminal application. Barrier must be shared between
+/// tasks witht the same given screen or event channel.
+async fn main_task<F, A, T>(
+    barrier: Arc<Barrier>,
+    terminal: Terminal,
+    start: F,
+) -> T
+where
+    F: FnOnce(Terminal) -> A + Send + 'static,
+    A: Future<Output = T> + Send + 'static,
+    T: Send + 'static,
+{
+    let screen = terminal.screen.clone();
+    let _guard = screen.conn_guard();
+    barrier.wait().await;
+    start(terminal).await
+}
+
+/// The task that listens to events. Barrier must be shared between tasks
+/// with the same given screen or event channel.
+async fn events_task(
+    barrier: Arc<Barrier>,
+    interval: Duration,
+    screen: Screen,
+    sender: watch::Sender<Event>,
+) -> Result<(), Error> {
+    let mut stdout = None;
+    {
+        let mut locked = screen
+            .lock()
+            .await
+            .expect("renderer can't have already disconnected");
+        let size = locked.size();
+        let min_size = locked.min_size();
+        if size.x < min_size.x || size.y < min_size.y {
+            locked.check_resize(min_size, &mut stdout).await?;
+            locked.check_resize(size, &mut stdout).await?;
+        }
+    }
+    barrier.wait().await;
+    event_listener(interval, sender, &screen, &mut stdout).await
+}
+
+/// The task that renders the screen buffer, periodically. Barrier must be
+/// shared between tasks with the same given screen.
+async fn renderer_task(
+    barrier: Arc<Barrier>,
+    screen: Screen,
+) -> Result<(), Error> {
+    let _guard = screen.conn_guard();
+    barrier.wait().await;
+    renderer(&screen).await
+}
+
+/// A handle to the terminal.
 #[derive(Debug, Clone)]
 pub struct Terminal {
+    /// Screen handle. Used to write into the screen.
     pub screen: Screen,
+    /// Events handle. Used to check and await for events, such as resizing of
+    /// the screen or keys pressed.
     pub events: EventListener,
 }
 
