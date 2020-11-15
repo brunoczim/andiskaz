@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder","A terminal configuration builder."],["Terminal",""]]});
+initSidebarItems({"struct":[["Builder","A terminal configuration builder."],["Terminal","A handle to the terminal."]]});
