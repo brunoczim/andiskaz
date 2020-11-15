@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-0.2.22/src/time/interval.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>interval.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-0.3.3/src/time/interval.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>interval.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../tokio/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../tokio/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
                 <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -171,9 +171,12 @@
 <span id="168">168</span>
 <span id="169">169</span>
 <span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">future</span>::<span class="ident">poll_fn</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">time</span>::{<span class="ident">delay_until</span>, <span class="ident">Delay</span>, <span class="ident">Duration</span>, <span class="ident">Instant</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">time</span>::{<span class="ident">sleep_until</span>, <span class="ident">Duration</span>, <span class="ident">Instant</span>, <span class="ident">Sleep</span>};
 
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">pin</span>::<span class="ident">Pin</span>;
@@ -210,12 +213,12 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// A simple example using `interval` to execute a task every two seconds.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The difference between `interval` and [`delay_for`] is that an `interval`</span>
+<span class="doccomment">/// The difference between `interval` and [`sleep`] is that an `interval`</span>
 <span class="doccomment">/// measures the time since the last tick, which means that `.tick().await`</span>
 <span class="doccomment">/// may wait for a shorter time than the duration specified for the interval</span>
 <span class="doccomment">/// if some time has passed between calls to `.tick().await`.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// If the tick in the example below was replaced with [`delay_for`], the task</span>
+<span class="doccomment">/// If the tick in the example below was replaced with [`sleep`], the task</span>
 <span class="doccomment">/// would only be executed once every three seconds, and not every two</span>
 <span class="doccomment">/// seconds.</span>
 <span class="doccomment">///</span>
@@ -224,7 +227,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// async fn task_that_takes_a_second() {</span>
 <span class="doccomment">///     println!(&quot;hello&quot;);</span>
-<span class="doccomment">///     time::delay_for(time::Duration::from_secs(1)).await</span>
+<span class="doccomment">///     time::sleep(time::Duration::from_secs(1)).await</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// #[tokio::main]</span>
@@ -237,7 +240,7 @@
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// [`delay_for`]: crate::time::delay_for()</span>
+<span class="doccomment">/// [`sleep`]: crate::time::sleep()</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">interval</span>(<span class="ident">period</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Interval</span> {
     <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">period</span> <span class="op">&gt;</span> <span class="ident">Duration</span>::<span class="ident">new</span>(<span class="number">0</span>, <span class="number">0</span>), <span class="string">&quot;`period` must be non-zero.&quot;</span>);
 
@@ -245,7 +248,7 @@
 }
 
 <span class="doccomment">/// Creates new `Interval` that yields with interval of `period` with the</span>
-<span class="doccomment">/// first tick completing at `at`.</span>
+<span class="doccomment">/// first tick completing at `start`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// An interval will tick indefinitely. At any time, the `Interval` value can be</span>
 <span class="doccomment">/// dropped. This cancels the interval.</span>
@@ -275,24 +278,28 @@
     <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">period</span> <span class="op">&gt;</span> <span class="ident">Duration</span>::<span class="ident">new</span>(<span class="number">0</span>, <span class="number">0</span>), <span class="string">&quot;`period` must be non-zero.&quot;</span>);
 
     <span class="ident">Interval</span> {
-        <span class="ident">delay</span>: <span class="ident">delay_until</span>(<span class="ident">start</span>),
+        <span class="ident">delay</span>: <span class="ident">sleep_until</span>(<span class="ident">start</span>),
         <span class="ident">period</span>,
     }
 }
 
 <span class="doccomment">/// Stream returned by [`interval`](interval) and [`interval_at`](interval_at).</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This type only implements the [`Stream`] trait if the &quot;stream&quot; feature is</span>
+<span class="doccomment">/// enabled.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`Stream`]: trait@crate::stream::Stream</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Interval</span> {
     <span class="doccomment">/// Future that completes the next time the `Interval` yields a value.</span>
-    <span class="ident">delay</span>: <span class="ident">Delay</span>,
+    <span class="ident">delay</span>: <span class="ident">Sleep</span>,
 
     <span class="doccomment">/// The duration between values yielded by `Interval`.</span>
     <span class="ident">period</span>: <span class="ident">Duration</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Interval</span> {
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span> <span class="comment">// TODO: document</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll_tick</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">Instant</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll_tick</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">Instant</span><span class="op">&gt;</span> {
         <span class="comment">// Wait for the delay to be done</span>
         <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">delay</span>).<span class="ident">poll</span>(<span class="ident">cx</span>));
 
@@ -328,7 +335,6 @@
     <span class="doccomment">///     // approximately 20ms have elapsed.</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">should_implement_trait</span>)]</span> <span class="comment">// TODO: rename (tokio-rs/tokio#1261)</span>
     <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">tick</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Instant</span> {
         <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">poll_tick</span>(<span class="ident">cx</span>)).<span class="ident">await</span>
     }

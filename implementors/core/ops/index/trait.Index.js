@@ -1,4 +1,5 @@
 (function() {var implementors = {};
+implementors["bytes"] = [{"text":"impl Index&lt;Range&lt;usize&gt;&gt; for UninitSlice","synthetic":false,"types":[]},{"text":"impl Index&lt;RangeFrom&lt;usize&gt;&gt; for UninitSlice","synthetic":false,"types":[]},{"text":"impl Index&lt;RangeFull&gt; for UninitSlice","synthetic":false,"types":[]},{"text":"impl Index&lt;RangeInclusive&lt;usize&gt;&gt; for UninitSlice","synthetic":false,"types":[]},{"text":"impl Index&lt;RangeTo&lt;usize&gt;&gt; for UninitSlice","synthetic":false,"types":[]},{"text":"impl Index&lt;RangeToInclusive&lt;usize&gt;&gt; for UninitSlice","synthetic":false,"types":[]}];
 implementors["slab"] = [{"text":"impl&lt;T&gt; Index&lt;usize&gt; for Slab&lt;T&gt;","synthetic":false,"types":[]}];
 implementors["smallvec"] = [{"text":"impl&lt;A:&nbsp;Array, I:&nbsp;SliceIndex&lt;[A::Item]&gt;&gt; Index&lt;I&gt; for SmallVec&lt;A&gt;","synthetic":false,"types":[]}];
 implementors["syn"] = [{"text":"impl&lt;T, P&gt; Index&lt;usize&gt; for Punctuated&lt;T, P&gt;","synthetic":false,"types":[]}];

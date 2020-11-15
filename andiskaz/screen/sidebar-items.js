@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["LockedScreen","A locked screen terminal with exclusive access to it."],["Screen",""],["Tile","A [`Tile`] in the terminal, i.e. a single character with foreground and background colors."]]});

@@ -1,6 +1,8 @@
 (function() {var implementors = {};
 implementors["andiskaz"] = [{"text":"impl&lt;'tstring&gt; Iterator for TermStringIndices&lt;'tstring&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'tstring&gt; Iterator for TermStringIter&lt;'tstring&gt;","synthetic":false,"types":[]}];
 implementors["bytes"] = [{"text":"impl&lt;T:&nbsp;Buf&gt; Iterator for IntoIter&lt;T&gt;","synthetic":false,"types":[]}];
+implementors["futures_executor"] = [{"text":"impl&lt;S:&nbsp;Stream + Unpin&gt; Iterator for BlockingStream&lt;S&gt;","synthetic":false,"types":[]}];
+implementors["futures_util"] = [{"text":"impl&lt;'a, Fut&gt; Iterator for IterPinMut&lt;'a, Fut&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'a, Fut:&nbsp;Unpin&gt; Iterator for IterMut&lt;'a, Fut&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'a, Fut&gt; Iterator for IterPinRef&lt;'a, Fut&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'a, Fut:&nbsp;Unpin&gt; Iterator for Iter&lt;'a, Fut&gt;","synthetic":false,"types":[]}];
 implementors["memchr"] = [{"text":"impl&lt;'a&gt; Iterator for Memchr&lt;'a&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'a&gt; Iterator for Memchr2&lt;'a&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'a&gt; Iterator for Memchr3&lt;'a&gt;","synthetic":false,"types":[]}];
 implementors["mio"] = [{"text":"impl&lt;'a&gt; Iterator for Iter&lt;'a&gt;","synthetic":false,"types":[]}];
 implementors["proc_macro2"] = [{"text":"impl Iterator for IntoIter","synthetic":false,"types":[]}];

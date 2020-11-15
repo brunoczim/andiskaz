@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["ErrorKind","An error that may happen when executing a terminal."]],"struct":[["Error",""],["EventsOff",""],["RendererOff",""]]});

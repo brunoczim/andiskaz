@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-0.2.22/src/fs/file.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>file.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-0.3.3/src/fs/file.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>file.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../tokio/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../tokio/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
                 <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -761,36 +761,6 @@
 <span id="758">758</span>
 <span id="759">759</span>
 <span id="760">760</span>
-<span id="761">761</span>
-<span id="762">762</span>
-<span id="763">763</span>
-<span id="764">764</span>
-<span id="765">765</span>
-<span id="766">766</span>
-<span id="767">767</span>
-<span id="768">768</span>
-<span id="769">769</span>
-<span id="770">770</span>
-<span id="771">771</span>
-<span id="772">772</span>
-<span id="773">773</span>
-<span id="774">774</span>
-<span id="775">775</span>
-<span id="776">776</span>
-<span id="777">777</span>
-<span id="778">778</span>
-<span id="779">779</span>
-<span id="780">780</span>
-<span id="781">781</span>
-<span id="782">782</span>
-<span id="783">783</span>
-<span id="784">784</span>
-<span id="785">785</span>
-<span id="786">786</span>
-<span id="787">787</span>
-<span id="788">788</span>
-<span id="789">789</span>
-<span id="790">790</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Types for working with [`File`].</span>
 <span class="doccomment">//!</span>
@@ -799,7 +769,8 @@
 <span class="kw">use</span> <span class="self">self</span>::<span class="ident">State</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">fs</span>::{<span class="ident">asyncify</span>, <span class="ident">sys</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">io</span>::<span class="ident">blocking</span>::<span class="ident">Buf</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">io</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncSeek</span>, <span class="ident">AsyncWrite</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">io</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncSeek</span>, <span class="ident">AsyncWrite</span>, <span class="ident">ReadBuf</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">sync</span>::<span class="ident">Mutex</span>;
 
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fs</span>::{<span class="ident">Metadata</span>, <span class="ident">Permissions</span>};
@@ -874,12 +845,18 @@
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">File</span> {
     <span class="ident">std</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">sys</span>::<span class="ident">File</span><span class="op">&gt;</span>,
+    <span class="ident">inner</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">Inner</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">struct</span> <span class="ident">Inner</span> {
     <span class="ident">state</span>: <span class="ident">State</span>,
 
     <span class="doccomment">/// Errors from writes/flushes are returned in write/flush calls. If a write</span>
     <span class="doccomment">/// error is observed while performing a read, it is saved until the next</span>
     <span class="doccomment">/// write / flush call.</span>
     <span class="ident">last_write_err</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">ErrorKind</span><span class="op">&gt;</span>,
+
+    <span class="ident">pos</span>: <span class="ident">u64</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
@@ -991,70 +968,11 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_std</span>(<span class="ident">std</span>: <span class="ident">sys</span>::<span class="ident">File</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">File</span> {
         <span class="ident">File</span> {
             <span class="ident">std</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">std</span>),
-            <span class="ident">state</span>: <span class="ident">State</span>::<span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">Buf</span>::<span class="ident">with_capacity</span>(<span class="number">0</span>))),
-            <span class="ident">last_write_err</span>: <span class="prelude-val">None</span>,
-        }
-    }
-
-    <span class="doccomment">/// Seeks to an offset, in bytes, in a stream.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```no_run</span>
-    <span class="doccomment">/// use tokio::fs::File;</span>
-    <span class="doccomment">/// use tokio::prelude::*;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// use std::io::SeekFrom;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # async fn dox() -&gt; std::io::Result&lt;()&gt; {</span>
-    <span class="doccomment">/// let mut file = File::open(&quot;foo.txt&quot;).await?;</span>
-    <span class="doccomment">/// file.seek(SeekFrom::Start(6)).await?;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut contents = vec![0u8; 10];</span>
-    <span class="doccomment">/// file.read_exact(&amp;mut contents).await?;</span>
-    <span class="doccomment">/// # Ok(())</span>
-    <span class="doccomment">/// # }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`read_exact`] method is defined on the [`AsyncReadExt`] trait.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [`read_exact`]: fn@crate::io::AsyncReadExt::read_exact</span>
-    <span class="doccomment">/// [`AsyncReadExt`]: trait@crate::io::AsyncReadExt</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">seek</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">pos</span>: <span class="ident">SeekFrom</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">complete_inflight</span>().<span class="ident">await</span>;
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
-            <span class="ident">Idle</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">buf_cell</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">buf_cell</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>(),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
-        };
-
-        <span class="comment">// Factor in any unread data from the buf</span>
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">buf</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">discard_read</span>();
-
-            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">SeekFrom</span>::<span class="ident">Current</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">offset</span>) <span class="op">=</span> <span class="ident">pos</span> {
-                <span class="kw-2">*</span><span class="ident">offset</span> <span class="op">+</span><span class="op">=</span> <span class="ident">n</span>;
-            }
-        }
-
-        <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
-
-        <span class="comment">// Start the operation</span>
-        <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Busy</span>(<span class="ident">sys</span>::<span class="ident">run</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> (<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">std</span>).<span class="ident">seek</span>(<span class="ident">pos</span>);
-            (<span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="ident">res</span>), <span class="ident">buf</span>)
-        }));
-
-        <span class="kw">let</span> (<span class="ident">op</span>, <span class="ident">buf</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
-            <span class="ident">Idle</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
-            <span class="ident">Busy</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">rx</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">rx</span>.<span class="ident">await</span>.<span class="ident">unwrap</span>(),
-        };
-
-        <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
-
-        <span class="kw">match</span> <span class="ident">op</span> {
-            <span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="ident">res</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">res</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+            <span class="ident">inner</span>: <span class="ident">Mutex</span>::<span class="ident">new</span>(<span class="ident">Inner</span> {
+                <span class="ident">state</span>: <span class="ident">State</span>::<span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">Buf</span>::<span class="ident">with_capacity</span>(<span class="number">0</span>))),
+                <span class="ident">last_write_err</span>: <span class="prelude-val">None</span>,
+                <span class="ident">pos</span>: <span class="number">0</span>,
+            }),
         }
     }
 
@@ -1081,8 +999,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`write_all`]: fn@crate::io::AsyncWriteExt::write_all</span>
     <span class="doccomment">/// [`AsyncWriteExt`]: trait@crate::io::AsyncWriteExt</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">sync_all</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">complete_inflight</span>().<span class="ident">await</span>;
+    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">sync_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">inner</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">lock</span>().<span class="ident">await</span>;
+        <span class="ident">inner</span>.<span class="ident">complete_inflight</span>().<span class="ident">await</span>;
 
         <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
         <span class="ident">asyncify</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">std</span>.<span class="ident">sync_all</span>()).<span class="ident">await</span>
@@ -1115,8 +1034,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`write_all`]: fn@crate::io::AsyncWriteExt::write_all</span>
     <span class="doccomment">/// [`AsyncWriteExt`]: trait@crate::io::AsyncWriteExt</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">sync_data</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">complete_inflight</span>().<span class="ident">await</span>;
+    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">sync_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">inner</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">lock</span>().<span class="ident">await</span>;
+        <span class="ident">inner</span>.<span class="ident">complete_inflight</span>().<span class="ident">await</span>;
 
         <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
         <span class="ident">asyncify</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">std</span>.<span class="ident">sync_data</span>()).<span class="ident">await</span>
@@ -1152,10 +1072,11 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`write_all`]: fn@crate::io::AsyncWriteExt::write_all</span>
     <span class="doccomment">/// [`AsyncWriteExt`]: trait@crate::io::AsyncWriteExt</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">set_len</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">complete_inflight</span>().<span class="ident">await</span>;
+    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">set_len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">size</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">inner</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">lock</span>().<span class="ident">await</span>;
+        <span class="ident">inner</span>.<span class="ident">complete_inflight</span>().<span class="ident">await</span>;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">inner</span>.<span class="ident">state</span> {
             <span class="ident">Idle</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">buf_cell</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">buf_cell</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>(),
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
         };
@@ -1168,7 +1089,7 @@
 
         <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
 
-        <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Busy</span>(<span class="ident">sys</span>::<span class="ident">run</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+        <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Busy</span>(<span class="ident">sys</span>::<span class="ident">run</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">seek</span>) <span class="op">=</span> <span class="ident">seek</span> {
                 (<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">std</span>).<span class="ident">seek</span>(<span class="ident">seek</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">std</span>.<span class="ident">set_len</span>(<span class="ident">size</span>))
             } <span class="kw">else</span> {
@@ -1180,15 +1101,17 @@
             (<span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="ident">res</span>), <span class="ident">buf</span>)
         }));
 
-        <span class="kw">let</span> (<span class="ident">op</span>, <span class="ident">buf</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
+        <span class="kw">let</span> (<span class="ident">op</span>, <span class="ident">buf</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">inner</span>.<span class="ident">state</span> {
             <span class="ident">Idle</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
             <span class="ident">Busy</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">rx</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">rx</span>.<span class="ident">await</span><span class="question-mark">?</span>,
         };
 
-        <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
+        <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
 
         <span class="kw">match</span> <span class="ident">op</span> {
-            <span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="ident">res</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">res</span>.<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()),
+            <span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="ident">res</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">res</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">pos</span><span class="op">|</span> {
+                <span class="ident">inner</span>.<span class="ident">pos</span> <span class="op">=</span> <span class="ident">pos</span>;
+            }),
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
         }
     }
@@ -1253,7 +1176,7 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">into_std</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">sys</span>::<span class="ident">File</span> {
-        <span class="self">self</span>.<span class="ident">complete_inflight</span>().<span class="ident">await</span>;
+        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>().<span class="ident">complete_inflight</span>().<span class="ident">await</span>;
         <span class="ident">Arc</span>::<span class="ident">try_unwrap</span>(<span class="self">self</span>.<span class="ident">std</span>).<span class="ident">expect</span>(<span class="string">&quot;Arc::try_unwrap failed&quot;</span>)
     }
 
@@ -1320,42 +1243,32 @@
         <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
         <span class="ident">asyncify</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">std</span>.<span class="ident">set_permissions</span>(<span class="ident">perm</span>)).<span class="ident">await</span>
     }
-
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">complete_inflight</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">future</span>::<span class="ident">poll_fn</span>;
-
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>).<span class="ident">poll_flush</span>(<span class="ident">cx</span>)).<span class="ident">await</span> {
-            <span class="self">self</span>.<span class="ident">last_write_err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">kind</span>());
-        }
-    }
 }
 
 <span class="kw">impl</span> <span class="ident">AsyncRead</span> <span class="kw">for</span> <span class="ident">File</span> {
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">prepare_uninitialized_buffer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_buf</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">MaybeUninit</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="comment">// https://github.com/rust-lang/rust/blob/09c817eeb29e764cfc12d0a8d94841e3ffe34023/src/libstd/fs.rs#L668</span>
-        <span class="bool-val">false</span>
-    }
-
     <span class="kw">fn</span> <span class="ident">poll_read</span>(
-        <span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
+        <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-        <span class="ident">dst</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="ident">dst</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ReadBuf</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">me</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_mut</span>();
+        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">me</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>();
+
         <span class="kw">loop</span> {
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
+            <span class="kw">match</span> <span class="ident">inner</span>.<span class="ident">state</span> {
                 <span class="ident">Idle</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">buf_cell</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf_cell</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
 
                     <span class="kw">if</span> <span class="op">!</span><span class="ident">buf</span>.<span class="ident">is_empty</span>() {
-                        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">copy_to</span>(<span class="ident">dst</span>);
+                        <span class="ident">buf</span>.<span class="ident">copy_to</span>(<span class="ident">dst</span>);
                         <span class="kw-2">*</span><span class="ident">buf_cell</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">buf</span>);
-                        <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">n</span>));
+                        <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(()));
                     }
 
                     <span class="ident">buf</span>.<span class="ident">ensure_capacity_for</span>(<span class="ident">dst</span>);
-                    <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
+                    <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="ident">me</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
 
-                    <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Busy</span>(<span class="ident">sys</span>::<span class="ident">run</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                    <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Busy</span>(<span class="ident">sys</span>::<span class="ident">run</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
                         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">read_from</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">std</span>);
                         (<span class="ident">Operation</span>::<span class="ident">Read</span>(<span class="ident">res</span>), <span class="ident">buf</span>)
                     }));
@@ -1365,29 +1278,32 @@
 
                     <span class="kw">match</span> <span class="ident">op</span> {
                         <span class="ident">Operation</span>::<span class="ident">Read</span>(<span class="prelude-val">Ok</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">copy_to</span>(<span class="ident">dst</span>);
-                            <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
-                            <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">n</span>));
+                            <span class="ident">buf</span>.<span class="ident">copy_to</span>(<span class="ident">dst</span>);
+                            <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
+                            <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(()));
                         }
                         <span class="ident">Operation</span>::<span class="ident">Read</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buf</span>.<span class="ident">is_empty</span>());
 
-                            <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
+                            <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
                             <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>));
                         }
                         <span class="ident">Operation</span>::<span class="ident">Write</span>(<span class="prelude-val">Ok</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buf</span>.<span class="ident">is_empty</span>());
-                            <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
+                            <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
                             <span class="kw">continue</span>;
                         }
                         <span class="ident">Operation</span>::<span class="ident">Write</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="macro">assert</span><span class="macro">!</span>(<span class="self">self</span>.<span class="ident">last_write_err</span>.<span class="ident">is_none</span>());
-                            <span class="self">self</span>.<span class="ident">last_write_err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">kind</span>());
-                            <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
+                            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">inner</span>.<span class="ident">last_write_err</span>.<span class="ident">is_none</span>());
+                            <span class="ident">inner</span>.<span class="ident">last_write_err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">kind</span>());
+                            <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
                         }
-                        <span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="ident">result</span>) <span class="op">=</span><span class="op">&gt;</span> {
                             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buf</span>.<span class="ident">is_empty</span>());
-                            <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
+                            <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
+                            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">pos</span>) <span class="op">=</span> <span class="ident">result</span> {
+                                <span class="ident">inner</span>.<span class="ident">pos</span> <span class="op">=</span> <span class="ident">pos</span>;
+                            }
                             <span class="kw">continue</span>;
                         }
                     }
@@ -1398,13 +1314,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">AsyncSeek</span> <span class="kw">for</span> <span class="ident">File</span> {
-    <span class="kw">fn</span> <span class="ident">start_seek</span>(
-        <span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
-        <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-        <span class="kw-2">mut</span> <span class="ident">pos</span>: <span class="ident">SeekFrom</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">start_seek</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="kw-2">mut</span> <span class="ident">pos</span>: <span class="ident">SeekFrom</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">me</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_mut</span>();
+        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">me</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>();
+
         <span class="kw">loop</span> {
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
+            <span class="kw">match</span> <span class="ident">inner</span>.<span class="ident">state</span> {
+                <span class="ident">Busy</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;must wait for poll_complete before calling start_seek&quot;</span>),
                 <span class="ident">Idle</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">buf_cell</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf_cell</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
 
@@ -1417,49 +1333,41 @@
                         }
                     }
 
-                    <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
+                    <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="ident">me</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
 
-                    <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Busy</span>(<span class="ident">sys</span>::<span class="ident">run</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                    <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Busy</span>(<span class="ident">sys</span>::<span class="ident">run</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
                         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> (<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">std</span>).<span class="ident">seek</span>(<span class="ident">pos</span>);
                         (<span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="ident">res</span>), <span class="ident">buf</span>)
                     }));
-
-                    <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(()));
-                }
-                <span class="ident">Busy</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">rx</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="kw">let</span> (<span class="ident">op</span>, <span class="ident">buf</span>) <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">rx</span>).<span class="ident">poll</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
-                    <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
-
-                    <span class="kw">match</span> <span class="ident">op</span> {
-                        <span class="ident">Operation</span>::<span class="ident">Read</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-                        <span class="ident">Operation</span>::<span class="ident">Write</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="macro">assert</span><span class="macro">!</span>(<span class="self">self</span>.<span class="ident">last_write_err</span>.<span class="ident">is_none</span>());
-                            <span class="self">self</span>.<span class="ident">last_write_err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">kind</span>());
-                        }
-                        <span class="ident">Operation</span>::<span class="ident">Write</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-                        <span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-                    }
+                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
                 }
             }
         }
     }
 
     <span class="kw">fn</span> <span class="ident">poll_complete</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>();
+
         <span class="kw">loop</span> {
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
-                <span class="ident">Idle</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;must call start_seek before calling poll_complete&quot;</span>),
+            <span class="kw">match</span> <span class="ident">inner</span>.<span class="ident">state</span> {
+                <span class="ident">Idle</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">inner</span>.<span class="ident">pos</span>)),
                 <span class="ident">Busy</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">rx</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> (<span class="ident">op</span>, <span class="ident">buf</span>) <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">rx</span>).<span class="ident">poll</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
-                    <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
+                    <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
 
                     <span class="kw">match</span> <span class="ident">op</span> {
                         <span class="ident">Operation</span>::<span class="ident">Read</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
                         <span class="ident">Operation</span>::<span class="ident">Write</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="macro">assert</span><span class="macro">!</span>(<span class="self">self</span>.<span class="ident">last_write_err</span>.<span class="ident">is_none</span>());
-                            <span class="self">self</span>.<span class="ident">last_write_err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">kind</span>());
+                            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">inner</span>.<span class="ident">last_write_err</span>.<span class="ident">is_none</span>());
+                            <span class="ident">inner</span>.<span class="ident">last_write_err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">kind</span>());
                         }
                         <span class="ident">Operation</span>::<span class="ident">Write</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-                        <span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="ident">res</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Ready</span>(<span class="ident">res</span>),
+                        <span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="ident">res</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">pos</span>) <span class="op">=</span> <span class="ident">res</span> {
+                                <span class="ident">inner</span>.<span class="ident">pos</span> <span class="op">=</span> <span class="ident">pos</span>;
+                            }
+                            <span class="kw">return</span> <span class="ident">Ready</span>(<span class="ident">res</span>);
+                        }
                     }
                 }
             }
@@ -1469,16 +1377,19 @@
 
 <span class="kw">impl</span> <span class="ident">AsyncWrite</span> <span class="kw">for</span> <span class="ident">File</span> {
     <span class="kw">fn</span> <span class="ident">poll_write</span>(
-        <span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
+        <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
         <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">last_write_err</span>.<span class="ident">take</span>() {
+        <span class="kw">let</span> <span class="ident">me</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_mut</span>();
+        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">me</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>();
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">inner</span>.<span class="ident">last_write_err</span>.<span class="ident">take</span>() {
             <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into</span>()));
         }
 
         <span class="kw">loop</span> {
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
+            <span class="kw">match</span> <span class="ident">inner</span>.<span class="ident">state</span> {
                 <span class="ident">Idle</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">buf_cell</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf_cell</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
 
@@ -1489,9 +1400,9 @@
                     };
 
                     <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">copy_from</span>(<span class="ident">src</span>);
-                    <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
+                    <span class="kw">let</span> <span class="ident">std</span> <span class="op">=</span> <span class="ident">me</span>.<span class="ident">std</span>.<span class="ident">clone</span>();
 
-                    <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Busy</span>(<span class="ident">sys</span>::<span class="ident">run</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                    <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Busy</span>(<span class="ident">sys</span>::<span class="ident">run</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
                         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">seek</span>) <span class="op">=</span> <span class="ident">seek</span> {
                             (<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">std</span>).<span class="ident">seek</span>(<span class="ident">seek</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">buf</span>.<span class="ident">write_to</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">std</span>))
                         } <span class="kw">else</span> {
@@ -1505,7 +1416,7 @@
                 }
                 <span class="ident">Busy</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">rx</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> (<span class="ident">op</span>, <span class="ident">buf</span>) <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">rx</span>).<span class="ident">poll</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
-                    <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
+                    <span class="ident">inner</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
 
                     <span class="kw">match</span> <span class="ident">op</span> {
                         <span class="ident">Operation</span>::<span class="ident">Read</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1531,27 +1442,12 @@
     }
 
     <span class="kw">fn</span> <span class="ident">poll_flush</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">last_write_err</span>.<span class="ident">take</span>() {
-            <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into</span>()));
-        }
-
-        <span class="kw">let</span> (<span class="ident">op</span>, <span class="ident">buf</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
-            <span class="ident">Idle</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(())),
-            <span class="ident">Busy</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">rx</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">rx</span>).<span class="ident">poll</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>,
-        };
-
-        <span class="comment">// The buffer is not used here</span>
-        <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
-
-        <span class="kw">match</span> <span class="ident">op</span> {
-            <span class="ident">Operation</span>::<span class="ident">Read</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(())),
-            <span class="ident">Operation</span>::<span class="ident">Write</span>(<span class="ident">res</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ready</span>(<span class="ident">res</span>),
-            <span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(())),
-        }
+        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>();
+        <span class="ident">inner</span>.<span class="ident">poll_flush</span>(<span class="ident">cx</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">poll_shutdown</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">_cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(()))
+    <span class="kw">fn</span> <span class="ident">poll_shutdown</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">poll_flush</span>(<span class="ident">cx</span>)
     }
 }
 
@@ -1576,10 +1472,54 @@
     }
 }
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
+<span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">unix</span>::<span class="ident">io</span>::<span class="ident">FromRawFd</span> <span class="kw">for</span> <span class="ident">File</span> {
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_raw_fd</span>(<span class="ident">fd</span>: <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">unix</span>::<span class="ident">io</span>::<span class="ident">RawFd</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">sys</span>::<span class="ident">File</span>::<span class="ident">from_raw_fd</span>(<span class="ident">fd</span>).<span class="ident">into</span>()
+    }
+}
+
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">windows</span>::<span class="ident">io</span>::<span class="ident">AsRawHandle</span> <span class="kw">for</span> <span class="ident">File</span> {
     <span class="kw">fn</span> <span class="ident">as_raw_handle</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">windows</span>::<span class="ident">io</span>::<span class="ident">RawHandle</span> {
         <span class="self">self</span>.<span class="ident">std</span>.<span class="ident">as_raw_handle</span>()
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
+<span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">windows</span>::<span class="ident">io</span>::<span class="ident">FromRawHandle</span> <span class="kw">for</span> <span class="ident">File</span> {
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_raw_handle</span>(<span class="ident">handle</span>: <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">windows</span>::<span class="ident">io</span>::<span class="ident">RawHandle</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">sys</span>::<span class="ident">File</span>::<span class="ident">from_raw_handle</span>(<span class="ident">handle</span>).<span class="ident">into</span>()
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">Inner</span> {
+    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">complete_inflight</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">future</span>::<span class="ident">poll_fn</span>;
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">poll_fn</span>(<span class="op">|</span><span class="ident">cx</span><span class="op">|</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>).<span class="ident">poll_flush</span>(<span class="ident">cx</span>)).<span class="ident">await</span> {
+            <span class="self">self</span>.<span class="ident">last_write_err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">kind</span>());
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">poll_flush</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">last_write_err</span>.<span class="ident">take</span>() {
+            <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into</span>()));
+        }
+
+        <span class="kw">let</span> (<span class="ident">op</span>, <span class="ident">buf</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
+            <span class="ident">Idle</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(())),
+            <span class="ident">Busy</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">rx</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">rx</span>).<span class="ident">poll</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>,
+        };
+
+        <span class="comment">// The buffer is not used here</span>
+        <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">Idle</span>(<span class="prelude-val">Some</span>(<span class="ident">buf</span>));
+
+        <span class="kw">match</span> <span class="ident">op</span> {
+            <span class="ident">Operation</span>::<span class="ident">Read</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(())),
+            <span class="ident">Operation</span>::<span class="ident">Write</span>(<span class="ident">res</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ready</span>(<span class="ident">res</span>),
+            <span class="ident">Operation</span>::<span class="ident">Seek</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(())),
+        }
     }
 }
 </pre></div>

@@ -1,5 +1,6 @@
 (function() {var implementors = {};
 implementors["andiskaz"] = [{"text":"impl AsRef&lt;str&gt; for TermString","synthetic":false,"types":[]},{"text":"impl AsRef&lt;Path&gt; for TermString","synthetic":false,"types":[]},{"text":"impl&lt;'buf&gt; AsRef&lt;str&gt; for StringOrGraphm&lt;'buf&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'buf&gt; AsRef&lt;TermString&gt; for StringOrGraphm&lt;'buf&gt;","synthetic":false,"types":[]}];
 implementors["bytes"] = [{"text":"impl AsRef&lt;[u8]&gt; for Bytes","synthetic":false,"types":[]},{"text":"impl AsRef&lt;[u8]&gt; for BytesMut","synthetic":false,"types":[]}];
+implementors["futures_util"] = [{"text":"impl&lt;T:&nbsp;AsRef&lt;[u8]&gt;&gt; AsRef&lt;[u8]&gt; for Window&lt;T&gt;","synthetic":false,"types":[]}];
 implementors["smallvec"] = [{"text":"impl&lt;A:&nbsp;Array&gt; AsRef&lt;[&lt;A as Array&gt;::Item]&gt; for SmallVec&lt;A&gt;","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
