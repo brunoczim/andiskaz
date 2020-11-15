@@ -27,6 +27,10 @@ impl<'screen> LockedScreen<'screen> {
         self.buffer.size()
     }
 
+    pub fn min_size(&self) -> Coord2 {
+        self.screen.min_size()
+    }
+
     /// Sets the buffer of a given [`Tile`]. This operation is buffered.
     pub fn set(&mut self, point: Coord2, tile: Tile) {
         self.update(point, |stored| *stored = tile);

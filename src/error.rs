@@ -45,11 +45,11 @@ pub enum ErrorKind {
     Utf8(FromUtf8Error),
     /// This is an error from a bad join.
     Join(JoinError),
-    Custom(Box<dyn ErrorTrait>),
+    Custom(Box<dyn ErrorTrait + Send + Sync>),
 }
 
 impl ErrorKind {
-    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static) {
+    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send + Sync) {
         match self {
             ErrorKind::RendererOff(error) => error,
             ErrorKind::EventsOff(error) => error,
@@ -116,8 +116,8 @@ impl From<JoinError> for ErrorKind {
     }
 }
 
-impl From<Box<dyn ErrorTrait>> for ErrorKind {
-    fn from(error: Box<dyn ErrorTrait>) -> Self {
+impl From<Box<dyn ErrorTrait + Send + Sync>> for ErrorKind {
+    fn from(error: Box<dyn ErrorTrait + Send + Sync>) -> Self {
         ErrorKind::Custom(error)
     }
 }
@@ -132,7 +132,7 @@ impl Error {
         Self { kind: Box::new(kind) }
     }
 
-    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static) {
+    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send + Sync) {
         self.kind.as_dyn()
     }
 
@@ -206,8 +206,8 @@ impl From<JoinError> for Error {
     }
 }
 
-impl From<Box<dyn ErrorTrait>> for Error {
-    fn from(error: Box<dyn ErrorTrait>) -> Self {
+impl From<Box<dyn ErrorTrait + Send + Sync>> for Error {
+    fn from(error: Box<dyn ErrorTrait + Send + Sync>) -> Self {
         Self::new(ErrorKind::from(error))
     }
 }

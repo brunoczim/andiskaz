@@ -218,7 +218,6 @@ impl<'screen> Drop for ScreenGuard<'screen> {
 }
 
 pub(crate) async fn renderer(screen: &Screen) -> Result<(), Error> {
-    let _guard = screen.conn_guard();
     let mut interval = time::interval(screen.shared.frame_time);
     let mut buf = String::new();
 

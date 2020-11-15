@@ -72,7 +72,7 @@ impl Builder {
         let terminal = self.finish(receiver).await?;
         terminal.screen.setup().await?;
 
-        let mut barrier = Arc::new(Barrier::new(3));
+        let barrier = Arc::new(Barrier::new(3));
 
         let main_fut = {
             let terminal = terminal.clone();
@@ -85,33 +85,35 @@ impl Builder {
             })
         };
 
-        let listener_fut = {
+        let events_fut = {
             let interval = self.event_interval;
             let screen = terminal.screen.clone();
-            tokio::spawn(async move {
-                barrier.wait().await;
-                event_listener(interval, sender, &screen, &mut None).await
-            })
+            let barrier = barrier.clone();
+            tokio::spawn(Self::events_task(barrier, interval, screen, sender))
         };
 
         let renderer_fut = {
-            let terminal = terminal.clone();
-            tokio::spawn(async move { terminal.renderer().await })
+            let screen = terminal.screen.clone();
+            tokio::spawn(async move {
+                let _guard = screen.conn_guard();
+                barrier.wait().await;
+                renderer(&screen).await
+            })
         };
 
-        let result = tokio::select! {
-            result = main_fut => result,
-            result = listener_fut => result.map(|_| aux_must_fail()),
-            result = renderer_fut => result.map(|_| aux_must_fail()),
-        };
+        let (main_ret, events_ret, renderer_ret) =
+            tokio::join!(main_fut, events_fut, renderer_fut);
 
-        let _ = terminal.cleanup().await;
-        Ok(result?)
+        let _ = terminal.screen.cleanup().await;
+
+        events_ret?;
+        renderer_ret?;
+        Ok(main_ret?)
     }
 
     /// Finishes the builder and produces a terminal handle.
     async fn finish(
-        self,
+        &self,
         event_recv: watch::Receiver<Event>,
     ) -> Result<Terminal, Error> {
         let res = task::block_in_place(|| {
@@ -126,6 +128,27 @@ impl Builder {
         let screen = Screen::new(screen_size, self.min_screen, self.frame_time);
         let events = EventListener { recv: event_recv };
         Ok(Terminal { screen, events })
+    }
+
+    async fn events_task(
+        barrier: Arc<Barrier>,
+        interval: Duration,
+        screen: Screen,
+        sender: watch::Sender<Event>,
+    ) -> Result<(), Error> {
+        let mut stdout = None;
+        let mut locked = screen
+            .lock()
+            .await
+            .expect("renderer can't have already disconnected");
+        let size = locked.size();
+        let min_size = locked.min_size();
+        if size.x < min_size.x || size.y < min_size.y {
+            locked.check_resize(min_size, &mut stdout);
+            locked.check_resize(size, &mut stdout);
+        }
+        barrier.wait().await;
+        event_listener(interval, sender, &screen, &mut stdout).await
     }
 }
 
@@ -151,7 +174,7 @@ impl Terminal {
     /// terminal settings.
     pub async fn run<F, A, T>(start: F) -> Result<T, Error>
     where
-        F: FnOnce(&mut Terminal) -> A + Send + 'static,
+        F: FnOnce(Terminal) -> A + Send + 'static,
         A: Future<Output = T> + Send + 'static,
         T: Send + 'static,
     {
