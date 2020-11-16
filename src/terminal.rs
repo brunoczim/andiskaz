@@ -92,9 +92,11 @@ impl Builder {
     /// well.
     ///
     /// After that `start`'s future returns, terminal services such as screen
-    /// handle and events handle are not guaranteed to be available.
+    /// handle and events handle are not guaranteed to be available. One would
+    /// prefer spawning tasks that use the terminal handle by joining them, and
+    /// not detaching.
     ///
-    /// Returns an [`AlreadyRunning`] error if there already is an instance of
+    /// Returns an [`AlreadyRunning`] error if there is already an instance of
     /// terminal services executing. In other words, one should not call
     /// this function again if another call did not finish yet, otherwise it
     /// will panic.
@@ -258,7 +260,9 @@ impl Terminal {
     /// well.
     ///
     /// After that `start`'s future returns, terminal services such as screen
-    /// handle and events handle are not guaranteed to be available.
+    /// handle and events handle are not guaranteed to be available. One would
+    /// prefer spawning tasks that use the terminal handle by joining them, and
+    /// not detaching.
     ///
     /// This function uses the default configuration. See [`Builder`] for
     /// terminal settings.
