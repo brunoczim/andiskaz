@@ -7,11 +7,45 @@ use crate::{
     event::{event_listener, Event, Events, ResizeEvent},
     screen::{renderer, Screen},
 };
-use std::{future::Future, sync::Arc, time::Duration};
+use std::{
+    future::Future,
+    sync::{
+        atomic::{AtomicBool, Ordering::*},
+        Arc,
+    },
+    time::Duration,
+};
 use tokio::{
     sync::{watch, Barrier},
     task,
 };
+
+/// State of the terminal guard. true means acquired, false means released.
+static GUARD_STATE: AtomicBool = AtomicBool::new(false);
+
+/// A guard of the terminal handle. Only one instance of terminal services is
+/// allowed per time, this stucture ensures this.
+#[derive(Debug)]
+struct Guard;
+
+impl Guard {
+    /// Acquires the guard.
+    ///
+    /// # Panic
+    /// Panics if the guard was already acquired.
+    fn acquire() -> Self {
+        if GUARD_STATE.swap(true, Acquire) {
+            panic!("There already is a terminal application running");
+        }
+        Self
+    }
+}
+
+impl Drop for Guard {
+    fn drop(&mut self) {
+        GUARD_STATE.store(false, Release)
+    }
+}
 
 /// A terminal configuration builder.
 #[derive(Debug, Clone)]
@@ -61,12 +95,20 @@ impl Builder {
     ///
     /// After that `start`'s future returns, terminal services such as screen
     /// handle and events handle are not guaranteed to be available.
+    ///
+    /// # Panic
+    /// Panics if there already is an instance of terminal services executing.
+    /// In other words, one should not call this function again if another call
+    /// did not finish yet, otherwise it will panic.
     pub async fn run<F, A, T>(self, start: F) -> Result<T, Error>
     where
         F: FnOnce(Terminal) -> A + Send + 'static,
         A: Future<Output = T> + Send + 'static,
         T: Send + 'static,
     {
+        // Ensures there are no other terminal sevices executing.
+        let _guard = Guard::acquire();
+
         // Events channel.
         let dummy = Event::Resize(ResizeEvent { size: Coord2 { x: 0, y: 0 } });
         let (sender, receiver) = watch::channel(dummy);
