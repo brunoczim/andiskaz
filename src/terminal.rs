@@ -4,7 +4,7 @@ use crate::{
     coord,
     coord::Coord2,
     error::{Error, ErrorKind},
-    event::{event_listener, Event, EventListener, ResizeEvent},
+    event::{event_listener, Event, Events, ResizeEvent},
     screen::{renderer, Screen},
 };
 use std::{future::Future, sync::Arc, time::Duration};
@@ -58,6 +58,9 @@ impl Builder {
     /// Starts the application and gives it a handle to the terminal. When the
     /// given start function finishes, the application's execution stops as
     /// well.
+    ///
+    /// After that `start`'s future returns, terminal services such as screen
+    /// handle and events handle are not guaranteed to be available.
     pub async fn run<F, A, T>(self, start: F) -> Result<T, Error>
     where
         F: FnOnce(Terminal) -> A + Send + 'static,
@@ -137,7 +140,7 @@ impl Builder {
             x: coord::from_crossterm(width),
         };
         let screen = Screen::new(screen_size, self.min_screen, self.frame_time);
-        let events = EventListener::new(event_recv);
+        let events = Events::new(event_recv);
         Ok(Terminal { screen, events })
     }
 }
@@ -203,13 +206,16 @@ pub struct Terminal {
     pub screen: Screen,
     /// Events handle. Used to check and await for events, such as resizing of
     /// the screen or keys pressed.
-    pub events: EventListener,
+    pub events: Events,
 }
 
 impl Terminal {
     /// Starts the application and gives it a handle to the terminal. When the
     /// given start function finishes, the application's execution stops as
     /// well.
+    ///
+    /// After that `start`'s future returns, terminal services such as screen
+    /// handle and events handle are not guaranteed to be available.
     ///
     /// This function uses the default configuration. See [`Builder`] for
     /// terminal settings.

@@ -58,6 +58,8 @@ impl Drop for Shared {
     }
 }
 
+/// A handle to the screen. Used to write or read from the screen cells, as well
+/// to perform more advanced operations.
 #[derive(Debug, Clone)]
 pub struct Screen {
     shared: Arc<Shared>,
@@ -82,10 +84,15 @@ impl Screen {
         Self { shared }
     }
 
+    /// Returns the minimum size required for the screen.
     pub fn min_size(&self) -> Coord2 {
         self.shared.min_size
     }
 
+    /// Locks the screen handle. Most operations of the screen handle will lock
+    /// the handle, perform the operation, and then unlock the handle. When one
+    /// locks the screen manually, one can use the methods directly on the
+    /// locked screen, without having to lock and unlock everytime.
     pub async fn lock<'screen>(
         &'screen self,
     ) -> Result<LockedScreen<'screen>, RendererOff> {
@@ -97,10 +104,12 @@ impl Screen {
         }
     }
 
+    /// Returns the current size of the screen.
     pub async fn size(&self) -> Result<Coord2, RendererOff> {
         self.lock().await.map(|locked| locked.size())
     }
 
+    /// Sets every attribute of a given [`Tile`]. This operation is buffered.
     pub async fn set(
         &mut self,
         point: Coord2,
@@ -109,6 +118,7 @@ impl Screen {
         self.lock().await.map(|mut locked| locked.set(point, tile))
     }
 
+    /// Sets the colors of a given [`Tile`]. This operation is buffered.
     pub async fn transform_colors<P>(
         &mut self,
         point: Coord2,
@@ -122,6 +132,9 @@ impl Screen {
             .map(|mut locked| locked.transform_colors(point, transformer))
     }
 
+    /// Applies an update function to a [`Tile`]. An update function gets access
+    /// to a mutable reference of a [`Tile`], updates it, and then the screen
+    /// handles any changes made to it. This operation is buffered.
     pub async fn update<F, T>(
         &mut self,
         point: Coord2,
@@ -133,10 +146,13 @@ impl Screen {
         self.lock().await.map(|mut locked| locked.update(point, updater))
     }
 
+    /// Gets the attributes of a given [`Tile`], regardless of being flushed to
+    /// the screen yet or not.
     pub async fn get(&self, point: Coord2) -> Result<Tile, RendererOff> {
         self.lock().await.map(|locked| locked.get(point).clone())
     }
 
+    /// Sets every [`Tile`] into a whitespace grapheme with the given color.
     pub async fn clear(
         &mut self,
         background: Color,
@@ -144,6 +160,9 @@ impl Screen {
         self.lock().await.map(|mut locked| locked.clear(background))
     }
 
+    /// Prints a grapheme-encoded text (a [`TermString`]) using some style
+    /// options like ratio to the screen, color, margin and others. See
+    /// [`Style`].
     pub async fn styled_text<P>(
         &mut self,
         tstring: &TermString,
@@ -187,14 +206,20 @@ impl Screen {
         Ok(())
     }
 
+    /// Creates a connection guard. On drop, it closes the connection with the
+    /// renderer.
     pub(crate) fn conn_guard(&self) -> ScreenGuard {
         ScreenGuard { screen: self }
     }
 }
 
+/// A connection guard. It closes the connection between screen handle and
+/// renderer on drop.
 #[derive(Debug)]
 pub(crate) struct ScreenGuard<'screen> {
-    pub(crate) screen: &'screen Screen,
+    /// Reference to the original screen handle, on which connection will be
+    /// terminated.
+    screen: &'screen Screen,
 }
 
 impl<'screen> Drop for ScreenGuard<'screen> {
@@ -204,6 +229,8 @@ impl<'screen> Drop for ScreenGuard<'screen> {
     }
 }
 
+/// The renderer loop. Should be called only when setting up a terminal handler.
+/// Exits on error or when notified that it should exit.
 pub(crate) async fn renderer(screen: &Screen) -> Result<(), Error> {
     let mut interval = time::interval(screen.shared.frame_time);
     let mut buf = String::new();
@@ -219,8 +246,6 @@ pub(crate) async fn renderer(screen: &Screen) -> Result<(), Error> {
             _ = screen.shared.renderer_notif.notified() => break,
         };
     }
-
-    tdebug!("HE");
 
     Ok(())
 }

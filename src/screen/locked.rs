@@ -1,3 +1,6 @@
+//! This module defines a locked screen type, to directly access the screen
+//! buffer.
+
 use crate::{
     color::{transform::PairTransformer, Color, Color2},
     coord,
@@ -14,14 +17,20 @@ use crate::{
 use std::fmt::Write;
 use tokio::{io, sync::MutexGuard};
 
-/// A locked screen terminal with exclusive access to it.
+/// A locked screen terminal with exclusive access to it. By default, [`Screen`]
+/// locks and unlocks every operation. With this struct, a locked screen handle,
+/// one can execute many operations without locking and unlocking.
 #[derive(Debug)]
 pub struct LockedScreen<'screen> {
+    /// Reference to the original screen.
     screen: &'screen Screen,
+    /// Locked guard to the buffer.
     buffer: MutexGuard<'screen, ScreenBuffer>,
 }
 
 impl<'screen> LockedScreen<'screen> {
+    /// Creates a locked screen from a reference to the unlocked screen handle,
+    /// and a locked guard to the buffer.
     pub(crate) fn new(
         screen: &'screen Screen,
         buffer: MutexGuard<'screen, ScreenBuffer>,
@@ -29,21 +38,22 @@ impl<'screen> LockedScreen<'screen> {
         Self { screen, buffer }
     }
 
-    /// Size of the screen. In sync with [`Terminal::screen_size`].
+    /// Returns the current size of the screen.
     pub fn size(&self) -> Coord2 {
         self.buffer.size()
     }
 
+    /// Returns the minimum size required for the screen.
     pub fn min_size(&self) -> Coord2 {
         self.screen.min_size()
     }
 
-    /// Sets the buffer of a given [`Tile`]. This operation is buffered.
+    /// Sets every attribute of a given [`Tile`]. This operation is buffered.
     pub fn set(&mut self, point: Coord2, tile: Tile) {
         self.update(point, |stored| *stored = tile);
     }
 
-    /// Sets the buffer of a given [`Tile`]. This operation is buffered.
+    /// Sets the colors of a given [`Tile`]. This operation is buffered.
     pub fn transform_colors<P>(&mut self, point: Coord2, transformer: P)
     where
         P: PairTransformer,
@@ -71,14 +81,15 @@ impl<'screen> LockedScreen<'screen> {
         ret
     }
 
-    /// Gets the buffer of a given [`Tile`] consistently with the buffer.
+    /// Gets the attributes of a given [`Tile`], regardless of being flushed to
+    /// the screen yet or not.
     pub fn get(&self, point: Coord2) -> &Tile {
         let index =
             self.buffer.make_index(point).expect("Screen out of bounds");
         &self.buffer.curr[index]
     }
 
-    /// Sets every [`Tile`] into a whitespace grapheme with the given colors.
+    /// Sets every [`Tile`] into a whitespace grapheme with the given color.
     pub fn clear(&mut self, background: Color) {
         let size = self.buffer.size();
         let tile = Tile {
@@ -93,8 +104,9 @@ impl<'screen> LockedScreen<'screen> {
         }
     }
 
-    /// Prints a grapheme identifier-encoded text using some style options like
-    /// ratio to the screen.
+    /// Prints a grapheme-encoded text (a [`TermString`]) using some style
+    /// options like ratio to the screen, color, margin and others. See
+    /// [`Style`].
     pub fn styled_text<P>(
         &mut self,
         tstring: &TermString,
@@ -181,6 +193,9 @@ impl<'screen> LockedScreen<'screen> {
         }
     }
 
+    /// Checks if the new size is valid. If valid, then it resizes the screen,
+    /// and sets the `guard` to `None`. Otherwise, stdout is locked, and the
+    /// locked stdout is put into `guard`.
     pub(crate) async fn check_resize(
         &mut self,
         new_size: Coord2,
@@ -205,6 +220,7 @@ impl<'screen> LockedScreen<'screen> {
         Ok(())
     }
 
+    /// Asks the user to resize the screen (manually).
     async fn ask_resize(
         &mut self,
         stdout: &mut LockedStdout<'screen>,

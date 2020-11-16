@@ -55,6 +55,7 @@ impl<P> Style<P>
 where
     P: PairTransformer,
 {
+    /// Creates the style object from the color transformer.
     pub fn with_colors(colors: P) -> Self {
         Self {
             left_margin: 0,

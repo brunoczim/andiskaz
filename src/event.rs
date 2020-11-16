@@ -144,12 +144,15 @@ pub(crate) async fn poll<'guard>(
     }
 }
 
+/// Handle to terminal events. It can listen for either key or resize events.
 #[derive(Debug, Clone)]
-pub struct EventListener {
+pub struct Events {
+    /// Receiver of the event channel.
     recv: watch::Receiver<Event>,
 }
 
-impl EventListener {
+impl Events {
+    /// Creates an events handle from the given receiver of the event channel.
     pub(crate) fn new(recv: watch::Receiver<Event>) -> Self {
         Self { recv }
     }

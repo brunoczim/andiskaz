@@ -1,3 +1,5 @@
+//! This module defines the screen (double) buffer and related items.
+
 use crate::{color::Color2, coord, coord::Coord2, string::TermGrapheme};
 use std::collections::BTreeSet;
 

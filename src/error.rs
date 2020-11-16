@@ -1,3 +1,5 @@
+//! This module exports error types used by the terminal handles.
+
 use crossterm::ErrorKind as CrosstermError;
 use std::{
     error::Error as ErrorTrait,
@@ -7,6 +9,7 @@ use std::{
 };
 use tokio::{io, task::JoinError};
 
+/// Error returned by the screen handle when the renderer disconnects.
 #[derive(Debug, Clone)]
 pub struct RendererOff;
 
@@ -18,6 +21,7 @@ impl fmt::Display for RendererOff {
 
 impl ErrorTrait for RendererOff {}
 
+/// Error returned by the events handler when the listener disconnects.
 #[derive(Debug, Clone)]
 pub struct EventsOff;
 
@@ -29,11 +33,13 @@ impl fmt::Display for EventsOff {
 
 impl ErrorTrait for EventsOff {}
 
-/// An error that may happen when executing a terminal.
+/// The kind of an error that may happen when executing a terminal operation.
 #[derive(Debug)]
 #[non_exhaustive]
 pub enum ErrorKind {
+    /// Renderer disconnected.
     RendererOff(RendererOff),
+    /// Event listener disconnected.
     EventsOff(EventsOff),
     /// This is an IO error.
     IO(io::Error),
@@ -45,10 +51,12 @@ pub enum ErrorKind {
     Utf8(FromUtf8Error),
     /// This is an error from a bad join.
     Join(JoinError),
+    /// A custom error, stored in a trait object.
     Custom(Box<dyn ErrorTrait + Send + Sync>),
 }
 
 impl ErrorKind {
+    /// Returns this error kind as a trait object.
     pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send + Sync) {
         match self {
             ErrorKind::RendererOff(error) => error,
@@ -122,20 +130,25 @@ impl From<Box<dyn ErrorTrait + Send + Sync>> for ErrorKind {
     }
 }
 
+/// An error that may happen when executing an operation on the terminal.
 #[derive(Debug)]
 pub struct Error {
+    /// Kind of the error. Wrapped in a Box to reduce the stack size.
     kind: Box<ErrorKind>,
 }
 
 impl Error {
+    /// Creates an error from its kind.
     pub fn new(kind: ErrorKind) -> Self {
         Self { kind: Box::new(kind) }
     }
 
+    /// Returns this error as a trait object.
     pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send + Sync) {
         self.kind.as_dyn()
     }
 
+    /// Returns the kind of the error.
     pub fn kind(&self) -> &ErrorKind {
         &self.kind
     }

@@ -1,3 +1,9 @@
+//! This crate provides basic utilities for writing applications with Terminal
+//! User Interface (TUI). It provides an event listener, and it provides a
+//! handle to a double buffered screen renderer.
+
+#![warn(missing_docs)]
+
 #[macro_use]
 mod macros;
 mod stdio;
