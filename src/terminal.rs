@@ -98,6 +98,9 @@ impl Builder {
     /// terminal services executing. In other words, one should not call
     /// this function again if another call did not finish yet, otherwise it
     /// will panic.
+    ///
+    /// Beware! If the given `start` future returns a `Result`, then `run` will
+    /// return a double `Result`!!
     pub async fn run<F, A, T>(self, start: F) -> Result<T, Error>
     where
         F: FnOnce(Terminal) -> A + Send + 'static,
@@ -264,6 +267,9 @@ impl Terminal {
     /// terminal services executing. In other words, one should not call
     /// this function again if another call did not finish yet, otherwise it
     /// will panic.
+    ///
+    /// Beware! If the given `start` future returns a `Result`, then `run` will
+    /// return a double `Result`!!
     pub async fn run<F, A, T>(start: F) -> Result<T, Error>
     where
         F: FnOnce(Terminal) -> A + Send + 'static,
