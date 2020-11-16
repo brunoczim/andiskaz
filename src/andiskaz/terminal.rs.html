@@ -273,13 +273,16 @@
 <span id="270">270</span>
 <span id="271">271</span>
 <span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This crate exports a terminal terminal and its utilites.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">coord</span>,
     <span class="ident">coord</span>::<span class="ident">Coord2</span>,
-    <span class="ident">error</span>::{<span class="ident">Error</span>, <span class="ident">ErrorKind</span>},
+    <span class="ident">error</span>::{<span class="ident">AlreadyRunning</span>, <span class="ident">Error</span>, <span class="ident">ErrorKind</span>},
     <span class="ident">event</span>::{<span class="ident">event_listener</span>, <span class="ident">Event</span>, <span class="ident">Events</span>, <span class="ident">ResizeEvent</span>},
     <span class="ident">screen</span>::{<span class="ident">renderer</span>, <span class="ident">Screen</span>},
 };
@@ -305,15 +308,13 @@
 <span class="kw">struct</span> <span class="ident">Guard</span>;
 
 <span class="kw">impl</span> <span class="ident">Guard</span> {
-    <span class="doccomment">/// Acquires the guard.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Panic</span>
-    <span class="doccomment">/// Panics if the guard was already acquired.</span>
-    <span class="kw">fn</span> <span class="ident">acquire</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="doccomment">/// Acquires the guard. Returns an error if the guard was already acquired.</span>
+    <span class="kw">fn</span> <span class="ident">acquire</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">AlreadyRunning</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">GUARD_STATE</span>.<span class="ident">swap</span>(<span class="bool-val">true</span>, <span class="ident">Acquire</span>) {
-            <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;There already is a terminal application running&quot;</span>);
+            <span class="prelude-val">Err</span>(<span class="ident">AlreadyRunning</span>)
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Ok</span>(<span class="self">Self</span>)
         }
-        <span class="self">Self</span>
     }
 }
 
@@ -372,10 +373,10 @@
     <span class="doccomment">/// After that `start`&#39;s future returns, terminal services such as screen</span>
     <span class="doccomment">/// handle and events handle are not guaranteed to be available.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// # Panic</span>
-    <span class="doccomment">/// Panics if there already is an instance of terminal services executing.</span>
-    <span class="doccomment">/// In other words, one should not call this function again if another call</span>
-    <span class="doccomment">/// did not finish yet, otherwise it will panic.</span>
+    <span class="doccomment">/// Returns an [`AlreadyRunning`] error if there already is an instance of</span>
+    <span class="doccomment">/// terminal services executing. In other words, one should not call</span>
+    <span class="doccomment">/// this function again if another call did not finish yet, otherwise it</span>
+    <span class="doccomment">/// will panic.</span>
     <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">start</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">A</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -383,7 +384,7 @@
         <span class="ident">T</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="comment">// Ensures there are no other terminal sevices executing.</span>
-        <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">Guard</span>::<span class="ident">acquire</span>();
+        <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">Guard</span>::<span class="ident">acquire</span>()<span class="question-mark">?</span>;
 
         <span class="comment">// Events channel.</span>
         <span class="kw">let</span> <span class="ident">dummy</span> <span class="op">=</span> <span class="ident">Event</span>::<span class="ident">Resize</span>(<span class="ident">ResizeEvent</span> { <span class="ident">size</span>: <span class="ident">Coord2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="number">0</span> } });
@@ -537,6 +538,11 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function uses the default configuration. See [`Builder`] for</span>
     <span class="doccomment">/// terminal settings.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Returns an [`AlreadyRunning`] error if there already is an instance of</span>
+    <span class="doccomment">/// terminal services executing. In other words, one should not call</span>
+    <span class="doccomment">/// this function again if another call did not finish yet, otherwise it</span>
+    <span class="doccomment">/// will panic.</span>
     <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">start</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">A</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
