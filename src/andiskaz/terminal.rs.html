@@ -282,6 +282,10 @@
 <span id="279">279</span>
 <span id="280">280</span>
 <span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This crate exports a terminal terminal and its utilites.</span>
 
@@ -377,9 +381,11 @@
     <span class="doccomment">/// well.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// After that `start`&#39;s future returns, terminal services such as screen</span>
-    <span class="doccomment">/// handle and events handle are not guaranteed to be available.</span>
+    <span class="doccomment">/// handle and events handle are not guaranteed to be available. One would</span>
+    <span class="doccomment">/// prefer spawning tasks that use the terminal handle by joining them, and</span>
+    <span class="doccomment">/// not detaching.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns an [`AlreadyRunning`] error if there already is an instance of</span>
+    <span class="doccomment">/// Returns an [`AlreadyRunning`] error if there is already an instance of</span>
     <span class="doccomment">/// terminal services executing. In other words, one should not call</span>
     <span class="doccomment">/// this function again if another call did not finish yet, otherwise it</span>
     <span class="doccomment">/// will panic.</span>
@@ -543,7 +549,9 @@
     <span class="doccomment">/// well.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// After that `start`&#39;s future returns, terminal services such as screen</span>
-    <span class="doccomment">/// handle and events handle are not guaranteed to be available.</span>
+    <span class="doccomment">/// handle and events handle are not guaranteed to be available. One would</span>
+    <span class="doccomment">/// prefer spawning tasks that use the terminal handle by joining them, and</span>
+    <span class="doccomment">/// not detaching.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function uses the default configuration. See [`Builder`] for</span>
     <span class="doccomment">/// terminal settings.</span>
