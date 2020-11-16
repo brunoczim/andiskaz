@@ -2,7 +2,7 @@
 
 use crate::{
     coord::Coord2,
-    error::{Error, RendererOff},
+    error::{Error, EventsOff},
     screen::Screen,
     stdio::LockedStdout,
 };
@@ -158,13 +158,13 @@ impl Events {
     }
 
     /// Checks if an event happened, without blocking.
-    pub fn check(&mut self) -> Result<Option<Event>, RendererOff> {
+    pub fn check(&mut self) -> Result<Option<Event>, EventsOff> {
         self.listen().now_or_never().transpose()
     }
 
     /// Listens for an event to happen. Waits until an event is available.
-    pub async fn listen(&mut self) -> Result<Event, RendererOff> {
-        self.recv.changed().await.map_err(|_| RendererOff)?;
+    pub async fn listen(&mut self) -> Result<Event, EventsOff> {
+        self.recv.changed().await.map_err(|_| EventsOff)?;
         Ok(self.recv.borrow().clone())
     }
 }
