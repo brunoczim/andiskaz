@@ -168,6 +168,9 @@
 <span id="165">165</span>
 <span id="166">166</span>
 <span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This module defines input events of a terminal.</span>
 
@@ -315,12 +318,15 @@
     }
 }
 
+<span class="doccomment">/// Handle to terminal events. It can listen for either key or resize events.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EventListener</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Events</span> {
+    <span class="doccomment">/// Receiver of the event channel.</span>
     <span class="ident">recv</span>: <span class="ident">watch</span>::<span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">EventListener</span> {
+<span class="kw">impl</span> <span class="ident">Events</span> {
+    <span class="doccomment">/// Creates an events handle from the given receiver of the event channel.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">recv</span>: <span class="ident">watch</span>::<span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">recv</span> }
     }

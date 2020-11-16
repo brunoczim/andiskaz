@@ -336,7 +336,26 @@
 <span id="333">333</span>
 <span id="334">334</span>
 <span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
 </pre><div class="example-wrap"><pre class="rust ">
+<span class="doccomment">//! This module defines a locked screen type, to directly access the screen</span>
+<span class="doccomment">//! buffer.</span>
+
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">color</span>::{<span class="ident">transform</span>::<span class="ident">PairTransformer</span>, <span class="ident">Color</span>, <span class="ident">Color2</span>},
     <span class="ident">coord</span>,
@@ -353,14 +372,20 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Write</span>;
 <span class="kw">use</span> <span class="ident">tokio</span>::{<span class="ident">io</span>, <span class="ident">sync</span>::<span class="ident">MutexGuard</span>};
 
-<span class="doccomment">/// A locked screen terminal with exclusive access to it.</span>
+<span class="doccomment">/// A locked screen terminal with exclusive access to it. By default, [`Screen`]</span>
+<span class="doccomment">/// locks and unlocks every operation. With this struct, a locked screen handle,</span>
+<span class="doccomment">/// one can execute many operations without locking and unlocking.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LockedScreen</span><span class="op">&lt;</span><span class="lifetime">&#39;screen</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Reference to the original screen.</span>
     <span class="ident">screen</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;screen</span> <span class="ident">Screen</span>,
+    <span class="doccomment">/// Locked guard to the buffer.</span>
     <span class="ident">buffer</span>: <span class="ident">MutexGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;screen</span>, <span class="ident">ScreenBuffer</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;screen</span><span class="op">&gt;</span> <span class="ident">LockedScreen</span><span class="op">&lt;</span><span class="lifetime">&#39;screen</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Creates a locked screen from a reference to the unlocked screen handle,</span>
+    <span class="doccomment">/// and a locked guard to the buffer.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">screen</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;screen</span> <span class="ident">Screen</span>,
         <span class="ident">buffer</span>: <span class="ident">MutexGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;screen</span>, <span class="ident">ScreenBuffer</span><span class="op">&gt;</span>,
@@ -368,21 +393,22 @@
         <span class="self">Self</span> { <span class="ident">screen</span>, <span class="ident">buffer</span> }
     }
 
-    <span class="doccomment">/// Size of the screen. In sync with [`Terminal::screen_size`].</span>
+    <span class="doccomment">/// Returns the current size of the screen.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord2</span> {
         <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">size</span>()
     }
 
+    <span class="doccomment">/// Returns the minimum size required for the screen.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord2</span> {
         <span class="self">self</span>.<span class="ident">screen</span>.<span class="ident">min_size</span>()
     }
 
-    <span class="doccomment">/// Sets the buffer of a given [`Tile`]. This operation is buffered.</span>
+    <span class="doccomment">/// Sets every attribute of a given [`Tile`]. This operation is buffered.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Coord2</span>, <span class="ident">tile</span>: <span class="ident">Tile</span>) {
         <span class="self">self</span>.<span class="ident">update</span>(<span class="ident">point</span>, <span class="op">|</span><span class="ident">stored</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">stored</span> <span class="op">=</span> <span class="ident">tile</span>);
     }
 
-    <span class="doccomment">/// Sets the buffer of a given [`Tile`]. This operation is buffered.</span>
+    <span class="doccomment">/// Sets the colors of a given [`Tile`]. This operation is buffered.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">transform_colors</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Coord2</span>, <span class="ident">transformer</span>: <span class="ident">P</span>)
     <span class="kw">where</span>
         <span class="ident">P</span>: <span class="ident">PairTransformer</span>,
@@ -410,14 +436,15 @@
         <span class="ident">ret</span>
     }
 
-    <span class="doccomment">/// Gets the buffer of a given [`Tile`] consistently with the buffer.</span>
+    <span class="doccomment">/// Gets the attributes of a given [`Tile`], regardless of being flushed to</span>
+    <span class="doccomment">/// the screen yet or not.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Coord2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Tile</span> {
         <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span>
             <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">make_index</span>(<span class="ident">point</span>).<span class="ident">expect</span>(<span class="string">&quot;Screen out of bounds&quot;</span>);
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">curr</span>[<span class="ident">index</span>]
     }
 
-    <span class="doccomment">/// Sets every [`Tile`] into a whitespace grapheme with the given colors.</span>
+    <span class="doccomment">/// Sets every [`Tile`] into a whitespace grapheme with the given color.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">background</span>: <span class="ident">Color</span>) {
         <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">size</span>();
         <span class="kw">let</span> <span class="ident">tile</span> <span class="op">=</span> <span class="ident">Tile</span> {
@@ -432,8 +459,9 @@
         }
     }
 
-    <span class="doccomment">/// Prints a grapheme identifier-encoded text using some style options like</span>
-    <span class="doccomment">/// ratio to the screen.</span>
+    <span class="doccomment">/// Prints a grapheme-encoded text (a [`TermString`]) using some style</span>
+    <span class="doccomment">/// options like ratio to the screen, color, margin and others. See</span>
+    <span class="doccomment">/// [`Style`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">styled_text</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">tstring</span>: <span class="kw-2">&amp;</span><span class="ident">TermString</span>,
@@ -520,6 +548,9 @@
         }
     }
 
+    <span class="doccomment">/// Checks if the new size is valid. If valid, then it resizes the screen,</span>
+    <span class="doccomment">/// and sets the `guard` to `None`. Otherwise, stdout is locked, and the</span>
+    <span class="doccomment">/// locked stdout is put into `guard`.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">check_resize</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">new_size</span>: <span class="ident">Coord2</span>,
@@ -544,6 +575,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Asks the user to resize the screen (manually).</span>
     <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">ask_resize</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">stdout</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">LockedStdout</span><span class="op">&lt;</span><span class="lifetime">&#39;screen</span><span class="op">&gt;</span>,

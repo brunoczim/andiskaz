@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["ErrorKind","An error that may happen when executing a terminal."]],"struct":[["Error",""],["EventsOff",""],["RendererOff",""]]});
+initSidebarItems({"enum":[["ErrorKind","The kind of an error that may happen when executing a terminal operation."]],"struct":[["Error","An error that may happen when executing an operation on the terminal."],["EventsOff","Error returned by the events handler when the listener disconnects."],["RendererOff","Error returned by the screen handle when the renderer disconnects."]]});
