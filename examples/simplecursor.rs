@@ -16,8 +16,8 @@ use std::{panic, process::exit};
 /// Asynchronous main of a tokio project.
 #[tokio::main]
 async fn main() {
-    // Set panic hook so we can see the panic even if terminal was being used in
-    // raw mode.
+    // Sets panic hook so we can see the panic even if terminal was being used
+    // in raw mode.
     panic::set_hook(Box::new(|info| {
         let _ = emergency_restore();
         eprintln!("{}", info);
@@ -40,7 +40,7 @@ async fn main() {
         // Awaits for the terminal main future.
         .await;
 
-    // If error, print it out and exit with bad code.
+    // If error, prints it out and exit with bad code.
     if let Ok(Err(error)) | Err(error) = result {
         eprintln!("{}", error);
         exit(-1);

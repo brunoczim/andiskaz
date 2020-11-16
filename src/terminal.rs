@@ -3,7 +3,7 @@
 use crate::{
     coord,
     coord::Coord2,
-    error::{Error, ErrorKind},
+    error::{AlreadyRunning, Error, ErrorKind},
     event::{event_listener, Event, Events, ResizeEvent},
     screen::{renderer, Screen},
 };
@@ -29,15 +29,13 @@ static GUARD_STATE: AtomicBool = AtomicBool::new(false);
 struct Guard;
 
 impl Guard {
-    /// Acquires the guard.
-    ///
-    /// # Panic
-    /// Panics if the guard was already acquired.
-    fn acquire() -> Self {
+    /// Acquires the guard. Returns an error if the guard was already acquired.
+    fn acquire() -> Result<Self, AlreadyRunning> {
         if GUARD_STATE.swap(true, Acquire) {
-            panic!("There already is a terminal application running");
+            Err(AlreadyRunning)
+        } else {
+            Ok(Self)
         }
-        Self
     }
 }
 
@@ -96,10 +94,10 @@ impl Builder {
     /// After that `start`'s future returns, terminal services such as screen
     /// handle and events handle are not guaranteed to be available.
     ///
-    /// # Panic
-    /// Panics if there already is an instance of terminal services executing.
-    /// In other words, one should not call this function again if another call
-    /// did not finish yet, otherwise it will panic.
+    /// Returns an [`AlreadyRunning`] error if there already is an instance of
+    /// terminal services executing. In other words, one should not call
+    /// this function again if another call did not finish yet, otherwise it
+    /// will panic.
     pub async fn run<F, A, T>(self, start: F) -> Result<T, Error>
     where
         F: FnOnce(Terminal) -> A + Send + 'static,
@@ -107,7 +105,7 @@ impl Builder {
         T: Send + 'static,
     {
         // Ensures there are no other terminal sevices executing.
-        let _guard = Guard::acquire();
+        let _guard = Guard::acquire()?;
 
         // Events channel.
         let dummy = Event::Resize(ResizeEvent { size: Coord2 { x: 0, y: 0 } });
@@ -261,6 +259,11 @@ impl Terminal {
     ///
     /// This function uses the default configuration. See [`Builder`] for
     /// terminal settings.
+    ///
+    /// Returns an [`AlreadyRunning`] error if there already is an instance of
+    /// terminal services executing. In other words, one should not call
+    /// this function again if another call did not finish yet, otherwise it
+    /// will panic.
     pub async fn run<F, A, T>(start: F) -> Result<T, Error>
     where
         F: FnOnce(Terminal) -> A + Send + 'static,

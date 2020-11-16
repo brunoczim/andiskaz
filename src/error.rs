@@ -9,6 +9,19 @@ use std::{
 };
 use tokio::{io, task::JoinError};
 
+/// Error returned by the terminal handle initialization when there is already
+/// an instance of terminal services running.
+#[derive(Debug, Clone)]
+pub struct AlreadyRunning;
+
+impl fmt::Display for AlreadyRunning {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        fmt.pad("there already is an instance of terminal services running")
+    }
+}
+
+impl ErrorTrait for AlreadyRunning {}
+
 /// Error returned by the screen handle when the renderer disconnects.
 #[derive(Debug, Clone)]
 pub struct RendererOff;
@@ -37,6 +50,8 @@ impl ErrorTrait for EventsOff {}
 #[derive(Debug)]
 #[non_exhaustive]
 pub enum ErrorKind {
+    /// Terminal services already running.
+    AlreadyRunning(AlreadyRunning),
     /// Renderer disconnected.
     RendererOff(RendererOff),
     /// Event listener disconnected.
@@ -59,6 +74,7 @@ impl ErrorKind {
     /// Returns this error kind as a trait object.
     pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send + Sync) {
         match self {
+            ErrorKind::AlreadyRunning(error) => error,
             ErrorKind::RendererOff(error) => error,
             ErrorKind::EventsOff(error) => error,
             ErrorKind::IO(error) => error,
@@ -79,6 +95,12 @@ impl ErrorKind {
             CrosstermError::ParseIntError(error) => ErrorKind::ParseInt(error),
             error => ErrorKind::Custom(Box::new(error)),
         }
+    }
+}
+
+impl From<AlreadyRunning> for ErrorKind {
+    fn from(error: AlreadyRunning) -> Self {
+        ErrorKind::AlreadyRunning(error)
     }
 }
 
@@ -174,6 +196,12 @@ impl ErrorTrait for Error {
 impl From<ErrorKind> for Error {
     fn from(kind: ErrorKind) -> Self {
         Self::new(kind)
+    }
+}
+
+impl From<AlreadyRunning> for Error {
+    fn from(error: AlreadyRunning) -> Self {
+        Self::new(ErrorKind::from(error))
     }
 }
 
