@@ -58,7 +58,16 @@ macro_rules! tstring_concat {
     };
 }
 
-#[allow(unused_macros)]
+/// Writes the given formatting expression into the file `debug.txt`.
+///
+/// # Example
+/// ```norun
+/// use andiskaz::coord::Coord2;
+///
+/// let coords = Coord2 { x: 3, y: 5 };
+/// andiskaz::tdebug!("coords = {:?}\n", coords);
+/// ```
+#[macro_export]
 macro_rules! tdebug {
     ($($tok:tt)+) => {{
         use std::fs::OpenOptions;

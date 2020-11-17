@@ -3,7 +3,18 @@
 //! [`Transformer`], use [`FromFn`]. Analogously, there is a transformer over
 //! [`Color2`]s, the [`PairTransformer`].
 
-use crate::color::{ApproxBrightness, Brightness, Color, Color2};
+use crate::color::{
+    ApproxBrightness,
+    BasicColor,
+    Brightness,
+    CmyColor,
+    Color,
+    Color2,
+    Color8,
+    Color8Kind,
+    GrayColor,
+    RgbColor,
+};
 
 /// A color transformer. Changes a color.
 pub trait Transformer {
@@ -14,6 +25,42 @@ pub trait Transformer {
 impl Transformer for Color {
     fn transform(&self, _color: Color) -> Color {
         *self
+    }
+}
+
+impl Transformer for BasicColor {
+    fn transform(&self, _color: Color) -> Color {
+        Color::from(*self)
+    }
+}
+
+impl Transformer for Color8 {
+    fn transform(&self, _color: Color) -> Color {
+        Color::from(*self)
+    }
+}
+
+impl Transformer for Color8Kind {
+    fn transform(&self, _color: Color) -> Color {
+        Color::from(*self)
+    }
+}
+
+impl Transformer for CmyColor {
+    fn transform(&self, _color: Color) -> Color {
+        Color::from(*self)
+    }
+}
+
+impl Transformer for GrayColor {
+    fn transform(&self, _color: Color) -> Color {
+        Color::from(*self)
+    }
+}
+
+impl Transformer for RgbColor {
+    fn transform(&self, _color: Color) -> Color {
+        Color::from(*self)
     }
 }
 

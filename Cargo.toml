@@ -24,3 +24,7 @@ features = [
     "fs",
     "time"
 ]
+
+[dev-dependencies]
+rand = "^0.7.3"
+backtrace = "^0.3.54"
