@@ -75,6 +75,15 @@
 <span id="72">72</span>
 <span id="73">73</span>
 <span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">/// Creates a [`TermString`](crate::string::TermString) from string literal.</span>
 <span class="doccomment">/// Currently, invalid string get the unicode replacement character in their</span>
@@ -136,7 +145,16 @@
     };
 }
 
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_macros</span>)]</span>
+<span class="doccomment">/// Writes the given formatting expression into the file `debug.txt`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Example</span>
+<span class="doccomment">/// ```norun</span>
+<span class="doccomment">/// use andiskaz::coord::Coord2;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// let coords = Coord2 { x: 3, y: 5 };</span>
+<span class="doccomment">/// andiskaz::tdebug!(&quot;coords = {:?}\n&quot;, coords);</span>
+<span class="doccomment">/// ```</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">tdebug</span> {
     ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tok</span>:<span class="ident">tt</span>)<span class="op">+</span>) <span class="op">=</span><span class="op">&gt;</span> {{
         <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fs</span>::<span class="ident">OpenOptions</span>;
