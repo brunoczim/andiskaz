@@ -2,7 +2,7 @@ use andiskaz::{
     color::{BasicColor, Color2},
     coord::Coord2,
     emergency_restore,
-    error::Error,
+    error::Error as AndiskazError,
     event::{Event, Key, KeyEvent, ResizeEvent},
     screen::{LockedScreen, Tile},
     string::{TermGrapheme, TermString},
@@ -36,7 +36,7 @@ async fn main() {
 }
 
 /// The terminal main function.
-async fn term_main(mut terminal: Terminal) -> Result<(), Error> {
+async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
     let result = match Game::new(&mut terminal).await {
         Ok(game) => game.render(&mut terminal).await.map(|_| game),
         Err(exit) => Err(exit),
@@ -44,17 +44,17 @@ async fn term_main(mut terminal: Terminal) -> Result<(), Error> {
 
     let mut interval = time::interval(Duration::from_millis(50));
 
-    let exit = match result {
+    let error = match result {
         Ok(mut game) => loop {
-            if let Err(exit) = game.tick(&mut terminal).await {
-                break exit;
+            if let Err(error) = game.tick(&mut terminal).await {
+                break error;
             }
             interval.tick().await;
         },
-        Err(exit) => exit,
+        Err(error) => error,
     };
 
-    match exit {
+    match error.exit_is_ok()? {
         Exit::Esc => (),
 
         Exit::Won => {
@@ -86,14 +86,12 @@ async fn term_main(mut terminal: Terminal) -> Result<(), Error> {
 
             wait_key_delay(&mut terminal).await?;
         },
-
-        Exit::Error(error) => Err(error)?,
     }
 
     Ok(())
 }
 
-async fn wait_key_delay(terminal: &mut Terminal) -> Result<(), Error> {
+async fn wait_key_delay(terminal: &mut Terminal) -> Result<(), AndiskazError> {
     time::sleep(Duration::from_millis(100)).await;
     terminal.events.check()?;
 
@@ -107,15 +105,35 @@ enum Exit {
     Esc,
     Lost,
     Won,
-    Error(Error),
 }
 
-impl<E> From<E> for Exit
+#[derive(Debug)]
+enum SnakeError {
+    Exit(Exit),
+    Andiskaz(AndiskazError),
+}
+
+impl SnakeError {
+    fn exit_is_ok(self) -> Result<Exit, AndiskazError> {
+        match self {
+            SnakeError::Exit(exit) => Ok(exit),
+            SnakeError::Andiskaz(error) => Err(error),
+        }
+    }
+}
+
+impl From<Exit> for SnakeError {
+    fn from(exit: Exit) -> Self {
+        SnakeError::Exit(exit)
+    }
+}
+
+impl<E> From<E> for SnakeError
 where
-    E: Into<Error>,
+    E: Into<AndiskazError>,
 {
     fn from(error: E) -> Self {
-        Exit::Error(error.into())
+        SnakeError::Andiskaz(error.into())
     }
 }
 
@@ -331,7 +349,7 @@ struct Game {
 }
 
 impl Game {
-    async fn new(terminal: &Terminal) -> Result<Self, Exit> {
+    async fn new(terminal: &Terminal) -> Result<Self, SnakeError> {
         let screen = terminal.screen.lock().await?;
 
         let body_sprite = TermGrapheme::new_lossy("O");
@@ -365,7 +383,10 @@ impl Game {
         }
     }
 
-    async fn tick(&mut self, terminal: &mut Terminal) -> Result<(), Exit> {
+    async fn tick(
+        &mut self,
+        terminal: &mut Terminal,
+    ) -> Result<(), SnakeError> {
         match terminal.events.check()? {
             Some(Event::Key(KeyEvent { main_key: Key::Esc, .. })) => {
                 Err(Exit::Esc)?
@@ -425,7 +446,7 @@ impl Game {
         Ok(())
     }
 
-    async fn render(&self, terminal: &Terminal) -> Result<(), Exit> {
+    async fn render(&self, terminal: &Terminal) -> Result<(), SnakeError> {
         let mut screen = terminal.screen.lock().await?;
         screen.clear(BasicColor::Black.into());
 
