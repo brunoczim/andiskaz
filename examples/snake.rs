@@ -69,7 +69,7 @@ async fn term_main(mut terminal: Terminal) -> Result<(), Error> {
             screen.styled_text(&tstring!["YOU WON!!"], style);
             drop(screen);
 
-            terminal.events.listen().await?;
+            wait_key_delay(&mut terminal).await?;
         },
 
         Exit::Lost => {
@@ -84,12 +84,21 @@ async fn term_main(mut terminal: Terminal) -> Result<(), Error> {
             screen.styled_text(&tstring!["YOU LOST!!"], style);
             drop(screen);
 
-            terminal.events.listen().await?;
+            wait_key_delay(&mut terminal).await?;
         },
 
         Exit::Error(error) => Err(error)?,
     }
 
+    Ok(())
+}
+
+async fn wait_key_delay(terminal: &mut Terminal) -> Result<(), Error> {
+    time::sleep(Duration::from_millis(100)).await;
+    terminal.events.check()?;
+
+    time::sleep(Duration::from_millis(500)).await;
+    terminal.events.listen().await?;
     Ok(())
 }
 
