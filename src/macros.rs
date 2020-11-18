@@ -61,7 +61,7 @@ macro_rules! tstring_concat {
 /// Writes the given formatting expression into the file `debug.txt`.
 ///
 /// # Example
-/// ```norun
+/// ```no_run
 /// use andiskaz::coord::Coord2;
 ///
 /// let coords = Coord2 { x: 3, y: 5 };
