@@ -142,7 +142,7 @@
 <span id="139">139</span>
 <span id="140">140</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! UNIX related logic for terminal manipulation.</span>
+<span class="doccomment">//! UNIX related logic for terminal manipulation.</span>
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">io</span>, <span class="ident">mem</span>, <span class="ident">process</span>, <span class="ident">sync</span>::<span class="ident">Mutex</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">event</span>::<span class="ident">sys</span>::<span class="ident">unix</span>::<span class="ident">file_descriptor</span>::{<span class="ident">tty_fd</span>, <span class="ident">FileDesc</span>};
@@ -157,8 +157,8 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">unix</span>::<span class="ident">io</span>::{<span class="ident">IntoRawFd</span>, <span class="ident">RawFd</span>};
 
 <span class="macro">lazy_static</span><span class="macro">!</span> {
-    <span class="comment">// Some(Termios) -&gt; we&#39;re in the raw mode and this is the previous mode</span>
-    <span class="comment">// None -&gt; we&#39;re not in the raw mode</span>
+    <span class="comment">// Some(Termios) -&gt; we&#39;re in the raw mode and this is the previous mode</span>
+    <span class="comment">// None -&gt; we&#39;re not in the raw mode</span>
     <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">TERMINAL_MODE_PRIOR_RAW_MODE</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Termios</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Mutex</span>::<span class="ident">new</span>(<span class="prelude-val">None</span>);
 }
 
@@ -168,7 +168,7 @@
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">useless_conversion</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">size</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">u16</span>, <span class="ident">u16</span>)<span class="op">&gt;</span> {
-    <span class="comment">// http://rosettacode.org/wiki/Terminal_control/Dimensions#Library:_BSD_libc</span>
+    <span class="comment">// http://rosettacode.org/wiki/Terminal_control/Dimensions#Library:_BSD_libc</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">winsize</span> {
         <span class="ident">ws_row</span>: <span class="number">0</span>,
         <span class="ident">ws_col</span>: <span class="number">0</span>,
@@ -180,7 +180,7 @@
     <span class="kw">let</span> <span class="ident">fd</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">file</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span> {
         <span class="ident">file</span>.<span class="ident">raw_fd</span>()
     } <span class="kw">else</span> {
-        <span class="comment">// Fallback to libc::STDOUT_FILENO if /dev/tty is missing</span>
+        <span class="comment">// Fallback to libc::STDOUT_FILENO if /dev/tty is missing</span>
         <span class="ident">STDOUT_FILENO</span>
     };
 
@@ -206,7 +206,7 @@
     <span class="ident">raw_terminal_attr</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ios</span>);
     <span class="ident">set_terminal_attr</span>(<span class="ident">fd</span>, <span class="kw-2">&amp;</span><span class="ident">ios</span>)<span class="question-mark">?</span>;
 
-    <span class="comment">// Keep it last - set the original mode only if we were able to switch to the raw mode</span>
+    <span class="comment">// Keep it last - set the original mode only if we were able to switch to the raw mode</span>
     <span class="kw-2">*</span><span class="ident">original_mode</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">original_mode_ios</span>);
 
     <span class="prelude-val">Ok</span>(())
@@ -218,17 +218,17 @@
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">original_mode_ios</span>) <span class="op">=</span> <span class="ident">original_mode</span>.<span class="ident">as_ref</span>() {
         <span class="kw">let</span> <span class="ident">tty</span> <span class="op">=</span> <span class="ident">tty_fd</span>()<span class="question-mark">?</span>;
         <span class="ident">set_terminal_attr</span>(<span class="ident">tty</span>.<span class="ident">raw_fd</span>(), <span class="ident">original_mode_ios</span>)<span class="question-mark">?</span>;
-        <span class="comment">// Keep it last - remove the original mode only if we were able to switch back</span>
+        <span class="comment">// Keep it last - remove the original mode only if we were able to switch back</span>
         <span class="kw-2">*</span><span class="ident">original_mode</span> <span class="op">=</span> <span class="prelude-val">None</span>;
     }
 
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="doccomment">/// execute tput with the given argument and parse</span>
-<span class="doccomment">/// the output as a u16.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The arg should be &quot;cols&quot; or &quot;lines&quot;</span>
+<span class="doccomment">/// execute tput with the given argument and parse</span>
+<span class="doccomment">/// the output as a u16.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The arg should be &quot;cols&quot; or &quot;lines&quot;</span>
 <span class="kw">fn</span> <span class="ident">tput_value</span>(<span class="ident">arg</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
     <span class="kw">match</span> <span class="ident">process</span>::<span class="ident">Command</span>::<span class="ident">new</span>(<span class="string">&quot;tput&quot;</span>).<span class="ident">arg</span>(<span class="ident">arg</span>).<span class="ident">output</span>() {
         <span class="prelude-val">Ok</span>(<span class="ident">process</span>::<span class="ident">Output</span> { <span class="ident">stdout</span>, .. }) <span class="op">=</span><span class="op">&gt;</span> {
@@ -247,10 +247,10 @@
     }
 }
 
-<span class="doccomment">/// Returns the size of the screen as determined by tput.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This alternate way of computing the size is useful</span>
-<span class="doccomment">/// when in a subshell.</span>
+<span class="doccomment">/// Returns the size of the screen as determined by tput.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This alternate way of computing the size is useful</span>
+<span class="doccomment">/// when in a subshell.</span>
 <span class="kw">fn</span> <span class="ident">tput_size</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">u16</span>, <span class="ident">u16</span>)<span class="op">&gt;</span> {
     <span class="kw">match</span> (<span class="ident">tput_value</span>(<span class="string">&quot;cols&quot;</span>), <span class="ident">tput_value</span>(<span class="string">&quot;lines&quot;</span>)) {
         (<span class="prelude-val">Some</span>(<span class="ident">w</span>), <span class="prelude-val">Some</span>(<span class="ident">h</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>((<span class="ident">w</span>, <span class="ident">h</span>)),
@@ -258,7 +258,7 @@
     }
 }
 
-<span class="comment">// Transform the given mode into an raw mode (non-canonical) mode.</span>
+<span class="comment">// Transform the given mode into an raw mode (non-canonical) mode.</span>
 <span class="kw">fn</span> <span class="ident">raw_terminal_attr</span>(<span class="ident">termios</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Termios</span>) {
     <span class="kw">unsafe</span> { <span class="ident">cfmakeraw</span>(<span class="ident">termios</span>) }
 }

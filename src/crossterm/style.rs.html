@@ -457,117 +457,117 @@
 <span id="454">454</span>
 <span id="455">455</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! # Style</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The `style` module provides a functionality to apply attributes and colors on your text.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This documentation does not contain a lot of examples. The reason is that it&#39;s fairly</span>
-<span class="doccomment">//! obvious how to use this crate. Although, we do provide</span>
-<span class="doccomment">//! [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) repository</span>
-<span class="doccomment">//! to demonstrate the capabilities.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Platform-specific Notes</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Not all features are supported on all terminals/platforms. You should always consult</span>
-<span class="doccomment">//! platform-specific notes of the following types:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * [Color](enum.Color.html#platform-specific-notes)</span>
-<span class="doccomment">//! * [Attribute](enum.Attribute.html#platform-specific-notes)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! A few examples of how to use the style module.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Colors</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! How to change the terminal text color.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Command API:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Using the Command API to color text.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{stdout, Write};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! use crossterm::{execute, Result};</span>
-<span class="doccomment">//! use crossterm::style::{Print, SetForegroundColor, SetBackgroundColor, ResetColor, Color, Attribute};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">//!     execute!(</span>
-<span class="doccomment">//!         stdout(),</span>
-<span class="doccomment">//!         // Blue foreground</span>
-<span class="doccomment">//!         SetForegroundColor(Color::Blue),</span>
-<span class="doccomment">//!         // Red background</span>
-<span class="doccomment">//!         SetBackgroundColor(Color::Red),</span>
-<span class="doccomment">//!         // Print text</span>
-<span class="doccomment">//!         Print(&quot;Blue text on Red.&quot;.to_string()),</span>
-<span class="doccomment">//!         // Reset to default colors</span>
-<span class="doccomment">//!         ResetColor</span>
-<span class="doccomment">//!     )</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Functions:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Using functions from [`Colorize`](trait.Colorize.html) on a `String` or `&amp;&#39;static str` to color it.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use crossterm::style::Colorize;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Red foreground color &amp; blue background.&quot;.red().on_blue());</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Attributes</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! How to appy terminal attributes to text.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Command API:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Using the Command API to set attributes.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{stdout, Write};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! use crossterm::{execute, Result, style::Print};</span>
-<span class="doccomment">//! use crossterm::style::{SetAttribute, Attribute};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">//!     execute!(</span>
-<span class="doccomment">//!         stdout(),</span>
-<span class="doccomment">//!         // Set to bold</span>
-<span class="doccomment">//!         SetAttribute(Attribute::Bold),</span>
-<span class="doccomment">//!         Print(&quot;Bold text here.&quot;.to_string()),</span>
-<span class="doccomment">//!         // Reset all attributes</span>
-<span class="doccomment">//!         SetAttribute(Attribute::Reset)</span>
-<span class="doccomment">//!     )</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Functions:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Using [`Styler`](trait.Styler.html) functions on a `String` or `&amp;&#39;static str` to set attributes to it.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use crossterm::style::Styler;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Bold&quot;.bold());</span>
-<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Underlined&quot;.underlined());</span>
-<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Negative&quot;.negative());</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Displayable:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [`Attribute`](enum.Attribute.html) implements [Display](https://doc.rust-lang.org/beta/std/fmt/trait.Display.html) and therefore it can be formatted like:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use crossterm::style::Attribute;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! println!(</span>
-<span class="doccomment">//!     &quot;{} Underlined {} No Underline&quot;,</span>
-<span class="doccomment">//!     Attribute::Underlined,</span>
-<span class="doccomment">//!     Attribute::NoUnderline</span>
-<span class="doccomment">//! );</span>
-<span class="doccomment">//! ```</span>
+<span class="doccomment">//! # Style</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The `style` module provides a functionality to apply attributes and colors on your text.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This documentation does not contain a lot of examples. The reason is that it&#39;s fairly</span>
+<span class="doccomment">//! obvious how to use this crate. Although, we do provide</span>
+<span class="doccomment">//! [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) repository</span>
+<span class="doccomment">//! to demonstrate the capabilities.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Platform-specific Notes</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Not all features are supported on all terminals/platforms. You should always consult</span>
+<span class="doccomment">//! platform-specific notes of the following types:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * [Color](enum.Color.html#platform-specific-notes)</span>
+<span class="doccomment">//! * [Attribute](enum.Attribute.html#platform-specific-notes)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Examples</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! A few examples of how to use the style module.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ### Colors</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! How to change the terminal text color.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Command API:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Using the Command API to color text.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::io::{stdout, Write};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! use crossterm::{execute, Result};</span>
+<span class="doccomment">//! use crossterm::style::{Print, SetForegroundColor, SetBackgroundColor, ResetColor, Color, Attribute};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
+<span class="doccomment">//!     execute!(</span>
+<span class="doccomment">//!         stdout(),</span>
+<span class="doccomment">//!         // Blue foreground</span>
+<span class="doccomment">//!         SetForegroundColor(Color::Blue),</span>
+<span class="doccomment">//!         // Red background</span>
+<span class="doccomment">//!         SetBackgroundColor(Color::Red),</span>
+<span class="doccomment">//!         // Print text</span>
+<span class="doccomment">//!         Print(&quot;Blue text on Red.&quot;.to_string()),</span>
+<span class="doccomment">//!         // Reset to default colors</span>
+<span class="doccomment">//!         ResetColor</span>
+<span class="doccomment">//!     )</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Functions:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Using functions from [`Colorize`](trait.Colorize.html) on a `String` or `&amp;&#39;static str` to color it.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use crossterm::style::Colorize;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Red foreground color &amp; blue background.&quot;.red().on_blue());</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ### Attributes</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! How to appy terminal attributes to text.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Command API:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Using the Command API to set attributes.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::io::{stdout, Write};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! use crossterm::{execute, Result, style::Print};</span>
+<span class="doccomment">//! use crossterm::style::{SetAttribute, Attribute};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
+<span class="doccomment">//!     execute!(</span>
+<span class="doccomment">//!         stdout(),</span>
+<span class="doccomment">//!         // Set to bold</span>
+<span class="doccomment">//!         SetAttribute(Attribute::Bold),</span>
+<span class="doccomment">//!         Print(&quot;Bold text here.&quot;.to_string()),</span>
+<span class="doccomment">//!         // Reset all attributes</span>
+<span class="doccomment">//!         SetAttribute(Attribute::Reset)</span>
+<span class="doccomment">//!     )</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Functions:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Using [`Styler`](trait.Styler.html) functions on a `String` or `&amp;&#39;static str` to set attributes to it.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use crossterm::style::Styler;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Bold&quot;.bold());</span>
+<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Underlined&quot;.underlined());</span>
+<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Negative&quot;.negative());</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Displayable:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! [`Attribute`](enum.Attribute.html) implements [Display](https://doc.rust-lang.org/beta/std/fmt/trait.Display.html) and therefore it can be formatted like:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use crossterm::style::Attribute;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! println!(</span>
+<span class="doccomment">//!     &quot;{} Underlined {} No Underline&quot;,</span>
+<span class="doccomment">//!     Attribute::Underlined,</span>
+<span class="doccomment">//!     Attribute::NoUnderline</span>
+<span class="doccomment">//! );</span>
+<span class="doccomment">//! ```</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">env</span>, <span class="ident">fmt</span>::<span class="ident">Display</span>};
 
@@ -594,23 +594,23 @@
 <span class="kw">mod</span> <span class="ident">traits</span>;
 <span class="kw">mod</span> <span class="ident">types</span>;
 
-<span class="doccomment">/// Creates a `StyledContent`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This could be used to style any type that implements `Display` with colors and text attributes.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`StyledContent`](struct.StyledContent.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use crossterm::style::{style, Color};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let styled_content = style(&quot;Blue colored text on yellow background&quot;)</span>
-<span class="doccomment">///     .with(Color::Blue)</span>
-<span class="doccomment">///     .on(Color::Yellow);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// println!(&quot;{}&quot;, styled_content);</span>
-<span class="doccomment">/// ```</span>
+<span class="doccomment">/// Creates a `StyledContent`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This could be used to style any type that implements `Display` with colors and text attributes.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See [`StyledContent`](struct.StyledContent.html) for more info.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```no_run</span>
+<span class="doccomment">/// use crossterm::style::{style, Color};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// let styled_content = style(&quot;Blue colored text on yellow background&quot;)</span>
+<span class="doccomment">///     .with(Color::Blue)</span>
+<span class="doccomment">///     .on(Color::Yellow);</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// println!(&quot;{}&quot;, styled_content);</span>
+<span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">style</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>: <span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">val</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">D</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Clone</span>,
@@ -621,8 +621,8 @@
 <span class="macro">impl_colorize</span><span class="macro">!</span>(<span class="ident">String</span>);
 <span class="macro">impl_colorize</span><span class="macro">!</span>(<span class="ident">char</span>);
 
-<span class="comment">// We do actually need the parentheses here because the macro doesn&#39;t work without them otherwise</span>
-<span class="comment">// This is probably a bug somewhere in the compiler, but it isn&#39;t that big a deal.</span>
+<span class="comment">// We do actually need the parentheses here because the macro doesn&#39;t work without them otherwise</span>
+<span class="comment">// This is probably a bug somewhere in the compiler, but it isn&#39;t that big a deal.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_parens</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Colorize</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
     <span class="macro">impl_colorize_callback</span><span class="macro">!</span>(<span class="macro">def_color_base</span><span class="macro">!</span>((<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>)));
@@ -636,27 +636,27 @@
     <span class="macro">impl_styler_callback</span><span class="macro">!</span>(<span class="macro">def_attr_base</span><span class="macro">!</span>((<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>)));
 }
 
-<span class="doccomment">/// Returns available color count.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This does not always provide a good result.</span>
+<span class="doccomment">/// Returns available color count.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This does not always provide a good result.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">available_color_count</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u16</span> {
     <span class="ident">env</span>::<span class="ident">var</span>(<span class="string">&quot;TERM&quot;</span>)
         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="kw">if</span> <span class="ident">x</span>.<span class="ident">contains</span>(<span class="string">&quot;256color&quot;</span>) { <span class="number">256</span> } <span class="kw">else</span> { <span class="number">8</span> })
         .<span class="ident">unwrap_or</span>(<span class="number">8</span>)
 }
 
-<span class="doccomment">/// A command that sets the the foreground color.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Color`](enum.Color.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`SetColors`](struct.SetColors.html) can also be used to set both the foreground and background</span>
-<span class="doccomment">/// color in one command.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that sets the the foreground color.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See [`Color`](enum.Color.html) for more info.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`SetColors`](struct.SetColors.html) can also be used to set both the foreground and background</span>
+<span class="doccomment">/// color in one command.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetForegroundColor</span>(<span class="kw">pub</span> <span class="ident">Color</span>);
 
@@ -680,16 +680,16 @@
     }
 }
 
-<span class="doccomment">/// A command that sets the the background color.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Color`](enum.Color.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`SetColors`](struct.SetColors.html) can also be used to set both the foreground and background</span>
-<span class="doccomment">/// color with one command.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that sets the the background color.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See [`Color`](enum.Color.html) for more info.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`SetColors`](struct.SetColors.html) can also be used to set both the foreground and background</span>
+<span class="doccomment">/// color with one command.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetBackgroundColor</span>(<span class="kw">pub</span> <span class="ident">Color</span>);
 
@@ -713,26 +713,26 @@
     }
 }
 
-<span class="doccomment">/// A command that optionally sets the foreground and/or background color.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// For example:</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use std::io::{stdout, Write};</span>
-<span class="doccomment">/// use crossterm::execute;</span>
-<span class="doccomment">/// use crossterm::style::{Color::{Green, Black}, Colors, Print, SetColors};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// execute!(</span>
-<span class="doccomment">///     stdout(),</span>
-<span class="doccomment">///     SetColors(Colors::new(Green, Black)),</span>
-<span class="doccomment">///     Print(&quot;Hello, world!&quot;.to_string()),</span>
-<span class="doccomment">/// ).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Colors`](struct.Colors.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that optionally sets the foreground and/or background color.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// For example:</span>
+<span class="doccomment">/// ```no_run</span>
+<span class="doccomment">/// use std::io::{stdout, Write};</span>
+<span class="doccomment">/// use crossterm::execute;</span>
+<span class="doccomment">/// use crossterm::style::{Color::{Green, Black}, Colors, Print, SetColors};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// execute!(</span>
+<span class="doccomment">///     stdout(),</span>
+<span class="doccomment">///     SetColors(Colors::new(Green, Black)),</span>
+<span class="doccomment">///     Print(&quot;Hello, world!&quot;.to_string()),</span>
+<span class="doccomment">/// ).unwrap();</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See [`Colors`](struct.Colors.html) for more info.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetColors</span>(<span class="kw">pub</span> <span class="ident">Colors</span>);
 
@@ -768,13 +768,13 @@
     }
 }
 
-<span class="doccomment">/// A command that sets an attribute.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Attribute`](enum.Attribute.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that sets an attribute.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See [`Attribute`](enum.Attribute.html) for more info.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetAttribute</span>(<span class="kw">pub</span> <span class="ident">Attribute</span>);
 
@@ -794,18 +794,18 @@
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
     <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="comment">// attributes are not supported by WinAPI.</span>
+        <span class="comment">// attributes are not supported by WinAPI.</span>
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// A command that sets several attributes.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Attributes`](struct.Attributes.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that sets several attributes.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See [`Attributes`](struct.Attributes.html) for more info.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetAttributes</span>(<span class="kw">pub</span> <span class="ident">Attributes</span>);
 
@@ -824,18 +824,18 @@
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
     <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="comment">// attributes are not supported by WinAPI.</span>
+        <span class="comment">// attributes are not supported by WinAPI.</span>
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// A command that prints styled content.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`StyledContent`](struct.StyledContent.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that prints styled content.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See [`StyledContent`](struct.StyledContent.html) for more info.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PrintStyledContent</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span>(<span class="kw">pub</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>);
 
@@ -855,11 +855,11 @@
     }
 }
 
-<span class="doccomment">/// A command that resets the colors back to default.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that resets the colors back to default.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ResetColor</span>;
 
@@ -876,9 +876,9 @@
     }
 }
 
-<span class="doccomment">/// A command that prints the given displayable type.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that prints the given displayable type.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Print</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span>(<span class="kw">pub</span> <span class="ident">T</span>);
 

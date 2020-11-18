@@ -181,43 +181,43 @@
 <span id="178">178</span>
 <span id="179">179</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! Defines the macros for repetitive styling implementations</span>
+<span class="doccomment">//! Defines the macros for repetitive styling implementations</span>
 
-<span class="comment">// There&#39;s a single core set of macros structure here that&#39;s essentially repeated twice; once for</span>
-<span class="comment">// implementing `Styler` and once for `Colorize`. We&#39;ll go through `Styler` as the example, knowing</span>
-<span class="comment">// that `Colorize` works in precisely the same manner.</span>
-<span class="comment">//</span>
-<span class="comment">// There are four macros in each group. For `Styler`, they are:</span>
-<span class="comment">//  * def_attr_base,</span>
-<span class="comment">//  * def_attr_generic,</span>
-<span class="comment">//  * impl_styler_callback,</span>
-<span class="comment">//  * impl_styler</span>
-<span class="comment">//</span>
-<span class="comment">// Fundamentally, any implementation works in a similar fashion; many methods with near-identical</span>
-<span class="comment">// bodies are grouped together. There are additionally two types of implementors: so-called &quot;base&quot;</span>
-<span class="comment">// implementors (`char`, `String`, etc.) and a single &quot;generic&quot; implementor - &#39;StyledContent&lt;D&gt;&#39;.</span>
-<span class="comment">//</span>
-<span class="comment">// We can visualize the macro expansion with a sort of pipeline:</span>
-<span class="comment">//</span>
-<span class="comment">//                                    /--------&gt; def_attr_base</span>
-<span class="comment">//   [impl_styler -&gt;] impl_styler_callback</span>
-<span class="comment">//                                    \--------&gt; def_attr_generic</span>
-<span class="comment">//</span>
-<span class="comment">// The code-gen starts at &#39;impl_styler&#39; for &quot;base&quot; implementors, and at &#39;impl_styler_callback&#39; for</span>
-<span class="comment">// `StyledContent&lt;D&gt;`. From there, &#39;impl_styler_callback&#39; either repeatedly calls &#39;def_attr_base&#39;</span>
-<span class="comment">// or &#39;def_attr_generic&#39; - this is determined by the &#39;callback&#39; argument.</span>
-<span class="comment">//</span>
-<span class="comment">// &#39;def_attr_base&#39; is used to provide the method bodies for base types, and &#39;def_attr_generic&#39;</span>
-<span class="comment">// provides the method bodies for &#39;StyledContent&lt;D&gt;&#39;.</span>
+<span class="comment">// There&#39;s a single core set of macros structure here that&#39;s essentially repeated twice; once for</span>
+<span class="comment">// implementing `Styler` and once for `Colorize`. We&#39;ll go through `Styler` as the example, knowing</span>
+<span class="comment">// that `Colorize` works in precisely the same manner.</span>
+<span class="comment">//</span>
+<span class="comment">// There are four macros in each group. For `Styler`, they are:</span>
+<span class="comment">//  * def_attr_base,</span>
+<span class="comment">//  * def_attr_generic,</span>
+<span class="comment">//  * impl_styler_callback,</span>
+<span class="comment">//  * impl_styler</span>
+<span class="comment">//</span>
+<span class="comment">// Fundamentally, any implementation works in a similar fashion; many methods with near-identical</span>
+<span class="comment">// bodies are grouped together. There are additionally two types of implementors: so-called &quot;base&quot;</span>
+<span class="comment">// implementors (`char`, `String`, etc.) and a single &quot;generic&quot; implementor - &#39;StyledContent&lt;D&gt;&#39;.</span>
+<span class="comment">//</span>
+<span class="comment">// We can visualize the macro expansion with a sort of pipeline:</span>
+<span class="comment">//</span>
+<span class="comment">//                                    /--------&gt; def_attr_base</span>
+<span class="comment">//   [impl_styler -&gt;] impl_styler_callback</span>
+<span class="comment">//                                    \--------&gt; def_attr_generic</span>
+<span class="comment">//</span>
+<span class="comment">// The code-gen starts at &#39;impl_styler&#39; for &quot;base&quot; implementors, and at &#39;impl_styler_callback&#39; for</span>
+<span class="comment">// `StyledContent&lt;D&gt;`. From there, &#39;impl_styler_callback&#39; either repeatedly calls &#39;def_attr_base&#39;</span>
+<span class="comment">// or &#39;def_attr_generic&#39; - this is determined by the &#39;callback&#39; argument.</span>
+<span class="comment">//</span>
+<span class="comment">// &#39;def_attr_base&#39; is used to provide the method bodies for base types, and &#39;def_attr_generic&#39;</span>
+<span class="comment">// provides the method bodies for &#39;StyledContent&lt;D&gt;&#39;.</span>
 
-<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
-<span class="comment">// `Styler` macros                                                            //</span>
-<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="comment">// `Styler` macros                                                            //</span>
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
 
-<span class="comment">// Produces a single method for a &quot;base&quot; Styler implementation</span>
-<span class="comment">//</span>
-<span class="comment">// The first argument is the type for which Styler is being implemented. Because this is the same</span>
-<span class="comment">// for all &quot;base&quot; types, we can collapse them into a single macro.</span>
+<span class="comment">// Produces a single method for a &quot;base&quot; Styler implementation</span>
+<span class="comment">//</span>
+<span class="comment">// The first argument is the type for which Styler is being implemented. Because this is the same</span>
+<span class="comment">// for all &quot;base&quot; types, we can collapse them into a single macro.</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">def_attr_base</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">impl_ty</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">path</span>) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">impl_ty</span><span class="op">&gt;</span> {
@@ -232,10 +232,10 @@
     };
 }
 
-<span class="comment">// Produces a single method within an implementation of Styler for &#39;StyledContent&lt;D&gt;&#39;</span>
-<span class="comment">//</span>
-<span class="comment">// We give it an empty argument at the start so that it has the same &quot;signature&quot; as</span>
-<span class="comment">// &#39;def_attr_base&#39;, which takes a type as its first argument</span>
+<span class="comment">// Produces a single method within an implementation of Styler for &#39;StyledContent&lt;D&gt;&#39;</span>
+<span class="comment">//</span>
+<span class="comment">// We give it an empty argument at the start so that it has the same &quot;signature&quot; as</span>
+<span class="comment">// &#39;def_attr_base&#39;, which takes a type as its first argument</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">def_attr_generic</span> {
     ((), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">path</span>) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span> {
@@ -244,10 +244,10 @@
     };
 }
 
-<span class="comment">// Produces the set of methods inside the implementation, but not the outer block itself</span>
-<span class="comment">//</span>
-<span class="comment">// &#39;callback&#39; should be either one of &#39;def_attr_base&#39; or &#39;def_attr_generic&#39;. Each expansion of</span>
-<span class="comment">// &#39;callback&#39; produces a single method with the name given by the second argument.</span>
+<span class="comment">// Produces the set of methods inside the implementation, but not the outer block itself</span>
+<span class="comment">//</span>
+<span class="comment">// &#39;callback&#39; should be either one of &#39;def_attr_base&#39; or &#39;def_attr_generic&#39;. Each expansion of</span>
+<span class="comment">// &#39;callback&#39; produces a single method with the name given by the second argument.</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_styler_callback</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="macro">ident</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="macro-nonterminal">$</span><span class="macro">callback</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="ident">reset</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Attribute</span>::<span class="ident">Reset</span>);
@@ -264,10 +264,10 @@
     }
 }
 
-<span class="comment">// Produces the full implementation of Styler for &quot;base&quot; types</span>
-<span class="comment">//</span>
-<span class="comment">// This macro is mostly here for convenience; it&#39;s nice to not require writing out the</span>
-<span class="comment">// `impl Styler&lt;..&gt; for ..` for each base type.</span>
+<span class="comment">// Produces the full implementation of Styler for &quot;base&quot; types</span>
+<span class="comment">//</span>
+<span class="comment">// This macro is mostly here for convenience; it&#39;s nice to not require writing out the</span>
+<span class="comment">// `impl Styler&lt;..&gt; for ..` for each base type.</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_styler</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">impl_ty</span>:<span class="ident">ty</span>) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="kw">impl</span> <span class="ident">Styler</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">impl_ty</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">impl_ty</span> {
@@ -276,14 +276,14 @@
     };
 }
 
-<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
-<span class="comment">// `Colorize` macros                                                          //</span>
-<span class="comment">//                                                                            //</span>
-<span class="comment">// These are effectively the same as the `Styler` macros described above, so  //</span>
-<span class="comment">// not much detail is repeated here. Where above we have &#39;def_attr_*&#39;, there  //</span>
-<span class="comment">// is &#39;def_color_*&#39; here, and &#39;impl_colorize&#39; takes the place of              //</span>
-<span class="comment">// &#39;impl_styler&#39;.                                                             //</span>
-<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="comment">// `Colorize` macros                                                          //</span>
+<span class="comment">//                                                                            //</span>
+<span class="comment">// These are effectively the same as the `Styler` macros described above, so  //</span>
+<span class="comment">// not much detail is repeated here. Where above we have &#39;def_attr_*&#39;, there  //</span>
+<span class="comment">// is &#39;def_color_*&#39; here, and &#39;impl_colorize&#39; takes the place of              //</span>
+<span class="comment">// &#39;impl_styler&#39;.                                                             //</span>
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">def_color_base</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color_ty</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">side</span>:<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>:<span class="ident">path</span>) <span class="op">=</span><span class="op">&gt;</span> {
@@ -315,7 +315,7 @@
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_colorize_callback</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">callback</span>:<span class="macro">ident</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="comment">// foreground colors</span>
+        <span class="comment">// foreground colors</span>
         <span class="macro-nonterminal">$</span><span class="macro">callback</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="ident">foreground_color</span>: <span class="ident">black</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color</span>::<span class="ident">Black</span>);
         <span class="macro-nonterminal">$</span><span class="macro">callback</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="ident">foreground_color</span>: <span class="ident">dark_grey</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color</span>::<span class="ident">DarkGrey</span>);
         <span class="macro-nonterminal">$</span><span class="macro">callback</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="ident">foreground_color</span>: <span class="ident">red</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color</span>::<span class="ident">Red</span>);
@@ -333,7 +333,7 @@
         <span class="macro-nonterminal">$</span><span class="macro">callback</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="ident">foreground_color</span>: <span class="ident">white</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color</span>::<span class="ident">White</span>);
         <span class="macro-nonterminal">$</span><span class="macro">callback</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="ident">foreground_color</span>: <span class="ident">grey</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color</span>::<span class="ident">Grey</span>);
 
-        <span class="comment">// background colors</span>
+        <span class="comment">// background colors</span>
         <span class="macro-nonterminal">$</span><span class="macro">callback</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="ident">background_color</span>: <span class="ident">on_black</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color</span>::<span class="ident">Black</span>);
         <span class="macro-nonterminal">$</span><span class="macro">callback</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="ident">background_color</span>: <span class="ident">on_dark_grey</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color</span>::<span class="ident">DarkGrey</span>);
         <span class="macro-nonterminal">$</span><span class="macro">callback</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>, <span class="ident">background_color</span>: <span class="ident">on_red</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color</span>::<span class="ident">Red</span>);

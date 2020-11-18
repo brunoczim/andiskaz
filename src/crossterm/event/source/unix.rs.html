@@ -262,15 +262,15 @@
     <span class="ident">Event</span>, <span class="ident">InternalEvent</span>,
 };
 
-<span class="comment">// Tokens to identify file descriptor</span>
+<span class="comment">// Tokens to identify file descriptor</span>
 <span class="kw">const</span> <span class="ident">TTY_TOKEN</span>: <span class="ident">Token</span> <span class="op">=</span> <span class="ident">Token</span>(<span class="number">0</span>);
 <span class="kw">const</span> <span class="ident">SIGNAL_TOKEN</span>: <span class="ident">Token</span> <span class="op">=</span> <span class="ident">Token</span>(<span class="number">1</span>);
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;event-stream&quot;</span>)]</span>
 <span class="kw">const</span> <span class="ident">WAKE_TOKEN</span>: <span class="ident">Token</span> <span class="op">=</span> <span class="ident">Token</span>(<span class="number">2</span>);
 
-<span class="comment">// I (@zrzka) wasn&#39;t able to read more than 1_022 bytes when testing</span>
-<span class="comment">// reading on macOS/Linux -&gt; we don&#39;t need bigger buffer and 1k of bytes</span>
-<span class="comment">// is enough.</span>
+<span class="comment">// I (@zrzka) wasn&#39;t able to read more than 1_022 bytes when testing</span>
+<span class="comment">// reading on macOS/Linux -&gt; we don&#39;t need bigger buffer and 1k of bytes</span>
+<span class="comment">// is enough.</span>
 <span class="kw">const</span> <span class="ident">TTY_BUFFER_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1_204</span>;
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">UnixInternalEventSource</span> {
@@ -326,9 +326,9 @@
 
         <span class="kw">loop</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">poll</span>.<span class="ident">poll</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">events</span>, <span class="ident">timeout</span>.<span class="ident">leftover</span>()) {
-                <span class="comment">// Mio will throw an interrupted error in case of cursor position retrieval. We need to retry until it succeeds.</span>
-                <span class="comment">// Previous versions of Mio (&lt; 0.7) would automatically retry the poll call if it was interrupted (if EINTR was returned).</span>
-                <span class="comment">// https://docs.rs/mio/0.7.0/mio/struct.Poll.html#notes</span>
+                <span class="comment">// Mio will throw an interrupted error in case of cursor position retrieval. We need to retry until it succeeds.</span>
+                <span class="comment">// Previous versions of Mio (&lt; 0.7) would automatically retry the poll call if it was interrupted (if EINTR was returned).</span>
+                <span class="comment">// https://docs.rs/mio/0.7.0/mio/struct.Poll.html#notes</span>
                 <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Interrupted</span> {
                     <span class="kw">continue</span>;
                 } <span class="kw">else</span> {
@@ -337,7 +337,7 @@
             };
 
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">is_empty</span>() {
-                <span class="comment">// No readiness events = timeout</span>
+                <span class="comment">// No readiness events = timeout</span>
                 <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
             }
 
@@ -355,11 +355,11 @@
                                     }
                                 }
                                 <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">IoError</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                                    <span class="comment">// No more data to read at the moment. We will receive another event</span>
+                                    <span class="comment">// No more data to read at the moment. We will receive another event</span>
                                     <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">WouldBlock</span> {
                                         <span class="kw">break</span>;
                                     }
-                                    <span class="comment">// once more data is available to read.</span>
+                                    <span class="comment">// once more data is available to read.</span>
                                     <span class="kw">else</span> <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Interrupted</span> {
                                         <span class="kw">continue</span>;
                                     }
@@ -376,13 +376,13 @@
                         <span class="kw">for</span> <span class="ident">signal</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">signals</span> {
                             <span class="kw">match</span> <span class="ident">signal</span> <span class="kw">as</span> <span class="ident">libc</span>::<span class="ident">c_int</span> {
                                 <span class="ident">signal_hook</span>::<span class="ident">SIGWINCH</span> <span class="op">=</span><span class="op">&gt;</span> {
-                                    <span class="comment">// TODO Should we remove tput?</span>
-                                    <span class="comment">//</span>
-                                    <span class="comment">// This can take a really long time, because terminal::size can</span>
-                                    <span class="comment">// launch new process (tput) and then it parses its output. It&#39;s</span>
-                                    <span class="comment">// not a really long time from the absolute time point of view, but</span>
-                                    <span class="comment">// it&#39;s a really long time from the mio, async-std/tokio executor, ...</span>
-                                    <span class="comment">// point of view.</span>
+                                    <span class="comment">// TODO Should we remove tput?</span>
+                                    <span class="comment">//</span>
+                                    <span class="comment">// This can take a really long time, because terminal::size can</span>
+                                    <span class="comment">// launch new process (tput) and then it parses its output. It&#39;s</span>
+                                    <span class="comment">// not a really long time from the absolute time point of view, but</span>
+                                    <span class="comment">// it&#39;s a really long time from the mio, async-std/tokio executor, ...</span>
+                                    <span class="comment">// point of view.</span>
                                     <span class="kw">let</span> <span class="ident">new_size</span> <span class="op">=</span> <span class="kw">crate</span>::<span class="ident">terminal</span>::<span class="ident">size</span>()<span class="question-mark">?</span>;
                                     <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Resize</span>(
                                         <span class="ident">new_size</span>.<span class="number">0</span>, <span class="ident">new_size</span>.<span class="number">1</span>,
@@ -404,7 +404,7 @@
                 }
             }
 
-            <span class="comment">// Processing above can take some time, check if timeout expired</span>
+            <span class="comment">// Processing above can take some time, check if timeout expired</span>
             <span class="kw">if</span> <span class="ident">timeout</span>.<span class="ident">elapsed</span>() {
                 <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
             }
@@ -417,12 +417,12 @@
     }
 }
 
-<span class="comment">//</span>
-<span class="comment">// Following `Parser` structure exists for two reasons:</span>
-<span class="comment">//</span>
-<span class="comment">//  * mimick anes Parser interface</span>
-<span class="comment">//  * move the advancing, parsing, ... stuff out of the `try_read` method</span>
-<span class="comment">//</span>
+<span class="comment">//</span>
+<span class="comment">// Following `Parser` structure exists for two reasons:</span>
+<span class="comment">//</span>
+<span class="comment">//  * mimick anes Parser interface</span>
+<span class="comment">//  * move the advancing, parsing, ... stuff out of the `try_read` method</span>
+<span class="comment">//</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">struct</span> <span class="ident">Parser</span> {
     <span class="ident">buffer</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
@@ -432,22 +432,22 @@
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Parser</span> {
     <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">Parser</span> {
-            <span class="comment">// This buffer is used for -&gt; 1 &lt;- ANSI escape sequence. Are we</span>
-            <span class="comment">// aware of any ANSI escape sequence that is bigger? Can we make</span>
-            <span class="comment">// it smaller?</span>
-            <span class="comment">//</span>
-            <span class="comment">// Probably not worth spending more time on this as &quot;there&#39;s a plan&quot;</span>
-            <span class="comment">// to use the anes crate parser.</span>
+            <span class="comment">// This buffer is used for -&gt; 1 &lt;- ANSI escape sequence. Are we</span>
+            <span class="comment">// aware of any ANSI escape sequence that is bigger? Can we make</span>
+            <span class="comment">// it smaller?</span>
+            <span class="comment">//</span>
+            <span class="comment">// Probably not worth spending more time on this as &quot;there&#39;s a plan&quot;</span>
+            <span class="comment">// to use the anes crate parser.</span>
             <span class="ident">buffer</span>: <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="number">256</span>),
-            <span class="comment">// TTY_BUFFER_SIZE is 1_024 bytes. How many ANSI escape sequences can</span>
-            <span class="comment">// fit? What is an average sequence length? Let&#39;s guess here</span>
-            <span class="comment">// and say that the average ANSI escape sequence length is 8 bytes. Thus</span>
-            <span class="comment">// the buffer size should be 1024/8=128 to avoid additional allocations</span>
-            <span class="comment">// when processing large amounts of data.</span>
-            <span class="comment">//</span>
-            <span class="comment">// There&#39;s no need to make it bigger, because when you look at the `try_read`</span>
-            <span class="comment">// method implementation, all events are consumed before the next TTY_BUFFER</span>
-            <span class="comment">// is processed -&gt; events pushed.</span>
+            <span class="comment">// TTY_BUFFER_SIZE is 1_024 bytes. How many ANSI escape sequences can</span>
+            <span class="comment">// fit? What is an average sequence length? Let&#39;s guess here</span>
+            <span class="comment">// and say that the average ANSI escape sequence length is 8 bytes. Thus</span>
+            <span class="comment">// the buffer size should be 1024/8=128 to avoid additional allocations</span>
+            <span class="comment">// when processing large amounts of data.</span>
+            <span class="comment">//</span>
+            <span class="comment">// There&#39;s no need to make it bigger, because when you look at the `try_read`</span>
+            <span class="comment">// method implementation, all events are consumed before the next TTY_BUFFER</span>
+            <span class="comment">// is processed -&gt; events pushed.</span>
             <span class="ident">internal_events</span>: <span class="ident">VecDeque</span>::<span class="ident">with_capacity</span>(<span class="number">128</span>),
         }
     }
@@ -466,12 +466,12 @@
                     <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">clear</span>();
                 }
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="comment">// Event can&#39;t be parsed, because we don&#39;t have enough bytes for</span>
-                    <span class="comment">// the current sequence. Keep the buffer and process next bytes.</span>
+                    <span class="comment">// Event can&#39;t be parsed, because we don&#39;t have enough bytes for</span>
+                    <span class="comment">// the current sequence. Keep the buffer and process next bytes.</span>
                 }
                 <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="comment">// Event can&#39;t be parsed (not enough parameters, parameter is not a number, ...).</span>
-                    <span class="comment">// Clear the buffer and continue with another sequence.</span>
+                    <span class="comment">// Event can&#39;t be parsed (not enough parameters, parameter is not a number, ...).</span>
+                    <span class="comment">// Clear the buffer and continue with another sequence.</span>
                     <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">clear</span>();
                 }
             }

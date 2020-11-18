@@ -90,37 +90,37 @@
 <span id="87">87</span>
 <span id="88">88</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! This module contains the `content style` that can be applied to an `styled content`.</span>
+<span class="doccomment">//! This module contains the `content style` that can be applied to an `styled content`.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Display</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">style</span>::{<span class="ident">Attribute</span>, <span class="ident">Attributes</span>, <span class="ident">Color</span>, <span class="ident">StyledContent</span>};
 
-<span class="doccomment">/// The style that can be put on content.</span>
+<span class="doccomment">/// The style that can be put on content.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ContentStyle</span> {
-    <span class="doccomment">/// The foreground color.</span>
+    <span class="doccomment">/// The foreground color.</span>
     <span class="kw">pub</span> <span class="ident">foreground_color</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Color</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The background color.</span>
+    <span class="doccomment">/// The background color.</span>
     <span class="kw">pub</span> <span class="ident">background_color</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Color</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// List of attributes.</span>
+    <span class="doccomment">/// List of attributes.</span>
     <span class="kw">pub</span> <span class="ident">attributes</span>: <span class="ident">Attributes</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ContentStyle</span> {
-    <span class="doccomment">/// Creates a `StyledContent` by applying the style to the given `val`.</span>
+    <span class="doccomment">/// Creates a `StyledContent` by applying the style to the given `val`.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Display</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">val</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span> {
         <span class="ident">StyledContent</span>::<span class="ident">new</span>(<span class="self">self</span>, <span class="ident">val</span>)
     }
 
-    <span class="doccomment">/// Creates a new `ContentStyle`.</span>
+    <span class="doccomment">/// Creates a new `ContentStyle`.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ContentStyle</span> {
         <span class="ident">ContentStyle</span>::<span class="ident">default</span>()
     }
 
-    <span class="doccomment">/// Sets the background color.</span>
+    <span class="doccomment">/// Sets the background color.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">background</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ContentStyle</span> {
         <span class="self">Self</span> {
@@ -129,7 +129,7 @@
         }
     }
 
-    <span class="doccomment">/// Sets the foreground color.</span>
+    <span class="doccomment">/// Sets the foreground color.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">foreground</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ContentStyle</span> {
         <span class="self">Self</span> {
@@ -138,9 +138,9 @@
         }
     }
 
-    <span class="doccomment">/// Adds the attribute.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// You can add more attributes by calling this method multiple times.</span>
+    <span class="doccomment">/// Adds the attribute.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// You can add more attributes by calling this method multiple times.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">attribute</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">attr</span>: <span class="ident">Attribute</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ContentStyle</span> {
         <span class="self">self</span>.<span class="ident">attributes</span>.<span class="ident">set</span>(<span class="ident">attr</span>);

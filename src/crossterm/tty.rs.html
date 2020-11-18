@@ -47,10 +47,10 @@
 <span id="44">44</span>
 <span id="45">45</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! Making it a little more convenient and safe to query whether</span>
-<span class="doccomment">//! something is a terminal teletype or not.</span>
-<span class="doccomment">//! This module defines the IsTty trait and the is_tty method to</span>
-<span class="doccomment">//! return true if the item represents a terminal.</span>
+<span class="doccomment">//! Making it a little more convenient and safe to query whether</span>
+<span class="doccomment">//! something is a terminal teletype or not.</span>
+<span class="doccomment">//! This module defines the IsTty trait and the is_tty method to</span>
+<span class="doccomment">//! return true if the item represents a terminal.</span>
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">unix</span>::<span class="ident">io</span>::<span class="ident">AsRawFd</span>;
@@ -59,21 +59,21 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
 <span class="kw">use</span> <span class="ident">winapi</span>::<span class="ident">um</span>::<span class="ident">consoleapi</span>::<span class="ident">GetConsoleMode</span>;
 
-<span class="doccomment">/// Adds the `is_tty` method to types that might represent a terminal</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use std::io::stdout;</span>
-<span class="doccomment">/// use crossterm::tty::IsTty;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let is_tty: bool = stdout().is_tty();</span>
-<span class="doccomment">/// ```</span>
+<span class="doccomment">/// Adds the `is_tty` method to types that might represent a terminal</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// use std::io::stdout;</span>
+<span class="doccomment">/// use crossterm::tty::IsTty;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// let is_tty: bool = stdout().is_tty();</span>
+<span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IsTty</span> {
-    <span class="doccomment">/// Returns true when an instance is a terminal teletype, otherwise false.</span>
+    <span class="doccomment">/// Returns true when an instance is a terminal teletype, otherwise false.</span>
     <span class="kw">fn</span> <span class="ident">is_tty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 }
 
-<span class="doccomment">/// On unix, the `isatty()` function returns true if a file</span>
-<span class="doccomment">/// descriptor is a terminal.</span>
+<span class="doccomment">/// On unix, the `isatty()` function returns true if a file</span>
+<span class="doccomment">/// descriptor is a terminal.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRawFd</span><span class="op">&gt;</span> <span class="ident">IsTty</span> <span class="kw">for</span> <span class="ident">S</span> {
     <span class="kw">fn</span> <span class="ident">is_tty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
@@ -82,8 +82,8 @@
     }
 }
 
-<span class="doccomment">/// On windows, `GetConsoleMode` will return true if we are in a terminal.</span>
-<span class="doccomment">/// Otherwise false.</span>
+<span class="doccomment">/// On windows, `GetConsoleMode` will return true if we are in a terminal.</span>
+<span class="doccomment">/// Otherwise false.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRawHandle</span><span class="op">&gt;</span> <span class="ident">IsTty</span> <span class="kw">for</span> <span class="ident">S</span> {
     <span class="kw">fn</span> <span class="ident">is_tty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {

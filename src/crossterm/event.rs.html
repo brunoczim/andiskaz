@@ -428,77 +428,77 @@
 <span id="425">425</span>
 <span id="426">426</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! # Event</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The `event` module provides the functionality to read keyboard, mouse and terminal resize events.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * The [`read`](fn.read.html) function returns an [`Event`](enum.Event.html) immediately</span>
-<span class="doccomment">//! (if available) or blocks until an [`Event`](enum.Event.html) is available.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * The [`poll`](fn.poll.html) function allows you to check if there is or isn&#39;t an [`Event`](enum.Event.html) available</span>
-<span class="doccomment">//! within the given period of time. In other words - if subsequent call to the [`read`](fn.read.html)</span>
-<span class="doccomment">//! function will block or not.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! It&#39;s **not allowed** to call these functions from different threads or combine them with the</span>
-<span class="doccomment">//! [`EventStream`](struct.EventStream.html). You&#39;re allowed to either:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * use the [`read`](fn.read.html) &amp; [`poll`](fn.poll.html) functions on any, but same, thread</span>
-<span class="doccomment">//! * or the [`EventStream`](struct.EventStream.html).</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Mouse Events</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Mouse events are not enabled by default. You have to enable them with the</span>
-<span class="doccomment">//! [`EnableMouseCapture`](struct.EnableMouseCapture.html) command. See [Command API](../index.html#command-api)</span>
-<span class="doccomment">//! for more information.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Blocking read:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use crossterm::event::{read, Event};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn print_events() -&gt; crossterm::Result&lt;()&gt; {</span>
-<span class="doccomment">//!     loop {</span>
-<span class="doccomment">//!         // `read()` blocks until an `Event` is available</span>
-<span class="doccomment">//!         match read()? {</span>
-<span class="doccomment">//!             Event::Key(event) =&gt; println!(&quot;{:?}&quot;, event),</span>
-<span class="doccomment">//!             Event::Mouse(event) =&gt; println!(&quot;{:?}&quot;, event),</span>
-<span class="doccomment">//!             Event::Resize(width, height) =&gt; println!(&quot;New size {}x{}&quot;, width, height),</span>
-<span class="doccomment">//!         }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//!     Ok(())</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Non-blocking read:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::time::Duration;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! use crossterm::event::{poll, read, Event};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn print_events() -&gt; crossterm::Result&lt;()&gt; {</span>
-<span class="doccomment">//!     loop {</span>
-<span class="doccomment">//!         // `poll()` waits for an `Event` for a given time period</span>
-<span class="doccomment">//!         if poll(Duration::from_millis(500))? {</span>
-<span class="doccomment">//!             // It&#39;s guaranteed that the `read()` won&#39;t block when the `poll()`</span>
-<span class="doccomment">//!             // function returns `true`</span>
-<span class="doccomment">//!             match read()? {</span>
-<span class="doccomment">//!                 Event::Key(event) =&gt; println!(&quot;{:?}&quot;, event),</span>
-<span class="doccomment">//!                 Event::Mouse(event) =&gt; println!(&quot;{:?}&quot;, event),</span>
-<span class="doccomment">//!                 Event::Resize(width, height) =&gt; println!(&quot;New size {}x{}&quot;, width, height),</span>
-<span class="doccomment">//!             }</span>
-<span class="doccomment">//!         } else {</span>
-<span class="doccomment">//!             // Timeout expired and no `Event` is available</span>
-<span class="doccomment">//!         }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//!     Ok(())</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Check the [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) folder for more of</span>
-<span class="doccomment">//! them (`event-*`).</span>
+<span class="doccomment">//! # Event</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The `event` module provides the functionality to read keyboard, mouse and terminal resize events.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * The [`read`](fn.read.html) function returns an [`Event`](enum.Event.html) immediately</span>
+<span class="doccomment">//! (if available) or blocks until an [`Event`](enum.Event.html) is available.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * The [`poll`](fn.poll.html) function allows you to check if there is or isn&#39;t an [`Event`](enum.Event.html) available</span>
+<span class="doccomment">//! within the given period of time. In other words - if subsequent call to the [`read`](fn.read.html)</span>
+<span class="doccomment">//! function will block or not.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! It&#39;s **not allowed** to call these functions from different threads or combine them with the</span>
+<span class="doccomment">//! [`EventStream`](struct.EventStream.html). You&#39;re allowed to either:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * use the [`read`](fn.read.html) &amp; [`poll`](fn.poll.html) functions on any, but same, thread</span>
+<span class="doccomment">//! * or the [`EventStream`](struct.EventStream.html).</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Mouse Events</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Mouse events are not enabled by default. You have to enable them with the</span>
+<span class="doccomment">//! [`EnableMouseCapture`](struct.EnableMouseCapture.html) command. See [Command API](../index.html#command-api)</span>
+<span class="doccomment">//! for more information.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Examples</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Blocking read:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use crossterm::event::{read, Event};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! fn print_events() -&gt; crossterm::Result&lt;()&gt; {</span>
+<span class="doccomment">//!     loop {</span>
+<span class="doccomment">//!         // `read()` blocks until an `Event` is available</span>
+<span class="doccomment">//!         match read()? {</span>
+<span class="doccomment">//!             Event::Key(event) =&gt; println!(&quot;{:?}&quot;, event),</span>
+<span class="doccomment">//!             Event::Mouse(event) =&gt; println!(&quot;{:?}&quot;, event),</span>
+<span class="doccomment">//!             Event::Resize(width, height) =&gt; println!(&quot;New size {}x{}&quot;, width, height),</span>
+<span class="doccomment">//!         }</span>
+<span class="doccomment">//!     }</span>
+<span class="doccomment">//!     Ok(())</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Non-blocking read:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::time::Duration;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! use crossterm::event::{poll, read, Event};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! fn print_events() -&gt; crossterm::Result&lt;()&gt; {</span>
+<span class="doccomment">//!     loop {</span>
+<span class="doccomment">//!         // `poll()` waits for an `Event` for a given time period</span>
+<span class="doccomment">//!         if poll(Duration::from_millis(500))? {</span>
+<span class="doccomment">//!             // It&#39;s guaranteed that the `read()` won&#39;t block when the `poll()`</span>
+<span class="doccomment">//!             // function returns `true`</span>
+<span class="doccomment">//!             match read()? {</span>
+<span class="doccomment">//!                 Event::Key(event) =&gt; println!(&quot;{:?}&quot;, event),</span>
+<span class="doccomment">//!                 Event::Mouse(event) =&gt; println!(&quot;{:?}&quot;, event),</span>
+<span class="doccomment">//!                 Event::Resize(width, height) =&gt; println!(&quot;New size {}x{}&quot;, width, height),</span>
+<span class="doccomment">//!             }</span>
+<span class="doccomment">//!         } else {</span>
+<span class="doccomment">//!             // Timeout expired and no `Event` is available</span>
+<span class="doccomment">//!         }</span>
+<span class="doccomment">//!     }</span>
+<span class="doccomment">//!     Ok(())</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Check the [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) folder for more of</span>
+<span class="doccomment">//! them (`event-*`).</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>;
 
@@ -525,94 +525,94 @@
 <span class="kw">mod</span> <span class="ident">timeout</span>;
 
 <span class="macro">lazy_static</span><span class="macro">!</span> {
-    <span class="doccomment">/// Static instance of `InternalEventReader`.</span>
-    <span class="doccomment">/// This needs to be static because there can be one event reader.</span>
+    <span class="doccomment">/// Static instance of `InternalEventReader`.</span>
+    <span class="doccomment">/// This needs to be static because there can be one event reader.</span>
     <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">INTERNAL_EVENT_READER</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">read</span>::<span class="ident">InternalEventReader</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">RwLock</span>::<span class="ident">new</span>(<span class="ident">read</span>::<span class="ident">InternalEventReader</span>::<span class="ident">default</span>());
 }
 
-<span class="doccomment">/// Checks if there is an [`Event`](enum.Event.html) available.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Returns `Ok(true)` if an [`Event`](enum.Event.html) is available otherwise it returns `Ok(false)`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `Ok(true)` guarantees that subsequent call to the [`read`](fn.read.html) function</span>
-<span class="doccomment">/// wont block.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Arguments</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * `timeout` - maximum waiting time for event availability</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Return immediately:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use std::time::Duration;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// use crossterm::{event::poll, Result};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn is_event_available() -&gt; Result&lt;bool&gt; {</span>
-<span class="doccomment">///     // Zero duration says that the `poll` function must return immediately</span>
-<span class="doccomment">///     // with an `Event` availability information</span>
-<span class="doccomment">///     poll(Duration::from_secs(0))</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Wait up to 100ms:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use std::time::Duration;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// use crossterm::{event::poll, Result};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn is_event_available() -&gt; Result&lt;bool&gt; {</span>
-<span class="doccomment">///     // Wait for an `Event` availability for 100ms. It returns immediately</span>
-<span class="doccomment">///     // if an `Event` is/becomes available.</span>
-<span class="doccomment">///     poll(Duration::from_millis(100))</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
+<span class="doccomment">/// Checks if there is an [`Event`](enum.Event.html) available.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Returns `Ok(true)` if an [`Event`](enum.Event.html) is available otherwise it returns `Ok(false)`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `Ok(true)` guarantees that subsequent call to the [`read`](fn.read.html) function</span>
+<span class="doccomment">/// wont block.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Arguments</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// * `timeout` - maximum waiting time for event availability</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Return immediately:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```no_run</span>
+<span class="doccomment">/// use std::time::Duration;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// use crossterm::{event::poll, Result};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// fn is_event_available() -&gt; Result&lt;bool&gt; {</span>
+<span class="doccomment">///     // Zero duration says that the `poll` function must return immediately</span>
+<span class="doccomment">///     // with an `Event` availability information</span>
+<span class="doccomment">///     poll(Duration::from_secs(0))</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Wait up to 100ms:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```no_run</span>
+<span class="doccomment">/// use std::time::Duration;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// use crossterm::{event::poll, Result};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// fn is_event_available() -&gt; Result&lt;bool&gt; {</span>
+<span class="doccomment">///     // Wait for an `Event` availability for 100ms. It returns immediately</span>
+<span class="doccomment">///     // if an `Event` is/becomes available.</span>
+<span class="doccomment">///     poll(Duration::from_millis(100))</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll</span>(<span class="ident">timeout</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
     <span class="ident">poll_internal</span>(<span class="prelude-val">Some</span>(<span class="ident">timeout</span>), <span class="kw-2">&amp;</span><span class="ident">EventFilter</span>)
 }
 
-<span class="doccomment">/// Reads a single [`Event`](enum.Event.html).</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This function blocks until an [`Event`](enum.Event.html) is available. Combine it with the</span>
-<span class="doccomment">/// [`poll`](fn.poll.html) function to get non-blocking reads.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Blocking read:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use crossterm::{event::read, Result};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn print_events() -&gt; Result&lt;bool&gt; {</span>
-<span class="doccomment">///     loop {</span>
-<span class="doccomment">///         // Blocks until an `Event` is available</span>
-<span class="doccomment">///         println!(&quot;{:?}&quot;, read()?);</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Non-blocking read:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use std::time::Duration;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// use crossterm::{event::{read, poll}, Result};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn print_events() -&gt; Result&lt;bool&gt; {</span>
-<span class="doccomment">///     loop {</span>
-<span class="doccomment">///         if poll(Duration::from_millis(100))? {</span>
-<span class="doccomment">///             // It&#39;s guaranteed that `read` wont block, because `poll` returned</span>
-<span class="doccomment">///             // `Ok(true)`.</span>
-<span class="doccomment">///             println!(&quot;{:?}&quot;, read()?);</span>
-<span class="doccomment">///         } else {</span>
-<span class="doccomment">///             // Timeout expired, no `Event` is available</span>
-<span class="doccomment">///         }</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
+<span class="doccomment">/// Reads a single [`Event`](enum.Event.html).</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This function blocks until an [`Event`](enum.Event.html) is available. Combine it with the</span>
+<span class="doccomment">/// [`poll`](fn.poll.html) function to get non-blocking reads.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Blocking read:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```no_run</span>
+<span class="doccomment">/// use crossterm::{event::read, Result};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// fn print_events() -&gt; Result&lt;bool&gt; {</span>
+<span class="doccomment">///     loop {</span>
+<span class="doccomment">///         // Blocks until an `Event` is available</span>
+<span class="doccomment">///         println!(&quot;{:?}&quot;, read()?);</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Non-blocking read:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```no_run</span>
+<span class="doccomment">/// use std::time::Duration;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// use crossterm::{event::{read, poll}, Result};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// fn print_events() -&gt; Result&lt;bool&gt; {</span>
+<span class="doccomment">///     loop {</span>
+<span class="doccomment">///         if poll(Duration::from_millis(100))? {</span>
+<span class="doccomment">///             // It&#39;s guaranteed that `read` wont block, because `poll` returned</span>
+<span class="doccomment">///             // `Ok(true)`.</span>
+<span class="doccomment">///             println!(&quot;{:?}&quot;, read()?);</span>
+<span class="doccomment">///         } else {</span>
+<span class="doccomment">///             // Timeout expired, no `Event` is available</span>
+<span class="doccomment">///         }</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span> {
     <span class="kw">match</span> <span class="ident">read_internal</span>(<span class="kw-2">&amp;</span><span class="ident">EventFilter</span>)<span class="question-mark">?</span> {
         <span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">event</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">event</span>),
@@ -621,7 +621,7 @@
     }
 }
 
-<span class="doccomment">/// Polls to check if there are any `InternalEvent`s that can be read within the given duration.</span>
+<span class="doccomment">/// Polls to check if there are any `InternalEvent`s that can be read within the given duration.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">poll_internal</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>, <span class="ident">filter</span>: <span class="kw-2">&amp;</span><span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Filter</span>,
@@ -639,7 +639,7 @@
     <span class="ident">reader</span>.<span class="ident">poll</span>(<span class="ident">timeout</span>, <span class="ident">filter</span>)
 }
 
-<span class="doccomment">/// Reads a single `InternalEvent`.</span>
+<span class="doccomment">/// Reads a single `InternalEvent`.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">read_internal</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">filter</span>: <span class="kw-2">&amp;</span><span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Filter</span>,
@@ -648,9 +648,9 @@
     <span class="ident">reader</span>.<span class="ident">read</span>(<span class="ident">filter</span>)
 }
 
-<span class="doccomment">/// A command that enables mouse event capturing.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Mouse events can be captured with [read](./fn.read.html)/[poll](./fn.poll.html).</span>
+<span class="doccomment">/// A command that enables mouse event capturing.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Mouse events can be captured with [read](./fn.read.html)/[poll](./fn.poll.html).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EnableMouseCapture</span>;
 
@@ -672,9 +672,9 @@
     }
 }
 
-<span class="doccomment">/// A command that disables mouse event capturing.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Mouse events can be captured with [read](./fn.read.html)/[poll](./fn.poll.html).</span>
+<span class="doccomment">/// A command that disables mouse event capturing.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Mouse events can be captured with [read](./fn.read.html)/[poll](./fn.poll.html).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DisableMouseCapture</span>;
 
@@ -696,72 +696,72 @@
     }
 }
 
-<span class="doccomment">/// Represents an event.</span>
+<span class="doccomment">/// Represents an event.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialOrd</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Event</span> {
-    <span class="doccomment">/// A single key event with additional pressed modifiers.</span>
+    <span class="doccomment">/// A single key event with additional pressed modifiers.</span>
     <span class="ident">Key</span>(<span class="ident">KeyEvent</span>),
-    <span class="doccomment">/// A single mouse event with additional pressed modifiers.</span>
+    <span class="doccomment">/// A single mouse event with additional pressed modifiers.</span>
     <span class="ident">Mouse</span>(<span class="ident">MouseEvent</span>),
-    <span class="doccomment">/// An resize event with new dimensions after resize (columns, rows).</span>
+    <span class="doccomment">/// An resize event with new dimensions after resize (columns, rows).</span>
     <span class="ident">Resize</span>(<span class="ident">u16</span>, <span class="ident">u16</span>),
 }
 
-<span class="doccomment">/// Represents a mouse event.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Platform-specific Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## Mouse Buttons</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Some platforms/terminals do not report mouse button for the</span>
-<span class="doccomment">/// `MouseEvent::Up` and `MouseEvent::Drag` events. `MouseButton::Left`</span>
-<span class="doccomment">/// is returned if we don&#39;t know which button was used.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## Key Modifiers</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Some platforms/terminals does not report all key modifiers</span>
-<span class="doccomment">/// combinations for all mouse event types. For example - macOS reports</span>
-<span class="doccomment">/// `Ctrl` + left mouse button click as a right mouse button click.</span>
+<span class="doccomment">/// Represents a mouse event.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Platform-specific Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Mouse Buttons</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Some platforms/terminals do not report mouse button for the</span>
+<span class="doccomment">/// `MouseEvent::Up` and `MouseEvent::Drag` events. `MouseButton::Left`</span>
+<span class="doccomment">/// is returned if we don&#39;t know which button was used.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Key Modifiers</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Some platforms/terminals does not report all key modifiers</span>
+<span class="doccomment">/// combinations for all mouse event types. For example - macOS reports</span>
+<span class="doccomment">/// `Ctrl` + left mouse button click as a right mouse button click.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialOrd</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MouseEvent</span> {
-    <span class="doccomment">/// Pressed mouse button.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Contains mouse button, pressed pointer location (column, row), and additional key modifiers.</span>
+    <span class="doccomment">/// Pressed mouse button.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Contains mouse button, pressed pointer location (column, row), and additional key modifiers.</span>
     <span class="ident">Down</span>(<span class="ident">MouseButton</span>, <span class="ident">u16</span>, <span class="ident">u16</span>, <span class="ident">KeyModifiers</span>),
-    <span class="doccomment">/// Released mouse button.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Contains mouse button, released pointer location (column, row), and additional key modifiers.</span>
+    <span class="doccomment">/// Released mouse button.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Contains mouse button, released pointer location (column, row), and additional key modifiers.</span>
     <span class="ident">Up</span>(<span class="ident">MouseButton</span>, <span class="ident">u16</span>, <span class="ident">u16</span>, <span class="ident">KeyModifiers</span>),
-    <span class="doccomment">/// Moved mouse pointer while pressing a mouse button.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Contains the pressed mouse button, released pointer location (column, row), and additional key modifiers.</span>
+    <span class="doccomment">/// Moved mouse pointer while pressing a mouse button.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Contains the pressed mouse button, released pointer location (column, row), and additional key modifiers.</span>
     <span class="ident">Drag</span>(<span class="ident">MouseButton</span>, <span class="ident">u16</span>, <span class="ident">u16</span>, <span class="ident">KeyModifiers</span>),
-    <span class="doccomment">/// Scrolled mouse wheel downwards (towards the user).</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Contains the scroll location (column, row), and additional key modifiers.</span>
+    <span class="doccomment">/// Scrolled mouse wheel downwards (towards the user).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Contains the scroll location (column, row), and additional key modifiers.</span>
     <span class="ident">ScrollDown</span>(<span class="ident">u16</span>, <span class="ident">u16</span>, <span class="ident">KeyModifiers</span>),
-    <span class="doccomment">/// Scrolled mouse wheel upwards (away from the user).</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Contains the scroll location (column, row), and additional key modifiers.</span>
+    <span class="doccomment">/// Scrolled mouse wheel upwards (away from the user).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Contains the scroll location (column, row), and additional key modifiers.</span>
     <span class="ident">ScrollUp</span>(<span class="ident">u16</span>, <span class="ident">u16</span>, <span class="ident">KeyModifiers</span>),
 }
 
-<span class="doccomment">/// Represents a mouse button.</span>
+<span class="doccomment">/// Represents a mouse button.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialOrd</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MouseButton</span> {
-    <span class="doccomment">/// Left mouse button.</span>
+    <span class="doccomment">/// Left mouse button.</span>
     <span class="ident">Left</span>,
-    <span class="doccomment">/// Right mouse button.</span>
+    <span class="doccomment">/// Right mouse button.</span>
     <span class="ident">Right</span>,
-    <span class="doccomment">/// Middle mouse button.</span>
+    <span class="doccomment">/// Middle mouse button.</span>
     <span class="ident">Middle</span>,
 }
 
 <span class="macro">bitflags</span><span class="macro">!</span> {
-    <span class="doccomment">/// Represents key modifiers (shift, control, alt).</span>
+    <span class="doccomment">/// Represents key modifiers (shift, control, alt).</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">KeyModifiers</span>: <span class="ident">u8</span> {
         <span class="kw">const</span> <span class="ident">SHIFT</span> <span class="op">=</span> <span class="number">0b0000_0001</span>;
@@ -771,13 +771,13 @@
     }
 }
 
-<span class="doccomment">/// Represents a key event.</span>
+<span class="doccomment">/// Represents a key event.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialOrd</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">KeyEvent</span> {
-    <span class="doccomment">/// The key itself.</span>
+    <span class="doccomment">/// The key itself.</span>
     <span class="kw">pub</span> <span class="ident">code</span>: <span class="ident">KeyCode</span>,
-    <span class="doccomment">/// Additional key modifiers.</span>
+    <span class="doccomment">/// Additional key modifiers.</span>
     <span class="kw">pub</span> <span class="ident">modifiers</span>: <span class="ident">KeyModifiers</span>,
 }
 
@@ -796,61 +796,61 @@
     }
 }
 
-<span class="doccomment">/// Represents a key.</span>
+<span class="doccomment">/// Represents a key.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialOrd</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Hash</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">KeyCode</span> {
-    <span class="doccomment">/// Backspace key.</span>
+    <span class="doccomment">/// Backspace key.</span>
     <span class="ident">Backspace</span>,
-    <span class="doccomment">/// Enter key.</span>
+    <span class="doccomment">/// Enter key.</span>
     <span class="ident">Enter</span>,
-    <span class="doccomment">/// Left arrow key.</span>
+    <span class="doccomment">/// Left arrow key.</span>
     <span class="ident">Left</span>,
-    <span class="doccomment">/// Right arrow key.</span>
+    <span class="doccomment">/// Right arrow key.</span>
     <span class="ident">Right</span>,
-    <span class="doccomment">/// Up arrow key.</span>
+    <span class="doccomment">/// Up arrow key.</span>
     <span class="ident">Up</span>,
-    <span class="doccomment">/// Down arrow key.</span>
+    <span class="doccomment">/// Down arrow key.</span>
     <span class="ident">Down</span>,
-    <span class="doccomment">/// Home key.</span>
+    <span class="doccomment">/// Home key.</span>
     <span class="ident">Home</span>,
-    <span class="doccomment">/// End key.</span>
+    <span class="doccomment">/// End key.</span>
     <span class="ident">End</span>,
-    <span class="doccomment">/// Page up key.</span>
+    <span class="doccomment">/// Page up key.</span>
     <span class="ident">PageUp</span>,
-    <span class="doccomment">/// Page dow key.</span>
+    <span class="doccomment">/// Page dow key.</span>
     <span class="ident">PageDown</span>,
-    <span class="doccomment">/// Tab key.</span>
+    <span class="doccomment">/// Tab key.</span>
     <span class="ident">Tab</span>,
-    <span class="doccomment">/// Shift + Tab key.</span>
+    <span class="doccomment">/// Shift + Tab key.</span>
     <span class="ident">BackTab</span>,
-    <span class="doccomment">/// Delete key.</span>
+    <span class="doccomment">/// Delete key.</span>
     <span class="ident">Delete</span>,
-    <span class="doccomment">/// Insert key.</span>
+    <span class="doccomment">/// Insert key.</span>
     <span class="ident">Insert</span>,
-    <span class="doccomment">/// F key.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// `KeyEvent::F(1)` represents F1 key, etc.</span>
+    <span class="doccomment">/// F key.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `KeyEvent::F(1)` represents F1 key, etc.</span>
     <span class="ident">F</span>(<span class="ident">u8</span>),
-    <span class="doccomment">/// A character.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// `KeyEvent::Char(&#39;c&#39;)` represents `c` character, etc.</span>
+    <span class="doccomment">/// A character.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `KeyEvent::Char(&#39;c&#39;)` represents `c` character, etc.</span>
     <span class="ident">Char</span>(<span class="ident">char</span>),
-    <span class="doccomment">/// Null.</span>
+    <span class="doccomment">/// Null.</span>
     <span class="ident">Null</span>,
-    <span class="doccomment">/// Escape key.</span>
+    <span class="doccomment">/// Escape key.</span>
     <span class="ident">Esc</span>,
 }
 
-<span class="doccomment">/// An internal event.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Encapsulates publicly available `Event` with additional internal</span>
-<span class="doccomment">/// events that shouldn&#39;t be publicly available to the crate users.</span>
+<span class="doccomment">/// An internal event.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Encapsulates publicly available `Event` with additional internal</span>
+<span class="doccomment">/// events that shouldn&#39;t be publicly available to the crate users.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialOrd</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>, <span class="ident">Clone</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">InternalEvent</span> {
-    <span class="doccomment">/// An event.</span>
+    <span class="doccomment">/// An event.</span>
     <span class="ident">Event</span>(<span class="ident">Event</span>),
-    <span class="doccomment">/// A cursor position (`col`, `row`).</span>
+    <span class="doccomment">/// A cursor position (`col`, `row`).</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
     <span class="ident">CursorPosition</span>(<span class="ident">u16</span>, <span class="ident">u16</span>),
 }

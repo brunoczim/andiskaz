@@ -475,7 +475,7 @@
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">sys</span>::<span class="ident">Waker</span>;
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">filter</span>::<span class="ident">Filter</span>, <span class="ident">source</span>::<span class="ident">EventSource</span>, <span class="ident">timeout</span>::<span class="ident">PollTimeout</span>, <span class="ident">InternalEvent</span>, <span class="prelude-ty">Result</span>};
 
-<span class="doccomment">/// Can be used to read `InternalEvent`s.</span>
+<span class="doccomment">/// Can be used to read `InternalEvent`s.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">InternalEventReader</span> {
     <span class="ident">events</span>: <span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span>,
     <span class="ident">source</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">EventSource</span><span class="op">&gt;</span><span class="op">&gt;</span>,
@@ -500,7 +500,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">InternalEventReader</span> {
-    <span class="doccomment">/// Returns a `Waker` allowing to wake/force the `poll` method to return `Ok(false)`.</span>
+    <span class="doccomment">/// Returns a `Waker` allowing to wake/force the `poll` method to return `Ok(false)`.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;event-stream&quot;</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">waker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Waker</span> {
         <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">as_ref</span>().<span class="ident">expect</span>(<span class="string">&quot;reader source not set&quot;</span>).<span class="ident">waker</span>()
@@ -578,13 +578,13 @@
 
                     <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">event</span>);
                 } <span class="kw">else</span> {
-                    <span class="comment">// We can not directly write events back to `self.events`.</span>
-                    <span class="comment">// If we did, we would put our self&#39;s into an endless loop</span>
-                    <span class="comment">// that would enqueue -&gt; dequeue -&gt; enqueue etc.</span>
-                    <span class="comment">// This happens because `poll` in this function will always return true if there are events in it&#39;s.</span>
-                    <span class="comment">// And because we just put the non-fulfilling event there this is going to be the case.</span>
-                    <span class="comment">// Instead we can store them into the temporary buffer,</span>
-                    <span class="comment">// and then when the filter is fulfilled write all events back in order.</span>
+                    <span class="comment">// We can not directly write events back to `self.events`.</span>
+                    <span class="comment">// If we did, we would put our self&#39;s into an endless loop</span>
+                    <span class="comment">// that would enqueue -&gt; dequeue -&gt; enqueue etc.</span>
+                    <span class="comment">// This happens because `poll` in this function will always return true if there are events in it&#39;s.</span>
+                    <span class="comment">// And because we just put the non-fulfilling event there this is going to be the case.</span>
+                    <span class="comment">// Instead we can store them into the temporary buffer,</span>
+                    <span class="comment">// and then when the filter is fulfilled write all events back in order.</span>
                     <span class="ident">skipped_events</span>.<span class="ident">push_back</span>(<span class="ident">event</span>);
                 }
             }
@@ -897,24 +897,24 @@
             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
             <span class="ident">_timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
         ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span>, <span class="ident">ErrorKind</span><span class="op">&gt;</span> {
-            <span class="comment">// Return error if set in case there&#39;s just one remaining event</span>
+            <span class="comment">// Return error if set in case there&#39;s just one remaining event</span>
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">error</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">error</span>.<span class="ident">take</span>() {
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>);
                 }
             }
 
-            <span class="comment">// Return all events from the queue</span>
+            <span class="comment">// Return all events from the queue</span>
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">event</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">pop_front</span>() {
                 <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">event</span>));
             }
 
-            <span class="comment">// Return error if there&#39;re no more events</span>
+            <span class="comment">// Return error if there&#39;re no more events</span>
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">error</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">error</span>.<span class="ident">take</span>() {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>);
             }
 
-            <span class="comment">// Timeout</span>
+            <span class="comment">// Timeout</span>
             <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
         }
 

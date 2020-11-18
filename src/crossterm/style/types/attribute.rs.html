@@ -178,9 +178,9 @@
 
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="ident">SetAttribute</span>;
 
-<span class="comment">// This macro generates the Attribute enum, its iterator</span>
-<span class="comment">// function, and the static array containing the sgr code</span>
-<span class="comment">// of each attribute</span>
+<span class="comment">// This macro generates the Attribute enum, its iterator</span>
+<span class="comment">// function, and the static array containing the sgr code</span>
+<span class="comment">// of each attribute</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">Attribute</span> {
     (
         $(
@@ -188,56 +188,56 @@
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">sgr</span>:<span class="ident">expr</span>,
         )<span class="op">*</span>
     ) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="doccomment">/// Represents an attribute.</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// # Platform-specific Notes</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// * Only UNIX and Windows 10 terminals do support text attributes.</span>
-        <span class="doccomment">/// * Keep in mind that not all terminals support all attributes.</span>
-        <span class="doccomment">/// * Crossterm implements almost all attributes listed in the</span>
-        <span class="doccomment">///   [SGR parameters](https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters).</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// | Attribute | Windows | UNIX | Notes |</span>
-        <span class="doccomment">/// | :-- | :--: | :--: | :-- |</span>
-        <span class="doccomment">/// | `Reset` | ✓ | ✓ | |</span>
-        <span class="doccomment">/// | `Bold` | ✓ | ✓ | |</span>
-        <span class="doccomment">/// | `Dim` | ✓ | ✓ | |</span>
-        <span class="doccomment">/// | `Italic` | ? | ? | Not widely supported, sometimes treated as inverse. |</span>
-        <span class="doccomment">/// | `Underlined` | ✓ | ✓ | |</span>
-        <span class="doccomment">/// | `SlowBlink` | ? | ? | Not widely supported, sometimes treated as inverse. |</span>
-        <span class="doccomment">/// | `RapidBlink` | ? | ? | Not widely supported. MS-DOS ANSI.SYS; 150+ per minute. |</span>
-        <span class="doccomment">/// | `Reverse` | ✓ | ✓ | |</span>
-        <span class="doccomment">/// | `Hidden` | ✓ | ✓ | Also known as Conceal. |</span>
-        <span class="doccomment">/// | `Fraktur` | ✗ | ✓ | Legible characters, but marked for deletion. |</span>
-        <span class="doccomment">/// | `DefaultForegroundColor` | ? | ? | Implementation specific (according to standard). |</span>
-        <span class="doccomment">/// | `DefaultBackgroundColor` | ? | ? | Implementation specific (according to standard). |</span>
-        <span class="doccomment">/// | `Framed` | ? | ? | Not widely supported. |</span>
-        <span class="doccomment">/// | `Encircled` | ? | ? | This should turn on the encircled attribute. |</span>
-        <span class="doccomment">/// | `OverLined` | ? | ? | This should draw a line at the top of the text. |</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// # Examples</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// Basic usage:</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// ```no_run</span>
-        <span class="doccomment">/// use crossterm::style::Attribute;</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// println!(</span>
-        <span class="doccomment">///     &quot;{} Underlined {} No Underline&quot;,</span>
-        <span class="doccomment">///     Attribute::Underlined,</span>
-        <span class="doccomment">///     Attribute::NoUnderline</span>
-        <span class="doccomment">/// );</span>
-        <span class="doccomment">/// ```</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// Style existing text:</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// ```no_run</span>
-        <span class="doccomment">/// use crossterm::style::Styler;</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// println!(&quot;{}&quot;, &quot;Bold text&quot;.bold());</span>
-        <span class="doccomment">/// println!(&quot;{}&quot;, &quot;Underlined text&quot;.underlined());</span>
-        <span class="doccomment">/// println!(&quot;{}&quot;, &quot;Negative text&quot;.negative());</span>
-        <span class="doccomment">/// ```</span>
+        <span class="doccomment">/// Represents an attribute.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// # Platform-specific Notes</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// * Only UNIX and Windows 10 terminals do support text attributes.</span>
+        <span class="doccomment">/// * Keep in mind that not all terminals support all attributes.</span>
+        <span class="doccomment">/// * Crossterm implements almost all attributes listed in the</span>
+        <span class="doccomment">///   [SGR parameters](https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters).</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// | Attribute | Windows | UNIX | Notes |</span>
+        <span class="doccomment">/// | :-- | :--: | :--: | :-- |</span>
+        <span class="doccomment">/// | `Reset` | ✓ | ✓ | |</span>
+        <span class="doccomment">/// | `Bold` | ✓ | ✓ | |</span>
+        <span class="doccomment">/// | `Dim` | ✓ | ✓ | |</span>
+        <span class="doccomment">/// | `Italic` | ? | ? | Not widely supported, sometimes treated as inverse. |</span>
+        <span class="doccomment">/// | `Underlined` | ✓ | ✓ | |</span>
+        <span class="doccomment">/// | `SlowBlink` | ? | ? | Not widely supported, sometimes treated as inverse. |</span>
+        <span class="doccomment">/// | `RapidBlink` | ? | ? | Not widely supported. MS-DOS ANSI.SYS; 150+ per minute. |</span>
+        <span class="doccomment">/// | `Reverse` | ✓ | ✓ | |</span>
+        <span class="doccomment">/// | `Hidden` | ✓ | ✓ | Also known as Conceal. |</span>
+        <span class="doccomment">/// | `Fraktur` | ✗ | ✓ | Legible characters, but marked for deletion. |</span>
+        <span class="doccomment">/// | `DefaultForegroundColor` | ? | ? | Implementation specific (according to standard). |</span>
+        <span class="doccomment">/// | `DefaultBackgroundColor` | ? | ? | Implementation specific (according to standard). |</span>
+        <span class="doccomment">/// | `Framed` | ? | ? | Not widely supported. |</span>
+        <span class="doccomment">/// | `Encircled` | ? | ? | This should turn on the encircled attribute. |</span>
+        <span class="doccomment">/// | `OverLined` | ? | ? | This should draw a line at the top of the text. |</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// # Examples</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// Basic usage:</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// ```no_run</span>
+        <span class="doccomment">/// use crossterm::style::Attribute;</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// println!(</span>
+        <span class="doccomment">///     &quot;{} Underlined {} No Underline&quot;,</span>
+        <span class="doccomment">///     Attribute::Underlined,</span>
+        <span class="doccomment">///     Attribute::NoUnderline</span>
+        <span class="doccomment">/// );</span>
+        <span class="doccomment">/// ```</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// Style existing text:</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// ```no_run</span>
+        <span class="doccomment">/// use crossterm::style::Styler;</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// println!(&quot;{}&quot;, &quot;Bold text&quot;.bold());</span>
+        <span class="doccomment">/// println!(&quot;{}&quot;, &quot;Underlined text&quot;.underlined());</span>
+        <span class="doccomment">/// println!(&quot;{}&quot;, &quot;Negative text&quot;.negative());</span>
+        <span class="doccomment">/// ```</span>
         <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
         <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Hash</span>)]</span>
         <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Attribute</span> {
@@ -252,7 +252,7 @@
         ];
 
         <span class="kw">impl</span> <span class="ident">Attribute</span> {
-            <span class="doccomment">/// Iterates over all the variants of the Attribute enum.</span>
+            <span class="doccomment">/// Iterates over all the variants of the Attribute enum.</span>
             <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iterator</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Attribute</span><span class="op">&gt;</span> {
                 <span class="kw">use</span> <span class="self">self</span>::<span class="ident">Attribute</span>::<span class="kw-2">*</span>;
                 [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>,)<span class="op">*</span> ].<span class="ident">iter</span>().<span class="ident">copied</span>()
@@ -263,55 +263,55 @@
 
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="macro">Attribute</span><span class="macro">!</span> {
-    <span class="doccomment">/// Resets all the attributes.</span>
+    <span class="doccomment">/// Resets all the attributes.</span>
     <span class="ident">Reset</span> <span class="op">=</span> <span class="number">0</span>,
-    <span class="doccomment">/// Increases the text intensity.</span>
+    <span class="doccomment">/// Increases the text intensity.</span>
     <span class="ident">Bold</span> <span class="op">=</span> <span class="number">1</span>,
-    <span class="doccomment">/// Decreases the text intensity.</span>
+    <span class="doccomment">/// Decreases the text intensity.</span>
     <span class="ident">Dim</span> <span class="op">=</span> <span class="number">2</span>,
-    <span class="doccomment">/// Emphasises the text.</span>
+    <span class="doccomment">/// Emphasises the text.</span>
     <span class="ident">Italic</span> <span class="op">=</span> <span class="number">3</span>,
-    <span class="doccomment">/// Underlines the text.</span>
+    <span class="doccomment">/// Underlines the text.</span>
     <span class="ident">Underlined</span> <span class="op">=</span> <span class="number">4</span>,
-    <span class="doccomment">/// Makes the text blinking (&lt; 150 per minute).</span>
+    <span class="doccomment">/// Makes the text blinking (&lt; 150 per minute).</span>
     <span class="ident">SlowBlink</span> <span class="op">=</span> <span class="number">5</span>,
-    <span class="doccomment">/// Makes the text blinking (&gt;= 150 per minute).</span>
+    <span class="doccomment">/// Makes the text blinking (&gt;= 150 per minute).</span>
     <span class="ident">RapidBlink</span> <span class="op">=</span> <span class="number">6</span>,
-    <span class="doccomment">/// Swaps foreground and background colors.</span>
+    <span class="doccomment">/// Swaps foreground and background colors.</span>
     <span class="ident">Reverse</span> <span class="op">=</span> <span class="number">7</span>,
-    <span class="doccomment">/// Hides the text (also known as Conceal).</span>
+    <span class="doccomment">/// Hides the text (also known as Conceal).</span>
     <span class="ident">Hidden</span> <span class="op">=</span> <span class="number">8</span>,
-    <span class="doccomment">/// Crosses the text.</span>
+    <span class="doccomment">/// Crosses the text.</span>
     <span class="ident">CrossedOut</span> <span class="op">=</span> <span class="number">9</span>,
-    <span class="doccomment">/// Sets the [Fraktur](https://en.wikipedia.org/wiki/Fraktur) typeface.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Mostly used for [mathematical alphanumeric symbols](https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols).</span>
+    <span class="doccomment">/// Sets the [Fraktur](https://en.wikipedia.org/wiki/Fraktur) typeface.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Mostly used for [mathematical alphanumeric symbols](https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols).</span>
     <span class="ident">Fraktur</span> <span class="op">=</span> <span class="number">20</span>,
-    <span class="doccomment">/// Turns off the `Bold` attribute. - Inconsistent - Prefer to use NormalIntensity</span>
+    <span class="doccomment">/// Turns off the `Bold` attribute. - Inconsistent - Prefer to use NormalIntensity</span>
     <span class="ident">NoBold</span> <span class="op">=</span> <span class="number">21</span>,
-    <span class="doccomment">/// Switches the text back to normal intensity (no bold, italic).</span>
+    <span class="doccomment">/// Switches the text back to normal intensity (no bold, italic).</span>
     <span class="ident">NormalIntensity</span> <span class="op">=</span> <span class="number">22</span>,
-    <span class="doccomment">/// Turns off the `Italic` attribute.</span>
+    <span class="doccomment">/// Turns off the `Italic` attribute.</span>
     <span class="ident">NoItalic</span> <span class="op">=</span> <span class="number">23</span>,
-    <span class="doccomment">/// Turns off the `Underlined` attribute.</span>
+    <span class="doccomment">/// Turns off the `Underlined` attribute.</span>
     <span class="ident">NoUnderline</span> <span class="op">=</span> <span class="number">24</span>,
-    <span class="doccomment">/// Turns off the text blinking (`SlowBlink` or `RapidBlink`).</span>
+    <span class="doccomment">/// Turns off the text blinking (`SlowBlink` or `RapidBlink`).</span>
     <span class="ident">NoBlink</span> <span class="op">=</span> <span class="number">25</span>,
-    <span class="doccomment">/// Turns off the `Reverse` attribute.</span>
+    <span class="doccomment">/// Turns off the `Reverse` attribute.</span>
     <span class="ident">NoReverse</span> <span class="op">=</span> <span class="number">27</span>,
-    <span class="doccomment">/// Turns off the `Hidden` attribute.</span>
+    <span class="doccomment">/// Turns off the `Hidden` attribute.</span>
     <span class="ident">NoHidden</span> <span class="op">=</span> <span class="number">28</span>,
-    <span class="doccomment">/// Turns off the `CrossedOut` attribute.</span>
+    <span class="doccomment">/// Turns off the `CrossedOut` attribute.</span>
     <span class="ident">NotCrossedOut</span> <span class="op">=</span> <span class="number">29</span>,
-    <span class="doccomment">/// Makes the text framed.</span>
+    <span class="doccomment">/// Makes the text framed.</span>
     <span class="ident">Framed</span> <span class="op">=</span> <span class="number">51</span>,
-    <span class="doccomment">/// Makes the text encircled.</span>
+    <span class="doccomment">/// Makes the text encircled.</span>
     <span class="ident">Encircled</span> <span class="op">=</span> <span class="number">52</span>,
-    <span class="doccomment">/// Draws a line at the top of the text.</span>
+    <span class="doccomment">/// Draws a line at the top of the text.</span>
     <span class="ident">OverLined</span> <span class="op">=</span> <span class="number">53</span>,
-    <span class="doccomment">/// Turns off the `Frame` and `Encircled` attributes.</span>
+    <span class="doccomment">/// Turns off the `Frame` and `Encircled` attributes.</span>
     <span class="ident">NotFramedOrEncircled</span> <span class="op">=</span> <span class="number">54</span>,
-    <span class="doccomment">/// Turns off the `OverLined` attribute.</span>
+    <span class="doccomment">/// Turns off the `OverLined` attribute.</span>
     <span class="ident">NotOverLined</span> <span class="op">=</span> <span class="number">55</span>,
 }
 
@@ -323,19 +323,19 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Attribute</span> {
-    <span class="doccomment">/// Returns a u32 with one bit set, which is the</span>
-    <span class="doccomment">/// signature of this attribute in the Attributes</span>
-    <span class="doccomment">/// bitset.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The +1 enables storing Reset (whose index is 0)</span>
-    <span class="doccomment">///  in the bitset Attributes.</span>
+    <span class="doccomment">/// Returns a u32 with one bit set, which is the</span>
+    <span class="doccomment">/// signature of this attribute in the Attributes</span>
+    <span class="doccomment">/// bitset.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The +1 enables storing Reset (whose index is 0)</span>
+    <span class="doccomment">///  in the bitset Attributes.</span>
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
         <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> ((<span class="self">self</span> <span class="kw">as</span> <span class="ident">u32</span>) <span class="op">+</span> <span class="number">1</span>)
     }
-    <span class="doccomment">/// Returns the SGR attribute value.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// See https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters</span>
+    <span class="doccomment">/// Returns the SGR attribute value.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// See https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sgr</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i16</span> {
         <span class="ident">SGR</span>[<span class="self">self</span> <span class="kw">as</span> <span class="ident">usize</span>]
     }

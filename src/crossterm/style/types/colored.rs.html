@@ -24,16 +24,16 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
-<span class="doccomment">/// Represents a foreground or background color.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This can be converted to a [Colors](struct.Colors.html) by calling `into()` and applied</span>
-<span class="doccomment">/// using the [SetColors](struct.SetColors.html) command.</span>
+<span class="doccomment">/// Represents a foreground or background color.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This can be converted to a [Colors](struct.Colors.html) by calling `into()` and applied</span>
+<span class="doccomment">/// using the [SetColors](struct.SetColors.html) command.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Colored</span> {
-    <span class="doccomment">/// A foreground color.</span>
+    <span class="doccomment">/// A foreground color.</span>
     <span class="ident">ForegroundColor</span>(<span class="ident">Color</span>),
-    <span class="doccomment">/// A background color.</span>
+    <span class="doccomment">/// A background color.</span>
     <span class="ident">BackgroundColor</span>(<span class="ident">Color</span>),
 }
 </pre></div>

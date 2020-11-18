@@ -93,10 +93,10 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span>};
 
-<span class="doccomment">/// A file descriptor wrapper.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// It allows to retrieve raw file descriptor, write to the file descriptor and</span>
-<span class="doccomment">/// mainly it closes the file descriptor once dropped.</span>
+<span class="doccomment">/// A file descriptor wrapper.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// It allows to retrieve raw file descriptor, write to the file descriptor and</span>
+<span class="doccomment">/// mainly it closes the file descriptor once dropped.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FileDesc</span> {
     <span class="ident">fd</span>: <span class="ident">RawFd</span>,
@@ -104,12 +104,12 @@
 }
 
 <span class="kw">impl</span> <span class="ident">FileDesc</span> {
-    <span class="doccomment">/// Constructs a new `FileDesc` with the given `RawFd`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Arguments</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * `fd` - raw file descriptor</span>
-    <span class="doccomment">/// * `close_on_drop` - specify if the raw file descriptor should be closed once the `FileDesc` is dropped</span>
+    <span class="doccomment">/// Constructs a new `FileDesc` with the given `RawFd`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Arguments</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `fd` - raw file descriptor</span>
+    <span class="doccomment">/// * `close_on_drop` - specify if the raw file descriptor should be closed once the `FileDesc` is dropped</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">fd</span>: <span class="ident">RawFd</span>, <span class="ident">close_on_drop</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FileDesc</span> {
         <span class="ident">FileDesc</span> { <span class="ident">fd</span>, <span class="ident">close_on_drop</span> }
     }
@@ -130,7 +130,7 @@
         }
     }
 
-    <span class="doccomment">/// Returns the underlying file descriptor.</span>
+    <span class="doccomment">/// Returns the underlying file descriptor.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">raw_fd</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RawFd</span> {
         <span class="self">self</span>.<span class="ident">fd</span>
     }
@@ -139,17 +139,17 @@
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">FileDesc</span> {
     <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">close_on_drop</span> {
-            <span class="comment">// Note that errors are ignored when closing a file descriptor. The</span>
-            <span class="comment">// reason for this is that if an error occurs we don&#39;t actually know if</span>
-            <span class="comment">// the file descriptor was closed or not, and if we retried (for</span>
-            <span class="comment">// something like EINTR), we might close another valid file descriptor</span>
-            <span class="comment">// opened after we closed ours.</span>
+            <span class="comment">// Note that errors are ignored when closing a file descriptor. The</span>
+            <span class="comment">// reason for this is that if an error occurs we don&#39;t actually know if</span>
+            <span class="comment">// the file descriptor was closed or not, and if we retried (for</span>
+            <span class="comment">// something like EINTR), we might close another valid file descriptor</span>
+            <span class="comment">// opened after we closed ours.</span>
             <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">libc</span>::<span class="ident">close</span>(<span class="self">self</span>.<span class="ident">fd</span>) };
         }
     }
 }
 
-<span class="doccomment">/// Creates a file descriptor pointing to the standard input or `/dev/tty`.</span>
+<span class="doccomment">/// Creates a file descriptor pointing to the standard input or `/dev/tty`.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tty_fd</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FileDesc</span><span class="op">&gt;</span> {
     <span class="kw">let</span> (<span class="ident">fd</span>, <span class="ident">close_on_drop</span>) <span class="op">=</span> <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">libc</span>::<span class="ident">isatty</span>(<span class="ident">libc</span>::<span class="ident">STDIN_FILENO</span>) <span class="op">=</span><span class="op">=</span> <span class="number">1</span> } {
         (<span class="ident">libc</span>::<span class="ident">STDIN_FILENO</span>, <span class="bool-val">false</span>)

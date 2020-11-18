@@ -194,35 +194,35 @@
 
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">error</span>::<span class="prelude-ty">Result</span>;
 
-<span class="doccomment">/// An interface for a command that performs an action on the terminal.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Crossterm provides a set of commands,</span>
-<span class="doccomment">/// and there is no immediate reason to implement a command yourself.</span>
-<span class="doccomment">/// In order to understand how to use and execute commands,</span>
-<span class="doccomment">/// it is recommended that you take a look at [Command Api](../#command-api) chapter.</span>
+<span class="doccomment">/// An interface for a command that performs an action on the terminal.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Crossterm provides a set of commands,</span>
+<span class="doccomment">/// and there is no immediate reason to implement a command yourself.</span>
+<span class="doccomment">/// In order to understand how to use and execute commands,</span>
+<span class="doccomment">/// it is recommended that you take a look at [Command Api](../#command-api) chapter.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Command</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span>: <span class="ident">Display</span>;
 
-    <span class="doccomment">/// Returns an ANSI code representation of this command.</span>
-    <span class="doccomment">/// An ANSI code can manipulate the terminal by writing it to the terminal buffer.</span>
-    <span class="doccomment">/// However, only Windows 10 and UNIX systems support this.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command Api](../#command-api)</span>
+    <span class="doccomment">/// Returns an ANSI code representation of this command.</span>
+    <span class="doccomment">/// An ANSI code can manipulate the terminal by writing it to the terminal buffer.</span>
+    <span class="doccomment">/// However, only Windows 10 and UNIX systems support this.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command Api](../#command-api)</span>
     <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">AnsiType</span>;
 
-    <span class="doccomment">/// Execute this command.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Windows versions lower than windows 10 do not support ANSI escape codes,</span>
-    <span class="doccomment">/// therefore a direct WinAPI call is made.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command Api](../#command-api)</span>
+    <span class="doccomment">/// Execute this command.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Windows versions lower than windows 10 do not support ANSI escape codes,</span>
+    <span class="doccomment">/// therefore a direct WinAPI call is made.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command Api](../#command-api)</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
     <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
-    <span class="doccomment">/// Returns whether the ansi code representation of this command is supported by windows.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// A list of supported ANSI escape codes</span>
-    <span class="doccomment">/// can be found [here](https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences).</span>
+    <span class="doccomment">/// Returns whether the ansi code representation of this command is supported by windows.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// A list of supported ANSI escape codes</span>
+    <span class="doccomment">/// can be found [here](https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences).</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
     <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="kw">super</span>::<span class="ident">ansi_support</span>::<span class="ident">supports_ansi</span>()
@@ -250,15 +250,15 @@
     }
 }
 
-<span class="doccomment">/// An interface for commands that can be queued for further execution.</span>
+<span class="doccomment">/// An interface for commands that can be queued for further execution.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">QueueableCommand</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span>: <span class="ident">Sized</span> {
-    <span class="doccomment">/// Queues the given command for further execution.</span>
+    <span class="doccomment">/// Queues the given command for further execution.</span>
     <span class="kw">fn</span> <span class="ident">queue</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>;
 }
 
-<span class="doccomment">/// An interface for commands that are directly executed.</span>
+<span class="doccomment">/// An interface for commands that are directly executed.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ExecutableCommand</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span>: <span class="ident">Sized</span> {
-    <span class="doccomment">/// Executes the given command directly.</span>
+    <span class="doccomment">/// Executes the given command directly.</span>
     <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>;
 }
 
@@ -267,57 +267,57 @@
     <span class="ident">A</span>: <span class="ident">Display</span>,
     <span class="ident">T</span>: <span class="ident">Write</span>,
 {
-    <span class="doccomment">/// Queues the given command for further execution.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Queued commands will be executed in the following cases:</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * When `flush` is called manually on the given type implementing `io::Write`.</span>
-    <span class="doccomment">/// * The terminal will `flush` automatically if the buffer is full.</span>
-    <span class="doccomment">/// * Each line is flushed in case of `stdout`, because it is line buffered.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Arguments</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// - [Command](./trait.Command.html)</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     The command that you want to queue for later execution.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// use std::io::{Write, stdout};</span>
-    <span class="doccomment">/// use crossterm::{Result, QueueableCommand, style::Print};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///  fn main() -&gt; Result&lt;()&gt; {</span>
-    <span class="doccomment">///     let mut stdout = stdout();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     // `Print` will executed executed when `flush` is called.</span>
-    <span class="doccomment">///     stdout</span>
-    <span class="doccomment">///         .queue(Print(&quot;foo 1\n&quot;.to_string()))?</span>
-    <span class="doccomment">///         .queue(Print(&quot;foo 2&quot;.to_string()))?;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     // some other code (no execution happening here) ...</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     // when calling `flush` on `stdout`, all commands will be written to the stdout and therefore executed.</span>
-    <span class="doccomment">///     stdout.flush()?;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     Ok(())</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     // ==== Output ====</span>
-    <span class="doccomment">///     // foo 1</span>
-    <span class="doccomment">///     // foo 2</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Have a look over at the [Command API](./#command-api) for more details.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Notes</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.</span>
-    <span class="doccomment">/// * In case of Windows versions lower than 10, a direct WinApi call will be made.</span>
-    <span class="doccomment">///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,</span>
-    <span class="doccomment">///     and can therefore not be written to the given `writer`.</span>
-    <span class="doccomment">///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)</span>
-    <span class="doccomment">///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.</span>
+    <span class="doccomment">/// Queues the given command for further execution.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Queued commands will be executed in the following cases:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * When `flush` is called manually on the given type implementing `io::Write`.</span>
+    <span class="doccomment">/// * The terminal will `flush` automatically if the buffer is full.</span>
+    <span class="doccomment">/// * Each line is flushed in case of `stdout`, because it is line buffered.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Arguments</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - [Command](./trait.Command.html)</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     The command that you want to queue for later execution.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// use std::io::{Write, stdout};</span>
+    <span class="doccomment">/// use crossterm::{Result, QueueableCommand, style::Print};</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///  fn main() -&gt; Result&lt;()&gt; {</span>
+    <span class="doccomment">///     let mut stdout = stdout();</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     // `Print` will executed executed when `flush` is called.</span>
+    <span class="doccomment">///     stdout</span>
+    <span class="doccomment">///         .queue(Print(&quot;foo 1\n&quot;.to_string()))?</span>
+    <span class="doccomment">///         .queue(Print(&quot;foo 2&quot;.to_string()))?;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     // some other code (no execution happening here) ...</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     // when calling `flush` on `stdout`, all commands will be written to the stdout and therefore executed.</span>
+    <span class="doccomment">///     stdout.flush()?;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     Ok(())</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     // ==== Output ====</span>
+    <span class="doccomment">///     // foo 1</span>
+    <span class="doccomment">///     // foo 2</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Have a look over at the [Command API](./#command-api) for more details.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Notes</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.</span>
+    <span class="doccomment">/// * In case of Windows versions lower than 10, a direct WinApi call will be made.</span>
+    <span class="doccomment">///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,</span>
+    <span class="doccomment">///     and can therefore not be written to the given `writer`.</span>
+    <span class="doccomment">///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)</span>
+    <span class="doccomment">///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.</span>
     <span class="kw">fn</span> <span class="ident">queue</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">A</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="macro">queue</span><span class="macro">!</span>(<span class="self">self</span>, <span class="ident">command</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
@@ -329,46 +329,46 @@
     <span class="ident">A</span>: <span class="ident">Display</span>,
     <span class="ident">T</span>: <span class="ident">Write</span>,
 {
-    <span class="doccomment">/// Executes the given command directly.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The given command its ANSI escape code will be written and flushed onto `Self`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Arguments</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// - [Command](./trait.Command.html)</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     The command that you want to execute directly.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Example</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// use std::io::{Write, stdout};</span>
-    <span class="doccomment">/// use crossterm::{Result, ExecutableCommand, style::Print};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///  fn main() -&gt; Result&lt;()&gt; {</span>
-    <span class="doccomment">///      // will be executed directly</span>
-    <span class="doccomment">///       stdout()</span>
-    <span class="doccomment">///         .execute(Print(&quot;sum:\n&quot;.to_string()))?</span>
-    <span class="doccomment">///         .execute(Print(format!(&quot;1 + 1= {} &quot;, 1 + 1)))?;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///       Ok(())</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///      // ==== Output ====</span>
-    <span class="doccomment">///      // sum:</span>
-    <span class="doccomment">///      // 1 + 1 = 2</span>
-    <span class="doccomment">///  }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Have a look over at the [Command API](./#command-api) for more details.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Notes</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.</span>
-    <span class="doccomment">/// * In case of Windows versions lower than 10, a direct WinApi call will be made.</span>
-    <span class="doccomment">///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,</span>
-    <span class="doccomment">///     and can therefore not be written to the given `writer`.</span>
-    <span class="doccomment">///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)</span>
-    <span class="doccomment">///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.</span>
+    <span class="doccomment">/// Executes the given command directly.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The given command its ANSI escape code will be written and flushed onto `Self`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Arguments</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - [Command](./trait.Command.html)</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///     The command that you want to execute directly.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// use std::io::{Write, stdout};</span>
+    <span class="doccomment">/// use crossterm::{Result, ExecutableCommand, style::Print};</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///  fn main() -&gt; Result&lt;()&gt; {</span>
+    <span class="doccomment">///      // will be executed directly</span>
+    <span class="doccomment">///       stdout()</span>
+    <span class="doccomment">///         .execute(Print(&quot;sum:\n&quot;.to_string()))?</span>
+    <span class="doccomment">///         .execute(Print(format!(&quot;1 + 1= {} &quot;, 1 + 1)))?;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///       Ok(())</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">///      // ==== Output ====</span>
+    <span class="doccomment">///      // sum:</span>
+    <span class="doccomment">///      // 1 + 1 = 2</span>
+    <span class="doccomment">///  }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Have a look over at the [Command API](./#command-api) for more details.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Notes</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.</span>
+    <span class="doccomment">/// * In case of Windows versions lower than 10, a direct WinApi call will be made.</span>
+    <span class="doccomment">///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,</span>
+    <span class="doccomment">///     and can therefore not be written to the given `writer`.</span>
+    <span class="doccomment">///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)</span>
+    <span class="doccomment">///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.</span>
     <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">A</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="macro">execute</span><span class="macro">!</span>(<span class="self">self</span>, <span class="ident">command</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)

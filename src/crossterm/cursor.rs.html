@@ -515,49 +515,49 @@
 <span id="512">512</span>
 <span id="513">513</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! # Cursor</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The `cursor` module provides functionality to work with the terminal cursor.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This documentation does not contain a lot of examples. The reason is that it&#39;s fairly</span>
-<span class="doccomment">//! obvious how to use this crate. Although, we do provide</span>
-<span class="doccomment">//! [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) repository</span>
-<span class="doccomment">//! to demonstrate the capabilities.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Cursor actions can be performed with commands.</span>
-<span class="doccomment">//! Please have a look at [command documentation](../index.html#command-api) for a more detailed documentation.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{stdout, Write};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! use crossterm::{</span>
-<span class="doccomment">//!     ExecutableCommand, execute, Result,</span>
-<span class="doccomment">//!     cursor::{DisableBlinking, EnableBlinking, MoveTo, RestorePosition, SavePosition}</span>
-<span class="doccomment">//! };</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">//!     // with macro</span>
-<span class="doccomment">//!     execute!(</span>
-<span class="doccomment">//!         stdout(),</span>
-<span class="doccomment">//!         SavePosition,</span>
-<span class="doccomment">//!         MoveTo(10, 10),</span>
-<span class="doccomment">//!         EnableBlinking,</span>
-<span class="doccomment">//!         DisableBlinking,</span>
-<span class="doccomment">//!         RestorePosition</span>
-<span class="doccomment">//!     );</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!   // with function</span>
-<span class="doccomment">//!   stdout()</span>
-<span class="doccomment">//!     .execute(MoveTo(11,11))?</span>
-<span class="doccomment">//!     .execute(RestorePosition);</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!  Ok(())</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! For manual execution control check out [crossterm::queue](../macro.queue.html).</span>
+<span class="doccomment">//! # Cursor</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The `cursor` module provides functionality to work with the terminal cursor.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This documentation does not contain a lot of examples. The reason is that it&#39;s fairly</span>
+<span class="doccomment">//! obvious how to use this crate. Although, we do provide</span>
+<span class="doccomment">//! [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) repository</span>
+<span class="doccomment">//! to demonstrate the capabilities.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Examples</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Cursor actions can be performed with commands.</span>
+<span class="doccomment">//! Please have a look at [command documentation](../index.html#command-api) for a more detailed documentation.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::io::{stdout, Write};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! use crossterm::{</span>
+<span class="doccomment">//!     ExecutableCommand, execute, Result,</span>
+<span class="doccomment">//!     cursor::{DisableBlinking, EnableBlinking, MoveTo, RestorePosition, SavePosition}</span>
+<span class="doccomment">//! };</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
+<span class="doccomment">//!     // with macro</span>
+<span class="doccomment">//!     execute!(</span>
+<span class="doccomment">//!         stdout(),</span>
+<span class="doccomment">//!         SavePosition,</span>
+<span class="doccomment">//!         MoveTo(10, 10),</span>
+<span class="doccomment">//!         EnableBlinking,</span>
+<span class="doccomment">//!         DisableBlinking,</span>
+<span class="doccomment">//!         RestorePosition</span>
+<span class="doccomment">//!     );</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!   // with function</span>
+<span class="doccomment">//!   stdout()</span>
+<span class="doccomment">//!     .execute(MoveTo(11,11))?</span>
+<span class="doccomment">//!     .execute(RestorePosition);</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!  Ok(())</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! For manual execution control check out [crossterm::queue](../macro.queue.html).</span>
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">sys</span>::<span class="ident">position</span>;
 
@@ -569,12 +569,12 @@
 <span class="kw">mod</span> <span class="ident">ansi</span>;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">sys</span>;
 
-<span class="doccomment">/// A command that moves the terminal cursor to the given position (column, row).</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * Top left cell is represented as `0,0`.</span>
-<span class="doccomment">/// * Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that moves the terminal cursor to the given position (column, row).</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// * Top left cell is represented as `0,0`.</span>
+<span class="doccomment">/// * Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MoveTo</span>(<span class="kw">pub</span> <span class="ident">u16</span>, <span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -598,12 +598,12 @@
     }
 }
 
-<span class="doccomment">/// A command that moves the terminal cursor up the given number of lines,</span>
-<span class="doccomment">/// and moves it to the first column.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that moves the terminal cursor up the given number of lines,</span>
+<span class="doccomment">/// and moves it to the first column.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MoveToNextLine</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -627,12 +627,12 @@
     }
 }
 
-<span class="doccomment">/// A command that moves the terminal cursor down the given number of lines,</span>
-<span class="doccomment">/// and moves it to the first column.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that moves the terminal cursor down the given number of lines,</span>
+<span class="doccomment">/// and moves it to the first column.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MoveToPreviousLine</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -656,11 +656,11 @@
     }
 }
 
-<span class="doccomment">/// A command that moves the terminal cursor to the given column on the current row.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that moves the terminal cursor to the given column on the current row.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MoveToColumn</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -684,11 +684,11 @@
     }
 }
 
-<span class="doccomment">/// A command that moves the terminal cursor a given number of rows up.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that moves the terminal cursor a given number of rows up.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MoveUp</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -712,11 +712,11 @@
     }
 }
 
-<span class="doccomment">/// A command that moves the terminal cursor a given number of columns to the right.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that moves the terminal cursor a given number of columns to the right.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MoveRight</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -740,11 +740,11 @@
     }
 }
 
-<span class="doccomment">/// A command that moves the terminal cursor a given number of rows down.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that moves the terminal cursor a given number of rows down.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MoveDown</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -768,11 +768,11 @@
     }
 }
 
-<span class="doccomment">/// A command that moves the terminal cursor a given number of columns to the left.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that moves the terminal cursor a given number of columns to the left.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MoveLeft</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -796,14 +796,14 @@
     }
 }
 
-<span class="doccomment">/// A command that saves the current terminal cursor position.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See the [RestorePosition](./struct.RestorePosition.html) command.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - The cursor position is stored globally.</span>
-<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that saves the current terminal cursor position.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See the [RestorePosition](./struct.RestorePosition.html) command.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - The cursor position is stored globally.</span>
+<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SavePosition</span>;
 
@@ -821,14 +821,14 @@
     }
 }
 
-<span class="doccomment">/// A command that restores the saved terminal cursor position.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See the [SavePosition](./struct.SavePosition.html) command.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - The cursor position is stored globally.</span>
-<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that restores the saved terminal cursor position.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See the [SavePosition](./struct.SavePosition.html) command.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - The cursor position is stored globally.</span>
+<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RestorePosition</span>;
 
@@ -846,11 +846,11 @@
     }
 }
 
-<span class="doccomment">/// A command that hides the terminal cursor.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that hides the terminal cursor.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Hide</span>;
 
@@ -868,11 +868,11 @@
     }
 }
 
-<span class="doccomment">/// A command that shows the terminal cursor.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that shows the terminal cursor.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Show</span>;
 
@@ -890,12 +890,12 @@
     }
 }
 
-<span class="doccomment">/// A command that enables blinking of the terminal cursor.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - Windows versions lower than Windows 10 do not support this functionality.</span>
-<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that enables blinking of the terminal cursor.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - Windows versions lower than Windows 10 do not support this functionality.</span>
+<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EnableBlinking</span>;
 
@@ -913,12 +913,12 @@
     }
 }
 
-<span class="doccomment">/// A command that disables blinking of the terminal cursor.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - Windows versions lower than Windows 10 do not support this functionality.</span>
-<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that disables blinking of the terminal cursor.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - Windows versions lower than Windows 10 do not support this functionality.</span>
+<span class="doccomment">/// - Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DisableBlinking</span>;
 
@@ -961,7 +961,7 @@
         <span class="ident">position</span>, <span class="ident">MoveDown</span>, <span class="ident">MoveLeft</span>, <span class="ident">MoveRight</span>, <span class="ident">MoveTo</span>, <span class="ident">MoveUp</span>, <span class="ident">RestorePosition</span>, <span class="ident">SavePosition</span>,
     };
 
-    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
+    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">ignore</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_move_to</span>() {
@@ -974,7 +974,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">position</span>().<span class="ident">unwrap</span>(), (<span class="ident">saved_x</span>, <span class="ident">saved_y</span>));
     }
 
-    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
+    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">ignore</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_move_right</span>() {
@@ -983,7 +983,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">position</span>().<span class="ident">unwrap</span>(), (<span class="ident">saved_x</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">saved_y</span>));
     }
 
-    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
+    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">ignore</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_move_left</span>() {
@@ -991,7 +991,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">position</span>().<span class="ident">unwrap</span>(), (<span class="number">0</span>, <span class="number">0</span>));
     }
 
-    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
+    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">ignore</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_move_up</span>() {
@@ -999,7 +999,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">position</span>().<span class="ident">unwrap</span>(), (<span class="number">0</span>, <span class="number">0</span>));
     }
 
-    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
+    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">ignore</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_move_down</span>() {
@@ -1008,7 +1008,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">position</span>().<span class="ident">unwrap</span>(), (<span class="number">0</span>, <span class="number">2</span>));
     }
 
-    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
+    <span class="comment">// Test is disabled, because it&#39;s failing on Travis</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">ignore</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_save_restore_position</span>() {

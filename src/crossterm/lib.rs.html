@@ -261,235 +261,235 @@
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">unused_imports</span>, <span class="ident">unused_must_use</span>)]</span>
 
-<span class="doccomment">//! # Crossterm</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Have you ever been disappointed when a terminal library for rust was only written for UNIX systems?</span>
-<span class="doccomment">//! Crossterm provides clearing, event (input) handling, styling, cursor movement, and terminal actions for both</span>
-<span class="doccomment">//! Windows and UNIX systems.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Crossterm aims to be simple and easy to call in code. Through the simplicity of Crossterm, you do not</span>
-<span class="doccomment">//! have to worry about the platform you are working with.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This crate supports all UNIX and Windows terminals down to Windows 7 (not all terminals are tested</span>
-<span class="doccomment">//! see [Tested Terminals](https://github.com/crossterm-rs/crossterm#tested-terminals)</span>
-<span class="doccomment">//! for more info).</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Command API</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The command API makes the use of `crossterm` much easier and offers more control over when and how a</span>
-<span class="doccomment">//! command is executed. A command is just an action you can perform on the terminal e.g. cursor movement.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The command API offers:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * Better Performance.</span>
-<span class="doccomment">//! * Complete control over when to flush.</span>
-<span class="doccomment">//! * Complete control over where the ANSI escape commands are executed to.</span>
-<span class="doccomment">//! * Way easier and nicer API.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! There are two ways to use the API command:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * Functions can execute commands on types that implement Write. Functions are easier to use and debug.</span>
-<span class="doccomment">//!   There is a disadvantage, and that is that there is a boilerplate code involved.</span>
-<span class="doccomment">//! * Macros are generally seen as more difficult and aren&#39;t always well supported by editors but offer an API with less boilerplate code. If you are</span>
-<span class="doccomment">//!   not afraid of macros, this is a recommendation.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Linux and Windows 10 systems support ANSI escape codes. Those ANSI escape codes are strings or rather a</span>
-<span class="doccomment">//! byte sequence. When we `write` and `flush` those to the terminal we can perform some action.</span>
-<span class="doccomment">//! For older windows systems a WinApi call is made.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Supported Commands</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - Module [`cursor`](cursor/index.html)</span>
-<span class="doccomment">//!   - Visibility - [`Show`](cursor/struct.Show.html), [`Hide`](cursor/struct.Hide.html)</span>
-<span class="doccomment">//!   - Appearance - [`EnableBlinking`](cursor/struct.EnableBlinking.html),</span>
-<span class="doccomment">//!     [`DisableBlinking`](cursor/struct.DisableBlinking.html)</span>
-<span class="doccomment">//!   - Position -</span>
-<span class="doccomment">//!     [`SavePosition`](cursor/struct.SavePosition.html), [`RestorePosition`](cursor/struct.RestorePosition.html),</span>
-<span class="doccomment">//!     [`MoveUp`](cursor/struct.MoveUp.html), [`MoveDown`](cursor/struct.MoveDown.html),</span>
-<span class="doccomment">//!     [`MoveLeft`](cursor/struct.MoveLeft.html), [`MoveRight`](cursor/struct.MoveRight.html),</span>
-<span class="doccomment">//!     [`MoveTo`](cursor/struct.MoveTo.html), [`MoveToColumn`](cursor/struct.MoveToColumn.html),</span>
-<span class="doccomment">//!     [`MoveToNextLine`](cursor/struct.MoveToNextLine.html), [`MoveToPreviousLine`](cursor/struct.MoveToPreviousLine.html),</span>
-<span class="doccomment">//! - Module [`event`](event/index.html)</span>
-<span class="doccomment">//!   - Mouse events - [`EnableMouseCapture`](event/struct.EnableMouseCapture.html),</span>
-<span class="doccomment">//!     [`DisableMouseCapture`](event/struct.DisableMouseCapture.html)</span>
-<span class="doccomment">//! - Module [`style`](style/index.html)</span>
-<span class="doccomment">//!   - Colors - [`SetForegroundColor`](style/struct.SetForegroundColor.html),</span>
-<span class="doccomment">//!     [`SetBackgroundColor`](style/struct.SetBackgroundColor.html),</span>
-<span class="doccomment">//!     [`ResetColor`](style/struct.ResetColor.html), [`SetColors`](style/struct.SetColors.html)</span>
-<span class="doccomment">//!   - Attributes - [`SetAttribute`](style/struct.SetAttribute.html), [`SetAttributes`](style/struct.SetAttributes.html),</span>
-<span class="doccomment">//!     [`PrintStyledContent`](style/struct.PrintStyledContent.html)</span>
-<span class="doccomment">//! - Module [`terminal`](terminal/index.html)</span>
-<span class="doccomment">//!   - Scrolling - [`ScrollUp`](terminal/struct.ScrollUp.html),</span>
-<span class="doccomment">//!     [`ScrollDown`](terminal/struct.ScrollDown.html)</span>
-<span class="doccomment">//!   - Miscellaneous - [`Clear`](terminal/struct.Clear.html),</span>
-<span class="doccomment">//!     [`SetSize`](terminal/struct.SetSize.html)</span>
-<span class="doccomment">//!     [`SetTitle`](terminal/struct.SetTitle.html)</span>
-<span class="doccomment">//!     [`DisableLineWrap`](terminal/struct.DisableLineWrap.html)</span>
-<span class="doccomment">//!     [`EnableLineWrap`](terminal/struct.EnableLineWrap.html)</span>
-<span class="doccomment">//!   - Alternate screen - [`EnterAlternateScreen`](terminal/struct.EnterAlternateScreen.html),</span>
-<span class="doccomment">//!     [`LeaveAlternateScreen`](terminal/struct.LeaveAlternateScreen.html)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Command Execution</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! There are two different ways to execute commands:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * [Lazy Execution](#lazy-execution)</span>
-<span class="doccomment">//! * [Direct Execution](#direct-execution)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! #### Lazy Execution</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Flushing bytes to the terminal buffer is a heavy system call. If we perform a lot of actions with the terminal,</span>
-<span class="doccomment">//! we want to do this periodically - like with a TUI editor - so that we can flush more data to the terminal buffer</span>
-<span class="doccomment">//! at the same time.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Crossterm offers the possibility to do this with `queue`.</span>
-<span class="doccomment">//! With `queue` you can queue commands, and when you call [Write::flush][flush] these commands will be executed.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! You can pass a custom buffer implementing [std::io::Write][write] to this `queue` operation.</span>
-<span class="doccomment">//! The commands will be executed on that buffer.</span>
-<span class="doccomment">//! The most common buffer is [std::io::stdout][stdout] however, [std::io::stderr][stderr] is used sometimes as well.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ##### Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! A simple demonstration that shows the command API in action with cursor commands.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Functions:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{Write, stdout};</span>
-<span class="doccomment">//! use crossterm::{QueueableCommand, cursor};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! let mut stdout = stdout();</span>
-<span class="doccomment">//! stdout.queue(cursor::MoveTo(5,5));</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! // some other code ...</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! stdout.flush();</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The [queue](./trait.QueueableCommand.html) function returns itself, therefore you can use this to queue another</span>
-<span class="doccomment">//! command. Like `stdout.queue(Goto(5,5)).queue(Clear(ClearType::All))`.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Macros:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{Write, stdout};</span>
-<span class="doccomment">//! use crossterm::{queue, QueueableCommand, cursor};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! let mut stdout = stdout();</span>
-<span class="doccomment">//! queue!(stdout,  cursor::MoveTo(5, 5));</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! // some other code ...</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! // move operation is performed only if we flush the buffer.</span>
-<span class="doccomment">//! stdout.flush();</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! You can pass more than one command into the [queue](./macro.queue.html) macro like</span>
-<span class="doccomment">//! `queue!(stdout, MoveTo(5, 5), Clear(ClearType::All))` and</span>
-<span class="doccomment">//! they will be executed in the given order from left to right.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! #### Direct Execution</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! For many applications it is not at all important to be efficient with &#39;flush&#39; operations.</span>
-<span class="doccomment">//! For this use case there is the `execute` operation.</span>
-<span class="doccomment">//! This operation executes the command immediately, and calls the `flush` under water.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! You can pass a custom buffer implementing [std::io::Write][write] to this `execute` operation.</span>
-<span class="doccomment">//! The commands will be executed on that buffer.</span>
-<span class="doccomment">//! The most common buffer is [std::io::stdout][stdout] however, [std::io::stderr][stderr] is used sometimes as well.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ##### Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Functions:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{Write, stdout};</span>
-<span class="doccomment">//! use crossterm::{ExecutableCommand, cursor};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! let mut stdout = stdout();</span>
-<span class="doccomment">//! stdout.execute(cursor::MoveTo(5,5));</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//! The [execute](./trait.ExecutableCommand.html) function returns itself, therefore you can use this to queue</span>
-<span class="doccomment">//! another command. Like `stdout.queue(Goto(5,5)).queue(Clear(ClearType::All))`.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Macros:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{Write, stdout};</span>
-<span class="doccomment">//! use crossterm::{execute, ExecutableCommand, cursor};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! let mut stdout = stdout();</span>
-<span class="doccomment">//! execute!(stdout, cursor::MoveTo(5, 5));</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//! You can pass more than one command into the [execute](./macro.execute.html) macro like</span>
-<span class="doccomment">//! `execute!(stdout, MoveTo(5, 5), Clear(ClearType::All))` and they will be executed in the given order from</span>
-<span class="doccomment">//! left to right.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Print a rectangle colored with magenta and use both direct execution and lazy execution.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Functions:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{stdout, Write};</span>
-<span class="doccomment">//! use crossterm::{</span>
-<span class="doccomment">//!     ExecutableCommand, QueueableCommand,</span>
-<span class="doccomment">//!     terminal, cursor, style::{self, Colorize}, Result</span>
-<span class="doccomment">//! };</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">//!   let mut stdout = stdout();</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!   stdout.execute(terminal::Clear(terminal::ClearType::All))?;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!   for y in 0..40 {</span>
-<span class="doccomment">//!     for x in 0..150 {</span>
-<span class="doccomment">//!       if (y == 0 || y == 40 - 1) || (x == 0 || x == 150 - 1) {</span>
-<span class="doccomment">//!         // in this loop we are more efficient by not flushing the buffer.</span>
-<span class="doccomment">//!         stdout</span>
-<span class="doccomment">//!           .queue(cursor::MoveTo(x,y))?</span>
-<span class="doccomment">//!           .queue(style::PrintStyledContent( &quot;█&quot;.magenta()))?;</span>
-<span class="doccomment">//!       }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//!   }</span>
-<span class="doccomment">//!   stdout.flush()?;</span>
-<span class="doccomment">//!   Ok(())</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Macros:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{stdout, Write};</span>
-<span class="doccomment">//! use crossterm::{</span>
-<span class="doccomment">//!     execute, queue,</span>
-<span class="doccomment">//!     style::{self, Colorize}, cursor, terminal, Result</span>
-<span class="doccomment">//! };</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">//!   let mut stdout = stdout();</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!   execute!(stdout, terminal::Clear(terminal::ClearType::All))?;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!   for y in 0..40 {</span>
-<span class="doccomment">//!     for x in 0..150 {</span>
-<span class="doccomment">//!       if (y == 0 || y == 40 - 1) || (x == 0 || x == 150 - 1) {</span>
-<span class="doccomment">//!         // in this loop we are more efficient by not flushing the buffer.</span>
-<span class="doccomment">//!         queue!(stdout, cursor::MoveTo(x,y), style::PrintStyledContent( &quot;█&quot;.magenta()))?;</span>
-<span class="doccomment">//!       }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//!   }</span>
-<span class="doccomment">//!   stdout.flush()?;</span>
-<span class="doccomment">//!   Ok(())</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [write]: https://doc.rust-lang.org/std/io/trait.Write.html</span>
-<span class="doccomment">//! [stdout]: https://doc.rust-lang.org/std/io/fn.stdout.html</span>
-<span class="doccomment">//! [stderr]: https://doc.rust-lang.org/std/io/fn.stderr.html</span>
-<span class="doccomment">//! [flush]: https://doc.rust-lang.org/std/io/trait.Write.html#tymethod.flush</span>
+<span class="doccomment">//! # Crossterm</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Have you ever been disappointed when a terminal library for rust was only written for UNIX systems?</span>
+<span class="doccomment">//! Crossterm provides clearing, event (input) handling, styling, cursor movement, and terminal actions for both</span>
+<span class="doccomment">//! Windows and UNIX systems.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Crossterm aims to be simple and easy to call in code. Through the simplicity of Crossterm, you do not</span>
+<span class="doccomment">//! have to worry about the platform you are working with.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This crate supports all UNIX and Windows terminals down to Windows 7 (not all terminals are tested</span>
+<span class="doccomment">//! see [Tested Terminals](https://github.com/crossterm-rs/crossterm#tested-terminals)</span>
+<span class="doccomment">//! for more info).</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Command API</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The command API makes the use of `crossterm` much easier and offers more control over when and how a</span>
+<span class="doccomment">//! command is executed. A command is just an action you can perform on the terminal e.g. cursor movement.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The command API offers:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * Better Performance.</span>
+<span class="doccomment">//! * Complete control over when to flush.</span>
+<span class="doccomment">//! * Complete control over where the ANSI escape commands are executed to.</span>
+<span class="doccomment">//! * Way easier and nicer API.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! There are two ways to use the API command:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * Functions can execute commands on types that implement Write. Functions are easier to use and debug.</span>
+<span class="doccomment">//!   There is a disadvantage, and that is that there is a boilerplate code involved.</span>
+<span class="doccomment">//! * Macros are generally seen as more difficult and aren&#39;t always well supported by editors but offer an API with less boilerplate code. If you are</span>
+<span class="doccomment">//!   not afraid of macros, this is a recommendation.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Linux and Windows 10 systems support ANSI escape codes. Those ANSI escape codes are strings or rather a</span>
+<span class="doccomment">//! byte sequence. When we `write` and `flush` those to the terminal we can perform some action.</span>
+<span class="doccomment">//! For older windows systems a WinApi call is made.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ### Supported Commands</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - Module [`cursor`](cursor/index.html)</span>
+<span class="doccomment">//!   - Visibility - [`Show`](cursor/struct.Show.html), [`Hide`](cursor/struct.Hide.html)</span>
+<span class="doccomment">//!   - Appearance - [`EnableBlinking`](cursor/struct.EnableBlinking.html),</span>
+<span class="doccomment">//!     [`DisableBlinking`](cursor/struct.DisableBlinking.html)</span>
+<span class="doccomment">//!   - Position -</span>
+<span class="doccomment">//!     [`SavePosition`](cursor/struct.SavePosition.html), [`RestorePosition`](cursor/struct.RestorePosition.html),</span>
+<span class="doccomment">//!     [`MoveUp`](cursor/struct.MoveUp.html), [`MoveDown`](cursor/struct.MoveDown.html),</span>
+<span class="doccomment">//!     [`MoveLeft`](cursor/struct.MoveLeft.html), [`MoveRight`](cursor/struct.MoveRight.html),</span>
+<span class="doccomment">//!     [`MoveTo`](cursor/struct.MoveTo.html), [`MoveToColumn`](cursor/struct.MoveToColumn.html),</span>
+<span class="doccomment">//!     [`MoveToNextLine`](cursor/struct.MoveToNextLine.html), [`MoveToPreviousLine`](cursor/struct.MoveToPreviousLine.html),</span>
+<span class="doccomment">//! - Module [`event`](event/index.html)</span>
+<span class="doccomment">//!   - Mouse events - [`EnableMouseCapture`](event/struct.EnableMouseCapture.html),</span>
+<span class="doccomment">//!     [`DisableMouseCapture`](event/struct.DisableMouseCapture.html)</span>
+<span class="doccomment">//! - Module [`style`](style/index.html)</span>
+<span class="doccomment">//!   - Colors - [`SetForegroundColor`](style/struct.SetForegroundColor.html),</span>
+<span class="doccomment">//!     [`SetBackgroundColor`](style/struct.SetBackgroundColor.html),</span>
+<span class="doccomment">//!     [`ResetColor`](style/struct.ResetColor.html), [`SetColors`](style/struct.SetColors.html)</span>
+<span class="doccomment">//!   - Attributes - [`SetAttribute`](style/struct.SetAttribute.html), [`SetAttributes`](style/struct.SetAttributes.html),</span>
+<span class="doccomment">//!     [`PrintStyledContent`](style/struct.PrintStyledContent.html)</span>
+<span class="doccomment">//! - Module [`terminal`](terminal/index.html)</span>
+<span class="doccomment">//!   - Scrolling - [`ScrollUp`](terminal/struct.ScrollUp.html),</span>
+<span class="doccomment">//!     [`ScrollDown`](terminal/struct.ScrollDown.html)</span>
+<span class="doccomment">//!   - Miscellaneous - [`Clear`](terminal/struct.Clear.html),</span>
+<span class="doccomment">//!     [`SetSize`](terminal/struct.SetSize.html)</span>
+<span class="doccomment">//!     [`SetTitle`](terminal/struct.SetTitle.html)</span>
+<span class="doccomment">//!     [`DisableLineWrap`](terminal/struct.DisableLineWrap.html)</span>
+<span class="doccomment">//!     [`EnableLineWrap`](terminal/struct.EnableLineWrap.html)</span>
+<span class="doccomment">//!   - Alternate screen - [`EnterAlternateScreen`](terminal/struct.EnterAlternateScreen.html),</span>
+<span class="doccomment">//!     [`LeaveAlternateScreen`](terminal/struct.LeaveAlternateScreen.html)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ### Command Execution</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! There are two different ways to execute commands:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * [Lazy Execution](#lazy-execution)</span>
+<span class="doccomment">//! * [Direct Execution](#direct-execution)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! #### Lazy Execution</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Flushing bytes to the terminal buffer is a heavy system call. If we perform a lot of actions with the terminal,</span>
+<span class="doccomment">//! we want to do this periodically - like with a TUI editor - so that we can flush more data to the terminal buffer</span>
+<span class="doccomment">//! at the same time.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Crossterm offers the possibility to do this with `queue`.</span>
+<span class="doccomment">//! With `queue` you can queue commands, and when you call [Write::flush][flush] these commands will be executed.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! You can pass a custom buffer implementing [std::io::Write][write] to this `queue` operation.</span>
+<span class="doccomment">//! The commands will be executed on that buffer.</span>
+<span class="doccomment">//! The most common buffer is [std::io::stdout][stdout] however, [std::io::stderr][stderr] is used sometimes as well.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ##### Examples</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! A simple demonstration that shows the command API in action with cursor commands.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Functions:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::io::{Write, stdout};</span>
+<span class="doccomment">//! use crossterm::{QueueableCommand, cursor};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! let mut stdout = stdout();</span>
+<span class="doccomment">//! stdout.queue(cursor::MoveTo(5,5));</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! // some other code ...</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! stdout.flush();</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The [queue](./trait.QueueableCommand.html) function returns itself, therefore you can use this to queue another</span>
+<span class="doccomment">//! command. Like `stdout.queue(Goto(5,5)).queue(Clear(ClearType::All))`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Macros:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::io::{Write, stdout};</span>
+<span class="doccomment">//! use crossterm::{queue, QueueableCommand, cursor};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! let mut stdout = stdout();</span>
+<span class="doccomment">//! queue!(stdout,  cursor::MoveTo(5, 5));</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! // some other code ...</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! // move operation is performed only if we flush the buffer.</span>
+<span class="doccomment">//! stdout.flush();</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! You can pass more than one command into the [queue](./macro.queue.html) macro like</span>
+<span class="doccomment">//! `queue!(stdout, MoveTo(5, 5), Clear(ClearType::All))` and</span>
+<span class="doccomment">//! they will be executed in the given order from left to right.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! #### Direct Execution</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! For many applications it is not at all important to be efficient with &#39;flush&#39; operations.</span>
+<span class="doccomment">//! For this use case there is the `execute` operation.</span>
+<span class="doccomment">//! This operation executes the command immediately, and calls the `flush` under water.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! You can pass a custom buffer implementing [std::io::Write][write] to this `execute` operation.</span>
+<span class="doccomment">//! The commands will be executed on that buffer.</span>
+<span class="doccomment">//! The most common buffer is [std::io::stdout][stdout] however, [std::io::stderr][stderr] is used sometimes as well.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ##### Examples</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Functions:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::io::{Write, stdout};</span>
+<span class="doccomment">//! use crossterm::{ExecutableCommand, cursor};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! let mut stdout = stdout();</span>
+<span class="doccomment">//! stdout.execute(cursor::MoveTo(5,5));</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//! The [execute](./trait.ExecutableCommand.html) function returns itself, therefore you can use this to queue</span>
+<span class="doccomment">//! another command. Like `stdout.queue(Goto(5,5)).queue(Clear(ClearType::All))`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Macros:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::io::{Write, stdout};</span>
+<span class="doccomment">//! use crossterm::{execute, ExecutableCommand, cursor};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! let mut stdout = stdout();</span>
+<span class="doccomment">//! execute!(stdout, cursor::MoveTo(5, 5));</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//! You can pass more than one command into the [execute](./macro.execute.html) macro like</span>
+<span class="doccomment">//! `execute!(stdout, MoveTo(5, 5), Clear(ClearType::All))` and they will be executed in the given order from</span>
+<span class="doccomment">//! left to right.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Examples</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Print a rectangle colored with magenta and use both direct execution and lazy execution.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Functions:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::io::{stdout, Write};</span>
+<span class="doccomment">//! use crossterm::{</span>
+<span class="doccomment">//!     ExecutableCommand, QueueableCommand,</span>
+<span class="doccomment">//!     terminal, cursor, style::{self, Colorize}, Result</span>
+<span class="doccomment">//! };</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
+<span class="doccomment">//!   let mut stdout = stdout();</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!   stdout.execute(terminal::Clear(terminal::ClearType::All))?;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!   for y in 0..40 {</span>
+<span class="doccomment">//!     for x in 0..150 {</span>
+<span class="doccomment">//!       if (y == 0 || y == 40 - 1) || (x == 0 || x == 150 - 1) {</span>
+<span class="doccomment">//!         // in this loop we are more efficient by not flushing the buffer.</span>
+<span class="doccomment">//!         stdout</span>
+<span class="doccomment">//!           .queue(cursor::MoveTo(x,y))?</span>
+<span class="doccomment">//!           .queue(style::PrintStyledContent( &quot;█&quot;.magenta()))?;</span>
+<span class="doccomment">//!       }</span>
+<span class="doccomment">//!     }</span>
+<span class="doccomment">//!   }</span>
+<span class="doccomment">//!   stdout.flush()?;</span>
+<span class="doccomment">//!   Ok(())</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Macros:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::io::{stdout, Write};</span>
+<span class="doccomment">//! use crossterm::{</span>
+<span class="doccomment">//!     execute, queue,</span>
+<span class="doccomment">//!     style::{self, Colorize}, cursor, terminal, Result</span>
+<span class="doccomment">//! };</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
+<span class="doccomment">//!   let mut stdout = stdout();</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!   execute!(stdout, terminal::Clear(terminal::ClearType::All))?;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!   for y in 0..40 {</span>
+<span class="doccomment">//!     for x in 0..150 {</span>
+<span class="doccomment">//!       if (y == 0 || y == 40 - 1) || (x == 0 || x == 150 - 1) {</span>
+<span class="doccomment">//!         // in this loop we are more efficient by not flushing the buffer.</span>
+<span class="doccomment">//!         queue!(stdout, cursor::MoveTo(x,y), style::PrintStyledContent( &quot;█&quot;.magenta()))?;</span>
+<span class="doccomment">//!       }</span>
+<span class="doccomment">//!     }</span>
+<span class="doccomment">//!   }</span>
+<span class="doccomment">//!   stdout.flush()?;</span>
+<span class="doccomment">//!   Ok(())</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//!```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! [write]: https://doc.rust-lang.org/std/io/trait.Write.html</span>
+<span class="doccomment">//! [stdout]: https://doc.rust-lang.org/std/io/fn.stdout.html</span>
+<span class="doccomment">//! [stderr]: https://doc.rust-lang.org/std/io/fn.stderr.html</span>
+<span class="doccomment">//! [flush]: https://doc.rust-lang.org/std/io/trait.Write.html#tymethod.flush</span>
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">ansi</span>::<span class="ident">Ansi</span>,
@@ -497,21 +497,21 @@
     <span class="ident">error</span>::{<span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span>},
 };
 
-<span class="doccomment">/// A module to work with the terminal cursor</span>
+<span class="doccomment">/// A module to work with the terminal cursor</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">cursor</span>;
-<span class="doccomment">/// A module to read events.</span>
+<span class="doccomment">/// A module to read events.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">event</span>;
-<span class="doccomment">/// A module to apply attributes and colors on your text.</span>
+<span class="doccomment">/// A module to apply attributes and colors on your text.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">style</span>;
-<span class="doccomment">/// A module to work with the terminal.</span>
+<span class="doccomment">/// A module to work with the terminal.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">terminal</span>;
 
-<span class="doccomment">/// A module to query if the current instance is a tty.</span>
+<span class="doccomment">/// A module to query if the current instance is a tty.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tty</span>;
 
 <span class="kw">mod</span> <span class="ident">ansi</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-<span class="doccomment">/// A module that exposes one function to check if the current terminal supports ansi sequences.</span>
+<span class="doccomment">/// A module that exposes one function to check if the current terminal supports ansi sequences.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ansi_support</span>;
 <span class="kw">mod</span> <span class="ident">command</span>;
 <span class="kw">mod</span> <span class="ident">error</span>;

@@ -428,88 +428,88 @@
 <span id="425">425</span>
 <span id="426">426</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! # Terminal</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The `terminal` module provides functionality to work with the terminal.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This documentation does not contain a lot of examples. The reason is that it&#39;s fairly</span>
-<span class="doccomment">//! obvious how to use this crate. Although, we do provide</span>
-<span class="doccomment">//! [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) repository</span>
-<span class="doccomment">//! to demonstrate the capabilities.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Most terminal actions can be performed with commands.</span>
-<span class="doccomment">//! Please have a look at [command documentation](../index.html#command-api) for a more detailed documentation.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Screen Buffer</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! A screen buffer is a two-dimensional array of character</span>
-<span class="doccomment">//! and color data which is displayed in a terminal screen.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The terminal has several of those buffers and is able to switch between them.</span>
-<span class="doccomment">//! The default screen in which you work is called the &#39;main screen&#39;.</span>
-<span class="doccomment">//! The other screens are called the &#39;alternative screen&#39;.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! It is important to understand that crossterm does not yet support creating screens,</span>
-<span class="doccomment">//! or switch between more than two buffers, and only offers the ability to change</span>
-<span class="doccomment">//! between the &#39;alternate&#39; and &#39;main screen&#39;.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Alternate Screen</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! By default, you will be working on the main screen.</span>
-<span class="doccomment">//! There is also another screen called the &#39;alternative&#39; screen.</span>
-<span class="doccomment">//! This screen is slightly different from the main screen.</span>
-<span class="doccomment">//! For example, it has the exact dimensions of the terminal window,</span>
-<span class="doccomment">//! without any scroll-back area.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Crossterm offers the possibility to switch to the &#39;alternative&#39; screen,</span>
-<span class="doccomment">//! make some modifications, and move back to the &#39;main&#39; screen again.</span>
-<span class="doccomment">//! The main screen will stay intact and will have the original data as we performed all</span>
-<span class="doccomment">//! operations on the alternative screen.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! An good example of this is Vim.</span>
-<span class="doccomment">//! When it is launched from bash, a whole new buffer is used to modify a file.</span>
-<span class="doccomment">//! Then, when the modification is finished, it closes again and continues on the main screen.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Raw Mode</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! By default, the terminal functions in a certain way.</span>
-<span class="doccomment">//! For example, it will move the cursor to the beginning of the next line when the input hits the end of a line.</span>
-<span class="doccomment">//! Or that the backspace is interpreted for character removal.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Sometimes these default modes are irrelevant,</span>
-<span class="doccomment">//! and in this case, we can turn them off.</span>
-<span class="doccomment">//! This is what happens when you enable raw modes.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Those modes will be set when enabling raw modes:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - Input will not be forwarded to screen</span>
-<span class="doccomment">//! - Input will not be processed on enter press</span>
-<span class="doccomment">//! - Input will not be line buffered (input sent byte-by-byte to input buffer)</span>
-<span class="doccomment">//! - Special keys like backspace and CTL+C will not be processed by terminal driver</span>
-<span class="doccomment">//! - New line character will not be processed therefore `println!` can&#39;t be used, use `write!` instead</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{stdout, Write};</span>
-<span class="doccomment">//! use crossterm::{execute, Result, terminal::{ScrollUp, SetSize, size}};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">//!     let (cols, rows) = size()?;</span>
-<span class="doccomment">//!     // Resize terminal and scroll up.</span>
-<span class="doccomment">//!     execute!(</span>
-<span class="doccomment">//!         stdout(),</span>
-<span class="doccomment">//!         SetSize(10, 10),</span>
-<span class="doccomment">//!         ScrollUp(5)</span>
-<span class="doccomment">//!     )?;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!     // Be a good citizen, cleanup</span>
-<span class="doccomment">//!     execute!(stdout(), SetSize(cols, rows))?;</span>
-<span class="doccomment">//!     Ok(())</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! For manual execution control check out [crossterm::queue](../macro.queue.html).</span>
+<span class="doccomment">//! # Terminal</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The `terminal` module provides functionality to work with the terminal.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This documentation does not contain a lot of examples. The reason is that it&#39;s fairly</span>
+<span class="doccomment">//! obvious how to use this crate. Although, we do provide</span>
+<span class="doccomment">//! [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) repository</span>
+<span class="doccomment">//! to demonstrate the capabilities.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Most terminal actions can be performed with commands.</span>
+<span class="doccomment">//! Please have a look at [command documentation](../index.html#command-api) for a more detailed documentation.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Screen Buffer</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! A screen buffer is a two-dimensional array of character</span>
+<span class="doccomment">//! and color data which is displayed in a terminal screen.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The terminal has several of those buffers and is able to switch between them.</span>
+<span class="doccomment">//! The default screen in which you work is called the &#39;main screen&#39;.</span>
+<span class="doccomment">//! The other screens are called the &#39;alternative screen&#39;.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! It is important to understand that crossterm does not yet support creating screens,</span>
+<span class="doccomment">//! or switch between more than two buffers, and only offers the ability to change</span>
+<span class="doccomment">//! between the &#39;alternate&#39; and &#39;main screen&#39;.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ### Alternate Screen</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! By default, you will be working on the main screen.</span>
+<span class="doccomment">//! There is also another screen called the &#39;alternative&#39; screen.</span>
+<span class="doccomment">//! This screen is slightly different from the main screen.</span>
+<span class="doccomment">//! For example, it has the exact dimensions of the terminal window,</span>
+<span class="doccomment">//! without any scroll-back area.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Crossterm offers the possibility to switch to the &#39;alternative&#39; screen,</span>
+<span class="doccomment">//! make some modifications, and move back to the &#39;main&#39; screen again.</span>
+<span class="doccomment">//! The main screen will stay intact and will have the original data as we performed all</span>
+<span class="doccomment">//! operations on the alternative screen.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! An good example of this is Vim.</span>
+<span class="doccomment">//! When it is launched from bash, a whole new buffer is used to modify a file.</span>
+<span class="doccomment">//! Then, when the modification is finished, it closes again and continues on the main screen.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ### Raw Mode</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! By default, the terminal functions in a certain way.</span>
+<span class="doccomment">//! For example, it will move the cursor to the beginning of the next line when the input hits the end of a line.</span>
+<span class="doccomment">//! Or that the backspace is interpreted for character removal.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Sometimes these default modes are irrelevant,</span>
+<span class="doccomment">//! and in this case, we can turn them off.</span>
+<span class="doccomment">//! This is what happens when you enable raw modes.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Those modes will be set when enabling raw modes:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - Input will not be forwarded to screen</span>
+<span class="doccomment">//! - Input will not be processed on enter press</span>
+<span class="doccomment">//! - Input will not be line buffered (input sent byte-by-byte to input buffer)</span>
+<span class="doccomment">//! - Special keys like backspace and CTL+C will not be processed by terminal driver</span>
+<span class="doccomment">//! - New line character will not be processed therefore `println!` can&#39;t be used, use `write!` instead</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Examples</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```no_run</span>
+<span class="doccomment">//! use std::io::{stdout, Write};</span>
+<span class="doccomment">//! use crossterm::{execute, Result, terminal::{ScrollUp, SetSize, size}};</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
+<span class="doccomment">//!     let (cols, rows) = size()?;</span>
+<span class="doccomment">//!     // Resize terminal and scroll up.</span>
+<span class="doccomment">//!     execute!(</span>
+<span class="doccomment">//!         stdout(),</span>
+<span class="doccomment">//!         SetSize(10, 10),</span>
+<span class="doccomment">//!         ScrollUp(5)</span>
+<span class="doccomment">//!     )?;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     // Be a good citizen, cleanup</span>
+<span class="doccomment">//!     execute!(stdout(), SetSize(cols, rows))?;</span>
+<span class="doccomment">//!     Ok(())</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! For manual execution control check out [crossterm::queue](../macro.queue.html).</span>
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
 <span class="kw">use</span> <span class="ident">crossterm_winapi</span>::{<span class="ident">ConsoleMode</span>, <span class="ident">Handle</span>, <span class="ident">ScreenBuffer</span>};
@@ -525,28 +525,28 @@
 <span class="kw">mod</span> <span class="ident">ansi</span>;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">sys</span>;
 
-<span class="doccomment">/// Enables raw mode.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Please have a look at the [raw mode](./#raw-mode) section.</span>
+<span class="doccomment">/// Enables raw mode.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Please have a look at the [raw mode](./#raw-mode) section.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enable_raw_mode</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">sys</span>::<span class="ident">enable_raw_mode</span>()
 }
 
-<span class="doccomment">/// Disables raw mode.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Please have a look at the [raw mode](./#raw-mode) section.</span>
+<span class="doccomment">/// Disables raw mode.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Please have a look at the [raw mode](./#raw-mode) section.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">disable_raw_mode</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">sys</span>::<span class="ident">disable_raw_mode</span>()
 }
 
-<span class="doccomment">/// Returns the terminal size `(columns, rows)`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The top left cell is represented `(1, 1)`.</span>
+<span class="doccomment">/// Returns the terminal size `(columns, rows)`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The top left cell is represented `(1, 1)`.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">u16</span>, <span class="ident">u16</span>)<span class="op">&gt;</span> {
     <span class="ident">sys</span>::<span class="ident">size</span>()
 }
 
-<span class="doccomment">/// Disables line wrapping.</span>
+<span class="doccomment">/// Disables line wrapping.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DisableLineWrap</span>;
 
@@ -567,7 +567,7 @@
     }
 }
 
-<span class="doccomment">/// Enable line wrapping.</span>
+<span class="doccomment">/// Enable line wrapping.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EnableLineWrap</span>;
 
@@ -588,28 +588,28 @@
     }
 }
 
-<span class="doccomment">/// A command that switches to alternate screen.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="doccomment">/// * Use [LeaveAlternateScreen](./struct.LeaveAlternateScreen.html) command to leave the entered alternate screen.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use std::io::{stdout, Write};</span>
-<span class="doccomment">/// use crossterm::{execute, Result, terminal::{EnterAlternateScreen, LeaveAlternateScreen}};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">///     execute!(stdout(), EnterAlternateScreen)?;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     // Do anything on the alternate screen</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     execute!(stdout(), LeaveAlternateScreen)</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
+<span class="doccomment">/// A command that switches to alternate screen.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// * Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// * Use [LeaveAlternateScreen](./struct.LeaveAlternateScreen.html) command to leave the entered alternate screen.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```no_run</span>
+<span class="doccomment">/// use std::io::{stdout, Write};</span>
+<span class="doccomment">/// use crossterm::{execute, Result, terminal::{EnterAlternateScreen, LeaveAlternateScreen}};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// fn main() -&gt; Result&lt;()&gt; {</span>
+<span class="doccomment">///     execute!(stdout(), EnterAlternateScreen)?;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///     // Do anything on the alternate screen</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///     execute!(stdout(), LeaveAlternateScreen)</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EnterAlternateScreen</span>;
 
@@ -628,28 +628,28 @@
     }
 }
 
-<span class="doccomment">/// A command that switches back to the main screen.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="doccomment">/// * Use [EnterAlternateScreen](./struct.EnterAlternateScreen.html) to enter the alternate screen.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use std::io::{stdout, Write};</span>
-<span class="doccomment">/// use crossterm::{execute, Result, terminal::{EnterAlternateScreen, LeaveAlternateScreen}};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">///     execute!(stdout(), EnterAlternateScreen)?;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     // Do anything on the alternate screen</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     execute!(stdout(), LeaveAlternateScreen)</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
+<span class="doccomment">/// A command that switches back to the main screen.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// * Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// * Use [EnterAlternateScreen](./struct.EnterAlternateScreen.html) to enter the alternate screen.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```no_run</span>
+<span class="doccomment">/// use std::io::{stdout, Write};</span>
+<span class="doccomment">/// use crossterm::{execute, Result, terminal::{EnterAlternateScreen, LeaveAlternateScreen}};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// fn main() -&gt; Result&lt;()&gt; {</span>
+<span class="doccomment">///     execute!(stdout(), EnterAlternateScreen)?;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///     // Do anything on the alternate screen</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///     execute!(stdout(), LeaveAlternateScreen)</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LeaveAlternateScreen</span>;
 
@@ -668,27 +668,27 @@
     }
 }
 
-<span class="doccomment">/// Different ways to clear the terminal buffer.</span>
+<span class="doccomment">/// Different ways to clear the terminal buffer.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ClearType</span> {
-    <span class="doccomment">/// All cells.</span>
+    <span class="doccomment">/// All cells.</span>
     <span class="ident">All</span>,
-    <span class="doccomment">/// All cells from the cursor position downwards.</span>
+    <span class="doccomment">/// All cells from the cursor position downwards.</span>
     <span class="ident">FromCursorDown</span>,
-    <span class="doccomment">/// All cells from the cursor position upwards.</span>
+    <span class="doccomment">/// All cells from the cursor position upwards.</span>
     <span class="ident">FromCursorUp</span>,
-    <span class="doccomment">/// All cells at the cursor row.</span>
+    <span class="doccomment">/// All cells at the cursor row.</span>
     <span class="ident">CurrentLine</span>,
-    <span class="doccomment">/// All cells from the cursor position until the new line.</span>
+    <span class="doccomment">/// All cells from the cursor position until the new line.</span>
     <span class="ident">UntilNewLine</span>,
 }
 
-<span class="doccomment">/// A command that scrolls the terminal screen a given number of rows up.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that scrolls the terminal screen a given number of rows up.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ScrollUp</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -705,11 +705,11 @@
     }
 }
 
-<span class="doccomment">/// A command that scrolls the terminal screen a given number of rows down.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that scrolls the terminal screen a given number of rows down.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ScrollDown</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -726,13 +726,13 @@
     }
 }
 
-<span class="doccomment">/// A command that clears the terminal screen buffer.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See the [`ClearType`](enum.ClearType.html) enum.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that clears the terminal screen buffer.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// See the [`ClearType`](enum.ClearType.html) enum.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Clear</span>(<span class="kw">pub</span> <span class="ident">ClearType</span>);
 
@@ -755,11 +755,11 @@
     }
 }
 
-<span class="doccomment">/// A command that sets the terminal size `(columns, rows)`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that sets the terminal size `(columns, rows)`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetSize</span>(<span class="kw">pub</span> <span class="ident">u16</span>, <span class="kw">pub</span> <span class="ident">u16</span>);
 
@@ -776,11 +776,11 @@
     }
 }
 
-<span class="doccomment">/// A command that sets the terminal title</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
+<span class="doccomment">/// A command that sets the terminal title</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Notes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetTitle</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw">pub</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>);
 
@@ -813,7 +813,7 @@
 
     <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">size</span>, <span class="ident">SetSize</span>};
 
-    <span class="comment">// Test is disabled, because it&#39;s failing on Travis CI</span>
+    <span class="comment">// Test is disabled, because it&#39;s failing on Travis CI</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">ignore</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_resize_ansi</span>() {
@@ -823,15 +823,15 @@
 
         <span class="macro">execute</span><span class="macro">!</span>(<span class="ident">stdout</span>(), <span class="ident">SetSize</span>(<span class="number">35</span>, <span class="number">35</span>)).<span class="ident">unwrap</span>();
 
-        <span class="comment">// see issue: https://github.com/eminence/terminal-size/issues/11</span>
+        <span class="comment">// see issue: https://github.com/eminence/terminal-size/issues/11</span>
         <span class="ident">thread</span>::<span class="ident">sleep</span>(<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">30</span>));
 
         <span class="macro">assert_eq</span><span class="macro">!</span>((<span class="number">35</span>, <span class="number">35</span>), <span class="ident">size</span>().<span class="ident">unwrap</span>());
 
-        <span class="comment">// reset to previous size</span>
+        <span class="comment">// reset to previous size</span>
         <span class="macro">execute</span><span class="macro">!</span>(<span class="ident">stdout</span>(), <span class="ident">SetSize</span>(<span class="ident">width</span>, <span class="ident">height</span>)).<span class="ident">unwrap</span>();
 
-        <span class="comment">// see issue: https://github.com/eminence/terminal-size/issues/11</span>
+        <span class="comment">// see issue: https://github.com/eminence/terminal-size/issues/11</span>
         <span class="ident">thread</span>::<span class="ident">sleep</span>(<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">30</span>));
 
         <span class="macro">assert_eq</span><span class="macro">!</span>((<span class="ident">width</span>, <span class="ident">height</span>), <span class="ident">size</span>().<span class="ident">unwrap</span>());
@@ -843,7 +843,7 @@
             <span class="kw">if</span> <span class="macro">cfg</span><span class="macro">!</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;windows&quot;</span>) {
                 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ansi_support</span>::<span class="ident">set_virtual_terminal_processing</span>;
 
-                <span class="comment">// if it is not listed we should try with WinApi to check if we do support ANSI-codes.</span>
+                <span class="comment">// if it is not listed we should try with WinApi to check if we do support ANSI-codes.</span>
                 <span class="kw">match</span> <span class="ident">set_virtual_terminal_processing</span>(<span class="bool-val">true</span>) {
                     <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">true</span>,
                     <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">false</span>,

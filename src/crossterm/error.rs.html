@@ -52,7 +52,7 @@
 <span id="49">49</span>
 <span id="50">50</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! Module containing error handling logic.</span>
+<span class="doccomment">//! Module containing error handling logic.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Display</span>, <span class="ident">Formatter</span>},
@@ -61,10 +61,10 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">impl_from</span>;
 
-<span class="doccomment">/// The `crossterm` result type.</span>
+<span class="doccomment">/// The `crossterm` result type.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">ErrorKind</span><span class="op">&gt;</span>;
 
-<span class="doccomment">/// Wrapper for all errors that can occur in `crossterm`.</span>
+<span class="doccomment">/// Wrapper for all errors that can occur in `crossterm`.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorKind</span> {
