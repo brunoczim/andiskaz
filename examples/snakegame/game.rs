@@ -375,7 +375,7 @@ impl Game {
         let x = usize::from(self.bounds.max.x + 1 - self.bounds.min.x);
         let y = usize::from(self.bounds.max.y + 1 - self.bounds.min.y);
 
-        // Mean(x,y)/4
-        (x + y) / 8
+        // Mean(x,y)/2
+        (x + y) / 4
     }
 }

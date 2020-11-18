@@ -5,3 +5,9 @@ games
 # Docs
 
 https://brunoczim.github.io/andiskaz/andiskaz/
+
+# Example Snake Game
+
+See [this folder](./examples/snakegame/).
+
+![screenshot of snake game example](./examples/screenshot-snakegame.png)
