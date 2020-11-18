@@ -1,3 +1,6 @@
+//! This example implements the "snake game". It does not have a menu or
+//! anything like that. Arrows control the snake, ESC exits.
+
 mod plane;
 mod snake;
 mod food;
@@ -6,15 +9,22 @@ mod game;
 use crate::game::{EndKind, Game};
 use andiskaz::{
     color::{BasicColor, Color2},
+    coord::Coord2,
     emergency_restore,
     error::Error as AndiskazError,
     style::Style,
+    terminal,
     terminal::Terminal,
     tstring,
 };
 use backtrace::Backtrace;
 use std::{panic, process::exit, time::Duration};
 use tokio::time;
+
+/// Time interval between game ticks.
+const TICK: Duration = Duration::from_millis(70);
+/// Delay before waiting for a key.
+const WAIT_KEY_DELAY: Duration = Duration::from_millis(100);
 
 /// Asynchronous main of a tokio project.
 #[tokio::main]
@@ -27,8 +37,18 @@ async fn main() {
         eprintln!("{}\n{:?}", info, backtrace);
     }));
 
-    // Creates a terminal with default settings and run it.
-    let result = Terminal::run(term_main).await;
+    // Creates and runs a terminal with given settings.
+    let result = terminal::Builder::default()
+        // Interval between event polling.
+        .event_interval(WAIT_KEY_DELAY / 2)
+        // Minimum screen size.
+        .min_screen(Coord2 { x: 50, y: 20 })
+        // Interval between rendering frames.
+        .frame_time(TICK / 2)
+        // Runs.
+        .run(term_main)
+        .await;
+
     // If error, prints it out and exits with bad code.
     if let Ok(Err(error)) | Err(error) = result {
         eprintln!("{}", error);
@@ -38,40 +58,55 @@ async fn main() {
 
 /// The terminal main function.
 async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
-    let tick = Duration::from_millis(60);
+    // Initializes the game getting info from the given terminal.
     let game = Game::new(&mut terminal).await?;
-    let end_kind = game.run(&mut terminal, tick).await?;
+    // Runs the game and gets info on how it ended.
+    let end_kind = game.run(&mut terminal, TICK).await?;
 
     match end_kind {
+        // User cancelled (ESC)? Do nothing.
         EndKind::Cancel => (),
 
+        // User won. Print message.
         EndKind::Win => {
+            // Black foreground, green background.
             let colors = Color2 {
                 foreground: BasicColor::Black.into(),
                 background: BasicColor::LightGreen.into(),
             };
+            // Locks the screen. Attention. While locked, rendering is blocked.
             let mut screen = terminal.screen.lock().await?;
+            // Style for message. Centralized.
             let style = Style::with_colors(colors)
                 .align(1, 2)
                 .top_margin(screen.size().y / 2);
+            // Puts message.
             screen.styled_text(&tstring!["YOU WON!!"], style);
+            // IMPORTANT! Drops the locked screen so rendering don't block.
             drop(screen);
 
+            // Waits a key with a delay before waiting for the key.
             wait_key_delay(&mut terminal).await?;
         },
 
+        // User lost. Print message.
         EndKind::Loss => {
+            // Black foreground, red background.
             let colors = Color2 {
                 foreground: BasicColor::Black.into(),
                 background: BasicColor::LightRed.into(),
             };
+            // Locks the screen. Attention. While locked, rendering is blocked.
             let mut screen = terminal.screen.lock().await?;
+            // Style for message. Centralized.
             let style = Style::with_colors(colors)
                 .align(1, 2)
                 .top_margin(screen.size().y / 2);
             screen.styled_text(&tstring!["YOU LOST!!"], style);
+            // IMPORTANT! Drops the locked screen so rendering don't block.
             drop(screen);
 
+            // Waits a key with a delay before waiting for the key.
             wait_key_delay(&mut terminal).await?;
         },
     }
@@ -79,11 +114,17 @@ async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
     Ok(())
 }
 
+/// Waits for a key to be pressed. After an in-game event, the user might press
+/// a key thinking he still is in the game. There is some mental delay here. So,
+/// to compensate the mental delay, we wait a little before actually waiting for
+/// the key.
 async fn wait_key_delay(terminal: &mut Terminal) -> Result<(), AndiskazError> {
-    time::sleep(Duration::from_millis(100)).await;
+    // We have to wait before clearing the events handler.
+    time::sleep(WAIT_KEY_DELAY).await;
+    // Clears the events handler channel.
     terminal.events.check()?;
 
-    time::sleep(Duration::from_millis(500)).await;
+    // Waits for a key this time.
     terminal.events.listen().await?;
     Ok(())
 }
