@@ -142,8 +142,8 @@ impl Game {
 
         loop {
             // Locks for rendering. This MUST happen before checking for an
-            // event, so that we check for a resize event still valid when
-            // rendering.
+            // event, so that we check for a resize event that is still valid
+            // when rendering.
             let mut screen = terminal.screen.lock().await?;
             // Maybe an event.
             let event = terminal.events.check()?;
