@@ -133,17 +133,27 @@ impl Game {
     ) -> Result<EndKind, Error> {
         // Initializes the tick control.
         let mut interval = time::interval(tick);
+        // Locks for rendering.
+        let mut screen = terminal.screen.lock().await?;
         // First rendering.
-        self.render(terminal).await?;
+        self.render(&mut screen);
+        // Drops so we don't keep the lock.
+        drop(screen);
 
         loop {
+            // Locks for rendering. This MUST happen before checking for an
+            // event, so that we check for a resize event still valid when
+            // rendering.
+            let mut screen = terminal.screen.lock().await?;
             // Maybe an event.
             let event = terminal.events.check()?;
             // Processes the event in this tick. Possibly gets the end of the
             // game.
             let maybe_end = self.tick(event);
             // Even if we would stop right now, render.
-            self.render(terminal).await?;
+            self.render(&mut screen);
+            // Drops so we don't keep the lock.
+            drop(screen);
 
             if let Some(end) = maybe_end {
                 // Stops if the end of the game has been reached.
@@ -272,22 +282,18 @@ impl Game {
     }
 
     /// Renders all game data into the screen.
-    pub async fn render(&self, terminal: &Terminal) -> Result<(), Error> {
-        // Locks the screen.
-        let mut screen = terminal.screen.lock().await?;
+    fn render(&self, screen: &mut LockedScreen) {
         // Clears screen with black as background color.
         screen.clear(BasicColor::Black.into());
 
         // Renders the snake.
-        self.snake.render(&mut screen);
+        self.snake.render(screen);
         // Renders the food.
-        self.food.render(&mut screen);
+        self.food.render(screen);
         // Renders the borders.
-        self.render_borders(&mut screen);
+        self.render_borders(screen);
         // Renders the message above the borders.
-        self.render_message(&mut screen);
-
-        Ok(())
+        self.render_message(screen);
     }
 
     /// Renders the borders via the given locked screen.
