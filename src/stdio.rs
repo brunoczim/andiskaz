@@ -1,3 +1,6 @@
+//! This module exports utilities related to terminal's standard input and
+//! output at a raw level.
+
 use crossterm::Command;
 use std::{
     fmt,
@@ -11,27 +14,44 @@ use tokio::{
     sync::{Mutex, MutexGuard},
 };
 
+/// A centralized lock to a standard output handle.
 #[derive(Debug)]
 pub struct Stdout {
+    /// A lock to tokio's stdout.
     inner: Mutex<TokioStdout>,
 }
 
 impl Stdout {
+    /// Creates a new centralized stdout lock. You should NOT call this
+    /// function if there is already an active centralized lock to the Stdout.
+    /// You shouldn't also write to stdout through other means, such as
+    /// std's `println!`.
     pub fn new() -> Stdout {
         Self { inner: Mutex::new(io::stdout()) }
     }
 
+    /// Locks this centralized lock to the standard output, and acquire a locked
+    /// stdout.
     pub async fn lock<'stdout>(&'stdout self) -> LockedStdout<'stdout> {
         LockedStdout { guard: self.inner.lock().await }
     }
 
+    /// Tries to lock this centralized lock to the standard output, without
+    /// blocking, and acquire a locked stdout. Returns `None` if lock failed.
+    pub fn try_lock(&self) -> Option<LockedStdout> {
+        self.inner.try_lock().ok().map(|guard| LockedStdout { guard })
+    }
+
+    /// Locks the stdout and writes and flushes everything in the given buffer.
     pub async fn write_and_flush(&self, buf: &[u8]) -> Result<(), io::Error> {
         self.lock().await.write_and_flush(buf).await
     }
 }
 
+/// A locked standard output handle.
 #[derive(Debug)]
 pub struct LockedStdout<'stdout> {
+    /// Guard of tokio's Mutex.
     guard: MutexGuard<'stdout, TokioStdout>,
 }
 

@@ -296,7 +296,10 @@ impl<'screen> LockedScreen<'screen> {
             )?;
         }
 
-        self.screen.shared.stdout.write_and_flush(buf.as_bytes()).await?;
+        if let Some(mut stdout) = self.screen.shared.stdout.try_lock() {
+            stdout.write_and_flush(buf.as_bytes()).await?;
+        }
+
         self.buffer.next_tick();
 
         Ok(())
