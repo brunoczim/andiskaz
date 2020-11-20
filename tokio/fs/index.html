@@ -13,7 +13,7 @@ necessary, this allows the runtime to convert the current thread from a
 <em>worker</em> to a <em>backup</em> thread, where blocking is acceptable.</p>
 <h2 id="usage" class="section-header"><a href="#usage">Usage</a></h2>
 <p>Where possible, users should prefer the provided asynchronous-specific
-traits such as <a href="https://docs.rs/tokio-io/0.1/tokio_io/trait.AsyncRead.html"><code>AsyncRead</code></a>, or methods returning a <code>Future</code> or <code>Poll</code>
+traits such as <a href="../../tokio/io/trait.AsyncRead.html"><code>AsyncRead</code></a>, or methods returning a <code>Future</code> or <code>Poll</code>
 type. Adaptions also extend to traits like <code>std::io::Read</code> where methods
 return <code>std::io::Result</code>. Be warned that these adapted methods may return
 <code>std::io::ErrorKind::WouldBlock</code> if a <em>worker</em> thread can not be converted
@@ -29,7 +29,8 @@ to a <em>backup</em> thread immediately.</p>
 </td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
 <table><tr class="module-item"><td><a class="fn" href="fn.canonicalize.html" title="tokio::fs::canonicalize fn">canonicalize</a></td><td class="docblock-short"><p>Returns the canonical, absolute form of a path with all intermediate
 components normalized and symbolic links resolved.</p>
-</td></tr><tr class="module-item"><td><a class="fn" href="fn.copy.html" title="tokio::fs::copy fn">copy</a></td><td class="docblock-short"><p>Copies the contents of one file to another. This function will also copy the permission bits of the original file to the destination file.
+</td></tr><tr class="module-item"><td><a class="fn" href="fn.copy.html" title="tokio::fs::copy fn">copy</a></td><td class="docblock-short"><p>Copies the contents of one file to another. This function will also copy the permission bits
+of the original file to the destination file.
 This function will overwrite the contents of to.</p>
 </td></tr><tr class="module-item"><td><a class="fn" href="fn.create_dir.html" title="tokio::fs::create_dir fn">create_dir</a></td><td class="docblock-short"><p>Creates a new, empty directory at the provided path</p>
 </td></tr><tr class="module-item"><td><a class="fn" href="fn.create_dir_all.html" title="tokio::fs::create_dir_all fn">create_dir_all</a></td><td class="docblock-short"><p>Recursively creates a directory and all of its parent components if they
