@@ -352,6 +352,12 @@
 <span id="349">349</span>
 <span id="350">350</span>
 <span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This module defines a locked screen type, to directly access the screen</span>
 <span class="doccomment">//! buffer.</span>
@@ -601,7 +607,13 @@
         <span class="ident">stdout</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">LockedStdout</span><span class="op">&lt;</span><span class="lifetime">&#39;screen</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
-            <span class="string">&quot;{}&quot;</span>,
+            <span class="string">&quot;{}{}{}&quot;</span>,
+            <span class="ident">crossterm</span>::<span class="ident">style</span>::<span class="ident">SetForegroundColor</span>(
+                <span class="ident">crossterm</span>::<span class="ident">style</span>::<span class="ident">Color</span>::<span class="ident">White</span>
+            ),
+            <span class="ident">crossterm</span>::<span class="ident">style</span>::<span class="ident">SetBackgroundColor</span>(
+                <span class="ident">crossterm</span>::<span class="ident">style</span>::<span class="ident">Color</span>::<span class="ident">Black</span>
+            ),
             <span class="ident">crossterm</span>::<span class="ident">terminal</span>::<span class="ident">Clear</span>(<span class="ident">crossterm</span>::<span class="ident">terminal</span>::<span class="ident">ClearType</span>::<span class="ident">All</span>)
         );
         <span class="ident">stdout</span>.<span class="ident">write_and_flush</span>(<span class="ident">buf</span>.<span class="ident">as_bytes</span>()).<span class="ident">await</span><span class="question-mark">?</span>;
