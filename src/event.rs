@@ -131,11 +131,13 @@ pub(crate) async fn poll<'guard>(
 
         Some(CrosstermEvent::Resize(width, height)) => {
             let size = Coord2 { x: width, y: height };
-            screen.lock().await?.check_resize(size, stdout).await?;
+            let mut locked_screen = screen.lock().await?;
+            locked_screen.check_resize(size, stdout).await?;
             if stdout.is_none() {
                 let evt = ResizeEvent { size };
                 let _ = sender.send(Event::Resize(evt));
             }
+            drop(locked_screen);
 
             Ok(true)
         },

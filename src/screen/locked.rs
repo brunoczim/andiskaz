@@ -246,7 +246,13 @@ impl<'screen> LockedScreen<'screen> {
         stdout: &mut LockedStdout<'screen>,
     ) -> io::Result<()> {
         let buf = format!(
-            "{}",
+            "{}{}{}",
+            crossterm::style::SetForegroundColor(
+                crossterm::style::Color::White
+            ),
+            crossterm::style::SetBackgroundColor(
+                crossterm::style::Color::Black
+            ),
             crossterm::terminal::Clear(crossterm::terminal::ClearType::All)
         );
         stdout.write_and_flush(buf.as_bytes()).await?;
