@@ -362,18 +362,22 @@ impl Game {
 
     /// Resizes the game state about screen size.
     fn resize(&mut self, event: ResizeEvent) -> Option<EndKind> {
+        // Keeps track if the end is reached.
+        let mut end = None;
         // New bounds.
         self.bounds = Self::make_bounds(event.size);
-        if !self.snake.in_bounds(self.bounds) {
+
+        if self.snake.saturate_at_bounds(self.bounds) {
             // We will consider that the game is lost if snake gets outside of
             // the plane when resizing.
-            return Some(EndKind::Loss);
+            end = Some(EndKind::Loss);
         }
         if !self.food.in_bounds(self.bounds) {
             // If the food is outside of the plane, regenerates.
             self.food.regenerate(&self.snake, self.bounds);
         }
-        None
+
+        end
     }
 
     /// Computes the size of the snake when the player wins.

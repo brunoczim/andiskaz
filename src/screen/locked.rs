@@ -17,6 +17,15 @@ use crate::{
 use std::fmt::Write;
 use tokio::{io, sync::MutexGuard};
 
+#[cold]
+#[inline(never)]
+fn out_of_bounds(point: Coord2, size: Coord2) -> ! {
+    panic!(
+        "Point x: {}, y: {} out of screen size x: {}, y: {}",
+        point.x, point.y, size.x, size.y
+    )
+}
+
 /// A locked screen terminal with exclusive access to it. By default, [`Screen`]
 /// locks and unlocks every operation. With this struct, a locked screen handle,
 /// one can execute many operations without locking and unlocking.
@@ -70,8 +79,10 @@ impl<'screen> LockedScreen<'screen> {
     where
         F: FnOnce(&mut Tile) -> T,
     {
-        let index =
-            self.buffer.make_index(point).expect("Screen out of bounds");
+        let index = self
+            .buffer
+            .make_index(point)
+            .unwrap_or_else(|| out_of_bounds(point, self.buffer.size()));
         let ret = updater(&mut self.buffer.curr[index]);
         if self.buffer.old[index] != self.buffer.curr[index] {
             self.buffer.changed.insert(point);
@@ -84,8 +95,10 @@ impl<'screen> LockedScreen<'screen> {
     /// Gets the attributes of a given [`Tile`], regardless of being flushed to
     /// the screen yet or not.
     pub fn get(&self, point: Coord2) -> &Tile {
-        let index =
-            self.buffer.make_index(point).expect("Screen out of bounds");
+        let index = self
+            .buffer
+            .make_index(point)
+            .unwrap_or_else(|| out_of_bounds(point, self.buffer.size()));
         &self.buffer.curr[index]
     }
 

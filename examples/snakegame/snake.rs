@@ -93,15 +93,36 @@ impl Snake {
         self.segments.iter().skip(1).any(|segment| *segment == head)
     }
 
-    /// Tests if all the segments are inside of a bound. Useful when resizing.
-    pub fn in_bounds(&self, bounds: Bounds) -> bool {
-        // For all segments, they must be contained in the bounds.
-        self.segments.iter().all(|point| {
-            bounds.min.x <= point.x
-                && point.x <= bounds.max.x
-                && bounds.min.y <= point.y
-                && point.y <= bounds.max.y
-        })
+    /// Tests if all the segments are inside of a bound and saturates points
+    /// outside of bounds. Returns whether the saturation happened. Useful when
+    /// resizing.
+    pub fn saturate_at_bounds(&mut self, bounds: Bounds) -> bool {
+        // Initially, there is no saturation.
+        let mut saturated = false;
+
+        for point in &mut self.segments {
+            // Saturate X bounds. If saturation happened, register this fact
+            // into saturated.
+            if point.x < bounds.min.x {
+                point.x = bounds.min.x;
+                saturated = true;
+            } else if point.x > bounds.max.x {
+                point.x = bounds.max.x;
+                saturated = true;
+            }
+
+            // Saturate X bounds. If saturation happened, register this fact
+            // into saturated.
+            if point.y < bounds.min.y {
+                point.y = bounds.min.y;
+                saturated = true;
+            } else if point.y > bounds.max.y {
+                point.y = bounds.max.y;
+                saturated = true;
+            }
+        }
+
+        saturated
     }
 
     /// Renders the snake.
