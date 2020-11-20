@@ -1,8 +1,10 @@
+//! This example dumps any event that may happen.
+
 use andiskaz::{
-    color::Color2,
+    color::{BasicColor, Color2},
     emergency_restore,
     error::Error,
-    event::Event,
+    event::{Event, Key, KeyEvent},
     style::Style,
     terminal::Terminal,
     tstring,
@@ -31,23 +33,40 @@ async fn main() {
 /// The terminal main function.
 async fn term_main(mut term: Terminal) -> Result<(), Error> {
     // Allocates space for a string safe, to print it.
-    let string = tstring!["Hello, World! Press any key..."];
+    let message = tstring!["Exits on ESC"];
+    // Last event dumped.
+    let mut curr_event = None;
+
     loop {
         // Locks the screen. The word "lock" is important here.
         let mut screen = term.screen.lock().await?;
-        // Puts our message.
-        screen.styled_text(&string, Style::with_colors(Color2::default()));
+
+        // Clears the screen from our previous events. Remember, the cost of
+        // this operation is amortized by the double buffering.
+        screen.clear(BasicColor::Black.into());
+
+        // Puts our instructions.
+        screen.styled_text(&message, Style::with_colors(Color2::default()));
+
+        if let Some(event_dump) = &curr_event {
+            // If there was a previous event dump, output it.
+            let style = Style::with_colors(Color2::default()).top_margin(2);
+            screen.styled_text(&event_dump, style);
+        }
+
         // Drops the screen handle. IMPORTANT. If we don't drop, it will block
         // things like the screen renderer.
         drop(screen);
 
-        // Checks if a key was pressed. We'll wait until an event happens. If a
-        // key was pressed or an error happened, we exit. The only event that
-        // makes this `if` fail is a resize event, so, we have to re-print our
-        // message in the next iteration.
-        if let Ok(Event::Key(_)) | Err(_) = term.events.listen().await {
-            break;
-        }
+        let event_string = match term.events.listen().await? {
+            // Exits if ESC.
+            Event::Key(KeyEvent { main_key: Key::Esc, .. }) => break,
+            // Otherwise dump it.
+            event => format!("{:?}", event),
+        };
+
+        // Save the event dump.
+        curr_event = Some(tstring![event_string]);
     }
 
     Ok(())
