@@ -4,7 +4,8 @@ use crate::{
     coord,
     coord::Coord2,
     error::{AlreadyRunning, Error, ErrorKind},
-    event::{event_listener, Event, Events, ResizeEvent},
+    event,
+    event::{Listener, Reactor},
     screen::{renderer, Screen},
 };
 use std::{
@@ -15,10 +16,7 @@ use std::{
     },
     time::Duration,
 };
-use tokio::{
-    sync::{watch, Barrier},
-    task,
-};
+use tokio::{sync::Barrier, task};
 
 /// State of the terminal guard. true means acquired, false means released.
 static GUARD_STATE: AtomicBool = AtomicBool::new(false);
@@ -112,12 +110,11 @@ impl Builder {
         // Ensures there are no other terminal sevices executing.
         let _guard = Guard::acquire()?;
 
-        // Events channel.
-        let dummy = Event::Resize(ResizeEvent { size: Coord2 { x: 0, y: 0 } });
-        let (sender, receiver) = watch::channel(dummy);
+        // Event channel.
+        let (reactor, listener) = event::channel();
 
         // Initializes terminal structures.
-        let terminal = self.finish(receiver).await?;
+        let terminal = self.finish(listener).await?;
         let screen = terminal.screen.clone();
         terminal.screen.setup().await?;
 
@@ -135,7 +132,7 @@ impl Builder {
             let interval = self.event_interval;
             let screen = screen.clone();
             let barrier = barrier.clone();
-            tokio::spawn(events_task(barrier, interval, screen, sender))
+            tokio::spawn(events_task(barrier, interval, screen, reactor))
         };
 
         // Renderer task future.
@@ -171,10 +168,7 @@ impl Builder {
     }
 
     /// Finishes the builder and produces a terminal handle.
-    async fn finish(
-        &self,
-        event_recv: watch::Receiver<Event>,
-    ) -> Result<Terminal, Error> {
+    async fn finish(&self, events: Listener) -> Result<Terminal, Error> {
         let res = task::block_in_place(|| {
             crossterm::terminal::enable_raw_mode()?;
             crossterm::terminal::size()
@@ -185,7 +179,6 @@ impl Builder {
             x: coord::from_crossterm(width),
         };
         let screen = Screen::new(screen_size, self.min_screen, self.frame_time);
-        let events = Events::new(event_recv);
         Ok(Terminal { screen, events })
     }
 }
@@ -214,7 +207,7 @@ async fn events_task(
     barrier: Arc<Barrier>,
     interval: Duration,
     screen: Screen,
-    sender: watch::Sender<Event>,
+    mut reactor: Reactor,
 ) -> Result<(), Error> {
     let mut stdout = None;
     {
@@ -230,7 +223,7 @@ async fn events_task(
         }
     }
     barrier.wait().await;
-    event_listener(interval, sender, &screen, &mut stdout).await
+    reactor.react_loop(interval, &screen, &mut stdout).await
 }
 
 /// The task that renders the screen buffer, periodically. Barrier must be
@@ -249,9 +242,9 @@ async fn renderer_task(
 pub struct Terminal {
     /// Screen handle. Used to write into the screen.
     pub screen: Screen,
-    /// Events handle. Used to check and await for events, such as resizing of
-    /// the screen or keys pressed.
-    pub events: Events,
+    /// Listener handle. Used to check and await for events, such as resizing
+    /// of the screen or keys pressed.
+    pub events: Listener,
 }
 
 impl Terminal {

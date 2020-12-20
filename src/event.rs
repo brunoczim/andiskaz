@@ -280,7 +280,7 @@ fn key_from_crossterm(crossterm: CrosstermKey) -> Option<Key> {
 }
 
 /// Handle to terminal events. It can listen for either key or resize events.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Listener {
     last: Epoch,
     shared: Arc<Mutex<Shared>>,
