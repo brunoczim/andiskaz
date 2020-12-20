@@ -1,5 +1,8 @@
 //! This module defines input events of a terminal.
 
+#[cfg(test)]
+mod test;
+
 use crate::{
     coord::Coord2,
     error::{Error, EventsOff},
@@ -50,7 +53,7 @@ impl Shared {
     }
 
     fn read(&self, epoch: Epoch) -> Event {
-        if self.key.epoch > epoch && self.resize.epoch < epoch {
+        if self.key.epoch > epoch && self.resize.epoch <= epoch {
             self.key.event.into()
         } else {
             self.resize.event.into()
@@ -288,11 +291,13 @@ pub struct Listener {
 
 impl Listener {
     /// Checks if an event happened, without blocking.
-    pub fn check(&self) -> Result<Option<Event>, EventsOff> {
+    pub fn check(&mut self) -> Result<Option<Event>, EventsOff> {
         let shared = self.shared.lock().unwrap();
         let epoch = shared.epoch();
         if epoch > self.last {
-            Ok(Some(shared.read(self.last)))
+            let event = shared.read(self.last);
+            self.last = epoch;
+            Ok(Some(event))
         } else if shared.connected {
             Ok(None)
         } else {
@@ -301,7 +306,7 @@ impl Listener {
     }
 
     /// Listens for an event to happen. Waits until an event is available.
-    pub async fn listen(&self) -> Result<Event, EventsOff> {
+    pub async fn listen(&mut self) -> Result<Event, EventsOff> {
         ListenerSubs { listener: self }.await
     }
 }
@@ -318,17 +323,19 @@ impl Drop for Listener {
 
 #[derive(Debug)]
 struct ListenerSubs<'list> {
-    listener: &'list Listener,
+    listener: &'list mut Listener,
 }
 
 impl<'list> Future for ListenerSubs<'list> {
     type Output = Result<Event, EventsOff>;
 
-    fn poll(self: Pin<&mut Self>, ctx: &mut Context) -> Poll<Self::Output> {
-        let mut shared = self.listener.shared.lock().unwrap();
+    fn poll(mut self: Pin<&mut Self>, ctx: &mut Context) -> Poll<Self::Output> {
+        let this = &mut *self;
+        let mut shared = this.listener.shared.lock().unwrap();
         let epoch = shared.epoch();
-        if epoch > self.listener.last {
-            let event = shared.read(self.listener.last);
+        if epoch > this.listener.last {
+            let event = shared.read(this.listener.last);
+            this.listener.last = epoch;
             Poll::Ready(Ok(event))
         } else if shared.connected {
             shared.subscribe(ctx.waker().clone());
