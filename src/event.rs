@@ -57,7 +57,7 @@ impl Shared {
         }
     }
 
-    fn write(&self, event: Event) {
+    fn write(&mut self, event: Event) {
         let epoch = self.epoch();
 
         match event {
@@ -183,7 +183,7 @@ impl Reactor {
 
 impl Drop for Reactor {
     fn drop(&mut self) {
-        let shared = self.shared.lock().unwrap();
+        let mut shared = self.shared.lock().unwrap();
         shared.connected = false;
         shared.wake();
     }
@@ -302,19 +302,14 @@ impl Listener {
 
     /// Listens for an event to happen. Waits until an event is available.
     pub async fn listen(&self) -> Result<Event, EventsOff> {
-        loop {
-            if let Some(event) = self.check()? {
-                break Ok(event);
-            }
-            ListenerSubs { listener: &self }.await;
-        }
+        ListenerSubs { listener: self }.await
     }
 }
 
 impl Drop for Listener {
     fn drop(&mut self) {
         if Arc::strong_count(&self.shared) <= 2 {
-            let shared = self.shared.lock().unwrap();
+            let mut shared = self.shared.lock().unwrap();
             shared.connected = false;
             shared.wake();
         }
@@ -354,6 +349,7 @@ impl<'react> Future for ReactorSubs<'react> {
 
     fn poll(self: Pin<&mut Self>, ctx: &mut Context) -> Poll<Self::Output> {
         let mut shared = self.reactor.shared.lock().unwrap();
+        shared.subscribe(ctx.waker().clone());
         if shared.connected {
             Poll::Pending
         } else {
