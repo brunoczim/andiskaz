@@ -20,19 +20,28 @@ use std::{
 };
 use tokio::{task, time};
 
+/// Epoch integer for our channel's versions. Hopefully, it won't overflow.
 type Epoch = u128;
 
+/// Snapshot of an event with a given epoch.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 struct Snapshot<E> {
+    /// The event of this snapshot.
     event: E,
+    /// Epoch count of this snapshot.
     epoch: Epoch,
 }
 
+/// Shared data of the event channel.
 #[derive(Debug, Clone)]
 struct Shared {
+    /// Last key event's snapshot.
     key: Snapshot<KeyEvent>,
+    /// Last resize event's snapshot.
     resize: Snapshot<ResizeEvent>,
+    /// List of wakers from subscribed tasks.
     wakers: VecDeque<Waker>,
+    /// Whether there is a connection on the channel.
     connected: bool,
 }
 
@@ -48,10 +57,13 @@ impl Default for Shared {
 }
 
 impl Shared {
+    /// Selects maximum epoch.
     fn epoch(&self) -> Epoch {
         self.key.epoch.max(self.resize.epoch)
     }
 
+    /// Reads the correct lastest event, given the epoch where the caller is.
+    /// Uses the adequate event, i.e. resize event has precedence.
     fn read(&self, epoch: Epoch) -> Event {
         if self.key.epoch > epoch && self.resize.epoch <= epoch {
             self.key.event.into()
@@ -60,6 +72,7 @@ impl Shared {
         }
     }
 
+    /// Writes an event into the channel. Advances current epoch.
     fn write(&mut self, event: Event) {
         let epoch = self.epoch();
 
@@ -73,17 +86,20 @@ impl Shared {
         }
     }
 
+    /// Awakes all the subscribed tasks.
     fn wake(&mut self) {
         while let Some(waker) = self.wakers.pop_front() {
             waker.wake();
         }
     }
 
+    /// Subscribes a task's waker.
     fn subscribe(&mut self, waker: Waker) {
         self.wakers.push_back(waker)
     }
 }
 
+/// Creates an event channel.
 pub(crate) fn channel() -> (Reactor, Listener) {
     let shared = Arc::new(Mutex::new(Shared::default()));
     let reactor = Reactor { shared: shared.clone() };
@@ -91,12 +107,18 @@ pub(crate) fn channel() -> (Reactor, Listener) {
     (reactor, listener)
 }
 
+/// An event reactor. The event reactor gets events from the OS, perform
+/// reactions required to be done immediately, and makes events available to an
+/// event listener.
 #[derive(Debug)]
 pub(crate) struct Reactor {
+    /// Reference to concurrent shared channel data.
     shared: Arc<Mutex<Shared>>,
 }
 
 impl Reactor {
+    /// Performs a "react loop", i.e. keeps polling events, reacting to the
+    /// events, and sending them to the event listener.
     pub(crate) async fn react_loop<'screen>(
         &mut self,
         event_interval: Duration,
@@ -120,6 +142,8 @@ impl Reactor {
         Ok(())
     }
 
+    /// Reacts to a single event. Input uses the crossterm encoding for the
+    /// event.
     async fn react<'guard>(
         &self,
         crossterm: CrosstermEvent,
@@ -166,6 +190,7 @@ impl Reactor {
         Ok(())
     }
 
+    /// Polls for a single event from the OS.
     async fn poll<'guard>(&self) -> Result<Option<CrosstermEvent>, Error> {
         let result = task::block_in_place(|| {
             match crossterm::event::poll(Duration::from_millis(0))? {
@@ -177,6 +202,7 @@ impl Reactor {
         result.map_err(Error::from_crossterm)
     }
 
+    /// Sends an event through the channel, so that the listener receives it.
     fn send(&self, event: Event) {
         let mut shared = self.shared.lock().unwrap();
         shared.write(event);
@@ -228,6 +254,7 @@ pub struct KeyEvent {
 }
 
 impl KeyEvent {
+    /// A dummy key event, with dummy data.
     fn dummy() -> Self {
         Self { main_key: Key::Esc, ctrl: false, alt: false, shift: false }
     }
@@ -236,11 +263,14 @@ impl KeyEvent {
 /// An event fired by a resize of the screen.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ResizeEvent {
-    /// New dimensions of the screen.
+    /// New dimensions of the screen. If set to `None`, then the screen was
+    /// resized to an invalid size, and andiskaz's event reactor is taking care
+    /// of this (or andiskis event reactor if you will).
     pub size: Option<Coord2>,
 }
 
 impl ResizeEvent {
+    /// A dummy resize event, with dummy data.
     fn dummy() -> Self {
         Self { size: None }
     }
@@ -314,6 +344,8 @@ impl Listener {
 impl Drop for Listener {
     fn drop(&mut self) {
         if Arc::strong_count(&self.shared) <= 2 {
+            // Only disconnect if we are the last listener (or if there is no
+            // reactor).
             let mut shared = self.shared.lock().unwrap();
             shared.connected = false;
             shared.wake();
@@ -321,8 +353,11 @@ impl Drop for Listener {
     }
 }
 
+/// Subscribes a listener to the channel's waker list. Subscription wakes the
+/// task up whenever there is a message or when the reactor disconnected.
 #[derive(Debug)]
 struct ListenerSubs<'list> {
+    /// The listener being subscribed.
     listener: &'list mut Listener,
 }
 
@@ -330,7 +365,10 @@ impl<'list> Future for ListenerSubs<'list> {
     type Output = Result<Event, EventsOff>;
 
     fn poll(mut self: Pin<&mut Self>, ctx: &mut Context) -> Poll<Self::Output> {
+        // Reborrowing cause otherwise borrow checker will treat all mutable
+        // borrows to Self's fields as a single borrow.
         let this = &mut *self;
+
         let mut shared = this.listener.shared.lock().unwrap();
         let epoch = shared.epoch();
         if epoch > this.listener.last {
@@ -346,8 +384,11 @@ impl<'list> Future for ListenerSubs<'list> {
     }
 }
 
+/// Subscribes a reactor to the channel's waker list. Subscription wakes the
+/// task up when the listeners disconnected.
 #[derive(Debug)]
 struct ReactorSubs<'react> {
+    /// The reactor being subscribed.
     reactor: &'react Reactor,
 }
 
