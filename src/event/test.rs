@@ -12,7 +12,10 @@ use crate::{
     },
 };
 use std::sync::Arc;
-use tokio::{sync::Barrier, task};
+use tokio::{
+    sync::{Barrier, Notify},
+    task,
+};
 
 #[tokio::test]
 async fn singletask() {
@@ -28,58 +31,83 @@ async fn singletask() {
 
 #[tokio::test]
 async fn multitask() {
-    let barrier = Arc::new(Barrier::new(4));
+    const LISTENERS: usize = 3;
+
+    let notify = Arc::new(Notify::new());
+    let barrier = Arc::new(Barrier::new(LISTENERS + 1));
+    let mut listener_threads = Vec::new();
     let (reactor, listener) = channel();
 
-    let listener0_thread = task::spawn({
-        let barrier = barrier.clone();
-        let listener = listener.clone();
-        multitask_listener(barrier, listener)
-    });
+    for _ in 0 .. LISTENERS {
+        let handle = task::spawn({
+            let notify = notify.clone();
+            let barrier = barrier.clone();
+            let listener = listener.clone();
+            multitask_listener(listener, notify, barrier)
+        });
+        listener_threads.push(handle);
+    }
 
-    let listener1_thread = task::spawn({
-        let barrier = barrier.clone();
-        let listener = listener.clone();
-        multitask_listener(barrier, listener)
-    });
+    drop(listener);
 
-    let listener2_thread = task::spawn({
-        let barrier = barrier.clone();
-        multitask_listener(barrier, listener)
-    });
-
-    let reactor_thread = task::spawn(async move {
-        multitask_send_resizes(&reactor).await;
-        barrier.wait().await;
-        multitask_send_keys(&reactor).await;
-        barrier.wait().await;
-        multitask_send_mixed(&reactor).await;
-        ReactorSubs { reactor: &reactor }.await;
-    });
+    let reactor_thread =
+        task::spawn(multitask_reactor(reactor, LISTENERS, notify, barrier));
 
     let (res0, res1, res2, res_r) = tokio::join!(
-        listener0_thread,
-        listener1_thread,
-        listener2_thread,
+        listener_threads.pop().unwrap(),
+        listener_threads.pop().unwrap(),
+        listener_threads.pop().unwrap(),
         reactor_thread
     );
+    assert_eq!(listener_threads.len(), 0);
     res0.unwrap();
     res1.unwrap();
     res2.unwrap();
     res_r.unwrap();
 }
 
-async fn multitask_listener(barrier: Arc<Barrier>, mut listener: Listener) {
-    multitask_recv_resizes(&barrier, &mut listener).await;
-    multitask_recv_keys(&barrier, &mut listener).await;
-    multitask_recv_mixed(&barrier, &mut listener).await;
+async fn multitask_listener(
+    mut listener: Listener,
+    notify: Arc<Notify>,
+    barrier: Arc<Barrier>,
+) {
+    multitask_recv_resizes(&mut listener, &notify).await;
+    barrier.wait().await;
+    multitask_recv_keys(&mut listener, &notify).await;
+    barrier.wait().await;
+    multitask_recv_mixed(&mut listener, &notify).await;
 }
 
-async fn multitask_recv_resizes(barrier: &Barrier, listener: &mut Listener) {
+async fn multitask_reactor(
+    reactor: Reactor,
+    listeners: usize,
+    notify: Arc<Notify>,
+    barrier: Arc<Barrier>,
+) {
+    multitask_send_resizes(&reactor).await;
+    for _ in 0 .. listeners {
+        notify.notify_one();
+    }
+    barrier.wait().await;
+
+    multitask_send_keys(&reactor).await;
+    for _ in 0 .. listeners {
+        notify.notify_one();
+    }
+    barrier.wait().await;
+
+    multitask_send_mixed(&reactor).await;
+    for _ in 0 .. listeners {
+        notify.notify_one();
+    }
+    ReactorSubs { reactor: &reactor }.await;
+}
+
+async fn multitask_recv_resizes(listener: &mut Listener, notify: &Notify) {
     loop {
         let message = tokio::select! {
             msg = listener.listen() => msg,
-            _ = barrier.wait() => break,
+            _ = notify.notified() => break,
         };
 
         match message.unwrap() {
@@ -90,13 +118,15 @@ async fn multitask_recv_resizes(barrier: &Barrier, listener: &mut Listener) {
             evt => panic!("{:#?}", evt),
         }
     }
+
+    listener.check().unwrap();
 }
 
-async fn multitask_recv_keys(barrier: &Barrier, listener: &mut Listener) {
+async fn multitask_recv_keys(listener: &mut Listener, notify: &Notify) {
     loop {
         let message = tokio::select! {
             msg = listener.listen() => msg,
-            _ = barrier.wait() => break,
+            _ = notify.notified() => break,
         };
 
         match message.unwrap() {
@@ -110,13 +140,15 @@ async fn multitask_recv_keys(barrier: &Barrier, listener: &mut Listener) {
             evt => panic!("{:#?}", evt),
         }
     }
+
+    listener.check().unwrap();
 }
 
-async fn multitask_recv_mixed(barrier: &Barrier, listener: &mut Listener) {
+async fn multitask_recv_mixed(listener: &mut Listener, notify: &Notify) {
     loop {
         let message = tokio::select! {
             msg = listener.listen() => msg,
-            _ = barrier.wait() => break,
+            _ = notify.notified() => break,
         };
 
         match message.unwrap() {
@@ -135,6 +167,8 @@ async fn multitask_recv_mixed(barrier: &Barrier, listener: &mut Listener) {
             evt => panic!("{:#?}", evt),
         }
     }
+
+    listener.check().unwrap();
 }
 
 async fn multitask_send_resizes(reactor: &Reactor) {
