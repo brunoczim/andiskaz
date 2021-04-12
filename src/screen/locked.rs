@@ -8,7 +8,7 @@ use crate::{
     error::Error,
     screen::{
         buffer::{ScreenBuffer, Tile},
-        Screen,
+        Shared,
     },
     stdio::LockedStdout,
     string::{TermGrapheme, TermString},
@@ -30,21 +30,23 @@ fn out_of_bounds(point: Coord2, size: Coord2) -> ! {
 /// locks and unlocks every operation. With this struct, a locked screen handle,
 /// one can execute many operations without locking and unlocking.
 #[derive(Debug)]
-pub struct LockedScreen<'screen> {
+pub struct LockedScreen<'terminal> {
     /// Reference to the original screen.
-    screen: &'screen Screen,
+    shared: &'terminal Shared,
     /// Locked guard to the buffer.
-    buffer: MutexGuard<'screen, ScreenBuffer>,
+    buffer: MutexGuard<'terminal, ScreenBuffer>,
 }
 
-impl<'screen> LockedScreen<'screen> {
+impl<'terminal> LockedScreen<'terminal> {
     /// Creates a locked screen from a reference to the unlocked screen handle,
     /// and a locked guard to the buffer.
-    pub(crate) fn new(
-        screen: &'screen Screen,
-        buffer: MutexGuard<'screen, ScreenBuffer>,
-    ) -> Self {
-        Self { screen, buffer }
+    pub(crate) async fn new<'param>(
+        shared: &'param Shared,
+    ) -> LockedScreen<'terminal>
+    where
+        'param: 'terminal,
+    {
+        Self { shared, buffer: shared.buffer.lock().await }
     }
 
     /// Returns the current size of the screen.
@@ -54,7 +56,7 @@ impl<'screen> LockedScreen<'screen> {
 
     /// Returns the minimum size required for the screen.
     pub fn min_size(&self) -> Coord2 {
-        self.screen.min_size()
+        self.shared.min_size
     }
 
     /// Sets every attribute of a given [`Tile`]. This operation is buffered.
@@ -212,19 +214,19 @@ impl<'screen> LockedScreen<'screen> {
     pub(crate) async fn check_resize(
         &mut self,
         new_size: Coord2,
-        guard: &mut Option<LockedStdout<'screen>>,
+        guard: &mut Option<LockedStdout<'terminal>>,
     ) -> io::Result<()> {
-        let min_size = self.screen.shared.min_size;
+        let min_size = self.shared.min_size;
         if new_size.x < min_size.x || new_size.y < min_size.y {
             if guard.is_none() {
-                let mut stdout = self.screen.shared.stdout.lock().await;
+                let mut stdout = self.shared.stdout.lock().await;
                 self.ask_resize(&mut stdout, min_size).await?;
                 *guard = Some(stdout);
             }
         } else {
             let mut stdout = match guard.take() {
                 Some(stdout) => stdout,
-                None => self.screen.shared.stdout.lock().await,
+                None => self.shared.stdout.lock().await,
             };
 
             self.resize(new_size, &mut stdout).await?;
@@ -236,7 +238,7 @@ impl<'screen> LockedScreen<'screen> {
     /// Asks the user to resize the screen (manually).
     async fn ask_resize(
         &mut self,
-        stdout: &mut LockedStdout<'screen>,
+        stdout: &mut LockedStdout<'terminal>,
         min_size: Coord2,
     ) -> io::Result<()> {
         let buf = format!(
@@ -256,7 +258,7 @@ impl<'screen> LockedScreen<'screen> {
     async fn resize(
         &mut self,
         new_size: Coord2,
-        stdout: &mut LockedStdout<'screen>,
+        stdout: &mut LockedStdout<'terminal>,
     ) -> io::Result<()> {
         let buf = format!(
             "{}{}{}",
@@ -296,7 +298,7 @@ impl<'screen> LockedScreen<'screen> {
             )?;
         }
 
-        if let Some(mut stdout) = self.screen.shared.stdout.try_lock() {
+        if let Some(mut stdout) = self.shared.stdout.try_lock() {
             stdout.write_and_flush(buf.as_bytes()).await?;
         }
 

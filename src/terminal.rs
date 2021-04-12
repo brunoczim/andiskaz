@@ -3,9 +3,10 @@
 use crate::{
     coord,
     coord::Coord2,
-    error::{AlreadyRunning, Error, ErrorKind},
+    error::{AlreadyRunning, Error, ErrorKind, EventsOff},
     event,
-    event::{Listener, Reactor},
+    event::{Event, ListenEvent, Reactor},
+    screen,
     screen::{renderer, Screen},
 };
 use std::{
@@ -19,17 +20,17 @@ use std::{
 use tokio::{sync::Barrier, task};
 
 /// State of the terminal guard. true means acquired, false means released.
-static GUARD_STATE: AtomicBool = AtomicBool::new(false);
+static RUN_GUARD_STATE: AtomicBool = AtomicBool::new(false);
 
 /// A guard of the terminal handle. Only one instance of terminal services is
 /// allowed per time, this stucture ensures this.
 #[derive(Debug)]
-struct Guard;
+struct RunGuard;
 
-impl Guard {
+impl RunGuard {
     /// Acquires the guard. Returns an error if the guard was already acquired.
     fn acquire() -> Result<Self, AlreadyRunning> {
-        if GUARD_STATE.swap(true, Acquire) {
+        if RUN_GUARD_STATE.swap(true, Acquire) {
             Err(AlreadyRunning)
         } else {
             Ok(Self)
@@ -37,9 +38,9 @@ impl Guard {
     }
 }
 
-impl Drop for Guard {
+impl Drop for RunGuard {
     fn drop(&mut self) {
-        GUARD_STATE.store(false, Release)
+        RUN_GUARD_STATE.store(false, Release)
     }
 }
 
@@ -108,7 +109,7 @@ impl Builder {
         T: Send + 'static,
     {
         // Ensures there are no other terminal sevices executing.
-        let _guard = Guard::acquire()?;
+        let _guard = RunGuard::acquire()?;
 
         // Event channel.
         let (reactor, listener) = event::channel();
@@ -210,20 +211,9 @@ async fn events_task(
     mut reactor: Reactor,
 ) -> Result<(), Error> {
     let mut stdout = None;
-    {
-        let mut locked = screen
-            .lock()
-            .await
-            .expect("renderer can't have already disconnected");
-        let size = locked.size();
-        let min_size = locked.min_size();
-        if size.x < min_size.x || size.y < min_size.y {
-            locked.check_resize(min_size, &mut stdout).await?;
-            locked.check_resize(size, &mut stdout).await?;
-        }
-    }
+    reactor.pre_loop(&mut stdout).await?;
     barrier.wait().await;
-    reactor.react_loop(interval, &screen, &mut stdout).await
+    reactor.react_loop(interval, &mut stdout).await
 }
 
 /// The task that renders the screen buffer, periodically. Barrier must be
@@ -240,11 +230,55 @@ async fn renderer_task(
 /// A handle to the terminal.
 #[derive(Debug, Clone)]
 pub struct Terminal {
-    /// Screen handle. Used to write into the screen.
-    pub screen: Screen,
-    /// Listener handle. Used to check and await for events, such as resizing
-    /// of the screen or keys pressed.
-    pub events: Listener,
+    shared: Arc<Shared>,
+    curr_epoch: event::Epoch,
+}
+
+impl Terminal {
+    pub async fn enter<'terminal>(
+        &'terminal mut self,
+    ) -> TerminalGuard<'terminal> {
+        TerminalGuard {
+            event_guard: self.shared.events.prevent().await,
+            shared: &self.shared,
+            curr_epoch: &mut self.curr_epoch,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct TerminalGuard<'terminal> {
+    event_guard: event::Prevent<'terminal>,
+    shared: &'terminal Arc<Shared>,
+    curr_epoch: &'terminal mut event::Epoch,
+}
+
+impl<'terminal> TerminalGuard<'terminal> {
+    pub fn last_event(&mut self) -> Event {
+        let events = self.shared.events.inner.lock().unwrap();
+        let event = events.read(*self.curr_epoch);
+        *self.curr_epoch = events.epoch();
+        event
+    }
+
+    /// Checks if an event happened, without blocking.
+    pub fn check(&mut self) -> Result<Option<Event>, EventsOff> {
+        let events = self.shared.events.inner.lock().unwrap();
+        let epoch = events.epoch();
+        if epoch > *self.curr_epoch {
+            let event = events.read(*self.curr_epoch);
+            *self.curr_epoch = epoch;
+            Ok(Some(event))
+        } else if events.connected() {
+            Ok(None)
+        } else {
+            Err(EventsOff)
+        }
+    }
+
+    pub async fn listen_event(&mut self) -> Result<Event, EventsOff> {
+        ListenEvent::new(self.curr_epoch, self.shared).await
+    }
 }
 
 impl Terminal {
@@ -275,4 +309,10 @@ impl Terminal {
     {
         Builder::new().run(start).await
     }
+}
+
+#[derive(Debug)]
+pub(crate) struct Shared {
+    pub(crate) events: event::Shared,
+    pub(crate) screen: screen::Shared,
 }

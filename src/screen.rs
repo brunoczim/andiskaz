@@ -31,7 +31,7 @@ pub use self::{buffer::Tile, locked::LockedScreen};
 
 /// Shared memory between terminal handle copies.
 #[derive(Debug)]
-struct Shared {
+pub(crate) struct Shared {
     /// Whether the terminal handle has been cleaned up (using
     /// terminal.cleanup).
     cleanedup: AtomicBool,
@@ -43,6 +43,20 @@ struct Shared {
     renderer_notif: Notify,
     min_size: Coord2,
     frame_time: Duration,
+}
+
+impl Shared {
+    pub async fn lock<'shared>(
+        &'shared self,
+    ) -> Result<LockedScreen<'shared>, RendererOff> {
+        let locked = LockedScreen::new(self).await;
+
+        if self.renderer_conn.load(Relaxed) {
+            Ok(locked)
+        } else {
+            Err(RendererOff)
+        }
+    }
 }
 
 impl Drop for Shared {
@@ -96,7 +110,7 @@ impl Screen {
     pub async fn lock<'screen>(
         &'screen self,
     ) -> Result<LockedScreen<'screen>, RendererOff> {
-        let locked = LockedScreen::new(self, self.shared.buffer.lock().await);
+        let locked = LockedScreen::new(&self.shared).await;
         if self.shared.renderer_conn.load(Relaxed) {
             Ok(locked)
         } else {

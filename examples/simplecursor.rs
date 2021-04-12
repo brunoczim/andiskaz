@@ -50,7 +50,10 @@ async fn main() {
 /// The terminal main function.
 async fn term_main(mut game: Game, mut term: Terminal) -> Result<(), Error> {
     // Renders for the first time.
-    game.render(&term).await?;
+    {
+        let mut screen = term.screen.lock().await?;
+        game.render(&mut screen).await?;
+    }
 
     loop {
         // Awaits for an event.
@@ -97,7 +100,10 @@ impl Game {
     }
 
     /// Renders the game state. Should be called only on resize or first render.
-    async fn render(&self, term: &Terminal) -> Result<(), Error> {
+    async fn render<'screen>(
+        &self,
+        screen: &mut LockedScreen<'screen>,
+    ) -> Result<(), Error> {
         // Colors of the message. Black foreground, green background.
         let colors = Color2 {
             foreground: BasicColor::Black.into(),
@@ -107,14 +113,11 @@ impl Game {
         // Message style. With the colors above and centralized.
         let style = Style::with_colors(colors).align(1, 2);
 
-        // Locking the screen.
-        let mut screen = term.screen.lock().await?;
-
         // Puts our message.
         screen.styled_text(&self.message, style);
 
         // Renders the cursor with black foreground, white foreground.
-        self.render_cursor(&mut screen, BasicColor::White.into()).await;
+        self.render_cursor(screen, BasicColor::White.into()).await;
 
         Ok(())
     }
