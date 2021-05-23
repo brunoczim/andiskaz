@@ -10,7 +10,7 @@ use crate::{
     error::Error,
     screen::buffer::ScreenBuffer,
     stdio,
-    stdio::{LockedStdout, Stdout},
+    stdio::{restore_screen, save_screen, LockedStdout, Stdout},
     string::{TermGrapheme, TermString},
     style::Style,
     terminal::Shared,
@@ -23,6 +23,7 @@ use std::{
 use tokio::{
     io,
     sync::{Mutex, MutexGuard, Notify},
+    task,
     time,
 };
 
@@ -42,6 +43,21 @@ pub(crate) struct ScreenData {
 }
 
 impl ScreenData {
+    pub fn new(
+        screen_size: Coord2,
+        min_size: Coord2,
+        frame_time: Duration,
+    ) -> Self {
+        Self {
+            min_size,
+            frame_time,
+            cleanedup: AtomicBool::new(false),
+            stdout: Stdout::new(),
+            buffer: Mutex::new(ScreenBuffer::blank(screen_size)),
+            notifier: Notify::new(),
+        }
+    }
+
     pub fn notify(&self) {
         self.notifier.notify_waiters()
     }
@@ -52,6 +68,38 @@ impl ScreenData {
 
     pub async fn lock<'this>(&'this self) -> Screen<'this> {
         Screen::new(self).await
+    }
+
+    /// Initialization of the terminal, such as cleaning the screen.
+    pub async fn setup(&self) -> Result<(), Error> {
+        let mut buf = String::new();
+        save_screen(&mut buf)?;
+        write!(
+            buf,
+            "{}{}{}{}",
+            crossterm::style::SetBackgroundColor(
+                crossterm::style::Color::Black
+            ),
+            crossterm::style::SetForegroundColor(
+                crossterm::style::Color::White
+            ),
+            crossterm::cursor::Hide,
+            crossterm::terminal::Clear(crossterm::terminal::ClearType::All),
+        )?;
+        self.stdout.write_and_flush(buf.as_bytes()).await?;
+        Ok(())
+    }
+
+    /// Asynchronous cleanup. It is preferred to call this before dropping.
+    pub async fn cleanup(&self) -> Result<(), Error> {
+        task::block_in_place(|| crossterm::terminal::disable_raw_mode())
+            .map_err(Error::from_crossterm)?;
+        let mut buf = String::new();
+        write!(buf, "{}", crossterm::cursor::Show)?;
+        restore_screen(&mut buf)?;
+        self.stdout.write_and_flush(buf.as_bytes()).await?;
+        self.cleanedup.store(true, Release);
+        Ok(())
     }
 }
 

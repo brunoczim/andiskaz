@@ -15,10 +15,17 @@ pub(crate) struct Reactor<'shared> {
 }
 
 impl<'shared> Reactor<'shared> {
-    pub(crate) async fn pre_loop<'stdout>(
-        &'stdout mut self,
+    pub fn new(shared: &'shared Shared) -> Self {
+        Self { shared }
+    }
+
+    pub async fn pre_loop<'stdout>(
+        &mut self,
         stdout_guard: &mut Option<LockedStdout<'stdout>>,
-    ) -> Result<(), Error> {
+    ) -> Result<(), Error>
+    where
+        'shared: 'stdout,
+    {
         let mut locked = self.shared.screen().lock().await;
         let size = locked.size();
         let min_size = locked.min_size();

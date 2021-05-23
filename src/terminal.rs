@@ -1,16 +1,25 @@
 //! This crate exports a terminal terminal and its utilites.
 
 use crate::{
-    error::{AlreadyRunning, ServicesOff},
+    coord,
+    coord::Coord2,
+    error::{AlreadyRunning, Error, ErrorKind, ServicesOff},
     event,
-    event::Event,
-    screen::{Screen, ScreenData},
+    event::{Event, Reactor},
+    screen::{renderer, Screen, ScreenData},
 };
-use std::sync::{
-    atomic::{AtomicBool, Ordering::*},
-    Arc,
+use std::{
+    future::Future,
+    sync::{
+        atomic::{AtomicBool, Ordering::*},
+        Arc,
+    },
+    time::Duration,
 };
-use tokio::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};
+use tokio::{
+    sync::{Barrier, RwLock, RwLockReadGuard, RwLockWriteGuard},
+    task,
+};
 
 /// State of the terminal guard. true means acquired, false means released.
 static RUN_GUARD_STATE: AtomicBool = AtomicBool::new(false);
@@ -37,7 +46,6 @@ impl Drop for RunGuard {
     }
 }
 
-/*
 /// A terminal configuration builder.
 #[derive(Debug, Clone)]
 pub struct Builder {
@@ -105,16 +113,30 @@ impl Builder {
         // Ensures there are no other terminal sevices executing.
         let _guard = RunGuard::acquire()?;
 
-        // Event channel.
-        let (reactor, listener) = event::channel();
+        let initial_size = self.initial_size()?;
 
         // Initializes terminal structures.
-        let terminal = self.finish(listener).await?;
-        let screen = terminal.screen.clone();
-        terminal.screen.setup().await?;
+        let terminal = self.finish(initial_size).await?;
+        let shared = terminal.shared.clone();
+        shared.screen().setup().await?;
 
         // Synchronization.
         let barrier = Arc::new(Barrier::new(3));
+
+        // Event listener task future.
+        let events_fut = {
+            let interval = self.event_interval;
+            let barrier = barrier.clone();
+            let shared = shared.clone();
+            tokio::spawn(events_task(barrier, interval, initial_size, shared))
+        };
+
+        // Renderer task future.
+        let renderer_fut = {
+            let barrier = barrier.clone();
+            let shared = shared.clone();
+            tokio::spawn(renderer_task(barrier, shared))
+        };
 
         // Main task future.
         let main_fut = {
@@ -122,30 +144,16 @@ impl Builder {
             tokio::spawn(main_task(barrier, terminal, start))
         };
 
-        // Event listener task future.
-        let events_fut = {
-            let interval = self.event_interval;
-            let screen = screen.clone();
-            let barrier = barrier.clone();
-            tokio::spawn(events_task(barrier, interval, screen, reactor))
-        };
-
-        // Renderer task future.
-        let renderer_fut = {
-            let screen = screen.clone();
-            tokio::spawn(renderer_task(barrier, screen))
-        };
-
         let (main_ret, events_ret, renderer_ret) =
             tokio::join!(main_fut, events_fut, renderer_fut);
 
         // Cleans up screen configurations (such as raw mode).
-        let _ = screen.cleanup().await;
+        let _ = shared.screen().cleanup().await;
 
         // Matches the error of events task result.
         if let Err(error) = events_ret? {
             match error.kind() {
-                ErrorKind::RendererOff(_) => (),
+                ErrorKind::ServicesOff(_) => (),
                 _ => Err(error)?,
             }
         }
@@ -153,7 +161,7 @@ impl Builder {
         // Matches the error of renderer task result.
         if let Err(error) = renderer_ret? {
             match error.kind() {
-                ErrorKind::RendererOff(_) => (),
+                ErrorKind::ServicesOff(_) => (),
                 _ => Err(error)?,
             }
         }
@@ -162,19 +170,26 @@ impl Builder {
         Ok(main_ret?)
     }
 
-    /// Finishes the builder and produces a terminal handle.
-    async fn finish(&self, events: Listener) -> Result<Terminal, Error> {
-        let res = task::block_in_place(|| {
+    fn initial_size(&self) -> Result<Coord2, Error> {
+        let size_res = task::block_in_place(|| {
             crossterm::terminal::enable_raw_mode()?;
             crossterm::terminal::size()
         });
-        let (width, height) = res.map_err(Error::from_crossterm)?;
-        let screen_size = Coord2 {
+        let (width, height) = size_res.map_err(Error::from_crossterm)?;
+        Ok(Coord2 {
             y: coord::from_crossterm(height),
             x: coord::from_crossterm(width),
-        };
-        let screen = ScreenData::new(screen_size, self.min_screen, self.frame_time);
-        Ok(Terminal { screen, events })
+        })
+    }
+
+    /// Finishes the builder and produces a terminal handle.
+    async fn finish(&self, screen_size: Coord2) -> Terminal {
+        let shared = Arc::new(Shared::new(
+            screen_size,
+            self.min_screen,
+            self.frame_time,
+        ));
+        Terminal { shared, curr_epoch: 0 }
     }
 }
 
@@ -190,8 +205,8 @@ where
     A: Future<Output = T> + Send + 'static,
     T: Send + 'static,
 {
-    let screen = terminal.screen.clone();
-    let _guard = screen.conn_guard();
+    let cloned = terminal.clone();
+    let _guard = cloned.shared.conn_guard();
     barrier.wait().await;
     start(terminal).await
 }
@@ -201,9 +216,10 @@ where
 async fn events_task(
     barrier: Arc<Barrier>,
     interval: Duration,
-    screen: ScreenData,
-    mut reactor: Reactor,
+    initial_size: Coord2,
+    shared: Arc<Shared>,
 ) -> Result<(), Error> {
+    let mut reactor = Reactor::new(&shared);
     let mut stdout = None;
     reactor.pre_loop(&mut stdout).await?;
     barrier.wait().await;
@@ -214,13 +230,12 @@ async fn events_task(
 /// shared between tasks with the same given screen.
 async fn renderer_task(
     barrier: Arc<Barrier>,
-    screen: ScreenData,
+    shared: Arc<Shared>,
 ) -> Result<(), Error> {
-    let _guard = screen.conn_guard();
+    let _guard = shared.conn_guard();
     barrier.wait().await;
-    renderer(&screen).await
+    renderer(&shared).await
 }
-*/
 
 /// A handle to the terminal.
 #[derive(Debug, Clone)]
@@ -249,14 +264,6 @@ impl Terminal {
     ) -> Result<TerminalGuard<'terminal>, ServicesOff> {
         self.shared.events.subscribe().await;
         self.enter_now().await
-    }
-}
-
-impl Drop for Terminal {
-    fn drop(&mut self) {
-        if Arc::strong_count(&self.shared) <= 3 {
-            self.shared.disconnect();
-        }
     }
 }
 
@@ -290,6 +297,19 @@ pub(crate) struct Shared {
 }
 
 impl Shared {
+    pub fn new(
+        screen_size: Coord2,
+        min_screen: Coord2,
+        frame_time: Duration,
+    ) -> Self {
+        Self {
+            sync: RwLock::new(()),
+            connected: AtomicBool::new(true),
+            screen: ScreenData::new(screen_size, min_screen, frame_time),
+            events: event::Channel::default(),
+        }
+    }
+
     pub(crate) fn is_connected(&self) -> bool {
         self.connected.load(Acquire)
     }

@@ -8,6 +8,8 @@ use crate::coord::Coord2;
 use std::sync::Mutex;
 use tokio::sync::Notify;
 
+pub(crate) use reactor::Reactor;
+
 /// Epoch integer for our channel's versions. Hopefully, it won't overflow.
 pub type Epoch = u128;
 
@@ -46,6 +48,13 @@ pub struct KeyEvent {
     pub shift: bool,
 }
 
+impl KeyEvent {
+    /// A dummy key event, with dummy data.
+    fn dummy() -> Self {
+        Self { main_key: Key::Esc, ctrl: false, alt: false, shift: false }
+    }
+}
+
 /// An event fired by a resize of the screen.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ResizeEvent {
@@ -53,6 +62,13 @@ pub struct ResizeEvent {
     /// resized to an invalid size, and andiskaz's event reactor is taking care
     /// of this (or andiskis event reactor if you will).
     pub size: Option<Coord2>,
+}
+
+impl ResizeEvent {
+    /// A dummy resize event, with dummy data.
+    fn dummy() -> Self {
+        Self { size: None }
+    }
 }
 
 /// A generic event type.
@@ -93,6 +109,15 @@ struct ChannelData {
     resize: Snapshot<ResizeEvent>,
 }
 
+impl Default for ChannelData {
+    fn default() -> Self {
+        Self {
+            key: Snapshot { event: KeyEvent::dummy(), epoch: 0 },
+            resize: Snapshot { event: ResizeEvent::dummy(), epoch: 0 },
+        }
+    }
+}
+
 impl ChannelData {
     /// Selects maximum epoch.
     fn epoch(&self) -> Epoch {
@@ -130,6 +155,15 @@ impl ChannelData {
 pub(crate) struct Channel {
     data: Mutex<ChannelData>,
     notifier: Notify,
+}
+
+impl Default for Channel {
+    fn default() -> Self {
+        Channel {
+            data: Mutex::new(ChannelData::default()),
+            notifier: Notify::new(),
+        }
+    }
 }
 
 impl Channel {

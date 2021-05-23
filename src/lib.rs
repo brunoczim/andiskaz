@@ -64,7 +64,7 @@
 //! }
 //! ```
 
-#![warn(missing_docs)]
+//#![warn(missing_docs)]
 #![deny(unused_must_use)]
 
 #[macro_use]
