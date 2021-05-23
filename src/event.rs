@@ -101,6 +101,7 @@ struct Snapshot<E> {
     epoch: Epoch,
 }
 
+/// Channel's data that needs locking.
 #[derive(Debug)]
 struct ChannelData {
     /// Last key event's snapshot.
@@ -119,7 +120,7 @@ impl Default for ChannelData {
 }
 
 impl ChannelData {
-    /// Selects maximum epoch.
+    /// Selects maximum last epoch.
     fn epoch(&self) -> Epoch {
         self.key.epoch.max(self.resize.epoch)
     }
@@ -151,9 +152,12 @@ impl ChannelData {
     }
 }
 
+/// Shared channel handle (for both senders and receivers).
 #[derive(Debug)]
 pub(crate) struct Channel {
+    /// Data that needs to be lock (the effective data of the channel).
     data: Mutex<ChannelData>,
+    /// Notification handle of the channel.
     notifier: Notify,
 }
 
@@ -167,22 +171,28 @@ impl Default for Channel {
 }
 
 impl Channel {
-    pub fn epoch(&self) -> Epoch {
-        self.data.lock().unwrap().epoch()
-    }
-
+    /// Notifies all parties subscribed to the channel.
     pub fn notify(&self) {
         self.notifier.notify_waiters()
     }
 
+    /// Subscribes to changes in this channel.
     pub async fn subscribe(&self) {
         self.notifier.notified().await
     }
 
+    /// Selects maximum last epoch.
+    pub fn epoch(&self) -> Epoch {
+        self.data.lock().unwrap().epoch()
+    }
+
+    /// Reads the correct lastest event, given the epoch where the caller is.
+    /// Uses the adequate event, i.e. resize event has precedence.
     pub fn read(&self, epoch: Epoch) -> Option<(Epoch, Event)> {
         self.data.lock().unwrap().read(epoch)
     }
 
+    /// Writes an event into the channel. Advances current epoch.
     pub fn write(&self, event: Event) {
         self.data.lock().unwrap().write(event)
     }

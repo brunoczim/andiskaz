@@ -39,10 +39,14 @@ pub(crate) struct ScreenData {
     stdout: Stdout,
     /// Buffer responsible for rendering the screen.
     buffer: Mutex<ScreenBuffer>,
+    /// Notification handle of the screen.
     notifier: Notify,
 }
 
 impl ScreenData {
+    /// Creates screen data from the given settings. If given actual size is
+    /// less than given minimum allowed size, the actual size is replaced by the
+    /// minimum size.
     pub fn new(size: Coord2, min_size: Coord2, frame_time: Duration) -> Self {
         let corrected_size = if size.x >= min_size.x && size.y >= min_size.y {
             size
@@ -59,14 +63,17 @@ impl ScreenData {
         }
     }
 
+    /// Notifies all parties subscribed to the screen updates.
     pub fn notify(&self) {
         self.notifier.notify_waiters()
     }
 
+    /// Subscribes to changes in the screen data such as disconnection.
     async fn subscribe(&self) {
         self.notifier.notified().await
     }
 
+    /// Locks the screen data into an actual screen handle.
     pub async fn lock<'this>(&'this self) -> Screen<'this> {
         Screen::new(self).await
     }
@@ -117,6 +124,8 @@ impl Drop for ScreenData {
     }
 }
 
+/// Panics given that a point in the screen is out of bounds. This is here so
+/// that the compiler can make other functions smaller.
 #[cold]
 #[inline(never)]
 fn out_of_bounds(point: Coord2, size: Coord2) -> ! {

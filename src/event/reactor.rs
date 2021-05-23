@@ -12,26 +12,21 @@ use tokio::{task, time};
 #[derive(Debug)]
 pub(crate) struct Reactor<'shared> {
     shared: &'shared Shared,
+    stdout_guard: Option<LockedStdout<'shared>>,
 }
 
 impl<'shared> Reactor<'shared> {
     pub fn new(shared: &'shared Shared) -> Self {
-        Self { shared }
+        Self { shared, stdout_guard: None }
     }
 
-    pub async fn pre_loop<'stdout>(
-        &mut self,
-        stdout_guard: &mut Option<LockedStdout<'stdout>>,
-    ) -> Result<(), Error>
-    where
-        'shared: 'stdout,
-    {
+    pub async fn pre_loop(&mut self) -> Result<(), Error> {
         let mut locked = self.shared.screen().lock().await;
         let size = locked.size();
         let min_size = locked.min_size();
         if size.x < min_size.x || size.y < min_size.y {
-            locked.check_resize(min_size, stdout_guard).await?;
-            locked.check_resize(size, stdout_guard).await?;
+            locked.check_resize(min_size, &mut self.stdout_guard).await?;
+            locked.check_resize(size, &mut self.stdout_guard).await?;
             let evt = ResizeEvent { size: None };
             self.send(Event::Resize(evt));
         }
@@ -40,16 +35,15 @@ impl<'shared> Reactor<'shared> {
 
     /// Performs a "react loop", i.e. keeps polling events, reacting to the
     /// events, and sending them to the event listener.
-    pub(crate) async fn react_loop<'stdout>(
-        &'stdout mut self,
+    pub(crate) async fn react_loop(
+        &mut self,
         event_interval: Duration,
-        stdout_guard: &mut Option<LockedStdout<'stdout>>,
     ) -> Result<(), Error> {
         let mut interval = time::interval(event_interval);
 
         while self.shared.is_connected() {
             match self.poll().await? {
-                Some(crossterm) => self.react(crossterm, stdout_guard).await?,
+                Some(crossterm) => self.react(crossterm).await?,
                 None => tokio::select! {
                     _ = interval.tick() => (),
                     _ = self.shared.events().subscribe() => (),
@@ -62,17 +56,13 @@ impl<'shared> Reactor<'shared> {
 
     /// Reacts to a single event. Input uses the crossterm encoding for the
     /// event.
-    async fn react<'stdout>(
-        &'stdout self,
-        crossterm: CrosstermEvent,
-        stdout: &mut Option<LockedStdout<'stdout>>,
-    ) -> Result<(), Error> {
+    async fn react(&mut self, crossterm: CrosstermEvent) -> Result<(), Error> {
         let _guard = self.shared.service_guard().await?;
 
         match crossterm {
             CrosstermEvent::Key(key) => {
-                let maybe_key =
-                    key_from_crossterm(key.code).filter(|_| stdout.is_none());
+                let maybe_key = key_from_crossterm(key.code)
+                    .filter(|_| self.stdout_guard.is_none());
                 if let Some(main_key) = maybe_key {
                     use crossterm::event::KeyModifiers as Mod;
 
@@ -90,10 +80,12 @@ impl<'shared> Reactor<'shared> {
             CrosstermEvent::Resize(width, height) => {
                 let size = Coord2 { x: width, y: height };
                 let mut locked_screen = self.shared.screen().lock().await;
-                let prev_size_good = stdout.is_none();
-                locked_screen.check_resize(size, stdout).await?;
+                let prev_size_good = self.stdout_guard.is_none();
+                locked_screen
+                    .check_resize(size, &mut self.stdout_guard)
+                    .await?;
 
-                if stdout.is_none() {
+                if self.stdout_guard.is_none() {
                     let evt = ResizeEvent { size: Some(size) };
                     self.send(Event::Resize(evt));
                 } else if prev_size_good {

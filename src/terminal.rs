@@ -220,10 +220,9 @@ async fn events_task(
     shared: Arc<Shared>,
 ) -> Result<(), Error> {
     let mut reactor = Reactor::new(&shared);
-    let mut stdout = None;
-    reactor.pre_loop(&mut stdout).await?;
+    reactor.pre_loop().await?;
     barrier.wait().await;
-    reactor.react_loop(interval, &mut stdout).await
+    reactor.react_loop(interval).await
 }
 
 /// The task that renders the screen buffer, periodically. Barrier must be
@@ -237,10 +236,12 @@ async fn renderer_task(
     renderer(&shared).await
 }
 
-/// A handle to the terminal.
+/// An application's handle to the terminal.
 #[derive(Debug, Clone)]
 pub struct Terminal {
+    /// Shared data between application's terminal handles and services.
     shared: Arc<Shared>,
+    /// Current epoch on event channel for this channel.
     curr_epoch: event::Epoch,
 }
 
