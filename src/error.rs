@@ -22,29 +22,17 @@ impl fmt::Display for AlreadyRunning {
 
 impl ErrorTrait for AlreadyRunning {}
 
-/// Error returned by the screen handle when the renderer disconnects.
-#[derive(Debug, Clone)]
-pub struct RendererOff;
-
-impl fmt::Display for RendererOff {
-    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        fmt.pad("terminal renderer disconnected")
-    }
-}
-
-impl ErrorTrait for RendererOff {}
-
 /// Error returned by the events handler when the listener disconnects.
 #[derive(Debug, Clone)]
-pub struct EventsOff;
+pub struct ServicesOff;
 
-impl fmt::Display for EventsOff {
+impl fmt::Display for ServicesOff {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        fmt.pad("terminal event listener disconnected")
+        fmt.pad("terminal event listener and/or screen render disconnected")
     }
 }
 
-impl ErrorTrait for EventsOff {}
+impl ErrorTrait for ServicesOff {}
 
 /// The kind of an error that may happen when executing a terminal operation.
 #[derive(Debug)]
@@ -52,10 +40,8 @@ impl ErrorTrait for EventsOff {}
 pub enum ErrorKind {
     /// Terminal services already running.
     AlreadyRunning(AlreadyRunning),
-    /// Renderer disconnected.
-    RendererOff(RendererOff),
-    /// Event listener disconnected.
-    EventsOff(EventsOff),
+    /// Event listener and/or renderer disconnected.
+    ServicesOff(ServicesOff),
     /// This is an IO error.
     IO(io::Error),
     /// This is a formatting error.
@@ -75,8 +61,7 @@ impl ErrorKind {
     pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send + Sync) {
         match self {
             ErrorKind::AlreadyRunning(error) => error,
-            ErrorKind::RendererOff(error) => error,
-            ErrorKind::EventsOff(error) => error,
+            ErrorKind::ServicesOff(error) => error,
             ErrorKind::IO(error) => error,
             ErrorKind::Fmt(error) => error,
             ErrorKind::ParseInt(error) => error,
@@ -104,15 +89,9 @@ impl From<AlreadyRunning> for ErrorKind {
     }
 }
 
-impl From<RendererOff> for ErrorKind {
-    fn from(error: RendererOff) -> Self {
-        ErrorKind::RendererOff(error)
-    }
-}
-
-impl From<EventsOff> for ErrorKind {
-    fn from(error: EventsOff) -> Self {
-        ErrorKind::EventsOff(error)
+impl From<ServicesOff> for ErrorKind {
+    fn from(error: ServicesOff) -> Self {
+        ErrorKind::ServicesOff(error)
     }
 }
 
@@ -205,14 +184,8 @@ impl From<AlreadyRunning> for Error {
     }
 }
 
-impl From<RendererOff> for Error {
-    fn from(error: RendererOff) -> Self {
-        Self::new(ErrorKind::from(error))
-    }
-}
-
-impl From<EventsOff> for Error {
-    fn from(error: EventsOff) -> Self {
+impl From<ServicesOff> for Error {
+    fn from(error: ServicesOff) -> Self {
         Self::new(ErrorKind::from(error))
     }
 }

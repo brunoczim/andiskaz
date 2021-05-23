@@ -1,23 +1,16 @@
 //! This crate exports a terminal terminal and its utilites.
 
 use crate::{
-    coord,
-    coord::Coord2,
-    error::{AlreadyRunning, Error, ErrorKind, EventsOff},
+    error::{AlreadyRunning, ServicesOff},
     event,
-    event::{Event, ListenEvent, Reactor},
-    screen,
-    screen::{renderer, Screen},
+    event::Event,
+    screen::{Screen, ScreenData},
 };
-use std::{
-    future::Future,
-    sync::{
-        atomic::{AtomicBool, Ordering::*},
-        Arc,
-    },
-    time::Duration,
+use std::sync::{
+    atomic::{AtomicBool, Ordering::*},
+    Arc,
 };
-use tokio::{sync::Barrier, task};
+use tokio::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};
 
 /// State of the terminal guard. true means acquired, false means released.
 static RUN_GUARD_STATE: AtomicBool = AtomicBool::new(false);
@@ -44,6 +37,7 @@ impl Drop for RunGuard {
     }
 }
 
+/*
 /// A terminal configuration builder.
 #[derive(Debug, Clone)]
 pub struct Builder {
@@ -179,7 +173,7 @@ impl Builder {
             y: coord::from_crossterm(height),
             x: coord::from_crossterm(width),
         };
-        let screen = Screen::new(screen_size, self.min_screen, self.frame_time);
+        let screen = ScreenData::new(screen_size, self.min_screen, self.frame_time);
         Ok(Terminal { screen, events })
     }
 }
@@ -207,7 +201,7 @@ where
 async fn events_task(
     barrier: Arc<Barrier>,
     interval: Duration,
-    screen: Screen,
+    screen: ScreenData,
     mut reactor: Reactor,
 ) -> Result<(), Error> {
     let mut stdout = None;
@@ -220,12 +214,13 @@ async fn events_task(
 /// shared between tasks with the same given screen.
 async fn renderer_task(
     barrier: Arc<Barrier>,
-    screen: Screen,
+    screen: ScreenData,
 ) -> Result<(), Error> {
     let _guard = screen.conn_guard();
     barrier.wait().await;
     renderer(&screen).await
 }
+*/
 
 /// A handle to the terminal.
 #[derive(Debug, Clone)]
@@ -235,84 +230,127 @@ pub struct Terminal {
 }
 
 impl Terminal {
-    pub async fn enter<'terminal>(
+    pub async fn enter_now<'terminal>(
         &'terminal mut self,
-    ) -> TerminalGuard<'terminal> {
-        TerminalGuard {
-            event_guard: self.shared.events.prevent().await,
-            shared: &self.shared,
+    ) -> Result<TerminalGuard<'terminal>, ServicesOff> {
+        let guard = self.shared.app_guard().await?;
+        let event = self.shared.events().read(self.curr_epoch);
+        let screen = self.shared.screen().lock().await;
+        Ok(TerminalGuard {
+            screen,
+            guard,
+            event,
             curr_epoch: &mut self.curr_epoch,
+        })
+    }
+
+    pub async fn listen<'terminal>(
+        &'terminal mut self,
+    ) -> Result<TerminalGuard<'terminal>, ServicesOff> {
+        self.shared.events.subscribe().await;
+        self.enter_now().await
+    }
+}
+
+impl Drop for Terminal {
+    fn drop(&mut self) {
+        if Arc::strong_count(&self.shared) <= 3 {
+            self.shared.disconnect();
         }
     }
 }
 
 #[derive(Debug)]
 pub struct TerminalGuard<'terminal> {
-    event_guard: event::Prevent<'terminal>,
-    shared: &'terminal Arc<Shared>,
+    guard: AppSyncGuard<'terminal>,
+    event: Option<(event::Epoch, Event)>,
     curr_epoch: &'terminal mut event::Epoch,
+    screen: Screen<'terminal>,
 }
 
 impl<'terminal> TerminalGuard<'terminal> {
-    pub fn last_event(&mut self) -> Event {
-        let events = self.shared.events.inner.lock().unwrap();
-        let event = events.read(*self.curr_epoch);
-        *self.curr_epoch = events.epoch();
-        event
+    pub fn event(&mut self) -> Option<Event> {
+        self.event.map(|(new_epoch, event)| {
+            *self.curr_epoch = new_epoch;
+            event
+        })
     }
 
-    /// Checks if an event happened, without blocking.
-    pub fn check(&mut self) -> Result<Option<Event>, EventsOff> {
-        let events = self.shared.events.inner.lock().unwrap();
-        let epoch = events.epoch();
-        if epoch > *self.curr_epoch {
-            let event = events.read(*self.curr_epoch);
-            *self.curr_epoch = epoch;
-            Ok(Some(event))
-        } else if events.connected() {
-            Ok(None)
-        } else {
-            Err(EventsOff)
-        }
-    }
-
-    pub async fn listen_event(&mut self) -> Result<Event, EventsOff> {
-        ListenEvent::new(self.curr_epoch, self.shared).await
-    }
-}
-
-impl Terminal {
-    /// Starts the application and gives it a handle to the terminal. When the
-    /// given start function finishes, the application's execution stops as
-    /// well.
-    ///
-    /// After that `start`'s future returns, terminal services such as screen
-    /// handle and events handle are not guaranteed to be available. One would
-    /// prefer spawning tasks that use the terminal handle by joining them, and
-    /// not detaching.
-    ///
-    /// This function uses the default configuration. See [`Builder`] for
-    /// terminal settings.
-    ///
-    /// Returns an [`AlreadyRunning`] error if there already is an instance of
-    /// terminal services executing. In other words, one should not call
-    /// this function again if another call did not finish yet, otherwise it
-    /// will panic.
-    ///
-    /// Beware! If the given `start` future returns a `Result`, then `run` will
-    /// return a double `Result`!!
-    pub async fn run<F, A, T>(start: F) -> Result<T, Error>
-    where
-        F: FnOnce(Terminal) -> A + Send + 'static,
-        A: Future<Output = T> + Send + 'static,
-        T: Send + 'static,
-    {
-        Builder::new().run(start).await
+    pub fn screen(&mut self) -> &mut Screen<'terminal> {
+        &mut self.screen
     }
 }
 
 #[derive(Debug)]
 pub(crate) struct Shared {
-    pub(crate) events: event::Shared,
-    pub(crate) screen: screen::Shared,
+    sync: RwLock<()>,
+    connected: AtomicBool,
+    screen: ScreenData,
+    events: event::Channel,
+}
+
+impl Shared {
+    pub(crate) fn is_connected(&self) -> bool {
+        self.connected.load(Acquire)
+    }
+
+    pub(crate) fn disconnect(&self) {
+        self.connected.store(false, Release);
+        self.events.notify();
+        self.screen.notify();
+    }
+
+    pub(crate) async fn service_guard<'this>(
+        &'this self,
+    ) -> Result<ServiceSyncGuard<'this>, ServicesOff> {
+        let guard = ServiceSyncGuard { inner: self.sync.read().await };
+        if self.is_connected() {
+            Ok(guard)
+        } else {
+            Err(ServicesOff)
+        }
+    }
+
+    pub(crate) async fn app_guard<'this>(
+        &'this self,
+    ) -> Result<AppSyncGuard<'this>, ServicesOff> {
+        let guard = AppSyncGuard { inner: self.sync.write().await };
+        if self.is_connected() {
+            Ok(guard)
+        } else {
+            Err(ServicesOff)
+        }
+    }
+
+    pub(crate) fn events(&self) -> &event::Channel {
+        &self.events
+    }
+
+    pub(crate) fn screen(&self) -> &ScreenData {
+        &self.screen
+    }
+
+    pub(crate) fn conn_guard(&self) -> ConnGuard {
+        ConnGuard { shared: self }
+    }
+}
+
+#[derive(Debug)]
+pub(crate) struct ServiceSyncGuard<'shared> {
+    inner: RwLockReadGuard<'shared, ()>,
+}
+
+#[derive(Debug)]
+pub(crate) struct AppSyncGuard<'shared> {
+    inner: RwLockWriteGuard<'shared, ()>,
+}
+
+pub(crate) struct ConnGuard<'shared> {
+    shared: &'shared Shared,
+}
+
+impl<'shared> Drop for ConnGuard<'shared> {
+    fn drop(&mut self) {
+        self.shared.disconnect()
+    }
 }

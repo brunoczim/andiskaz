@@ -34,19 +34,14 @@ async fn term_main(mut term: Terminal) -> Result<(), Error> {
     let string = tstring!["Hello, World! Press any key..."];
     loop {
         // Locks the screen. The word "lock" is important here.
-        let mut screen = term.screen.lock().await?;
-        // Puts our message.
-        screen.styled_text(&string, Style::with_colors(Color2::default()));
-        // Drops the screen handle. IMPORTANT. If we don't drop, it will block
-        // things like the screen renderer.
-        drop(screen);
+        let mut session = term.wait_event().await?;
 
-        // Checks if a key was pressed. We'll wait until an event happens. If a
-        // key was pressed or an error happened, we exit. The only event that
-        // makes this `if` fail is a resize event, so, we have to re-print our
-        // message in the next iteration.
-        if let Ok(Event::Key(_)) | Err(_) = term.events.listen().await {
-            break;
+        match session.event {
+            Some(Event::Key(_)) => break,
+            Some(Event::Resize(_)) => tick
+                .screen
+                .styled_text(&string, Style::with_colors(Color2::default())),
+            None => (),
         }
     }
 

@@ -131,36 +131,14 @@ impl Game {
         terminal: &mut Terminal,
         tick: Duration,
     ) -> Result<EndKind, Error> {
-        // Initializes the tick control.
         let mut interval = time::interval(tick);
-        // Locks for rendering.
-        let mut screen = terminal.screen.lock().await?;
-        // First rendering.
-        self.render(&mut screen);
-        // Drops so we don't keep the lock.
-        drop(screen);
-
         loop {
-            // Locks for rendering. This MUST happen before checking for an
-            // event, so that we check for a resize event that is still valid
-            // when rendering.
-            let mut screen = terminal.screen.lock().await?;
-            // Maybe an event.
-            let event = terminal.events.check()?;
-            // Processes the event in this tick. Possibly gets the end of the
-            // game.
-            let maybe_end = self.tick(event);
-            // Even if we would stop right now, render.
-            self.render(&mut screen);
-            // Drops so we don't keep the lock.
-            drop(screen);
-
+            let session = terminal.session().await?;
+            let maybe_end = self.tick(session.event);
+            self.render(&mut session.screen);
             if let Some(end) = maybe_end {
-                // Stops if the end of the game has been reached.
                 break Ok(end);
             }
-
-            // Wait for the tick interval.
             interval.tick().await;
         }
     }
