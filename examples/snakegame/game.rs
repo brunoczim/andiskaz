@@ -10,7 +10,7 @@ use andiskaz::{
     coord::Coord2,
     error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
-    screen::{LockedScreen, Tile},
+    screen::{Screen, Tile},
     string::{TermGrapheme, TermString},
     style::Style,
     terminal::Terminal,
@@ -51,10 +51,9 @@ pub struct Game {
 
 impl Game {
     /// Initializes the game state, given terminal info.
-    pub async fn new(terminal: &Terminal) -> Result<Self, Error> {
-        // Locks the screen.
-        let screen = terminal.screen.lock().await?;
-
+    pub async fn new<'terminal>(
+        screen: &mut Screen<'terminal>,
+    ) -> Result<Self, Error> {
         // Tile for the snake's body.
         let grapheme = TermGrapheme::new_lossy("O");
         let colors = Color2 {
@@ -133,9 +132,9 @@ impl Game {
     ) -> Result<EndKind, Error> {
         let mut interval = time::interval(tick);
         loop {
-            let session = terminal.session().await?;
-            let maybe_end = self.tick(session.event);
-            self.render(&mut session.screen);
+            let mut session = terminal.enter().await?;
+            let maybe_end = self.tick(session.event());
+            self.render(&mut session.screen());
             if let Some(end) = maybe_end {
                 break Ok(end);
             }
@@ -260,7 +259,7 @@ impl Game {
     }
 
     /// Renders all game data into the screen.
-    fn render(&self, screen: &mut LockedScreen) {
+    fn render(&self, screen: &mut Screen) {
         // Clears screen with black as background color.
         screen.clear(BasicColor::Black.into());
 
@@ -275,7 +274,7 @@ impl Game {
     }
 
     /// Renders the borders via the given locked screen.
-    fn render_borders<'screen>(&self, screen: &mut LockedScreen<'screen>) {
+    fn render_borders(&self, screen: &mut Screen) {
         // Top border.
         for x in self.bounds.min.x .. self.bounds.max.x + 1 {
             screen.set(
@@ -326,7 +325,7 @@ impl Game {
     }
 
     /// Renders the message above the borders.
-    fn render_message(&self, screen: &mut LockedScreen) {
+    fn render_message(&self, screen: &mut Screen) {
         // White foreground, black background.
         let colors = Color2 {
             foreground: BasicColor::White.into(),
@@ -342,17 +341,19 @@ impl Game {
     fn resize(&mut self, event: ResizeEvent) -> Option<EndKind> {
         // Keeps track if the end is reached.
         let mut end = None;
-        // New bounds.
-        self.bounds = Self::make_bounds(event.size);
+        if let Some(size) = event.size {
+            // New bounds.
+            self.bounds = Self::make_bounds(size);
 
-        if self.snake.saturate_at_bounds(self.bounds) {
-            // We will consider that the game is lost if snake gets outside of
-            // the plane when resizing.
-            end = Some(EndKind::Loss);
-        }
-        if !self.food.in_bounds(self.bounds) {
-            // If the food is outside of the plane, regenerates.
-            self.food.regenerate(&self.snake, self.bounds);
+            if self.snake.saturate_at_bounds(self.bounds) {
+                // We will consider that the game is lost if snake gets outside
+                // of the plane when resizing.
+                end = Some(EndKind::Loss);
+            }
+            if !self.food.in_bounds(self.bounds) {
+                // If the food is outside of the plane, regenerates.
+                self.food.regenerate(&self.snake, self.bounds);
+            }
         }
 
         end

@@ -4,7 +4,7 @@ use andiskaz::{
     emergency_restore,
     error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
-    screen::{LockedScreen, Tile},
+    screen::{Screen, Tile},
     string::{TermGrapheme, TermString},
     style::Style,
     terminal,
@@ -50,30 +50,30 @@ async fn main() {
 /// The terminal main function.
 async fn term_main(mut game: Game, mut term: Terminal) -> Result<(), Error> {
     // Renders for the first time.
-    {
-        let mut screen = term.screen.lock().await?;
-        game.render(&mut screen).await?;
-    }
+    game.render(term.enter().await?.screen()).await?;
 
     loop {
+        let mut session = term.listen().await?;
         // Awaits for an event.
-        match term.events.listen().await {
+        match session.event() {
             // This is a key event.
-            Ok(Event::Key(evt)) => {
+            Some(Event::Key(evt)) => {
                 // Let the game state handle the key, and they will tell us if
                 // we should keep executing (i.e. ESC was not pressed).
-                if !game.handle_key(evt, &term).await? {
+                if !game.handle_key(evt, session.screen()).await? {
                     break;
                 }
             },
 
             // This is a resize event. Let the game state handle it.
-            Ok(Event::Resize(evt)) => game.handle_resize(evt, &term).await?,
+            Some(Event::Resize(evt)) => {
+                game.handle_resize(evt, session.screen()).await?
+            },
 
             // Only possible error is if the event listener failed. In this
             // case, Terminal::run or Builder::run will already tell us that
             // this fail happened and we will handle it in main.
-            Err(_) => break,
+            None => break,
         }
     }
 
@@ -100,9 +100,9 @@ impl Game {
     }
 
     /// Renders the game state. Should be called only on resize or first render.
-    async fn render<'screen>(
+    async fn render<'terminal>(
         &self,
-        screen: &mut LockedScreen<'screen>,
+        screen: &mut Screen<'terminal>,
     ) -> Result<(), Error> {
         // Colors of the message. Black foreground, green background.
         let colors = Color2 {
@@ -123,9 +123,9 @@ impl Game {
     }
 
     /// Renders the cursor with the given color.
-    async fn render_cursor<'term>(
+    async fn render_cursor<'terminal>(
         &self,
-        screen: &mut LockedScreen<'term>,
+        screen: &mut Screen<'terminal>,
         color: Color,
     ) {
         // A space with the given colors.
@@ -144,16 +144,14 @@ impl Game {
     }
 
     /// Handles a key event.
-    async fn handle_key(
+    async fn handle_key<'terminal>(
         &mut self,
         key: KeyEvent,
-        term: &Terminal,
+        screen: &mut Screen<'terminal>,
     ) -> Result<bool, Error> {
-        // Locks the screen.
-        let mut screen = term.screen.lock().await?;
         // "Erases" the cursor using the same color as the background color
         // of all the terminal.
-        self.render_cursor(&mut screen, BasicColor::Black.into()).await;
+        self.render_cursor(screen, BasicColor::Black.into()).await;
 
         // Whether the "game" should keep executing.
         let mut executing = true;
@@ -199,27 +197,30 @@ impl Game {
         };
 
         // Renders the new cursor.
-        self.render_cursor(&mut screen, BasicColor::White.into()).await;
+        self.render_cursor(screen, BasicColor::White.into()).await;
 
         Ok(executing)
     }
 
     /// Handles a resize event.
-    async fn handle_resize(
+    async fn handle_resize<'terminal>(
         &mut self,
         evt: ResizeEvent,
-        term: &Terminal,
+        screen: &mut Screen<'terminal>,
     ) -> Result<(), Error> {
-        // Adjust the cursor position, if it would be outside of the terminal.
-        if self.cursor.y >= evt.size.y {
-            self.cursor.y = evt.size.y - 1;
-        }
-        if self.cursor.x >= evt.size.x {
-            self.cursor.x = evt.size.x - 1;
-        }
+        if let Some(size) = evt.size {
+            // Adjust the cursor position, if it would be outside of the
+            // terminal.
+            if self.cursor.y >= size.y {
+                self.cursor.y = size.y - 1;
+            }
+            if self.cursor.x >= size.x {
+                self.cursor.x = size.x - 1;
+            }
 
-        // Renders everything, since resizing scrambles the screen.
-        self.render(term).await?;
+            // Renders everything, since resizing scrambles the screen.
+            self.render(screen).await?;
+        }
 
         Ok(())
     }

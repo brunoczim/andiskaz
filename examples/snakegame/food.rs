@@ -3,7 +3,7 @@
 use crate::{plane::Bounds, snake::Snake};
 use andiskaz::{
     coord::Coord2,
-    screen::{LockedScreen, Tile},
+    screen::{Screen, Tile},
 };
 use rand::Rng;
 
@@ -66,7 +66,7 @@ impl Food {
     }
 
     /// Renders the food on the screen.
-    pub fn render(&self, screen: &mut LockedScreen) {
+    pub fn render(&self, screen: &mut Screen) {
         screen.set(self.pos, self.tile.clone());
     }
 }

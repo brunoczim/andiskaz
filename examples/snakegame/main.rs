@@ -59,7 +59,7 @@ async fn main() {
 /// The terminal main function.
 async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
     // Initializes the game getting info from the given terminal.
-    let game = Game::new(&mut terminal).await?;
+    let game = Game::new(terminal.enter().await?.screen()).await?;
     // Runs the game and gets info on how it ended.
     let end_kind = game.run(&mut terminal, TICK).await?;
 
@@ -74,16 +74,15 @@ async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
                 foreground: BasicColor::Black.into(),
                 background: BasicColor::LightGreen.into(),
             };
-            // Locks the screen. Attention. While locked, rendering is blocked.
-            let mut screen = terminal.screen.lock().await?;
-            // Style for message. Centralized.
-            let style = Style::with_colors(colors)
-                .align(1, 2)
-                .top_margin(screen.size().y / 2);
-            // Puts message.
-            screen.styled_text(&tstring!["YOU WON!!"], style);
-            // IMPORTANT! Drops the locked screen so rendering don't block.
-            drop(screen);
+            {
+                let mut session = terminal.enter().await?;
+                // Style for message. Centralized.
+                let style = Style::with_colors(colors)
+                    .align(1, 2)
+                    .top_margin(session.screen().size().y / 2);
+                // Puts message.
+                session.screen().styled_text(&tstring!["YOU WON!!"], style);
+            }
 
             // Waits a key with a delay before waiting for the key.
             wait_key_delay(&mut terminal).await?;
@@ -96,15 +95,15 @@ async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
                 foreground: BasicColor::Black.into(),
                 background: BasicColor::LightRed.into(),
             };
-            // Locks the screen. Attention. While locked, rendering is blocked.
-            let mut screen = terminal.screen.lock().await?;
-            // Style for message. Centralized.
-            let style = Style::with_colors(colors)
-                .align(1, 2)
-                .top_margin(screen.size().y / 2);
-            screen.styled_text(&tstring!["YOU LOST!!"], style);
-            // IMPORTANT! Drops the locked screen so rendering don't block.
-            drop(screen);
+            {
+                let mut session = terminal.enter().await?;
+                // Style for message. Centralized.
+                let style = Style::with_colors(colors)
+                    .align(1, 2)
+                    .top_margin(session.screen().size().y / 2);
+                // Puts message.
+                session.screen().styled_text(&tstring!["YOU LOST!!"], style);
+            }
 
             // Waits a key with a delay before waiting for the key.
             wait_key_delay(&mut terminal).await?;
@@ -121,10 +120,7 @@ async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
 async fn wait_key_delay(terminal: &mut Terminal) -> Result<(), AndiskazError> {
     // We have to wait before clearing the events handler.
     time::sleep(WAIT_KEY_DELAY).await;
-    // Clears the events handler channel.
-    terminal.events.check()?;
-
-    // Waits for a key this time.
-    terminal.events.listen().await?;
+    terminal.enter().await?.event();
+    terminal.listen().await?.event();
     Ok(())
 }

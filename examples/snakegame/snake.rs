@@ -6,7 +6,7 @@ use crate::{
 };
 use andiskaz::{
     coord::Coord2,
-    screen::{LockedScreen, Tile},
+    screen::{Screen, Tile},
 };
 use rand::Rng;
 use std::collections::VecDeque;
@@ -126,7 +126,7 @@ impl Snake {
     }
 
     /// Renders the snake.
-    pub fn render(&self, screen: &mut LockedScreen) {
+    pub fn render(&self, screen: &mut Screen) {
         // All the body segments. Although we will initially render the head as
         // a body segment, it's ok. There is no extra IO involved, since the
         // screen is buffered.

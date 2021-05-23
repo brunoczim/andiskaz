@@ -32,15 +32,18 @@ async fn main() {
 async fn term_main(mut term: Terminal) -> Result<(), Error> {
     // Allocates space for a string safe, to print it.
     let string = tstring!["Hello, World! Press any key..."];
+    let style = Style::with_colors(Color2::default());
+    term.enter().await?.screen().styled_text(&string, style);
+
     loop {
         // Locks the screen. The word "lock" is important here.
-        let mut session = term.wait_event().await?;
+        let mut session = term.listen().await?;
 
-        match session.event {
+        match session.event() {
             Some(Event::Key(_)) => break,
-            Some(Event::Resize(_)) => tick
-                .screen
-                .styled_text(&string, Style::with_colors(Color2::default())),
+            Some(Event::Resize(_)) => {
+                session.screen().styled_text(&string, style);
+            },
             None => (),
         }
     }

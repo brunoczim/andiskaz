@@ -34,39 +34,27 @@ async fn main() {
 async fn term_main(mut term: Terminal) -> Result<(), Error> {
     // Allocates space for a string safe, to print it.
     let message = tstring!["Exits on ESC"];
-    // Last event dumped.
-    let mut curr_event = None;
+    term.enter()
+        .await?
+        .screen()
+        .styled_text(&message, Style::with_colors(Color2::default()));
 
     loop {
-        // Locks the screen. The word "lock" is important here.
-        let mut screen = term.screen.lock().await?;
+        let mut session = term.listen().await?;
+        session.screen().clear(BasicColor::Black.into());
+        session
+            .screen()
+            .styled_text(&message, Style::with_colors(Color2::default()));
 
-        // Clears the screen from our previous events. Remember, the cost of
-        // this operation is amortized by the double buffering.
-        screen.clear(BasicColor::Black.into());
-
-        // Puts our instructions.
-        screen.styled_text(&message, Style::with_colors(Color2::default()));
-
-        if let Some(event_dump) = &curr_event {
-            // If there was a previous event dump, output it.
+        if let Some(event) = session.event() {
+            if let Event::Key(KeyEvent { main_key: Key::Esc, .. }) = event {
+                break;
+            }
             let style = Style::with_colors(Color2::default()).top_margin(2);
-            screen.styled_text(&event_dump, style);
+            session
+                .screen()
+                .styled_text(&tstring![format!("{:?}", event)], style);
         }
-
-        // Drops the screen handle. IMPORTANT. If we don't drop, it will block
-        // things like the screen renderer.
-        drop(screen);
-
-        let event_string = match term.events.listen().await? {
-            // Exits if ESC.
-            Event::Key(KeyEvent { main_key: Key::Esc, .. }) => break,
-            // Otherwise dump it.
-            event => format!("{:?}", event),
-        };
-
-        // Save the event dump.
-        curr_event = Some(tstring![event_string]);
     }
 
     Ok(())
