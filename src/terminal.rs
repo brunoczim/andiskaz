@@ -113,10 +113,9 @@ impl Builder {
         // Ensures there are no other terminal sevices executing.
         let _guard = RunGuard::acquire()?;
 
-        let initial_size = self.initial_size()?;
-
         // Initializes terminal structures.
-        let terminal = self.finish(initial_size).await?;
+        let initial_size = self.initial_size()?;
+        let terminal = self.finish(initial_size).await;
         let shared = terminal.shared.clone();
         shared.screen().setup().await?;
 
@@ -128,7 +127,7 @@ impl Builder {
             let interval = self.event_interval;
             let barrier = barrier.clone();
             let shared = shared.clone();
-            tokio::spawn(events_task(barrier, interval, initial_size, shared))
+            tokio::spawn(events_task(barrier, interval, shared))
         };
 
         // Renderer task future.
@@ -216,7 +215,6 @@ where
 async fn events_task(
     barrier: Arc<Barrier>,
     interval: Duration,
-    initial_size: Coord2,
     shared: Arc<Shared>,
 ) -> Result<(), Error> {
     let mut reactor = Reactor::new(&shared);
@@ -245,7 +243,16 @@ pub struct Terminal {
 }
 
 impl Terminal {
-    pub async fn enter_now<'terminal>(
+    pub async fn run<F, A, T>(start: F) -> Result<T, Error>
+    where
+        F: FnOnce(Terminal) -> A + Send + 'static,
+        A: Future<Output = T> + Send + 'static,
+        T: Send + 'static,
+    {
+        Builder::default().run(start).await
+    }
+
+    pub async fn enter<'terminal>(
         &'terminal mut self,
     ) -> Result<TerminalGuard<'terminal>, ServicesOff> {
         let guard = self.shared.app_guard().await?;
@@ -263,7 +270,7 @@ impl Terminal {
         &'terminal mut self,
     ) -> Result<TerminalGuard<'terminal>, ServicesOff> {
         self.shared.events.subscribe().await;
-        self.enter_now().await
+        self.enter().await
     }
 }
 
@@ -310,17 +317,17 @@ impl Shared {
         }
     }
 
-    pub(crate) fn is_connected(&self) -> bool {
+    pub fn is_connected(&self) -> bool {
         self.connected.load(Acquire)
     }
 
-    pub(crate) fn disconnect(&self) {
+    pub fn disconnect(&self) {
         self.connected.store(false, Release);
         self.events.notify();
         self.screen.notify();
     }
 
-    pub(crate) async fn service_guard<'this>(
+    pub async fn service_guard<'this>(
         &'this self,
     ) -> Result<ServiceSyncGuard<'this>, ServicesOff> {
         let guard = ServiceSyncGuard { inner: self.sync.read().await };
@@ -331,7 +338,7 @@ impl Shared {
         }
     }
 
-    pub(crate) async fn app_guard<'this>(
+    pub async fn app_guard<'this>(
         &'this self,
     ) -> Result<AppSyncGuard<'this>, ServicesOff> {
         let guard = AppSyncGuard { inner: self.sync.write().await };
@@ -342,15 +349,15 @@ impl Shared {
         }
     }
 
-    pub(crate) fn events(&self) -> &event::Channel {
+    pub fn events(&self) -> &event::Channel {
         &self.events
     }
 
-    pub(crate) fn screen(&self) -> &ScreenData {
+    pub fn screen(&self) -> &ScreenData {
         &self.screen
     }
 
-    pub(crate) fn conn_guard(&self) -> ConnGuard {
+    pub fn conn_guard(&self) -> ConnGuard {
         ConnGuard { shared: self }
     }
 }
