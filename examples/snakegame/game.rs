@@ -132,7 +132,7 @@ impl Game {
     ) -> Result<EndKind, Error> {
         let mut interval = time::interval(tick);
         loop {
-            let mut session = terminal.enter().await?;
+            let mut session = terminal.lock_now().await?;
             let maybe_end = self.tick(session.event());
             self.render(&mut session.screen());
             if let Some(end) = maybe_end {

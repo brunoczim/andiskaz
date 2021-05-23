@@ -50,7 +50,7 @@ async fn main() {
 /// The terminal main function.
 async fn term_main(mut game: Game, mut term: Terminal) -> Result<(), Error> {
     // Renders for the first time.
-    game.render(term.enter().await?.screen()).await?;
+    game.render(term.lock_now().await?.screen()).await?;
 
     loop {
         let mut session = term.listen().await?;

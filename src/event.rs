@@ -167,6 +167,10 @@ impl Default for Channel {
 }
 
 impl Channel {
+    pub fn epoch(&self) -> Epoch {
+        self.data.lock().unwrap().epoch()
+    }
+
     pub fn notify(&self) {
         self.notifier.notify_waiters()
     }

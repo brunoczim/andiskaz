@@ -34,7 +34,7 @@ async fn main() {
 async fn term_main(mut term: Terminal) -> Result<(), Error> {
     // Allocates space for a string safe, to print it.
     let message = tstring!["Exits on ESC"];
-    term.enter()
+    term.lock_now()
         .await?
         .screen()
         .styled_text(&message, Style::with_colors(Color2::default()));

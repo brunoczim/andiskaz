@@ -43,17 +43,18 @@ pub(crate) struct ScreenData {
 }
 
 impl ScreenData {
-    pub fn new(
-        screen_size: Coord2,
-        min_size: Coord2,
-        frame_time: Duration,
-    ) -> Self {
+    pub fn new(size: Coord2, min_size: Coord2, frame_time: Duration) -> Self {
+        let corrected_size = if size.x >= min_size.x && size.y >= min_size.y {
+            size
+        } else {
+            min_size
+        };
         Self {
             min_size,
             frame_time,
             cleanedup: AtomicBool::new(false),
             stdout: Stdout::new(),
-            buffer: Mutex::new(ScreenBuffer::blank(screen_size)),
+            buffer: Mutex::new(ScreenBuffer::blank(corrected_size)),
             notifier: Notify::new(),
         }
     }

@@ -59,7 +59,7 @@ async fn main() {
 /// The terminal main function.
 async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
     // Initializes the game getting info from the given terminal.
-    let game = Game::new(terminal.enter().await?.screen()).await?;
+    let game = Game::new(terminal.lock_now().await?.screen()).await?;
     // Runs the game and gets info on how it ended.
     let end_kind = game.run(&mut terminal, TICK).await?;
 
@@ -75,7 +75,7 @@ async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
                 background: BasicColor::LightGreen.into(),
             };
             {
-                let mut session = terminal.enter().await?;
+                let mut session = terminal.lock_now().await?;
                 // Style for message. Centralized.
                 let style = Style::with_colors(colors)
                     .align(1, 2)
@@ -96,7 +96,7 @@ async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
                 background: BasicColor::LightRed.into(),
             };
             {
-                let mut session = terminal.enter().await?;
+                let mut session = terminal.lock_now().await?;
                 // Style for message. Centralized.
                 let style = Style::with_colors(colors)
                     .align(1, 2)
@@ -120,7 +120,7 @@ async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
 async fn wait_key_delay(terminal: &mut Terminal) -> Result<(), AndiskazError> {
     // We have to wait before clearing the events handler.
     time::sleep(WAIT_KEY_DELAY).await;
-    terminal.enter().await?.event();
+    terminal.clear_event();
     terminal.listen().await?.event();
     Ok(())
 }

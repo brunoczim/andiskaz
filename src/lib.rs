@@ -22,14 +22,14 @@
 //! /// Asynchronous main of a tokio project.
 //! #[tokio::main]
 //! async fn main() {
-//!     // Sets panic hook so we can see the panic even if terminal was being
-//!     // used in raw mode.
+//!     // Sets panic hook so we can see the panic even if terminal was being used
+//!     // in raw mode.
 //!     panic::set_hook(Box::new(|info| {
 //!         let _ = emergency_restore();
 //!         eprintln!("{}", info);
 //!     }));
 //!
-//!     // Create a terminal with default settings and run it.
+//! // Creates a terminal with default settings and runs it.
 //!     let result = Terminal::run(term_main).await;
 //!     // If error, prints it out and exits with bad code.
 //!     if let Ok(Err(error)) | Err(error) = result {
@@ -40,23 +40,28 @@
 //!
 //! /// The terminal main function.
 //! async fn term_main(mut term: Terminal) -> Result<(), Error> {
-//!     // Allocates space for a string safe, to print it.
+//!     // Allocates memory for a string which is safe to be printed.
 //!     let string = tstring!["Hello, World! Press any key..."];
-//!     loop {
-//!         // Locks the screen. The word "lock" is important here.
-//!         let mut screen = term.screen.lock().await?;
-//!         // Puts our message.
-//!         screen.styled_text(&string, Style::with_colors(Color2::default()));
-//!         // Drops the screen handle. IMPORTANT. If we don't drop, it will
-//!         // block things like the screen renderer.
-//!         drop(screen);
+//!     // Style for the string.
+//!     let style = Style::with_colors(Color2::default());
+//!     // Initial rendering.
+//!     term.lock_now().await?.screen().styled_text(&string, style);
 //!
-//!         // Checks if a key was pressed. We'll wait until an event happens.
-//!         // If a key was pressed or an error happened, we exit. The only
-//!         // event that makes this `if` fail is a resize event, so, we have to
-//!         // re-print our message in the next iteration.
-//!         if let Ok(Event::Key(_)) | Err(_) = term.events.listen().await {
-//!             break;
+//!     loop {
+//!         // Awaits for an event (key pressed, screen resized, etc).
+//!         let mut session = term.listen().await?;
+//!
+//!         // Gets the event for the current terminal session.
+//!         match session.event() {
+//!             // We expect a key to exit the example.
+//!             Some(Event::Key(_)) => break,
+//!             // User resized screen? Then the whole screen was thrown out,
+//!             // re-rendering is required.
+//!             Some(Event::Resize(_)) => {
+//!                 session.screen().styled_text(&string, style);
+//!             },
+//!             // Won't really happen since we waited for an event.
+//!             None => (),
 //!         }
 //!     }
 //!
@@ -64,7 +69,7 @@
 //! }
 //! ```
 
-//#![warn(missing_docs)]
+#![warn(missing_docs)]
 #![deny(unused_must_use)]
 
 #[macro_use]

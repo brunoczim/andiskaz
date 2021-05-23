@@ -119,7 +119,7 @@ impl Builder {
         let shared = terminal.shared.clone();
         shared.screen().setup().await?;
 
-        // Synchronization.
+        // Synchronization between parties.
         let barrier = Arc::new(Barrier::new(3));
 
         // Event listener task future.
@@ -143,6 +143,7 @@ impl Builder {
             tokio::spawn(main_task(barrier, terminal, start))
         };
 
+        // Joins every task.
         let (main_ret, events_ret, renderer_ret) =
             tokio::join!(main_fut, events_fut, renderer_fut);
 
@@ -169,6 +170,7 @@ impl Builder {
         Ok(main_ret?)
     }
 
+    /// Finds the initial size of the terminal.
     fn initial_size(&self) -> Result<Coord2, Error> {
         let size_res = task::block_in_place(|| {
             crossterm::terminal::enable_raw_mode()?;
@@ -243,6 +245,25 @@ pub struct Terminal {
 }
 
 impl Terminal {
+    /// Runs the terminal application with the default settings, i.e. minumum
+    /// screen is 80x25, 20ms for frame rendering interval, and 20ms for event
+    /// polling from the OS.
+    ///
+    /// Gives the application a handle to the terminal. When the given start
+    /// function finishes, the application's execution stops as well.
+    ///
+    /// After that `start`'s future returns, terminal services such as screen
+    /// handle and events handle are not guaranteed to be available. One would
+    /// prefer spawning tasks that use the terminal handle by joining them, and
+    /// not detaching.
+    ///
+    /// Returns an [`AlreadyRunning`] error if there is already an instance of
+    /// terminal services executing. In other words, one should not call
+    /// this function again if another call did not finish yet, otherwise it
+    /// will panic.
+    ///
+    /// Beware! If the given `start` future returns a `Result`, then `run` will
+    /// return a double `Result`!!
     pub async fn run<F, A, T>(start: F) -> Result<T, Error>
     where
         F: FnOnce(Terminal) -> A + Send + 'static,
@@ -252,7 +273,12 @@ impl Terminal {
         Builder::default().run(start).await
     }
 
-    pub async fn enter<'terminal>(
+    /// Locks the terminal immediately (except it has to wait for the lock to be
+    /// available). A locked terminal handle is returned, on which an
+    /// application can write to the screen or get the most recent event.
+    ///
+    /// Screen is locked, event channel is locked.
+    pub async fn lock_now<'terminal>(
         &'terminal mut self,
     ) -> Result<TerminalGuard<'terminal>, ServicesOff> {
         let guard = self.shared.app_guard().await?;
@@ -266,23 +292,46 @@ impl Terminal {
         })
     }
 
+    /// Listens for an event and only finishes when an event arrives. A locked
+    /// terminal handle is returned, on which an application can write to the
+    /// screen or get the most recent event, which will be present.
+    ///
+    /// Screen is locked, event channel is locked.
     pub async fn listen<'terminal>(
         &'terminal mut self,
     ) -> Result<TerminalGuard<'terminal>, ServicesOff> {
         self.shared.events.subscribe().await;
-        self.enter().await
+        self.lock_now().await
+    }
+
+    /// Clears the event channel. After this call, the current event is marked
+    /// as read and it will no longer be available.
+    pub fn clear_event(&mut self) {
+        self.curr_epoch = self.shared.events().epoch();
     }
 }
 
+/// A guard on a locked terminal handle.
+///
+/// Screen is locked, event channel is locked.
 #[derive(Debug)]
 pub struct TerminalGuard<'terminal> {
+    /// Synchronization lock for application (exclusive).
     guard: AppSyncGuard<'terminal>,
+    /// The result of reading the event channel (event epoch, event itself).
     event: Option<(event::Epoch, Event)>,
+    /// Reference to the current epoch so we can update it when the event is
+    /// read.
     curr_epoch: &'terminal mut event::Epoch,
+    /// Locked handle to the screen acquired by the application.
     screen: Screen<'terminal>,
 }
 
 impl<'terminal> TerminalGuard<'terminal> {
+    /// Reads the last event. When this method is called, the event is marked as
+    /// read, and in subsequent locks to the terminal handle, it won't be
+    /// available. If not called and no other event arrives, this will not
+    /// be marked as read and it will be available in the next locking.
     pub fn event(&mut self) -> Option<Event> {
         self.event.map(|(new_epoch, event)| {
             *self.curr_epoch = new_epoch;
@@ -290,20 +339,32 @@ impl<'terminal> TerminalGuard<'terminal> {
         })
     }
 
+    /// Returns a locked handle to the screen.
     pub fn screen(&mut self) -> &mut Screen<'terminal> {
         &mut self.screen
     }
 }
 
+/// Shared data between parties of the terminal application (the application
+/// itself, the reactor service, the renderer service).
 #[derive(Debug)]
 pub(crate) struct Shared {
+    /// Synchronization between application handles (each one is exclusive) and
+    /// services handles (all shared, such as event reactor and screen
+    /// renderer).
     sync: RwLock<()>,
+    /// Flags whether every party is connected (i.e. application, reactor and
+    /// renderer).
     connected: AtomicBool,
+    /// Screen managing's data.
     screen: ScreenData,
+    /// Events channel data.
     events: event::Channel,
 }
 
 impl Shared {
+    /// Creates shared data from: current screen size, minimum screen size,
+    /// frame interval time .
     pub fn new(
         screen_size: Coord2,
         min_screen: Coord2,
@@ -317,16 +378,21 @@ impl Shared {
         }
     }
 
+    /// Whether all parties are connected.
     pub fn is_connected(&self) -> bool {
         self.connected.load(Acquire)
     }
 
+    /// Disconnects one party, and therefore, marks the whole shared data as
+    /// disconnected (idempotent).
     pub fn disconnect(&self) {
         self.connected.store(false, Release);
         self.events.notify();
         self.screen.notify();
     }
 
+    /// Locks the synchronization between application and services for the
+    /// services (shared).
     pub async fn service_guard<'this>(
         &'this self,
     ) -> Result<ServiceSyncGuard<'this>, ServicesOff> {
@@ -338,6 +404,8 @@ impl Shared {
         }
     }
 
+    /// Locks the synchronization between application and services for the
+    /// application (exclusive).
     pub async fn app_guard<'this>(
         &'this self,
     ) -> Result<AppSyncGuard<'this>, ServicesOff> {
@@ -349,30 +417,41 @@ impl Shared {
         }
     }
 
+    /// Returns reference to the events' channel used by this application.
     pub fn events(&self) -> &event::Channel {
         &self.events
     }
 
+    /// Returns reference to the screen manager's data used by this application.
     pub fn screen(&self) -> &ScreenData {
         &self.screen
     }
 
+    /// Creates a connection guard. A connection guard disconnects the shared
+    /// data when the guard is dropped.
     pub fn conn_guard(&self) -> ConnGuard {
         ConnGuard { shared: self }
     }
 }
 
+/// Synchronization guard acquired by a service (shared).
 #[derive(Debug)]
 pub(crate) struct ServiceSyncGuard<'shared> {
+    /// Inner lock guard.
     inner: RwLockReadGuard<'shared, ()>,
 }
 
+/// Synchronization guard acquired by an application handle (exclusive).
 #[derive(Debug)]
 pub(crate) struct AppSyncGuard<'shared> {
+    /// Inner lock guard.
     inner: RwLockWriteGuard<'shared, ()>,
 }
 
+/// Connection guard for shared data. Disconnects when dropped.
+#[derive(Debug)]
 pub(crate) struct ConnGuard<'shared> {
+    /// Reference to the shared data on which drop will happen.
     shared: &'shared Shared,
 }
 
