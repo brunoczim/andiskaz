@@ -1,7 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.18.2/src/event/sys/unix/parse.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>parse.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../../../favicon.svg">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.18.2/src/event/sys/unix/parse.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>parse.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../../../storage.js"></script><script src="../../../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../../../crossterm/index.html'><div class='logo-container rust-logo'><img src='../../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
-                <a id="settings-menu" href="../../../../../settings.html"><img src="../../../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<link rel="alternate icon" type="image/png" href="../../../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../../crossterm/index.html'><div class='logo-container rust-logo'><img src='../../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button">?</button>
+                <a id="settings-menu" href="../../../../../settings.html"><img src="../../../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -784,14 +784,14 @@
 <span id="781">781</span>
 <span id="782">782</span>
 <span id="783">783</span>
-</pre><div class="example-wrap"><pre class="rust ">
+</pre><pre class="rust">
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">event</span>::{<span class="ident">Event</span>, <span class="ident">KeyCode</span>, <span class="ident">KeyEvent</span>, <span class="ident">KeyModifiers</span>, <span class="ident">MouseButton</span>, <span class="ident">MouseEvent</span>},
     <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span>,
 };
 
-<span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span>::<span class="ident">InternalEvent</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
+<span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span><span class="ident">::InternalEvent</span>;
+<span class="kw">use</span> <span class="ident">std::io</span>;
 
 <span class="comment">// Event parsing</span>
 <span class="comment">//</span>
@@ -806,8 +806,8 @@
 <span class="comment">//</span>
 
 <span class="kw">fn</span> <span class="ident">could_not_parse_event_error</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ErrorKind</span> {
-    <span class="ident">ErrorKind</span>::<span class="ident">IoError</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(
-        <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Other</span>,
+    <span class="ident">ErrorKind::IoError</span>(<span class="ident">io::Error::new</span>(
+        <span class="ident">io::ErrorKind::Other</span>,
         <span class="string">&quot;Could not parse an event.&quot;</span>,
     ))
 }
@@ -824,7 +824,7 @@
                     <span class="comment">// Possible Esc sequence</span>
                     <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
                 } <span class="kw">else</span> {
-                    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Esc</span>.<span class="ident">into</span>()))))
+                    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Esc</span>.<span class="ident">into</span>()))))
                 }
             } <span class="kw">else</span> {
                 <span class="kw">match</span> <span class="ident">buffer</span>[<span class="number">1</span>] {
@@ -834,57 +834,57 @@
                         } <span class="kw">else</span> {
                             <span class="kw">match</span> <span class="ident">buffer</span>[<span class="number">2</span>] {
                                 <span class="comment">// F1-F4</span>
-                                <span class="ident">val</span> @ <span class="string">b&#39;P&#39;</span>..<span class="op">=</span><span class="string">b&#39;S&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(
-                                    <span class="ident">KeyCode</span>::<span class="ident">F</span>(<span class="number">1</span> <span class="op">+</span> <span class="ident">val</span> <span class="op">-</span> <span class="string">b&#39;P&#39;</span>).<span class="ident">into</span>(),
+                                <span class="ident">val</span> @ <span class="string">b&#39;P&#39;</span>..<span class="op">=</span><span class="string">b&#39;S&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(
+                                    <span class="ident">KeyCode::F</span>(<span class="number">1</span> <span class="op">+</span> <span class="ident">val</span> <span class="op">-</span> <span class="string">b&#39;P&#39;</span>).<span class="ident">into</span>(),
                                 )))),
                                 <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">could_not_parse_event_error</span>()),
                             }
                         }
                     }
                     <span class="string">b&#39;[&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">parse_csi</span>(<span class="ident">buffer</span>),
-                    <span class="string">b&#39;\x1B&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Esc</span>.<span class="ident">into</span>())))),
+                    <span class="string">b&#39;\x1B&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Esc</span>.<span class="ident">into</span>())))),
                     <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>[<span class="number">1</span>..]).<span class="ident">map</span>(<span class="op">|</span><span class="ident">maybe_char</span><span class="op">|</span> {
                         <span class="ident">maybe_char</span>
-                            .<span class="ident">map</span>(<span class="ident">KeyCode</span>::<span class="ident">Char</span>)
-                            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">code</span><span class="op">|</span> <span class="ident">KeyEvent</span>::<span class="ident">new</span>(<span class="ident">code</span>, <span class="ident">KeyModifiers</span>::<span class="ident">ALT</span>))
-                            .<span class="ident">map</span>(<span class="ident">Event</span>::<span class="ident">Key</span>)
-                            .<span class="ident">map</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>)
+                            .<span class="ident">map</span>(<span class="ident">KeyCode::Char</span>)
+                            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">code</span><span class="op">|</span> <span class="ident">KeyEvent::new</span>(<span class="ident">code</span>, <span class="ident">KeyModifiers::ALT</span>))
+                            .<span class="ident">map</span>(<span class="ident">Event::Key</span>)
+                            .<span class="ident">map</span>(<span class="ident">InternalEvent::Event</span>)
                     }),
                 }
             }
         }
-        <span class="string">b&#39;\r&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(
-            <span class="ident">KeyCode</span>::<span class="ident">Enter</span>.<span class="ident">into</span>(),
+        <span class="string">b&#39;\r&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(
+            <span class="ident">KeyCode::Enter</span>.<span class="ident">into</span>(),
         )))),
         <span class="comment">// Issue #371: \n = 0xA, which is also the keycode for Ctrl+J. The only reason we get</span>
         <span class="comment">// newlines as input is because the terminal converts \r into \n for us. When we</span>
         <span class="comment">// enter raw mode, we disable that, so \n no longer has any meaning - it&#39;s better to</span>
         <span class="comment">// use Ctrl+J. Waiting to handle it here means it gets picked up later</span>
-        <span class="string">b&#39;\n&#39;</span> <span class="kw">if</span> <span class="op">!</span><span class="kw">crate</span>::<span class="ident">terminal</span>::<span class="ident">sys</span>::<span class="ident">is_raw_mode_enabled</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(
-            <span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Enter</span>.<span class="ident">into</span>()),
+        <span class="string">b&#39;\n&#39;</span> <span class="kw">if</span> <span class="op">!</span><span class="kw">crate</span><span class="ident">::terminal::sys::is_raw_mode_enabled</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(
+            <span class="ident">Event::Key</span>(<span class="ident">KeyCode::Enter</span>.<span class="ident">into</span>()),
         ))),
-        <span class="string">b&#39;\t&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Tab</span>.<span class="ident">into</span>())))),
-        <span class="string">b&#39;\x7F&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(
-            <span class="ident">KeyCode</span>::<span class="ident">Backspace</span>.<span class="ident">into</span>(),
+        <span class="string">b&#39;\t&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Tab</span>.<span class="ident">into</span>())))),
+        <span class="string">b&#39;\x7F&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(
+            <span class="ident">KeyCode::Backspace</span>.<span class="ident">into</span>(),
         )))),
-        <span class="ident">c</span> @ <span class="string">b&#39;\x01&#39;</span>..<span class="op">=</span><span class="string">b&#39;\x1A&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(
-            <span class="ident">KeyCode</span>::<span class="ident">Char</span>((<span class="ident">c</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">0x1</span> <span class="op">+</span> <span class="string">b&#39;a&#39;</span>) <span class="kw">as</span> <span class="ident">char</span>),
-            <span class="ident">KeyModifiers</span>::<span class="ident">CONTROL</span>,
+        <span class="ident">c</span> @ <span class="string">b&#39;\x01&#39;</span>..<span class="op">=</span><span class="string">b&#39;\x1A&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(
+            <span class="ident">KeyCode::Char</span>((<span class="ident">c</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">0x1</span> <span class="op">+</span> <span class="string">b&#39;a&#39;</span>) <span class="kw">as</span> <span class="ident">char</span>),
+            <span class="ident">KeyModifiers::CONTROL</span>,
         ))))),
-        <span class="ident">c</span> @ <span class="string">b&#39;\x1C&#39;</span>..<span class="op">=</span><span class="string">b&#39;\x1F&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(
-            <span class="ident">KeyCode</span>::<span class="ident">Char</span>((<span class="ident">c</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">0x1C</span> <span class="op">+</span> <span class="string">b&#39;4&#39;</span>) <span class="kw">as</span> <span class="ident">char</span>),
-            <span class="ident">KeyModifiers</span>::<span class="ident">CONTROL</span>,
+        <span class="ident">c</span> @ <span class="string">b&#39;\x1C&#39;</span>..<span class="op">=</span><span class="string">b&#39;\x1F&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(
+            <span class="ident">KeyCode::Char</span>((<span class="ident">c</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">0x1C</span> <span class="op">+</span> <span class="string">b&#39;4&#39;</span>) <span class="kw">as</span> <span class="ident">char</span>),
+            <span class="ident">KeyModifiers::CONTROL</span>,
         ))))),
-        <span class="string">b&#39;\0&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(
-            <span class="ident">KeyCode</span>::<span class="ident">Char</span>(<span class="string">&#39; &#39;</span>),
-            <span class="ident">KeyModifiers</span>::<span class="ident">CONTROL</span>,
+        <span class="string">b&#39;\0&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(
+            <span class="ident">KeyCode::Char</span>(<span class="string">&#39; &#39;</span>),
+            <span class="ident">KeyModifiers::CONTROL</span>,
         ))))),
         <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">parse_utf8_char</span>(<span class="ident">buffer</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">maybe_char</span><span class="op">|</span> {
             <span class="ident">maybe_char</span>
-                .<span class="ident">map</span>(<span class="ident">KeyCode</span>::<span class="ident">Char</span>)
+                .<span class="ident">map</span>(<span class="ident">KeyCode::Char</span>)
                 .<span class="ident">map</span>(<span class="ident">char_code_to_event</span>)
-                .<span class="ident">map</span>(<span class="ident">Event</span>::<span class="ident">Key</span>)
-                .<span class="ident">map</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>)
+                .<span class="ident">map</span>(<span class="ident">Event::Key</span>)
+                .<span class="ident">map</span>(<span class="ident">InternalEvent::Event</span>)
         }),
     }
 }
@@ -892,14 +892,14 @@
 <span class="comment">// converts KeyCode to KeyEvent (adds shift modifier in case of uppercase characters)</span>
 <span class="kw">fn</span> <span class="ident">char_code_to_event</span>(<span class="ident">code</span>: <span class="ident">KeyCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">KeyEvent</span> {
     <span class="kw">let</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">code</span> {
-        <span class="ident">KeyCode</span>::<span class="ident">Char</span>(<span class="ident">c</span>) <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">is_uppercase</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>,
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>(),
+        <span class="ident">KeyCode::Char</span>(<span class="ident">c</span>) <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">is_uppercase</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyModifiers::SHIFT</span>,
+        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyModifiers::empty</span>(),
     };
-    <span class="ident">KeyEvent</span>::<span class="ident">new</span>(<span class="ident">code</span>, <span class="ident">modifiers</span>)
+    <span class="ident">KeyEvent::new</span>(<span class="ident">code</span>, <span class="ident">modifiers</span>)
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_csi</span>(<span class="ident">buffer</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>])); <span class="comment">// ESC [</span>
+    <span class="macro">assert!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>])); <span class="comment">// ESC [</span>
 
     <span class="kw">if</span> <span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">=</span> <span class="number">2</span> {
         <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
@@ -913,20 +913,20 @@
                 <span class="kw">match</span> <span class="ident">buffer</span>[<span class="number">3</span>] {
                     <span class="comment">// NOTE (@imdaveho): cannot find when this occurs;</span>
                     <span class="comment">// having another &#39;[&#39; after ESC[ not a likely scenario</span>
-                    <span class="ident">val</span> @ <span class="string">b&#39;A&#39;</span>..<span class="op">=</span><span class="string">b&#39;E&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">F</span>(<span class="number">1</span> <span class="op">+</span> <span class="ident">val</span> <span class="op">-</span> <span class="string">b&#39;A&#39;</span>).<span class="ident">into</span>())),
+                    <span class="ident">val</span> @ <span class="string">b&#39;A&#39;</span>..<span class="op">=</span><span class="string">b&#39;E&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::F</span>(<span class="number">1</span> <span class="op">+</span> <span class="ident">val</span> <span class="op">-</span> <span class="string">b&#39;A&#39;</span>).<span class="ident">into</span>())),
                     <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">could_not_parse_event_error</span>()),
                 }
             }
         }
-        <span class="string">b&#39;D&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Left</span>.<span class="ident">into</span>())),
-        <span class="string">b&#39;C&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Right</span>.<span class="ident">into</span>())),
-        <span class="string">b&#39;A&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Up</span>.<span class="ident">into</span>())),
-        <span class="string">b&#39;B&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Down</span>.<span class="ident">into</span>())),
-        <span class="string">b&#39;H&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Home</span>.<span class="ident">into</span>())),
-        <span class="string">b&#39;F&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">End</span>.<span class="ident">into</span>())),
-        <span class="string">b&#39;Z&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span> {
-            <span class="ident">code</span>: <span class="ident">KeyCode</span>::<span class="ident">BackTab</span>,
-            <span class="ident">modifiers</span>: <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>,
+        <span class="string">b&#39;D&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Left</span>.<span class="ident">into</span>())),
+        <span class="string">b&#39;C&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Right</span>.<span class="ident">into</span>())),
+        <span class="string">b&#39;A&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Up</span>.<span class="ident">into</span>())),
+        <span class="string">b&#39;B&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Down</span>.<span class="ident">into</span>())),
+        <span class="string">b&#39;H&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Home</span>.<span class="ident">into</span>())),
+        <span class="string">b&#39;F&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::End</span>.<span class="ident">into</span>())),
+        <span class="string">b&#39;Z&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
+            <span class="ident">code</span>: <span class="ident">KeyCode::BackTab</span>,
+            <span class="ident">modifiers</span>: <span class="ident">KeyModifiers::SHIFT</span>,
         })),
         <span class="string">b&#39;M&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">parse_csi_x10_mouse</span>(<span class="ident">buffer</span>),
         <span class="string">b&#39;&lt;&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">parse_csi_xterm_mouse</span>(<span class="ident">buffer</span>),
@@ -953,12 +953,12 @@
         <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">could_not_parse_event_error</span>()),
     };
 
-    <span class="prelude-val">Ok</span>(<span class="ident">input_event</span>.<span class="ident">map</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>))
+    <span class="prelude-val">Ok</span>(<span class="ident">input_event</span>.<span class="ident">map</span>(<span class="ident">InternalEvent::Event</span>))
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">next_parsed</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">iter</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">dyn</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">next_parsed</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">iter</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">dyn</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">FromStr</span>,
+    <span class="ident">T</span>: <span class="ident">std::str::FromStr</span>,
 {
     <span class="ident">iter</span>.<span class="ident">next</span>()
         .<span class="ident">ok_or_else</span>(<span class="ident">could_not_parse_event_error</span>)<span class="question-mark">?</span>
@@ -970,10 +970,10 @@
     <span class="comment">// ESC [ Cy ; Cx R</span>
     <span class="comment">//   Cy - cursor row number (starting from 1)</span>
     <span class="comment">//   Cx - cursor column number (starting from 1)</span>
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>])); <span class="comment">// ESC [</span>
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buffer</span>.<span class="ident">ends_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;R&#39;</span>]));
+    <span class="macro">assert!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>])); <span class="comment">// ESC [</span>
+    <span class="macro">assert!</span>(<span class="ident">buffer</span>.<span class="ident">ends_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;R&#39;</span>]));
 
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>[<span class="number">2</span>..<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>])
+    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">std::str::from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>[<span class="number">2</span>..<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>])
         .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">could_not_parse_event_error</span>())<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">split</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">split</span>(<span class="string">&#39;;&#39;</span>);
@@ -981,26 +981,26 @@
     <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">next_parsed</span>::<span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">split</span>)<span class="question-mark">?</span> <span class="op">-</span> <span class="number">1</span>;
     <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">next_parsed</span>::<span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">split</span>)<span class="question-mark">?</span> <span class="op">-</span> <span class="number">1</span>;
 
-    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">CursorPosition</span>(<span class="ident">x</span>, <span class="ident">y</span>)))
+    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::CursorPosition</span>(<span class="ident">x</span>, <span class="ident">y</span>)))
 }
 
 <span class="kw">fn</span> <span class="ident">parse_modifiers</span>(<span class="ident">mask</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">KeyModifiers</span> {
     <span class="kw">let</span> <span class="ident">modifier_mask</span> <span class="op">=</span> <span class="ident">mask</span>.<span class="ident">saturating_sub</span>(<span class="number">1</span>);
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="ident">KeyModifiers::empty</span>();
     <span class="kw">if</span> <span class="ident">modifier_mask</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::SHIFT</span>;
     }
     <span class="kw">if</span> <span class="ident">modifier_mask</span> <span class="op">&amp;</span> <span class="number">2</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">ALT</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::ALT</span>;
     }
     <span class="kw">if</span> <span class="ident">modifier_mask</span> <span class="op">&amp;</span> <span class="number">4</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">CONTROL</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::CONTROL</span>;
     }
     <span class="ident">modifiers</span>
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_csi_modifier_key_code</span>(<span class="ident">buffer</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>])); <span class="comment">// ESC [</span>
+    <span class="macro">assert!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>])); <span class="comment">// ESC [</span>
 
     <span class="kw">let</span> <span class="ident">modifier_mask</span> <span class="op">=</span> <span class="ident">buffer</span>[<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">2</span>];
     <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">buffer</span>[<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>];
@@ -1008,29 +1008,29 @@
     <span class="kw">let</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="ident">parse_modifiers</span>(<span class="ident">modifier_mask</span>);
 
     <span class="kw">let</span> <span class="ident">keycode</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">key</span> {
-        <span class="string">b&#39;A&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">Up</span>,
-        <span class="string">b&#39;B&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">Down</span>,
-        <span class="string">b&#39;C&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">Right</span>,
-        <span class="string">b&#39;D&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">Left</span>,
-        <span class="string">b&#39;F&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">End</span>,
-        <span class="string">b&#39;H&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">Home</span>,
-        <span class="string">b&#39;P&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">F</span>(<span class="number">1</span>),
-        <span class="string">b&#39;Q&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">F</span>(<span class="number">2</span>),
-        <span class="string">b&#39;R&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">F</span>(<span class="number">3</span>),
-        <span class="string">b&#39;S&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">F</span>(<span class="number">4</span>),
+        <span class="string">b&#39;A&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::Up</span>,
+        <span class="string">b&#39;B&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::Down</span>,
+        <span class="string">b&#39;C&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::Right</span>,
+        <span class="string">b&#39;D&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::Left</span>,
+        <span class="string">b&#39;F&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::End</span>,
+        <span class="string">b&#39;H&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::Home</span>,
+        <span class="string">b&#39;P&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::F</span>(<span class="number">1</span>),
+        <span class="string">b&#39;Q&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::F</span>(<span class="number">2</span>),
+        <span class="string">b&#39;R&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::F</span>(<span class="number">3</span>),
+        <span class="string">b&#39;S&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::F</span>(<span class="number">4</span>),
         <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">could_not_parse_event_error</span>()),
     };
 
-    <span class="kw">let</span> <span class="ident">input_event</span> <span class="op">=</span> <span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(<span class="ident">keycode</span>, <span class="ident">modifiers</span>));
+    <span class="kw">let</span> <span class="ident">input_event</span> <span class="op">=</span> <span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(<span class="ident">keycode</span>, <span class="ident">modifiers</span>));
 
-    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">input_event</span>)))
+    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">input_event</span>)))
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_csi_special_key_code</span>(<span class="ident">buffer</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>])); <span class="comment">// ESC [</span>
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buffer</span>.<span class="ident">ends_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;~&#39;</span>]));
+    <span class="macro">assert!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>])); <span class="comment">// ESC [</span>
+    <span class="macro">assert!</span>(<span class="ident">buffer</span>.<span class="ident">ends_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;~&#39;</span>]));
 
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>[<span class="number">2</span>..<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>])
+    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">std::str::from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>[<span class="number">2</span>..<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>])
         .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">could_not_parse_event_error</span>())<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">split</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">split</span>(<span class="string">&#39;;&#39;</span>);
 
@@ -1040,35 +1040,35 @@
     <span class="kw">let</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">modifier_mask</span>) <span class="op">=</span> <span class="ident">next_parsed</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">split</span>) {
         <span class="ident">parse_modifiers</span>(<span class="ident">modifier_mask</span>)
     } <span class="kw">else</span> {
-        <span class="ident">KeyModifiers</span>::<span class="ident">NONE</span>
+        <span class="ident">KeyModifiers::NONE</span>
     };
 
     <span class="kw">let</span> <span class="ident">keycode</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">first</span> {
-        <span class="number">1</span> <span class="op">|</span> <span class="number">7</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">Home</span>,
-        <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">Insert</span>,
-        <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">Delete</span>,
-        <span class="number">4</span> <span class="op">|</span> <span class="number">8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">End</span>,
-        <span class="number">5</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">PageUp</span>,
-        <span class="number">6</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">PageDown</span>,
-        <span class="ident">v</span> @ <span class="number">11</span>..<span class="op">=</span><span class="number">15</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">F</span>(<span class="ident">v</span> <span class="op">-</span> <span class="number">10</span>),
-        <span class="ident">v</span> @ <span class="number">17</span>..<span class="op">=</span><span class="number">21</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">F</span>(<span class="ident">v</span> <span class="op">-</span> <span class="number">11</span>),
-        <span class="ident">v</span> @ <span class="number">23</span>..<span class="op">=</span><span class="number">24</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode</span>::<span class="ident">F</span>(<span class="ident">v</span> <span class="op">-</span> <span class="number">12</span>),
+        <span class="number">1</span> <span class="op">|</span> <span class="number">7</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::Home</span>,
+        <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::Insert</span>,
+        <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::Delete</span>,
+        <span class="number">4</span> <span class="op">|</span> <span class="number">8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::End</span>,
+        <span class="number">5</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::PageUp</span>,
+        <span class="number">6</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::PageDown</span>,
+        <span class="ident">v</span> @ <span class="number">11</span>..<span class="op">=</span><span class="number">15</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::F</span>(<span class="ident">v</span> <span class="op">-</span> <span class="number">10</span>),
+        <span class="ident">v</span> @ <span class="number">17</span>..<span class="op">=</span><span class="number">21</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::F</span>(<span class="ident">v</span> <span class="op">-</span> <span class="number">11</span>),
+        <span class="ident">v</span> @ <span class="number">23</span>..<span class="op">=</span><span class="number">24</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">KeyCode::F</span>(<span class="ident">v</span> <span class="op">-</span> <span class="number">12</span>),
         <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">could_not_parse_event_error</span>()),
     };
 
-    <span class="kw">let</span> <span class="ident">input_event</span> <span class="op">=</span> <span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(<span class="ident">keycode</span>, <span class="ident">modifiers</span>));
+    <span class="kw">let</span> <span class="ident">input_event</span> <span class="op">=</span> <span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(<span class="ident">keycode</span>, <span class="ident">modifiers</span>));
 
-    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">input_event</span>)))
+    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">input_event</span>)))
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_csi_rxvt_mouse</span>(<span class="ident">buffer</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="comment">// rxvt mouse encoding:</span>
     <span class="comment">// ESC [ Cb ; Cx ; Cy ; M</span>
 
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>])); <span class="comment">// ESC [</span>
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buffer</span>.<span class="ident">ends_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;M&#39;</span>]));
+    <span class="macro">assert!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>])); <span class="comment">// ESC [</span>
+    <span class="macro">assert!</span>(<span class="ident">buffer</span>.<span class="ident">ends_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;M&#39;</span>]));
 
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>[<span class="number">2</span>..<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>])
+    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">std::str::from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>[<span class="number">2</span>..<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>])
         .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">could_not_parse_event_error</span>())<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">split</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">split</span>(<span class="string">&#39;;&#39;</span>);
 
@@ -1076,52 +1076,52 @@
     <span class="kw">let</span> <span class="ident">cx</span> <span class="op">=</span> <span class="ident">next_parsed</span>::<span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">split</span>)<span class="question-mark">?</span> <span class="op">-</span> <span class="number">1</span>;
     <span class="kw">let</span> <span class="ident">cy</span> <span class="op">=</span> <span class="ident">next_parsed</span>::<span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">split</span>)<span class="question-mark">?</span> <span class="op">-</span> <span class="number">1</span>;
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="ident">KeyModifiers::empty</span>();
 
     <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_0100</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0000_0100</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::SHIFT</span>;
     }
 
     <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_1000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0000_1000</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">ALT</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::ALT</span>;
     }
 
     <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0001_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0001_0000</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">CONTROL</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::CONTROL</span>;
     }
 
     <span class="kw">let</span> <span class="ident">event</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0110_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0110_0000</span> {
         <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_0001</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0000_0001</span> {
-            <span class="ident">MouseEvent</span>::<span class="ident">ScrollDown</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
+            <span class="ident">MouseEvent::ScrollDown</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
         } <span class="kw">else</span> {
-            <span class="ident">MouseEvent</span>::<span class="ident">ScrollUp</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
+            <span class="ident">MouseEvent::ScrollUp</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
         }
     } <span class="kw">else</span> {
         <span class="kw">let</span> <span class="ident">drag</span> <span class="op">=</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0100_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0100_0000</span>;
 
         <span class="kw">match</span> (<span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_0011</span>, <span class="ident">drag</span>) {
-            (<span class="number">0b0000_0000</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Down</span>(<span class="ident">MouseButton</span>::<span class="ident">Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">0b0000_0010</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Down</span>(<span class="ident">MouseButton</span>::<span class="ident">Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">0b0000_0001</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Down</span>(<span class="ident">MouseButton</span>::<span class="ident">Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">0b0000_0000</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Down</span>(<span class="ident">MouseButton::Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">0b0000_0010</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Down</span>(<span class="ident">MouseButton::Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">0b0000_0001</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Down</span>(<span class="ident">MouseButton::Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
 
-            (<span class="number">0b0000_0000</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Drag</span>(<span class="ident">MouseButton</span>::<span class="ident">Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">0b0000_0010</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Drag</span>(<span class="ident">MouseButton</span>::<span class="ident">Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">0b0000_0001</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Drag</span>(<span class="ident">MouseButton</span>::<span class="ident">Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">0b0000_0000</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Drag</span>(<span class="ident">MouseButton::Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">0b0000_0010</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Drag</span>(<span class="ident">MouseButton::Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">0b0000_0001</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Drag</span>(<span class="ident">MouseButton::Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
 
-            (<span class="number">0b0000_0011</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Up</span>(<span class="ident">MouseButton</span>::<span class="ident">Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">0b0000_0011</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Up</span>(<span class="ident">MouseButton::Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
 
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">could_not_parse_event_error</span>()),
         }
     };
 
-    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">event</span>))))
+    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">event</span>))))
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_csi_x10_mouse</span>(<span class="ident">buffer</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="comment">// X10 emulation mouse encoding: ESC [ M CB Cx Cy (6 characters only).</span>
     <span class="comment">// NOTE (@imdaveho): cannot find documentation on this</span>
 
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>, <span class="string">b&#39;M&#39;</span>])); <span class="comment">// ESC [ M</span>
+    <span class="macro">assert!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>, <span class="string">b&#39;M&#39;</span>])); <span class="comment">// ESC [ M</span>
 
     <span class="kw">if</span> <span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">6</span> {
         <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
@@ -1131,56 +1131,56 @@
     <span class="comment">// See http://www.xfree86.org/current/ctlseqs.html#Mouse%20Tracking</span>
     <span class="comment">// The upper left character position on the terminal is denoted as 1,1.</span>
     <span class="comment">// Subtract 1 to keep it synced with cursor</span>
-    <span class="kw">let</span> <span class="ident">cx</span> <span class="op">=</span> <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">buffer</span>[<span class="number">4</span>].<span class="ident">saturating_sub</span>(<span class="number">32</span>)) <span class="op">-</span> <span class="number">1</span>;
-    <span class="kw">let</span> <span class="ident">cy</span> <span class="op">=</span> <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">buffer</span>[<span class="number">5</span>].<span class="ident">saturating_sub</span>(<span class="number">32</span>)) <span class="op">-</span> <span class="number">1</span>;
+    <span class="kw">let</span> <span class="ident">cx</span> <span class="op">=</span> <span class="ident">u16::from</span>(<span class="ident">buffer</span>[<span class="number">4</span>].<span class="ident">saturating_sub</span>(<span class="number">32</span>)) <span class="op">-</span> <span class="number">1</span>;
+    <span class="kw">let</span> <span class="ident">cy</span> <span class="op">=</span> <span class="ident">u16::from</span>(<span class="ident">buffer</span>[<span class="number">5</span>].<span class="ident">saturating_sub</span>(<span class="number">32</span>)) <span class="op">-</span> <span class="number">1</span>;
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="ident">KeyModifiers::empty</span>();
 
     <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_0100</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0000_0100</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::SHIFT</span>;
     }
 
     <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_1000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0000_1000</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">ALT</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::ALT</span>;
     }
 
     <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0001_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0001_0000</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">CONTROL</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::CONTROL</span>;
     }
 
     <span class="kw">let</span> <span class="ident">mouse_input_event</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_0011</span> {
         <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> {
             <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0100_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0100_0000</span> {
-                <span class="ident">MouseEvent</span>::<span class="ident">ScrollUp</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
+                <span class="ident">MouseEvent::ScrollUp</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
             } <span class="kw">else</span> {
-                <span class="ident">MouseEvent</span>::<span class="ident">Down</span>(<span class="ident">MouseButton</span>::<span class="ident">Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
+                <span class="ident">MouseEvent::Down</span>(<span class="ident">MouseButton::Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
             }
         }
         <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> {
             <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0100_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0100_0000</span> {
-                <span class="ident">MouseEvent</span>::<span class="ident">ScrollDown</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
+                <span class="ident">MouseEvent::ScrollDown</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
             } <span class="kw">else</span> {
-                <span class="ident">MouseEvent</span>::<span class="ident">Down</span>(<span class="ident">MouseButton</span>::<span class="ident">Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
+                <span class="ident">MouseEvent::Down</span>(<span class="ident">MouseButton::Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
             }
         }
-        <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Down</span>(<span class="ident">MouseButton</span>::<span class="ident">Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-        <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Up</span>(<span class="ident">MouseButton</span>::<span class="ident">Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+        <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Down</span>(<span class="ident">MouseButton::Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+        <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Up</span>(<span class="ident">MouseButton::Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
         <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">could_not_parse_event_error</span>()),
     };
 
-    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">mouse_input_event</span>))))
+    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">mouse_input_event</span>))))
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_csi_xterm_mouse</span>(<span class="ident">buffer</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="comment">// ESC [ &lt; Cb ; Cx ; Cy (;) (M or m)</span>
 
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>, <span class="string">b&#39;&lt;&#39;</span>])); <span class="comment">// ESC [ &lt;</span>
+    <span class="macro">assert!</span>(<span class="ident">buffer</span>.<span class="ident">starts_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;\x1B&#39;</span>, <span class="string">b&#39;[&#39;</span>, <span class="string">b&#39;&lt;&#39;</span>])); <span class="comment">// ESC [ &lt;</span>
 
     <span class="kw">if</span> <span class="op">!</span><span class="ident">buffer</span>.<span class="ident">ends_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;m&#39;</span>]) <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">buffer</span>.<span class="ident">ends_with</span>(<span class="kw-2">&amp;</span>[<span class="string">b&#39;M&#39;</span>]) {
         <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
     }
 
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>[<span class="number">3</span>..<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>])
+    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">std::str::from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>[<span class="number">3</span>..<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>])
         .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">could_not_parse_event_error</span>())<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">split</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">split</span>(<span class="string">&#39;;&#39;</span>);
 
@@ -1192,25 +1192,25 @@
     <span class="kw">let</span> <span class="ident">cx</span> <span class="op">=</span> <span class="ident">next_parsed</span>::<span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">split</span>)<span class="question-mark">?</span> <span class="op">-</span> <span class="number">1</span>;
     <span class="kw">let</span> <span class="ident">cy</span> <span class="op">=</span> <span class="ident">next_parsed</span>::<span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">split</span>)<span class="question-mark">?</span> <span class="op">-</span> <span class="number">1</span>;
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modifiers</span> <span class="op">=</span> <span class="ident">KeyModifiers::empty</span>();
 
     <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_0100</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0000_0100</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::SHIFT</span>;
     }
 
     <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_1000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0000_1000</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">ALT</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::ALT</span>;
     }
 
     <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0001_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0001_0000</span> {
-        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers</span>::<span class="ident">CONTROL</span>;
+        <span class="ident">modifiers</span> <span class="op">|</span><span class="op">=</span> <span class="ident">KeyModifiers::CONTROL</span>;
     }
 
     <span class="kw">let</span> <span class="ident">event</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0100_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0100_0000</span> {
         <span class="kw">if</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_0001</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0000_0001</span> {
-            <span class="ident">MouseEvent</span>::<span class="ident">ScrollDown</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
+            <span class="ident">MouseEvent::ScrollDown</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
         } <span class="kw">else</span> {
-            <span class="ident">MouseEvent</span>::<span class="ident">ScrollUp</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
+            <span class="ident">MouseEvent::ScrollUp</span>(<span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>)
         }
     } <span class="kw">else</span> {
         <span class="kw">let</span> <span class="ident">up</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">buffer</span>.<span class="ident">last</span>().<span class="ident">unwrap</span>() {
@@ -1222,24 +1222,24 @@
         <span class="kw">let</span> <span class="ident">drag</span> <span class="op">=</span> <span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0010_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0010_0000</span>;
 
         <span class="kw">match</span> (<span class="ident">cb</span> <span class="op">&amp;</span> <span class="number">0b0000_0011</span>, <span class="ident">up</span>, <span class="ident">drag</span>) {
-            (<span class="number">0</span>, <span class="bool-val">true</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Up</span>(<span class="ident">MouseButton</span>::<span class="ident">Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">0</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Down</span>(<span class="ident">MouseButton</span>::<span class="ident">Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">0</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Drag</span>(<span class="ident">MouseButton</span>::<span class="ident">Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">1</span>, <span class="bool-val">true</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Up</span>(<span class="ident">MouseButton</span>::<span class="ident">Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">1</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Down</span>(<span class="ident">MouseButton</span>::<span class="ident">Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">1</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Drag</span>(<span class="ident">MouseButton</span>::<span class="ident">Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">2</span>, <span class="bool-val">true</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Up</span>(<span class="ident">MouseButton</span>::<span class="ident">Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">2</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Down</span>(<span class="ident">MouseButton</span>::<span class="ident">Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
-            (<span class="number">2</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent</span>::<span class="ident">Drag</span>(<span class="ident">MouseButton</span>::<span class="ident">Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">0</span>, <span class="bool-val">true</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Up</span>(<span class="ident">MouseButton::Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">0</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Down</span>(<span class="ident">MouseButton::Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">0</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Drag</span>(<span class="ident">MouseButton::Left</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">1</span>, <span class="bool-val">true</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Up</span>(<span class="ident">MouseButton::Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">1</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Down</span>(<span class="ident">MouseButton::Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">1</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Drag</span>(<span class="ident">MouseButton::Middle</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">2</span>, <span class="bool-val">true</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Up</span>(<span class="ident">MouseButton::Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">2</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Down</span>(<span class="ident">MouseButton::Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
+            (<span class="number">2</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MouseEvent::Drag</span>(<span class="ident">MouseButton::Right</span>, <span class="ident">cx</span>, <span class="ident">cy</span>, <span class="ident">modifiers</span>),
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">could_not_parse_event_error</span>()),
         }
     };
 
-    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">event</span>))))
+    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">event</span>))))
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_utf8_char</span>(<span class="ident">buffer</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-    <span class="kw">match</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="ident">buffer</span>) {
+    <span class="kw">match</span> <span class="ident">std::str::from_utf8</span>(<span class="ident">buffer</span>) {
         <span class="prelude-val">Ok</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">ch</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">chars</span>().<span class="ident">next</span>().<span class="ident">ok_or_else</span>(<span class="ident">could_not_parse_event_error</span>)<span class="question-mark">?</span>;
 
@@ -1279,30 +1279,30 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">event</span>::{<span class="ident">KeyModifiers</span>, <span class="ident">MouseButton</span>, <span class="ident">MouseEvent</span>};
+    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::event</span>::{<span class="ident">KeyModifiers</span>, <span class="ident">MouseButton</span>, <span class="ident">MouseEvent</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_esc_key</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;\x1B&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Esc</span>.<span class="ident">into</span>()))),
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Esc</span>.<span class="ident">into</span>()))),
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_possible_esc_sequence</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">parse_event</span>(<span class="string">&quot;\x1B&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">true</span>).<span class="ident">unwrap</span>(), <span class="prelude-val">None</span>,);
+        <span class="macro">assert_eq!</span>(<span class="ident">parse_event</span>(<span class="string">&quot;\x1B&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">true</span>).<span class="ident">unwrap</span>(), <span class="prelude-val">None</span>,);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_alt_key</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;\x1Bc&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(
-                <span class="ident">KeyCode</span>::<span class="ident">Char</span>(<span class="string">&#39;c&#39;</span>),
-                <span class="ident">KeyModifiers</span>::<span class="ident">ALT</span>
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(
+                <span class="ident">KeyCode::Char</span>(<span class="string">&#39;c&#39;</span>),
+                <span class="ident">KeyModifiers::ALT</span>
             )))),
         );
     }
@@ -1313,191 +1313,191 @@
         <span class="comment">// correct slice to other parse_ functions.</span>
 
         <span class="comment">// parse_csi_cursor_position</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;\x1B[20;10R&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">CursorPosition</span>(<span class="number">9</span>, <span class="number">19</span>))
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::CursorPosition</span>(<span class="number">9</span>, <span class="number">19</span>))
         );
 
         <span class="comment">// parse_csi</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;\x1B[D&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Left</span>.<span class="ident">into</span>()))),
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Left</span>.<span class="ident">into</span>()))),
         );
 
         <span class="comment">// parse_csi_modifier_key_code</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;\x1B[2D&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(
-                <span class="ident">KeyCode</span>::<span class="ident">Left</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(
+                <span class="ident">KeyCode::Left</span>,
+                <span class="ident">KeyModifiers::SHIFT</span>
             ))))
         );
 
         <span class="comment">// parse_csi_special_key_code</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;\x1B[3~&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Delete</span>.<span class="ident">into</span>()))),
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Delete</span>.<span class="ident">into</span>()))),
         );
 
         <span class="comment">// parse_csi_rxvt_mouse</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;\x1B[32;30;40;M&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">MouseEvent</span>::<span class="ident">Down</span>(
-                <span class="ident">MouseButton</span>::<span class="ident">Left</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">MouseEvent::Down</span>(
+                <span class="ident">MouseButton::Left</span>,
                 <span class="number">29</span>,
                 <span class="number">39</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>(),
+                <span class="ident">KeyModifiers::empty</span>(),
             ))))
         );
 
         <span class="comment">// parse_csi_x10_mouse</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;\x1B[M0\x60\x70&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">MouseEvent</span>::<span class="ident">Down</span>(
-                <span class="ident">MouseButton</span>::<span class="ident">Left</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">MouseEvent::Down</span>(
+                <span class="ident">MouseButton::Left</span>,
                 <span class="number">63</span>,
                 <span class="number">79</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>(),
+                <span class="ident">KeyModifiers::empty</span>(),
             ))))
         );
 
         <span class="comment">// parse_csi_xterm_mouse</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;\x1B[&lt;0;20;10;M&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">MouseEvent</span>::<span class="ident">Down</span>(
-                <span class="ident">MouseButton</span>::<span class="ident">Left</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">MouseEvent::Down</span>(
+                <span class="ident">MouseButton::Left</span>,
                 <span class="number">19</span>,
                 <span class="number">9</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>(),
+                <span class="ident">KeyModifiers::empty</span>(),
             ))))
         );
 
         <span class="comment">// parse_utf8_char</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;Ž&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(
-                <span class="ident">KeyCode</span>::<span class="ident">Char</span>(<span class="string">&#39;Ž&#39;</span>),
-                <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(
+                <span class="ident">KeyCode::Char</span>(<span class="string">&#39;Ž&#39;</span>),
+                <span class="ident">KeyModifiers::SHIFT</span>
             )))),
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_event</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;\t&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Tab</span>.<span class="ident">into</span>()))),
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Tab</span>.<span class="ident">into</span>()))),
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_csi_cursor_position</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi_cursor_position</span>(<span class="string">&quot;\x1B[20;10R&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">CursorPosition</span>(<span class="number">9</span>, <span class="number">19</span>))
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::CursorPosition</span>(<span class="number">9</span>, <span class="number">19</span>))
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_csi</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi</span>(<span class="string">&quot;\x1B[D&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Left</span>.<span class="ident">into</span>()))),
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Left</span>.<span class="ident">into</span>()))),
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_csi_modifier_key_code</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi_modifier_key_code</span>(<span class="string">&quot;\x1B[2D&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(
-                <span class="ident">KeyCode</span>::<span class="ident">Left</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(
+                <span class="ident">KeyCode::Left</span>,
+                <span class="ident">KeyModifiers::SHIFT</span>
             )))),
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_csi_special_key_code</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi_special_key_code</span>(<span class="string">&quot;\x1B[3~&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyCode</span>::<span class="ident">Delete</span>.<span class="ident">into</span>()))),
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Delete</span>.<span class="ident">into</span>()))),
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_csi_special_key_code_multiple_values_not_supported</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi_special_key_code</span>(<span class="string">&quot;\x1B[3;2~&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(
-                <span class="ident">KeyCode</span>::<span class="ident">Delete</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(
+                <span class="ident">KeyCode::Delete</span>,
+                <span class="ident">KeyModifiers::SHIFT</span>
             )))),
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_csi_rxvt_mouse</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi_rxvt_mouse</span>(<span class="string">&quot;\x1B[32;30;40;M&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">MouseEvent</span>::<span class="ident">Down</span>(
-                <span class="ident">MouseButton</span>::<span class="ident">Left</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">MouseEvent::Down</span>(
+                <span class="ident">MouseButton::Left</span>,
                 <span class="number">29</span>,
                 <span class="number">39</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>(),
+                <span class="ident">KeyModifiers::empty</span>(),
             ))))
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_csi_x10_mouse</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi_x10_mouse</span>(<span class="string">&quot;\x1B[M0\x60\x70&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">MouseEvent</span>::<span class="ident">Down</span>(
-                <span class="ident">MouseButton</span>::<span class="ident">Left</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">MouseEvent::Down</span>(
+                <span class="ident">MouseButton::Left</span>,
                 <span class="number">63</span>,
                 <span class="number">79</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>(),
+                <span class="ident">KeyModifiers::empty</span>(),
             ))))
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_csi_xterm_mouse</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi_xterm_mouse</span>(<span class="string">&quot;\x1B[&lt;0;20;10;M&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">MouseEvent</span>::<span class="ident">Down</span>(
-                <span class="ident">MouseButton</span>::<span class="ident">Left</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">MouseEvent::Down</span>(
+                <span class="ident">MouseButton::Left</span>,
                 <span class="number">19</span>,
                 <span class="number">9</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>(),
+                <span class="ident">KeyModifiers::empty</span>(),
             ))))
         );
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi_xterm_mouse</span>(<span class="string">&quot;\x1B[&lt;0;20;10M&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">MouseEvent</span>::<span class="ident">Down</span>(
-                <span class="ident">MouseButton</span>::<span class="ident">Left</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">MouseEvent::Down</span>(
+                <span class="ident">MouseButton::Left</span>,
                 <span class="number">19</span>,
                 <span class="number">9</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>(),
+                <span class="ident">KeyModifiers::empty</span>(),
             ))))
         );
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi_xterm_mouse</span>(<span class="string">&quot;\x1B[&lt;0;20;10;m&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">MouseEvent</span>::<span class="ident">Up</span>(
-                <span class="ident">MouseButton</span>::<span class="ident">Left</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">MouseEvent::Up</span>(
+                <span class="ident">MouseButton::Left</span>,
                 <span class="number">19</span>,
                 <span class="number">9</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>(),
+                <span class="ident">KeyModifiers::empty</span>(),
             ))))
         );
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_csi_xterm_mouse</span>(<span class="string">&quot;\x1B[&lt;0;20;10m&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Mouse</span>(<span class="ident">MouseEvent</span>::<span class="ident">Up</span>(
-                <span class="ident">MouseButton</span>::<span class="ident">Left</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Mouse</span>(<span class="ident">MouseEvent::Up</span>(
+                <span class="ident">MouseButton::Left</span>,
                 <span class="number">19</span>,
                 <span class="number">9</span>,
-                <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>(),
+                <span class="ident">KeyModifiers::empty</span>(),
             ))))
         );
     }
@@ -1507,66 +1507,67 @@
         <span class="comment">// https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php#54805</span>
 
         <span class="comment">// &#39;Valid ASCII&#39; =&gt; &quot;a&quot;,</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">parse_utf8_char</span>(<span class="string">&quot;a&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(), <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>),);
+        <span class="macro">assert_eq!</span>(<span class="ident">parse_utf8_char</span>(<span class="string">&quot;a&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(), <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>),);
 
         <span class="comment">// &#39;Valid 2 Octet Sequence&#39; =&gt; &quot;\xc3\xb1&quot;,</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xC3</span>, <span class="number">0xB1</span>]).<span class="ident">unwrap</span>(), <span class="prelude-val">Some</span>(<span class="string">&#39;ñ&#39;</span>),);
+        <span class="macro">assert_eq!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xC3</span>, <span class="number">0xB1</span>]).<span class="ident">unwrap</span>(), <span class="prelude-val">Some</span>(<span class="string">&#39;ñ&#39;</span>),);
 
         <span class="comment">// &#39;Invalid 2 Octet Sequence&#39; =&gt; &quot;\xc3\x28&quot;,</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xC3</span>, <span class="number">0x28</span>]).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xC3</span>, <span class="number">0x28</span>]).<span class="ident">is_err</span>());
 
         <span class="comment">// &#39;Invalid Sequence Identifier&#39; =&gt; &quot;\xa0\xa1&quot;,</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xA0</span>, <span class="number">0xA1</span>]).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xA0</span>, <span class="number">0xA1</span>]).<span class="ident">is_err</span>());
 
         <span class="comment">// &#39;Valid 3 Octet Sequence&#39; =&gt; &quot;\xe2\x82\xa1&quot;,</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xE2</span>, <span class="number">0x81</span>, <span class="number">0xA1</span>]).<span class="ident">unwrap</span>(),
             <span class="prelude-val">Some</span>(<span class="string">&#39;\u{2061}&#39;</span>),
         );
 
         <span class="comment">// &#39;Invalid 3 Octet Sequence (in 2nd Octet)&#39; =&gt; &quot;\xe2\x28\xa1&quot;,</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xE2</span>, <span class="number">0x28</span>, <span class="number">0xA1</span>]).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xE2</span>, <span class="number">0x28</span>, <span class="number">0xA1</span>]).<span class="ident">is_err</span>());
 
         <span class="comment">// &#39;Invalid 3 Octet Sequence (in 3rd Octet)&#39; =&gt; &quot;\xe2\x82\x28&quot;,</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xE2</span>, <span class="number">0x82</span>, <span class="number">0x28</span>]).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xE2</span>, <span class="number">0x82</span>, <span class="number">0x28</span>]).<span class="ident">is_err</span>());
 
         <span class="comment">// &#39;Valid 4 Octet Sequence&#39; =&gt; &quot;\xf0\x90\x8c\xbc&quot;,</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xF0</span>, <span class="number">0x90</span>, <span class="number">0x8C</span>, <span class="number">0xBC</span>]).<span class="ident">unwrap</span>(),
             <span class="prelude-val">Some</span>(<span class="string">&#39;𐌼&#39;</span>),
         );
 
         <span class="comment">// &#39;Invalid 4 Octet Sequence (in 2nd Octet)&#39; =&gt; &quot;\xf0\x28\x8c\xbc&quot;,</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xF0</span>, <span class="number">0x28</span>, <span class="number">0x8C</span>, <span class="number">0xBC</span>]).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xF0</span>, <span class="number">0x28</span>, <span class="number">0x8C</span>, <span class="number">0xBC</span>]).<span class="ident">is_err</span>());
 
         <span class="comment">// &#39;Invalid 4 Octet Sequence (in 3rd Octet)&#39; =&gt; &quot;\xf0\x90\x28\xbc&quot;,</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xF0</span>, <span class="number">0x90</span>, <span class="number">0x28</span>, <span class="number">0xBC</span>]).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xF0</span>, <span class="number">0x90</span>, <span class="number">0x28</span>, <span class="number">0xBC</span>]).<span class="ident">is_err</span>());
 
         <span class="comment">// &#39;Invalid 4 Octet Sequence (in 4th Octet)&#39; =&gt; &quot;\xf0\x28\x8c\x28&quot;,</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xF0</span>, <span class="number">0x28</span>, <span class="number">0x8C</span>, <span class="number">0x28</span>]).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">parse_utf8_char</span>(<span class="kw-2">&amp;</span>[<span class="number">0xF0</span>, <span class="number">0x28</span>, <span class="number">0x8C</span>, <span class="number">0x28</span>]).<span class="ident">is_err</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_char_event_lowercase</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;c&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(
-                <span class="ident">KeyCode</span>::<span class="ident">Char</span>(<span class="string">&#39;c&#39;</span>),
-                <span class="ident">KeyModifiers</span>::<span class="ident">empty</span>()
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(
+                <span class="ident">KeyCode::Char</span>(<span class="string">&#39;c&#39;</span>),
+                <span class="ident">KeyModifiers::empty</span>()
             )))),
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_parse_char_event_uppercase</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="ident">parse_event</span>(<span class="string">&quot;C&quot;</span>.<span class="ident">as_bytes</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent</span>::<span class="ident">Event</span>(<span class="ident">Event</span>::<span class="ident">Key</span>(<span class="ident">KeyEvent</span>::<span class="ident">new</span>(
-                <span class="ident">KeyCode</span>::<span class="ident">Char</span>(<span class="string">&#39;C&#39;</span>),
-                <span class="ident">KeyModifiers</span>::<span class="ident">SHIFT</span>
+            <span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent::new</span>(
+                <span class="ident">KeyCode::Char</span>(<span class="string">&#39;C&#39;</span>),
+                <span class="ident">KeyModifiers::SHIFT</span>
             )))),
         );
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../../../";window.currentCrate = "crossterm";</script><script src="../../../../../main.js"></script><script src="../../../../../source-script.js"></script><script src="../../../../../source-files.js"></script><script defer src="../../../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="crossterm" data-search-index-js="../../../../../search-index.js" data-search-js="../../../../../search.js"></div>
+    <script src="../../../../../main.js"></script><script src="../../../../../source-script.js"></script><script src="../../../../../source-files.js"></script></body></html>

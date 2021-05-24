@@ -1,7 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-0.3.4/src/sync/watch.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>watch.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.6.0/src/sync/watch.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>watch.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../tokio/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
-                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../tokio/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button">?</button>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -393,7 +393,135 @@
 <span id="390">390</span>
 <span id="391">391</span>
 <span id="392">392</span>
-</pre><div class="example-wrap"><pre class="rust ">
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+</pre><pre class="rust">
+<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sync&quot;</span>), <span class="ident">allow</span>(<span class="ident">dead_code</span>, <span class="ident">unreachable_pub</span>))]</span>
+
 <span class="doccomment">//! A single-producer, multi-consumer channel that only retains the *last* sent</span>
 <span class="doccomment">//! value.</span>
 <span class="doccomment">//!</span>
@@ -447,16 +575,21 @@
 <span class="doccomment">//! [`Sender::is_closed`]: crate::sync::watch::Sender::is_closed</span>
 <span class="doccomment">//! [`Sender::closed`]: crate::sync::watch::Sender::closed</span>
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">sync</span>::<span class="ident">Notify</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::sync::notify::Notify</span>;
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">atomic</span>::<span class="ident">AtomicUsize</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">atomic</span>::<span class="ident">Ordering</span>::{<span class="ident">Relaxed</span>, <span class="ident">SeqCst</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::{<span class="ident">Arc</span>, <span class="ident">RwLock</span>, <span class="ident">RwLockReadGuard</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::loom::sync::atomic::AtomicUsize</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::loom::sync::atomic::Ordering</span>::{<span class="ident">Relaxed</span>, <span class="ident">SeqCst</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::loom::sync</span>::{<span class="ident">Arc</span>, <span class="ident">RwLock</span>, <span class="ident">RwLockReadGuard</span>};
+<span class="kw">use</span> <span class="ident">std::ops</span>;
 
 <span class="doccomment">/// Receives values from the associated [`Sender`](struct@Sender).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Instances are created by the [`channel`](fn@channel) function.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// To turn this receiver into a `Stream`, you can use the [`WatchStream`]</span>
+<span class="doccomment">/// wrapper.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`WatchStream`]: https://docs.rs/tokio-stream/0.1/tokio_stream/wrappers/struct.WatchStream.html</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Pointer to the shared state</span>
@@ -508,7 +641,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">error</span> {
     <span class="doccomment">//! Watch error types</span>
 
-    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
+    <span class="kw">use</span> <span class="ident">std::fmt</span>;
 
     <span class="doccomment">/// Error produced when sending a value fails.</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
@@ -518,13 +651,13 @@
 
     <span class="comment">// ===== impl SendError =====</span>
 
-    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">SendError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
-            <span class="macro">write</span><span class="macro">!</span>(<span class="ident">fmt</span>, <span class="string">&quot;channel closed&quot;</span>)
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">fmt::Debug</span><span class="op">&gt;</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">SendError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+            <span class="macro">write!</span>(<span class="ident">fmt</span>, <span class="string">&quot;channel closed&quot;</span>)
         }
     }
 
-    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="ident">SendError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">fmt::Debug</span><span class="op">&gt;</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">SendError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
 
     <span class="doccomment">/// Error produced when receiving a change notification.</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
@@ -532,13 +665,13 @@
 
     <span class="comment">// ===== impl RecvError =====</span>
 
-    <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">RecvError</span> {
-        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
-            <span class="macro">write</span><span class="macro">!</span>(<span class="ident">fmt</span>, <span class="string">&quot;channel closed&quot;</span>)
+    <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">RecvError</span> {
+        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+            <span class="macro">write!</span>(<span class="ident">fmt</span>, <span class="string">&quot;channel closed&quot;</span>)
         }
     }
 
-    <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="ident">RecvError</span> {}
+    <span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">RecvError</span> {}
 }
 
 <span class="kw">const</span> <span class="ident">CLOSED</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span>;
@@ -571,12 +704,12 @@
 <span class="doccomment">/// [`Sender`]: struct@Sender</span>
 <span class="doccomment">/// [`Receiver`]: struct@Receiver</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">channel</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">init</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) {
-    <span class="kw">let</span> <span class="ident">shared</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">Shared</span> {
-        <span class="ident">value</span>: <span class="ident">RwLock</span>::<span class="ident">new</span>(<span class="ident">init</span>),
-        <span class="ident">version</span>: <span class="ident">AtomicUsize</span>::<span class="ident">new</span>(<span class="number">0</span>),
-        <span class="ident">ref_count_rx</span>: <span class="ident">AtomicUsize</span>::<span class="ident">new</span>(<span class="number">1</span>),
-        <span class="ident">notify_rx</span>: <span class="ident">Notify</span>::<span class="ident">new</span>(),
-        <span class="ident">notify_tx</span>: <span class="ident">Notify</span>::<span class="ident">new</span>(),
+    <span class="kw">let</span> <span class="ident">shared</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">Shared</span> {
+        <span class="ident">value</span>: <span class="ident">RwLock::new</span>(<span class="ident">init</span>),
+        <span class="ident">version</span>: <span class="ident">AtomicUsize::new</span>(<span class="number">0</span>),
+        <span class="ident">ref_count_rx</span>: <span class="ident">AtomicUsize::new</span>(<span class="number">1</span>),
+        <span class="ident">notify_rx</span>: <span class="ident">Notify::new</span>(),
+        <span class="ident">notify_tx</span>: <span class="ident">Notify::new</span>(),
     });
 
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">Sender</span> {
@@ -589,6 +722,14 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_shared</span>(<span class="ident">version</span>: <span class="ident">usize</span>, <span class="ident">shared</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Shared</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="comment">// No synchronization necessary as this is only used as a counter and</span>
+        <span class="comment">// not memory access.</span>
+        <span class="ident">shared</span>.<span class="ident">ref_count_rx</span>.<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Relaxed</span>);
+
+        <span class="self">Self</span> { <span class="ident">shared</span>, <span class="ident">version</span> }
+    }
+
     <span class="doccomment">/// Returns a reference to the most recently sent value</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Outstanding borrows hold a read lock. This means that long lived borrows</span>
@@ -636,27 +777,33 @@
     <span class="doccomment">///     assert!(rx.changed().await.is_err());</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">changed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">error</span>::<span class="ident">RecvError</span><span class="op">&gt;</span> {
-        <span class="comment">// In order to avoid a race condition, we first request a notification,</span>
-        <span class="comment">// **then** check the current value&#39;s version. If a new version exists,</span>
-        <span class="comment">// the notification request is dropped.</span>
-        <span class="kw">let</span> <span class="ident">notified</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">notify_rx</span>.<span class="ident">notified</span>();
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">changed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">error::RecvError</span><span class="op">&gt;</span> {
+        <span class="kw">loop</span> {
+            <span class="comment">// In order to avoid a race condition, we first request a notification,</span>
+            <span class="comment">// **then** check the current value&#39;s version. If a new version exists,</span>
+            <span class="comment">// the notification request is dropped.</span>
+            <span class="kw">let</span> <span class="ident">notified</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">notify_rx</span>.<span class="ident">notified</span>();
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ret</span>) <span class="op">=</span> <span class="ident">maybe_changed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">shared</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">version</span>) {
-            <span class="kw">return</span> <span class="ident">ret</span>;
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ret</span>) <span class="op">=</span> <span class="ident">maybe_changed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">shared</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">version</span>) {
+                <span class="kw">return</span> <span class="ident">ret</span>;
+            }
+
+            <span class="ident">notified</span>.<span class="kw">await</span>;
+            <span class="comment">// loop around again in case the wake-up was spurious</span>
         }
+    }
 
-        <span class="ident">notified</span>.<span class="ident">await</span>;
-
-        <span class="ident">maybe_changed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">shared</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">version</span>)
-            .<span class="ident">expect</span>(<span class="string">&quot;[bug] failed to observe change after notificaton.&quot;</span>)
+    <span class="macro">cfg_process_driver!</span> {
+        <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">try_has_changed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">error::RecvError</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+            <span class="ident">maybe_changed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">shared</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">version</span>)
+        }
     }
 }
 
 <span class="kw">fn</span> <span class="ident">maybe_changed</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
     <span class="ident">shared</span>: <span class="kw-2">&amp;</span><span class="ident">Shared</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
     <span class="ident">version</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">usize</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">error</span>::<span class="ident">RecvError</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">error::RecvError</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="comment">// Load the version from the state</span>
     <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">shared</span>.<span class="ident">version</span>.<span class="ident">load</span>(<span class="ident">SeqCst</span>);
     <span class="kw">let</span> <span class="ident">new_version</span> <span class="op">=</span> <span class="ident">state</span> <span class="op">&amp;</span> <span class="op">!</span><span class="ident">CLOSED</span>;
@@ -669,7 +816,7 @@
 
     <span class="kw">if</span> <span class="ident">CLOSED</span> <span class="op">=</span><span class="op">=</span> <span class="ident">state</span> <span class="op">&amp;</span> <span class="ident">CLOSED</span> {
         <span class="comment">// All receivers have dropped.</span>
-        <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">error</span>::<span class="ident">RecvError</span>(())));
+        <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">error::RecvError</span>(())));
     }
 
     <span class="prelude-val">None</span>
@@ -680,11 +827,7 @@
         <span class="kw">let</span> <span class="ident">version</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">version</span>;
         <span class="kw">let</span> <span class="ident">shared</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">clone</span>();
 
-        <span class="comment">// No synchronization necessary as this is only used as a counter and</span>
-        <span class="comment">// not memory access.</span>
-        <span class="ident">shared</span>.<span class="ident">ref_count_rx</span>.<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Relaxed</span>);
-
-        <span class="ident">Receiver</span> { <span class="ident">version</span>, <span class="ident">shared</span> }
+        <span class="self">Self</span><span class="ident">::from_shared</span>(<span class="ident">version</span>, <span class="ident">shared</span>)
     }
 }
 
@@ -701,10 +844,10 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Sends a new value via the channel, notifying all receivers.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">error</span>::<span class="ident">SendError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">error::SendError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="comment">// This is pretty much only useful as a hint anyway, so synchronization isn&#39;t critical.</span>
         <span class="kw">if</span> <span class="number">0</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">ref_count_rx</span>.<span class="ident">load</span>(<span class="ident">Relaxed</span>) {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>::<span class="ident">SendError</span> { <span class="ident">inner</span>: <span class="ident">value</span> });
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">error::SendError</span> { <span class="ident">inner</span>: <span class="ident">value</span> });
         }
 
         <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">value</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>() <span class="op">=</span> <span class="ident">value</span>;
@@ -716,6 +859,25 @@
         <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">notify_rx</span>.<span class="ident">notify_waiters</span>();
 
         <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="doccomment">/// Returns a reference to the most recently sent value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Outstanding borrows hold a read lock. This means that long lived borrows</span>
+    <span class="doccomment">/// could cause the send half to block. It is recommended to keep the borrow</span>
+    <span class="doccomment">/// as short lived as possible.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use tokio::sync::watch;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let (tx, _) = watch::channel(&quot;hello&quot;);</span>
+    <span class="doccomment">/// assert_eq!(*tx.borrow(), &quot;hello&quot;);</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">borrow</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">T</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">value</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
+        <span class="ident">Ref</span> { <span class="ident">inner</span> }
     }
 
     <span class="doccomment">/// Checks if the channel has been closed. This happens when all receivers</span>
@@ -758,15 +920,24 @@
     <span class="doccomment">///     println!(&quot;the `rx` handles dropped&quot;)</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">closed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">closed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let</span> <span class="ident">notified</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">notify_tx</span>.<span class="ident">notified</span>();
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">ref_count_rx</span>.<span class="ident">load</span>(<span class="ident">Relaxed</span>) <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span>;
         }
 
-        <span class="ident">notified</span>.<span class="ident">await</span>;
-        <span class="macro">debug_assert_eq</span><span class="macro">!</span>(<span class="number">0</span>, <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">ref_count_rx</span>.<span class="ident">load</span>(<span class="ident">Relaxed</span>));
+        <span class="ident">notified</span>.<span class="kw">await</span>;
+        <span class="macro">debug_assert_eq!</span>(<span class="number">0</span>, <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">ref_count_rx</span>.<span class="ident">load</span>(<span class="ident">Relaxed</span>));
+    }
+
+    <span class="macro">cfg_signal_internal!</span> {
+        <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">subscribe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">shared</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">clone</span>();
+            <span class="kw">let</span> <span class="ident">version</span> <span class="op">=</span> <span class="ident">shared</span>.<span class="ident">version</span>.<span class="ident">load</span>(<span class="ident">SeqCst</span>);
+
+            <span class="ident">Receiver::from_shared</span>(<span class="ident">version</span>, <span class="ident">shared</span>)
+        }
     }
 }
 
@@ -779,12 +950,94 @@
 
 <span class="comment">// ===== impl Ref =====</span>
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">ops</span>::<span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">ops::Deref</span> <span class="kw">for</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">T</span>;
 
     <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">deref</span>()
     }
 }
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">test</span>, <span class="ident">loom</span>))]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="ident">futures::future::FutureExt</span>;
+    <span class="kw">use</span> <span class="ident">loom::thread</span>;
+
+    <span class="comment">// test for https://github.com/tokio-rs/tokio/issues/3168</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">watch_spurious_wakeup</span>() {
+        <span class="ident">loom::model</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">let</span> (<span class="ident">send</span>, <span class="kw-2">mut</span> <span class="ident">recv</span>) <span class="op">=</span> <span class="kw">crate</span><span class="ident">::sync::watch::channel</span>(<span class="number">0i32</span>);
+
+            <span class="ident">send</span>.<span class="ident">send</span>(<span class="number">1</span>).<span class="ident">unwrap</span>();
+
+            <span class="kw">let</span> <span class="ident">send_thread</span> <span class="op">=</span> <span class="ident">thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                <span class="ident">send</span>.<span class="ident">send</span>(<span class="number">2</span>).<span class="ident">unwrap</span>();
+                <span class="ident">send</span>
+            });
+
+            <span class="ident">recv</span>.<span class="ident">changed</span>().<span class="ident">now_or_never</span>();
+
+            <span class="kw">let</span> <span class="ident">send</span> <span class="op">=</span> <span class="ident">send_thread</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">recv_thread</span> <span class="op">=</span> <span class="ident">thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                <span class="ident">recv</span>.<span class="ident">changed</span>().<span class="ident">now_or_never</span>();
+                <span class="ident">recv</span>.<span class="ident">changed</span>().<span class="ident">now_or_never</span>();
+                <span class="ident">recv</span>
+            });
+
+            <span class="ident">send</span>.<span class="ident">send</span>(<span class="number">3</span>).<span class="ident">unwrap</span>();
+
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">recv</span> <span class="op">=</span> <span class="ident">recv_thread</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">send_thread</span> <span class="op">=</span> <span class="ident">thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                <span class="ident">send</span>.<span class="ident">send</span>(<span class="number">2</span>).<span class="ident">unwrap</span>();
+            });
+
+            <span class="ident">recv</span>.<span class="ident">changed</span>().<span class="ident">now_or_never</span>();
+
+            <span class="ident">send_thread</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
+        });
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">watch_borrow</span>() {
+        <span class="ident">loom::model</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">let</span> (<span class="ident">send</span>, <span class="kw-2">mut</span> <span class="ident">recv</span>) <span class="op">=</span> <span class="kw">crate</span><span class="ident">::sync::watch::channel</span>(<span class="number">0i32</span>);
+
+            <span class="macro">assert!</span>(<span class="ident">send</span>.<span class="ident">borrow</span>().<span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="number">0</span>));
+            <span class="macro">assert!</span>(<span class="ident">recv</span>.<span class="ident">borrow</span>().<span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="number">0</span>));
+
+            <span class="ident">send</span>.<span class="ident">send</span>(<span class="number">1</span>).<span class="ident">unwrap</span>();
+            <span class="macro">assert!</span>(<span class="ident">send</span>.<span class="ident">borrow</span>().<span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="number">1</span>));
+
+            <span class="kw">let</span> <span class="ident">send_thread</span> <span class="op">=</span> <span class="ident">thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                <span class="ident">send</span>.<span class="ident">send</span>(<span class="number">2</span>).<span class="ident">unwrap</span>();
+                <span class="ident">send</span>
+            });
+
+            <span class="ident">recv</span>.<span class="ident">changed</span>().<span class="ident">now_or_never</span>();
+
+            <span class="kw">let</span> <span class="ident">send</span> <span class="op">=</span> <span class="ident">send_thread</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">recv_thread</span> <span class="op">=</span> <span class="ident">thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                <span class="ident">recv</span>.<span class="ident">changed</span>().<span class="ident">now_or_never</span>();
+                <span class="ident">recv</span>.<span class="ident">changed</span>().<span class="ident">now_or_never</span>();
+                <span class="ident">recv</span>
+            });
+
+            <span class="ident">send</span>.<span class="ident">send</span>(<span class="number">3</span>).<span class="ident">unwrap</span>();
+
+            <span class="kw">let</span> <span class="ident">recv</span> <span class="op">=</span> <span class="ident">recv_thread</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
+            <span class="macro">assert!</span>(<span class="ident">recv</span>.<span class="ident">borrow</span>().<span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="number">3</span>));
+            <span class="macro">assert!</span>(<span class="ident">send</span>.<span class="ident">borrow</span>().<span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="number">3</span>));
+
+            <span class="ident">send</span>.<span class="ident">send</span>(<span class="number">2</span>).<span class="ident">unwrap</span>();
+
+            <span class="ident">thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                <span class="macro">assert!</span>(<span class="ident">recv</span>.<span class="ident">borrow</span>().<span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="number">2</span>));
+            });
+            <span class="macro">assert!</span>(<span class="ident">send</span>.<span class="ident">borrow</span>().<span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="number">2</span>));
+        });
+    }
+}
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "tokio";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="tokio" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
+    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script></body></html>

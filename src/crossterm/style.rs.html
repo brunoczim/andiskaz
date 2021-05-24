@@ -1,7 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.18.2/src/style.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>style.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.18.2/src/style.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>style.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../crossterm/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
-                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../crossterm/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -456,7 +456,7 @@
 <span id="453">453</span>
 <span id="454">454</span>
 <span id="455">455</span>
-</pre><div class="example-wrap"><pre class="rust ">
+</pre><pre class="rust">
 <span class="doccomment">//! # Style</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The `style` module provides a functionality to apply attributes and colors on your text.</span>
@@ -569,17 +569,17 @@
 <span class="doccomment">//! );</span>
 <span class="doccomment">//! ```</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">env</span>, <span class="ident">fmt</span>::<span class="ident">Display</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">env</span>, <span class="ident">fmt::Display</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="prelude-ty">Result</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::Result</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">impl_display</span>, <span class="ident">Ansi</span>, <span class="ident">Command</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
+<span class="kw">use</span> <span class="ident">std::fmt</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
-    <span class="ident">attributes</span>::<span class="ident">Attributes</span>,
-    <span class="ident">content_style</span>::<span class="ident">ContentStyle</span>,
-    <span class="ident">styled_content</span>::<span class="ident">StyledContent</span>,
+    <span class="ident">attributes::Attributes</span>,
+    <span class="ident">content_style::ContentStyle</span>,
+    <span class="ident">styled_content::StyledContent</span>,
     <span class="ident">traits</span>::{<span class="ident">Colorize</span>, <span class="ident">Styler</span>},
     <span class="ident">types</span>::{<span class="ident">Attribute</span>, <span class="ident">Color</span>, <span class="ident">Colored</span>, <span class="ident">Colors</span>},
 };
@@ -615,25 +615,25 @@
 <span class="kw">where</span>
     <span class="ident">D</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Clone</span>,
 {
-    <span class="ident">ContentStyle</span>::<span class="ident">new</span>().<span class="ident">apply</span>(<span class="ident">val</span>)
+    <span class="ident">ContentStyle::new</span>().<span class="ident">apply</span>(<span class="ident">val</span>)
 }
 
-<span class="macro">impl_colorize</span><span class="macro">!</span>(<span class="ident">String</span>);
-<span class="macro">impl_colorize</span><span class="macro">!</span>(<span class="ident">char</span>);
+<span class="macro">impl_colorize!</span>(<span class="ident">String</span>);
+<span class="macro">impl_colorize!</span>(<span class="ident">char</span>);
 
 <span class="comment">// We do actually need the parentheses here because the macro doesn&#39;t work without them otherwise</span>
 <span class="comment">// This is probably a bug somewhere in the compiler, but it isn&#39;t that big a deal.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_parens</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Colorize</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
-    <span class="macro">impl_colorize_callback</span><span class="macro">!</span>(<span class="macro">def_color_base</span><span class="macro">!</span>((<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>)));
+    <span class="macro">impl_colorize_callback!</span>(<span class="macro">def_color_base!</span>((<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>)));
 }
 
-<span class="macro">impl_styler</span><span class="macro">!</span>(<span class="ident">String</span>);
-<span class="macro">impl_styler</span><span class="macro">!</span>(<span class="ident">char</span>);
+<span class="macro">impl_styler!</span>(<span class="ident">String</span>);
+<span class="macro">impl_styler!</span>(<span class="ident">char</span>);
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_parens</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Styler</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
-    <span class="macro">impl_styler_callback</span><span class="macro">!</span>(<span class="macro">def_attr_base</span><span class="macro">!</span>((<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>)));
+    <span class="macro">impl_styler_callback!</span>(<span class="macro">def_attr_base!</span>((<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>)));
 }
 
 <span class="doccomment">/// Returns available color count.</span>
@@ -642,7 +642,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// This does not always provide a good result.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">available_color_count</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u16</span> {
-    <span class="ident">env</span>::<span class="ident">var</span>(<span class="string">&quot;TERM&quot;</span>)
+    <span class="ident">env::var</span>(<span class="string">&quot;TERM&quot;</span>)
         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="kw">if</span> <span class="ident">x</span>.<span class="ident">contains</span>(<span class="string">&quot;256color&quot;</span>) { <span class="number">256</span> } <span class="kw">else</span> { <span class="number">8</span> })
         .<span class="ident">unwrap_or</span>(<span class="number">8</span>)
 }
@@ -660,9 +660,9 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetForegroundColor</span>(<span class="kw">pub</span> <span class="ident">Color</span>);
 
-<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="ident">SetForegroundColor</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
-        <span class="ident">ansi</span>::<span class="ident">set_fg_csi_sequence</span>(<span class="ident">f</span>, (<span class="self">self</span>.<span class="number">0</span>).<span class="number">0</span>)
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="ident">SetForegroundColor</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+        <span class="ident">ansi::set_fg_csi_sequence</span>(<span class="ident">f</span>, (<span class="self">self</span>.<span class="number">0</span>).<span class="number">0</span>)
     }
 }
 
@@ -670,13 +670,13 @@
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::AnsiType</span> {
         <span class="ident">Ansi</span>(<span class="kw-2">*</span><span class="self">self</span>)
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
     <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys</span>::<span class="ident">windows</span>::<span class="ident">set_foreground_color</span>(<span class="self">self</span>.<span class="number">0</span>)
+        <span class="ident">sys::windows::set_foreground_color</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
 
@@ -693,9 +693,9 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetBackgroundColor</span>(<span class="kw">pub</span> <span class="ident">Color</span>);
 
-<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="ident">SetBackgroundColor</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
-        <span class="ident">ansi</span>::<span class="ident">set_bg_csi_sequence</span>(<span class="ident">f</span>, (<span class="self">self</span>.<span class="number">0</span>).<span class="number">0</span>)
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="ident">SetBackgroundColor</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+        <span class="ident">ansi::set_bg_csi_sequence</span>(<span class="ident">f</span>, (<span class="self">self</span>.<span class="number">0</span>).<span class="number">0</span>)
     }
 }
 
@@ -703,13 +703,13 @@
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::AnsiType</span> {
         <span class="ident">Ansi</span>(<span class="kw-2">*</span><span class="self">self</span>)
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
     <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys</span>::<span class="ident">windows</span>::<span class="ident">set_background_color</span>(<span class="self">self</span>.<span class="number">0</span>)
+        <span class="ident">sys::windows::set_background_color</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
 
@@ -736,13 +736,13 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetColors</span>(<span class="kw">pub</span> <span class="ident">Colors</span>);
 
-<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="ident">SetColors</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="ident">SetColors</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>) <span class="op">=</span> (<span class="self">self</span>.<span class="number">0</span>).<span class="number">0</span>.<span class="ident">foreground</span> {
-            <span class="ident">ansi</span>::<span class="ident">set_fg_csi_sequence</span>(<span class="ident">f</span>, <span class="ident">color</span>)<span class="question-mark">?</span>;
+            <span class="ident">ansi::set_fg_csi_sequence</span>(<span class="ident">f</span>, <span class="ident">color</span>)<span class="question-mark">?</span>;
         }
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>) <span class="op">=</span> (<span class="self">self</span>.<span class="number">0</span>).<span class="number">0</span>.<span class="ident">background</span> {
-            <span class="ident">ansi</span>::<span class="ident">set_bg_csi_sequence</span>(<span class="ident">f</span>, <span class="ident">color</span>)<span class="question-mark">?</span>;
+            <span class="ident">ansi::set_bg_csi_sequence</span>(<span class="ident">f</span>, <span class="ident">color</span>)<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
@@ -752,17 +752,17 @@
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::AnsiType</span> {
         <span class="ident">Ansi</span>(<span class="kw-2">*</span><span class="self">self</span>)
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
     <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">foreground</span> {
-            <span class="ident">sys</span>::<span class="ident">windows</span>::<span class="ident">set_foreground_color</span>(<span class="ident">color</span>)<span class="question-mark">?</span>;
+            <span class="ident">sys::windows::set_foreground_color</span>(<span class="ident">color</span>)<span class="question-mark">?</span>;
         }
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">background</span> {
-            <span class="ident">sys</span>::<span class="ident">windows</span>::<span class="ident">set_background_color</span>(<span class="ident">color</span>)<span class="question-mark">?</span>;
+            <span class="ident">sys::windows::set_background_color</span>(<span class="ident">color</span>)<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
@@ -778,9 +778,9 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetAttribute</span>(<span class="kw">pub</span> <span class="ident">Attribute</span>);
 
-<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="ident">SetAttribute</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
-        <span class="ident">ansi</span>::<span class="ident">set_attr_csi_sequence</span>(<span class="ident">f</span>, (<span class="self">self</span>.<span class="number">0</span>).<span class="number">0</span>)
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="ident">SetAttribute</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+        <span class="ident">ansi::set_attr_csi_sequence</span>(<span class="ident">f</span>, (<span class="self">self</span>.<span class="number">0</span>).<span class="number">0</span>)
     }
 }
 
@@ -788,7 +788,7 @@
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::AnsiType</span> {
         <span class="ident">Ansi</span>(<span class="kw-2">*</span><span class="self">self</span>)
     }
 
@@ -809,16 +809,16 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetAttributes</span>(<span class="kw">pub</span> <span class="ident">Attributes</span>);
 
-<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="ident">SetAttributes</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
-        <span class="ident">ansi</span>::<span class="ident">set_attrs_csi_sequence</span>(<span class="ident">f</span>, (<span class="self">self</span>.<span class="number">0</span>).<span class="number">0</span>)
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="ident">SetAttributes</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+        <span class="ident">ansi::set_attrs_csi_sequence</span>(<span class="ident">f</span>, (<span class="self">self</span>.<span class="number">0</span>).<span class="number">0</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetAttributes</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">Ansi</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::AnsiType</span> {
         <span class="ident">Ansi</span>(<span class="kw-2">*</span><span class="self">self</span>)
     }
 
@@ -845,7 +845,7 @@
 {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::AnsiType</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">clone</span>()
     }
 
@@ -866,13 +866,13 @@
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">ResetColor</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">AnsiType</span> {
-        <span class="ident">ansi</span>::<span class="ident">RESET_CSI_SEQUENCE</span>
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::AnsiType</span> {
+        <span class="ident">ansi::RESET_CSI_SEQUENCE</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
     <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys</span>::<span class="ident">windows</span>::<span class="ident">reset</span>()
+        <span class="ident">sys::windows::reset</span>()
     }
 }
 
@@ -885,7 +885,7 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">Print</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">T</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::AnsiType</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">clone</span>()
     }
 
@@ -899,18 +899,19 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Print</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> ::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), ::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">ansi_code</span>())
+        <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">::std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">::std::result::Result</span><span class="op">&lt;</span>(), <span class="ident">::std::fmt::Error</span><span class="op">&gt;</span> {
+        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">ansi_code</span>())
     }
 }
 
-<span class="macro">impl_display</span><span class="macro">!</span>(<span class="kw">for</span> <span class="ident">SetForegroundColor</span>);
-<span class="macro">impl_display</span><span class="macro">!</span>(<span class="kw">for</span> <span class="ident">SetBackgroundColor</span>);
-<span class="macro">impl_display</span><span class="macro">!</span>(<span class="kw">for</span> <span class="ident">SetColors</span>);
-<span class="macro">impl_display</span><span class="macro">!</span>(<span class="kw">for</span> <span class="ident">SetAttribute</span>);
-<span class="macro">impl_display</span><span class="macro">!</span>(<span class="kw">for</span> <span class="ident">PrintStyledContent</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>);
-<span class="macro">impl_display</span><span class="macro">!</span>(<span class="kw">for</span> <span class="ident">PrintStyledContent</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>);
-<span class="macro">impl_display</span><span class="macro">!</span>(<span class="kw">for</span> <span class="ident">ResetColor</span>);
+<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">SetForegroundColor</span>);
+<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">SetBackgroundColor</span>);
+<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">SetColors</span>);
+<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">SetAttribute</span>);
+<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">PrintStyledContent</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>);
+<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">PrintStyledContent</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>);
+<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">ResetColor</span>);
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "crossterm";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>
