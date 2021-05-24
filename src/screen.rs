@@ -255,7 +255,7 @@ impl<'terminal> Screen<'terminal> {
 
             cursor.x = size.x - pos as Coord;
             cursor.x = cursor.x + style.left_margin - style.right_margin;
-            cursor.x = cursor.x / style.align_denom * style.align_numer;
+            cursor.x = cursor.x * style.align_numer / style.align_denom;
 
             slice = slice.index(.. pos);
 

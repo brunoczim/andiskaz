@@ -84,5 +84,6 @@ pub mod style;
 pub mod screen;
 pub mod event;
 pub mod terminal;
+pub mod ui;
 
 pub use self::stdio::emergency_restore;

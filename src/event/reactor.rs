@@ -41,7 +41,6 @@ impl<'shared> Reactor<'shared> {
         let size = locked.size();
         let min_size = locked.min_size();
         if size.x < min_size.x || size.y < min_size.y {
-            locked.check_resize(min_size, &mut self.stdout_guard).await?;
             locked.check_resize(size, &mut self.stdout_guard).await?;
             let evt = ResizeEvent { size: None };
             self.send(Event::Resize(evt));
