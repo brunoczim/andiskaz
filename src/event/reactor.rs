@@ -1,3 +1,5 @@
+//! This file defines an event reactor.
+
 use crate::{
     coord::Coord2,
     error::Error,

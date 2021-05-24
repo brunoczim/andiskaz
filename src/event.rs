@@ -1,7 +1,5 @@
 //! This module defines input events of a terminal.
 
-#[cfg(test)]
-mod test;
 mod reactor;
 
 use crate::coord::Coord2;
