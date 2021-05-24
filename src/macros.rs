@@ -20,8 +20,12 @@ macro_rules! tstring {
         $crate::string::TermString::default()
     };
 
-    [$s:expr] => {
+    [$s:expr $(,)?] => {
         $crate::string::TermString::new_lossy($s)
+    };
+
+    ($fmt:expr, $fst:expr $(,$rest:expr)* $(,)?) => {
+        $crate::tstring![format!($fmt, $fst $(, $rest)*)]
     };
 }
 

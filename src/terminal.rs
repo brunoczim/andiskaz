@@ -127,7 +127,7 @@ impl Builder {
             let interval = self.event_interval;
             let barrier = barrier.clone();
             let shared = shared.clone();
-            tokio::spawn(events_task(barrier, interval, shared))
+            tokio::spawn(events_task(barrier, interval, shared, initial_size))
         };
 
         // Renderer task future.
@@ -218,9 +218,10 @@ async fn events_task(
     barrier: Arc<Barrier>,
     interval: Duration,
     shared: Arc<Shared>,
+    initial_size: Coord2,
 ) -> Result<(), Error> {
     let mut reactor = Reactor::new(&shared);
-    reactor.pre_loop().await?;
+    reactor.pre_loop(initial_size).await?;
     barrier.wait().await;
     reactor.react_loop(interval).await
 }

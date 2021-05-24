@@ -36,12 +36,14 @@ impl<'shared> Reactor<'shared> {
 
     /// Executes the pre-"reactor loop" functions, handling the initial screen
     /// size and correctly dealing with the fact that it is invalid, if it is.
-    pub async fn pre_loop(&mut self) -> Result<(), Error> {
-        let mut locked = self.shared.screen().lock().await;
-        let size = locked.size();
-        let min_size = locked.min_size();
-        if size.x < min_size.x || size.y < min_size.y {
-            locked.check_resize(size, &mut self.stdout_guard).await?;
+    pub async fn pre_loop(
+        &mut self,
+        initial_size: Coord2,
+    ) -> Result<(), Error> {
+        let mut screen = self.shared.screen().lock().await;
+        let min_size = screen.min_size();
+        if initial_size.x < min_size.x || initial_size.y < min_size.y {
+            screen.check_resize(initial_size, &mut self.stdout_guard).await?;
             let evt = ResizeEvent { size: None };
             self.send(Event::Resize(evt));
         }

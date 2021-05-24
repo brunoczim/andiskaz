@@ -60,9 +60,7 @@ async fn term_main(mut term: Terminal) -> Result<(), Error> {
             }
 
             // Finally, dump this event.
-            session
-                .screen()
-                .styled_text(&tstring![format!("{:?}", event)], evt_style);
+            session.screen().styled_text(&tstring!["{:?}", event], evt_style);
         }
     }
 

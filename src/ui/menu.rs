@@ -1,3 +1,6 @@
+//! This module exports items related to menus in the UI, such as more extensive
+//! menus, or just dialogs for OK/CANCEL.
+
 use crate::{
     color::{BasicColor, Color, Color2},
     coord::{Coord, Coord2},
@@ -457,6 +460,12 @@ where
 pub trait MenuOption {
     /// Returns the display name of this option.
     fn name(&self) -> TermString;
+}
+
+impl MenuOption for TermString {
+    fn name(&self) -> TermString {
+        self.clone()
+    }
 }
 
 /// An item of a prompt about a dangerous action.
