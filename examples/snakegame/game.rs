@@ -30,6 +30,17 @@ pub enum EndKind {
     Cancel,
 }
 
+/// Tag of the internal state of the game.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+enum State {
+    /// Game running normally.
+    Running,
+    /// Screen has been put to a bad size.
+    BadScreen,
+    /// The game ended.
+    Ended(EndKind),
+}
+
 /// The central game state.
 #[derive(Debug)]
 pub struct Game {
@@ -47,6 +58,8 @@ pub struct Game {
     corner_tile: Tile,
     /// Message displayed above the border.
     message: TermString,
+    /// Game state, initially "running".
+    state: State,
 }
 
 impl Game {
@@ -120,6 +133,7 @@ impl Game {
             vertical_tile,
             horizontal_tile,
             message,
+            state: State::Running,
         })
     }
 
@@ -133,16 +147,30 @@ impl Game {
         // Interval between ticks.
         let mut interval = time::interval(tick);
         loop {
-            // Immediately acquires a terminal locked session.
-            let mut session = terminal.lock_now().await?;
-            // Let's interact with the event, change state, and see if it ended.
-            let maybe_end = self.tick(session.event());
-            // But before, we will render what we have.
-            self.render(&mut session.screen());
-            if let Some(end) = maybe_end {
-                // Ended? yep, break.
-                break Ok(end);
+            match self.state {
+                State::Running => {
+                    // Immediately acquires a terminal locked session.
+                    let mut session = terminal.lock_now().await?;
+                    // Let's interact with the event, change state, and see if
+                    // it ended.
+                    self.tick(session.event());
+                    // But before, we will render what we have.
+                    self.render(&mut session.screen());
+                },
+
+                State::BadScreen => {
+                    let mut session = terminal.lock_now().await?;
+                    // If there is an event, it potentially resized the screen
+                    // to a valid size.
+                    if let Some(event) = session.event() {
+                        self.restricted_event(event);
+                    }
+                },
+
+                // Game ended so we can stop the loop.
+                State::Ended(end) => break Ok(end),
             }
+
             interval.tick().await;
         }
     }
@@ -155,27 +183,24 @@ impl Game {
         }
     }
 
-    /// Performs the game's logical operations inside a game tick. Returns
-    /// `Some` if the end of the game happens.
-    fn tick(&mut self, event: Option<Event>) -> Option<EndKind> {
+    /// Performs the game's logical operations inside a game tick.
+    fn tick(&mut self, event: Option<Event>) {
         // Handles the event.
         if let Some(curr_event) = event {
-            if let Some(end) = self.handle_event(curr_event) {
-                return Some(end);
-            }
+            self.full_event(curr_event);
         }
 
         // Moves the snake.
-        self.move_snake()
+        self.move_snake();
     }
 
-    /// Handles an event, be it resizing or key pressing. Returns `Some` if the
-    /// end of the game happens.
-    fn handle_event(&mut self, event: Event) -> Option<EndKind> {
+    /// Handles an event, reacting to the full list of used events, be it
+    /// resizing or key pressing.
+    fn full_event(&mut self, event: Event) {
         match event {
             // ESC was pressed. Cancels the game.
             Event::Key(KeyEvent { main_key: Key::Esc, .. }) => {
-                return Some(EndKind::Cancel);
+                self.state = State::Ended(EndKind::Cancel);
             },
 
             // Arrow up was pressed, with no modifiers. Changes direction to up.
@@ -223,43 +248,57 @@ impl Game {
 
             // Screen was resized. Propagates the new size.
             Event::Resize(resize) => {
-                if let Some(end) = self.resize(resize) {
-                    return Some(end);
+                self.resize(resize);
+            },
+
+            // Other keys, ignores.
+            Event::Key(_) => (),
+        }
+    }
+
+    /// Handles an event, but only to a restricted set of used events: resizing
+    /// or ESC.
+    fn restricted_event(&mut self, event: Event) {
+        match event {
+            // ESC was pressed. Cancels the game.
+            Event::Key(KeyEvent { main_key: Key::Esc, .. }) => {
+                self.state = State::Ended(EndKind::Cancel);
+            },
+
+            // Screen was resized. Propagates the new size.
+            Event::Resize(event) => {
+                if event.size.is_some() {
+                    // If valid screen size, then we can keep the game running.
+                    self.state = State::Running;
                 }
             },
 
             // Other keys, ignores.
             Event::Key(_) => (),
         }
-
-        None
     }
 
-    /// Moves the snake. Returns `Some` if the end of the game happens.
-    fn move_snake(&mut self) -> Option<EndKind> {
+    /// Moves the snake in the current direction.
+    fn move_snake(&mut self) {
         match self.snake.mov(self.bounds, &self.food) {
             // Handles the case where the food was eaten.
-            Some(true) => {
+            Some(eaten) => {
                 if self.snake.length() >= self.win_size() {
-                    return Some(EndKind::Win);
+                    self.state = State::Ended(EndKind::Win);
+                } else if eaten {
+                    // Handles the case where the food was eaten: it needs to be
+                    // regenerated.
+                    self.food.regenerate(&self.snake, self.bounds);
                 }
 
-                self.food.regenerate(&self.snake, self.bounds);
+                if self.snake.head_intersects() {
+                    // If the head intersects the body, game over.
+                    self.state = State::Ended(EndKind::Loss)
+                }
             },
 
-            // Handles the case where the food was not eaten, but this is not
-            // the end of the game.
-            Some(false) => (),
-
             // Out of bounds. End of the game.
-            None => return Some(EndKind::Loss),
-        }
-
-        if self.snake.head_intersects() {
-            // If the head intersects the body, game over.
-            Some(EndKind::Loss)
-        } else {
-            None
+            None => self.state = State::Ended(EndKind::Loss),
         }
     }
 
@@ -343,9 +382,7 @@ impl Game {
     }
 
     /// Resizes the game state about screen size.
-    fn resize(&mut self, event: ResizeEvent) -> Option<EndKind> {
-        // Keeps track if the end is reached.
-        let mut end = None;
+    fn resize(&mut self, event: ResizeEvent) {
         if let Some(size) = event.size {
             // New bounds.
             self.bounds = Self::make_bounds(size);
@@ -353,15 +390,16 @@ impl Game {
             if self.snake.saturate_at_bounds(self.bounds) {
                 // We will consider that the game is lost if snake gets outside
                 // of the plane when resizing.
-                end = Some(EndKind::Loss);
+                self.state = State::Ended(EndKind::Loss);
             }
             if !self.food.in_bounds(self.bounds) {
                 // If the food is outside of the plane, regenerates.
                 self.food.regenerate(&self.snake, self.bounds);
             }
+        } else {
+            // Screen size is not valid? Save this as a bad screen state.
+            self.state = State::BadScreen;
         }
-
-        end
     }
 
     /// Computes the size of the snake when the player wins.
