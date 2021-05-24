@@ -53,8 +53,8 @@ async fn term_main(mut game: Game, mut term: Terminal) -> Result<(), Error> {
     game.render(term.lock_now().await?.screen()).await?;
 
     loop {
+        // Awaits for an event and locks the terminal handle data.
         let mut session = term.listen().await?;
-        // Awaits for an event.
         match session.event() {
             // This is a key event.
             Some(Event::Key(evt)) => {

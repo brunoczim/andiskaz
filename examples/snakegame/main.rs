@@ -120,7 +120,9 @@ async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
 async fn wait_key_delay(terminal: &mut Terminal) -> Result<(), AndiskazError> {
     // We have to wait before clearing the events handler.
     time::sleep(WAIT_KEY_DELAY).await;
+    // Clears all pending events.
     terminal.clear_event();
+    // Waits for one more event.
     terminal.listen().await?.event();
     Ok(())
 }

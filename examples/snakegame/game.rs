@@ -130,12 +130,17 @@ impl Game {
         terminal: &mut Terminal,
         tick: Duration,
     ) -> Result<EndKind, Error> {
+        // Interval between ticks.
         let mut interval = time::interval(tick);
         loop {
+            // Immediately acquires a terminal locked session.
             let mut session = terminal.lock_now().await?;
+            // Let's interact with the event, change state, and see if it ended.
             let maybe_end = self.tick(session.event());
+            // But before, we will render what we have.
             self.render(&mut session.screen());
             if let Some(end) = maybe_end {
+                // Ended? yep, break.
                 break Ok(end);
             }
             interval.tick().await;

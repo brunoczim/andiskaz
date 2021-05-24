@@ -32,28 +32,37 @@ async fn main() {
 
 /// The terminal main function.
 async fn term_main(mut term: Terminal) -> Result<(), Error> {
-    // Allocates space for a string safe, to print it.
+    // Allocates memory for a string which is safe to be printed.
     let message = tstring!["Exits on ESC"];
-    term.lock_now()
-        .await?
-        .screen()
-        .styled_text(&message, Style::with_colors(Color2::default()));
+    // Style for the message string.
+    let msg_style = Style::with_colors(Color2::default());
+    // Style for the event string.
+    let evt_style = Style::with_colors(Color2::default()).top_margin(2);
+    // Initial rendering.
+    term.lock_now().await?.screen().styled_text(&message, msg_style);
 
     loop {
+        // Listens for an event, and when it happens, returns a terminal guard,
+        // a "session".
         let mut session = term.listen().await?;
-        session.screen().clear(BasicColor::Black.into());
-        session
-            .screen()
-            .styled_text(&message, Style::with_colors(Color2::default()));
 
+        // There should be an event, then... print it.
         if let Some(event) = session.event() {
-            if let Event::Key(KeyEvent { main_key: Key::Esc, .. }) = event {
-                break;
+            match event {
+                // If ESC is pressed, we exit.
+                Event::Key(KeyEvent { main_key: Key::Esc, .. }) => break,
+                // If resized, message needs to be reprinted.
+                Event::Resize(_) => {
+                    session.screen().clear(BasicColor::Black.into());
+                    session.screen().styled_text(&message, msg_style);
+                },
+                _ => (),
             }
-            let style = Style::with_colors(Color2::default()).top_margin(2);
+
+            // Finally, dump this event.
             session
                 .screen()
-                .styled_text(&tstring![format!("{:?}", event)], style);
+                .styled_text(&tstring![format!("{:?}", event)], evt_style);
         }
     }
 
