@@ -3,8 +3,12 @@ name = "andiskaz"
 version = "0.1.0"
 authors = ["brunoczim <brunoczim@gmail.com>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "A convenience library for writing games and other apps in TUI"
+readme = "README.md"
+repository = "https://github.com/brunoczim/andiskaz"
+license-file = "LICENSE"
+keywords = ["terminal", "tui", "double buffering"]
+categories = ["game-development", "asynchronous"]
 
 [dependencies]
 unicode-segmentation = "^1.6.0"
