@@ -9,17 +9,31 @@ use crossterm::event::{Event as CrosstermEvent, KeyCode as CrosstermKey};
 use std::time::Duration;
 use tokio::{task, time};
 
+/// Event reactor: gets events from the low-level (OS + Crossterm), and sends
+/// them to the events channel.
 #[derive(Debug)]
 pub(crate) struct Reactor<'shared> {
+    /// Shared data between every party of the application.
     shared: &'shared Shared,
+    /// A guard to the standard output, to prevent renderer from rendering if
+    /// invalid size.
     stdout_guard: Option<LockedStdout<'shared>>,
 }
 
 impl<'shared> Reactor<'shared> {
+    /// Constructs the reactor from a reference to shared data on which it will
+    /// place the events.
     pub fn new(shared: &'shared Shared) -> Self {
         Self { shared, stdout_guard: None }
     }
 
+    /// Returns whether the current screen size is valid.
+    fn is_size_valid(&self) -> bool {
+        self.stdout_guard.is_none()
+    }
+
+    /// Executes the pre-"reactor loop" functions, handling the initial screen
+    /// size and correctly dealing with the fact that it is invalid, if it is.
     pub async fn pre_loop(&mut self) -> Result<(), Error> {
         let mut locked = self.shared.screen().lock().await;
         let size = locked.size();
@@ -35,7 +49,7 @@ impl<'shared> Reactor<'shared> {
 
     /// Performs a "react loop", i.e. keeps polling events, reacting to the
     /// events, and sending them to the event listener.
-    pub(crate) async fn react_loop(
+    pub async fn react_loop(
         &mut self,
         event_interval: Duration,
     ) -> Result<(), Error> {
@@ -61,8 +75,7 @@ impl<'shared> Reactor<'shared> {
 
         match crossterm {
             CrosstermEvent::Key(key) => {
-                let maybe_key = key_from_crossterm(key.code)
-                    .filter(|_| self.stdout_guard.is_none());
+                let maybe_key = key_from_crossterm(key.code);
                 if let Some(main_key) = maybe_key {
                     use crossterm::event::KeyModifiers as Mod;
 
@@ -80,19 +93,18 @@ impl<'shared> Reactor<'shared> {
             CrosstermEvent::Resize(width, height) => {
                 let size = Coord2 { x: width, y: height };
                 let mut locked_screen = self.shared.screen().lock().await;
-                let prev_size_good = self.stdout_guard.is_none();
+                let prev_size_valid = self.is_size_valid();
                 locked_screen
                     .check_resize(size, &mut self.stdout_guard)
                     .await?;
 
-                if self.stdout_guard.is_none() {
+                if self.is_size_valid() {
                     let evt = ResizeEvent { size: Some(size) };
                     self.send(Event::Resize(evt));
-                } else if prev_size_good {
+                } else if prev_size_valid {
                     let evt = ResizeEvent { size: None };
                     self.send(Event::Resize(evt));
                 }
-                drop(locked_screen);
             },
 
             _ => (),
