@@ -3,6 +3,7 @@
 
 use crate::{
     color::{BasicColor, Color, Color2},
+    coord,
     coord::{Coord, Coord2},
     error::ServicesOff,
     event::{Event, Key, KeyEvent, ResizeEvent},
@@ -361,7 +362,7 @@ where
         let mut available = screen_size.y - self.menu.title_y;
         available -= 2 * (self.menu.pad_after_title - 1) + cancel;
         let extra = available / (self.menu.pad_after_option + 1) - 2;
-        self.first_row + extra as usize
+        self.first_row + coord::to_index(extra)
     }
 
     /// Returns the range of the visible options in the screen.
@@ -447,12 +448,12 @@ where
         let mut len = buf.count_graphemes();
         let screen_size = screen.size();
 
-        if len as Coord % 2 != screen_size.x % 2 {
+        if coord::from_index(len) % 2 != screen_size.x % 2 {
             buf = tstring_concat![buf, TermGrapheme::space()];
             len += 1;
         }
 
-        if screen_size.x - 4 < len as Coord {
+        if screen_size.x - 4 < coord::from_index(len) {
             buf = tstring_concat![
                 buf.index(.. len - 5),
                 TermGrapheme::new_lossy("…")
@@ -491,7 +492,7 @@ where
 
     /// Gets the height of a given option (by index).
     fn y_of_option(&self, option: usize) -> Coord {
-        let count = (option - self.first_row) as Coord;
+        let count = coord::from_index(option - self.first_row);
         let before = (count + 1) * (self.menu.pad_after_option + 1);
         before + self.menu.pad_after_title + 1 + self.menu.title_y
     }

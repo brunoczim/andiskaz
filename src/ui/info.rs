@@ -4,7 +4,7 @@ use crate::{
     color::{BasicColor, Color, Color2},
     coord::Coord,
     error::ServicesOff,
-    event::{Event, Key, KeyEvent, ResizeEvent},
+    event::{Event, Key, KeyEvent},
     screen::Screen,
     string::TermString,
     style::Style,

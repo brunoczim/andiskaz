@@ -1,3 +1,5 @@
+//! This module exports a simple input dialog and related functionality.
+
 use crate::{
     color::{BasicColor, Color, Color2},
     coord,
@@ -9,12 +11,15 @@ use crate::{
     style::Style,
     terminal::Terminal,
 };
-use std::mem;
+use std::{iter, mem};
 use unicode_segmentation::UnicodeSegmentation;
 
+/// A selected item/option of the input dialog.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum InputDialogItem {
+pub enum InputDialogItem {
+    /// Input text prompt is going to be successful.
     Ok,
+    /// Input text prompt is going to be cancelled.
     Cancel,
 }
 
@@ -28,7 +33,7 @@ where
     /// The title of the input dialog.
     pub title: TermString,
     /// Initial buffer of the input dialog.
-    pub buffer: String,
+    pub buffer: TermString,
     /// Maximum size of the input box.
     pub max: Coord,
     /// Colors of the title.
@@ -61,7 +66,7 @@ where
     /// maximum input size, and filter function.
     pub fn new(
         title: TermString,
-        buffer: String,
+        buffer: TermString,
         max: Coord,
         filter: F,
     ) -> Self {
@@ -83,38 +88,67 @@ where
         }
     }
 
-    /// Gets user input without possibility of canceling it.
+    /// Gets user input without possibility of canceling it, with cursor at 0.
     pub async fn select(
         &mut self,
         term: &mut Terminal,
     ) -> Result<TermString, ServicesOff> {
-        let mut selector = Selector::without_cancel(self, 0);
+        self.select_with_initial(term, 0).await
+    }
+
+    /// Gets user input without possibility of canceling it, with given initial
+    /// cursor.
+    pub async fn select_with_initial(
+        &mut self,
+        term: &mut Terminal,
+        cursor: usize,
+    ) -> Result<TermString, ServicesOff> {
+        let mut selector = Selector::without_cancel(self, cursor);
         selector.run(term).await?;
         Ok(selector.result())
     }
 
-    /// Gets user input with the user possibly canceling it.
+    /// Gets user input with the user possibly canceling it, with cursor at 0
+    /// and OK initially selected.
     pub async fn select_with_cancel(
         &mut self,
         term: &mut Terminal,
     ) -> Result<Option<TermString>, ServicesOff> {
-        let mut selector = Selector::with_cancel(self, 0, InputDialogItem::Ok);
+        self.select_cancel_initial(term, 0, InputDialogItem::Ok).await
+    }
+
+    /// Gets user input with the user possibly canceling it, with given initial
+    /// cursor and given initially selected item.
+    pub async fn select_cancel_initial(
+        &mut self,
+        term: &mut Terminal,
+        cursor: usize,
+        selected: InputDialogItem,
+    ) -> Result<Option<TermString>, ServicesOff> {
+        let mut selector = Selector::with_cancel(self, cursor, selected);
         selector.run(term).await?;
         Ok(selector.result_with_cancel())
     }
 }
 
+/// An input dialog selector/runner.
 struct Selector<'dialog, F>
 where
     F: FnMut(char) -> bool,
 {
+    /// The original input dialog.
     dialog: &'dialog mut InputDialog<F>,
+    /// The current runtime buffer.
     buffer: Vec<char>,
-    joined: String,
+    /// Position of the cursor in the buffer.
     cursor: usize,
+    /// Selected item/option of the dialog (always OK if not has_cancel).
     selected: InputDialogItem,
+    /// Does this selection present a cancel option?
     has_cancel: bool,
+    /// The actual maximum length of the buffer.
     actual_max: Coord,
+    /// Is the screen in a valid size?
     valid_size: bool,
 }
 
@@ -122,6 +156,8 @@ impl<'dialog, F> Selector<'dialog, F>
 where
     F: FnMut(char) -> bool,
 {
+    /// Generic initialization. Should not be called directly, but through
+    /// helpers.
     fn new(
         dialog: &'dialog mut InputDialog<F>,
         cursor: usize,
@@ -130,7 +166,6 @@ where
     ) -> Self {
         Self {
             buffer: dialog.buffer.chars().collect(),
-            joined: String::new(),
             cursor,
             selected,
             has_cancel,
@@ -140,6 +175,8 @@ where
         }
     }
 
+    /// Creates a selector from the given dialog and cursor position, without
+    /// CANCEL.
     fn without_cancel(
         dialog: &'dialog mut InputDialog<F>,
         cursor: usize,
@@ -147,6 +184,8 @@ where
         Self::new(dialog, cursor, InputDialogItem::Ok, false)
     }
 
+    /// Creates a selector frm the given dialog, cursor position and selected
+    /// item, with CANCEL being a possibility.
     fn with_cancel(
         dialog: &'dialog mut InputDialog<F>,
         cursor: usize,
@@ -155,6 +194,7 @@ where
         Self::new(dialog, cursor, selected, true)
     }
 
+    /// Runs the selector.
     async fn run(&mut self, term: &mut Terminal) -> Result<(), ServicesOff> {
         self.init_run(term).await?;
 
@@ -165,6 +205,20 @@ where
 
             match event {
                 Some(Event::Key(keys)) if self.valid_size => match keys {
+                    KeyEvent {
+                        main_key: Key::Up,
+                        ctrl: false,
+                        alt: false,
+                        shift: false,
+                    } => self.key_up(screen),
+
+                    KeyEvent {
+                        main_key: Key::Down,
+                        ctrl: false,
+                        alt: false,
+                        shift: false,
+                    } => self.key_down(screen),
+
                     KeyEvent {
                         main_key: Key::Esc,
                         ctrl: false,
@@ -188,20 +242,6 @@ where
                         alt: false,
                         shift: false,
                     } => self.key_right(screen),
-
-                    KeyEvent {
-                        main_key: Key::Up,
-                        ctrl: false,
-                        alt: false,
-                        shift: false,
-                    } => self.key_up(screen),
-
-                    KeyEvent {
-                        main_key: Key::Down,
-                        ctrl: false,
-                        alt: false,
-                        shift: false,
-                    } => self.key_down(screen),
 
                     KeyEvent {
                         main_key: Key::Enter,
@@ -236,11 +276,15 @@ where
         Ok(())
     }
 
+    /// Computes the resulting string after accepting the dialog without the
+    /// CANCEL option.
     fn result(&mut self) -> TermString {
         let buffer = mem::take(&mut self.buffer);
         tstring![buffer.into_iter().collect::<String>()]
     }
 
+    /// Computes the resulting string after accepting or rejecting the dialog
+    /// (with the CANCEL option available).
     fn result_with_cancel(&mut self) -> Option<TermString> {
         match self.selected {
             InputDialogItem::Ok => Some(self.result()),
@@ -248,6 +292,7 @@ where
         }
     }
 
+    /// Initializes a run over this selector.
     async fn init_run(
         &mut self,
         term: &mut Terminal,
@@ -256,12 +301,12 @@ where
         self.selected = InputDialogItem::Ok;
         self.buffer = self.dialog.buffer.chars().collect::<Vec<_>>();
         self.cursor = 0;
-        self.joined = String::new();
         self.update_actual_max(session.screen().size());
         self.render(session.screen());
         Ok(())
     }
 
+    /// Updates the actual maximum length for the buffer, given a screen size.
     fn update_actual_max(&mut self, screen_size: Coord2) {
         self.actual_max = self.dialog.max.min(screen_size.x);
         let max_index = coord::to_index(self.actual_max).saturating_sub(1);
@@ -269,6 +314,7 @@ where
         self.buffer.truncate(coord::to_index(self.actual_max));
     }
 
+    /// Should be triggered when UP key is pressed.
     fn key_up(&mut self, screen: &mut Screen) {
         if self.has_cancel {
             self.selected = InputDialogItem::Ok;
@@ -277,6 +323,7 @@ where
         }
     }
 
+    /// Should be triggered when DOWN key is pressed.
     fn key_down(&mut self, screen: &mut Screen) {
         if self.has_cancel {
             self.selected = InputDialogItem::Cancel;
@@ -285,6 +332,7 @@ where
         }
     }
 
+    /// Should be triggered when LEFT key is pressed.
     fn key_left(&mut self, screen: &mut Screen) {
         if self.cursor > 0 {
             self.cursor -= 1;
@@ -292,6 +340,7 @@ where
         }
     }
 
+    /// Should be triggered when RIGHT key is pressed.
     fn key_right(&mut self, screen: &mut Screen) {
         if self.cursor < self.buffer.len() {
             self.cursor += 1;
@@ -299,6 +348,7 @@ where
         }
     }
 
+    /// Should be triggered when BACKSPACE key is pressed.
     fn key_backspace(&mut self, screen: &mut Screen) {
         if self.cursor > 0 {
             self.cursor -= 1;
@@ -307,17 +357,13 @@ where
         }
     }
 
+    /// Should be triggered when generic character key is pressed.
     fn key_char(&mut self, screen: &mut Screen, ch: char) {
         if (self.dialog.filter)(ch) {
-            self.joined.clear();
-            self.joined.push('a');
-            self.joined.push(ch);
-            if self.joined.graphemes(true).count() > 1 {
-                self.joined.clear();
-                self.joined.extend(self.buffer.iter());
-                self.joined.push(ch);
-                let length = self.joined.graphemes(true).count() as Coord;
-                if length <= self.actual_max {
+            let test_string = format!("a{}", ch);
+            if test_string.graphemes(true).count() > 1 {
+                let length = coord::from_index(self.buffer.len());
+                if length < self.actual_max {
                     self.buffer.insert(self.cursor, ch);
                     self.cursor += 1;
                     self.render_input_box(screen);
@@ -326,6 +372,7 @@ where
         }
     }
 
+    /// Should be triggered when the screen is resized.
     fn resized(&mut self, evt: ResizeEvent, screen: &mut Screen) {
         self.valid_size = match evt.size {
             Some(size) => {
@@ -337,6 +384,7 @@ where
         };
     }
 
+    /// Renders the whole input dialog.
     fn render(&self, screen: &mut Screen) {
         screen.clear(self.dialog.bg);
         self.render_title(screen);
@@ -347,6 +395,7 @@ where
         }
     }
 
+    /// Renders the title of the input dialog.
     fn render_title(&self, screen: &mut Screen) {
         let style = Style::new()
             .left_margin(1)
@@ -357,14 +406,11 @@ where
         screen.styled_text(&self.dialog.title, style);
     }
 
+    /// Renders the input box of the input dialog.
     fn render_input_box(&self, screen: &mut Screen) {
         let mut field = self.buffer.iter().collect::<String>();
-        let additional = self.actual_max as usize - self.buffer.len();
-        field.reserve(additional);
-
-        for _ in 0 .. additional {
-            field.push_str(" ");
-        }
+        let additional = coord::to_index(self.actual_max) - self.buffer.len();
+        field.extend(iter::repeat(' ').take(additional));
 
         let style = Style::new()
             .align(1, 2)
@@ -374,11 +420,10 @@ where
         screen.styled_text(&string, style);
 
         let width = screen.size().x;
-        let correction = (self.dialog.max % 2 + width % 2 + 1) as usize;
-        let length = field.graphemes(true).count() - correction % 2;
+        let correction = coord::to_index(self.actual_max % 2 + width % 2 + 1);
+        let length = field.len() - correction % 2;
 
         field.clear();
-
         for i in 0 .. length + 1 {
             if i == self.cursor {
                 field.push('¯')
@@ -396,6 +441,7 @@ where
         screen.styled_text(&string, style);
     }
 
+    /// Renders an item/option of the input dialog.
     fn render_item(&self, screen: &mut Screen, item: InputDialogItem) {
         let (option, y) = match item {
             InputDialogItem::Ok => ("> OK <", self.y_of_ok()),
@@ -412,14 +458,17 @@ where
         screen.styled_text(&string, style);
     }
 
+    /// Computes the Y coordinate of the input box.
     fn y_of_box(&self) -> Coord {
         self.dialog.title_y + 1 + self.dialog.pad_after_title
     }
 
+    /// Computes the Y coordinate of the OK option.
     fn y_of_ok(&self) -> Coord {
         self.y_of_box() + 2 + self.dialog.pad_after_box
     }
 
+    /// Computes the Y coordinate of the CANCEL option.
     fn y_of_cancel(&self) -> Coord {
         self.y_of_ok() + 1 + self.dialog.pad_after_ok
     }

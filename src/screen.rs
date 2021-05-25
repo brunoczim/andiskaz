@@ -253,7 +253,7 @@ impl<'terminal> Screen<'terminal> {
             let width = coord::to_index(size.x);
             let pos = self.find_break_pos(width, len, size, &slice, is_inside);
 
-            cursor.x = size.x - pos as Coord;
+            cursor.x = size.x - coord::from_index(pos);
             cursor.x = cursor.x + style.left_margin - style.right_margin;
             cursor.x = cursor.x * style.align_numer / style.align_denom;
 
@@ -286,7 +286,7 @@ impl<'terminal> Screen<'terminal> {
     ) -> usize {
         if width <= slice.len() {
             let mut pos = slice
-                .index(.. term_size.x as usize)
+                .index(.. coord::to_index(term_size.x))
                 .iter()
                 .rev()
                 .position(|grapheme| grapheme == TermGrapheme::space())
