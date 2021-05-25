@@ -335,32 +335,53 @@ where
 
     fn render(&self, screen: &mut Screen) {
         screen.clear(self.menu.bg);
+        self.render_title(screen);
+
+        let arrow_style =
+            Style::new().align(1, 2).colors(self.menu.arrow_colors);
+
+        let mut range = self.range_of_screen(screen.size());
+        self.render_up_arrow(screen, arrow_style);
+        self.render_down_arrow(screen, arrow_style, &mut range);
+
+        self.render_options(screen, range);
+        self.render_cancel(screen, screen.size().y);
+    }
+
+    fn render_title(&self, screen: &mut Screen) {
         let title_style = Style::new()
             .align(1, 2)
             .top_margin(self.menu.title_y)
             .colors(self.menu.title_colors)
             .max_height(self.menu.pad_after_title.saturating_add(1));
         screen.styled_text(&self.menu.title, title_style);
+    }
 
-        let arrow_style =
-            Style::new().align(1, 2).colors(self.menu.arrow_colors);
-
-        let mut range = self.range_of_screen(screen.size());
+    fn render_up_arrow(&self, screen: &mut Screen, style: Style<Color2>) {
         if self.first_row > 0 {
             let mut option_y = self.y_of_option(self.first_row);
             option_y -= self.menu.pad_after_option + 1;
-            let style = arrow_style.top_margin(option_y);
+            let style = style.top_margin(option_y);
             screen.styled_text(&tstring!["Ʌ"], style);
         }
+    }
 
+    fn render_down_arrow(
+        &self,
+        screen: &mut Screen,
+        style: Style<Color2>,
+        range: &mut Range<usize>,
+    ) {
         if range.end < self.menu.options.len() {
             let option_y = self.y_of_option(range.end);
-            let style = arrow_style.top_margin(option_y);
+            let style = style.top_margin(option_y);
             screen.styled_text(&tstring!["V"], style);
         } else {
             range.end = self.menu.options.len();
         }
+    }
 
+    fn render_options(&self, screen: &mut Screen, range: Range<usize>) {
         for (i, option) in self.menu.options[range.clone()].iter().enumerate() {
             let is_selected =
                 range.start + i == self.selected && !self.is_cancelling();
@@ -371,8 +392,6 @@ where
                 is_selected,
             );
         }
-
-        self.render_cancel(screen, screen.size().y);
     }
 
     fn render_option(
@@ -396,10 +415,6 @@ where
                 buf.index(.. len - 5),
                 TermGrapheme::new_lossy("…")
             ];
-            #[allow(unused_assignments)]
-            {
-                len -= 4;
-            }
         }
 
         buf = tstring_concat![tstring!["> "], buf, tstring![" <"]];

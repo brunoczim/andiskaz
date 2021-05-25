@@ -77,13 +77,24 @@ impl InfoDialog {
 
     fn render(&self, screen: &mut Screen) {
         screen.clear(self.bg);
+        self.render_title(screen);
+        let pos = self.render_message(screen);
+        self.render_ok(screen, pos);
+    }
+
+    fn render_title(&self, screen: &mut Screen) {
         let style = Style::new()
             .align(1, 2)
             .colors(self.title_colors)
             .top_margin(self.title_y);
         screen.styled_text(&self.title, style);
+    }
 
-        let pos = screen.styled_text(&self.message, self.style);
+    fn render_message(&self, screen: &mut Screen) -> Coord {
+        screen.styled_text(&self.message, self.style)
+    }
+
+    fn render_ok(&self, screen: &mut Screen, pos: Coord) {
         let ok_string = tstring!["> OK <"];
         let style = Style::new()
             .align(1, 2)
