@@ -18,6 +18,8 @@ pub struct Tile {
 pub struct ScreenBuffer {
     /// Width of the screen.
     width: usize,
+    /// Whether this has a valid screen size.
+    pub valid: bool,
     /// Old screen.
     pub old: Vec<Tile>,
     /// Currently editing screen.
@@ -33,6 +35,7 @@ impl ScreenBuffer {
         let old = curr.clone();
         Self {
             width: coord::to_index(size.x),
+            valid: true,
             curr,
             old,
             changed: BTreeSet::new(),

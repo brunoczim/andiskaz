@@ -164,8 +164,6 @@ where
     selected: usize,
     /// Whether the cancel option is currently selected, IF cancel is `Some`.
     cancel: Option<bool>,
-    /// Whether the terminal has a currently valid size.
-    valid_size: bool,
 }
 
 impl<'menu, O> Selector<'menu, O>
@@ -175,14 +173,7 @@ where
     /// Generic initialization for this selector, do not call directly unless
     /// really needed and wrapped.
     fn new(menu: &'menu Menu<O>, initial: usize, cancel: Option<bool>) -> Self {
-        Selector {
-            menu,
-            selected: initial,
-            cancel,
-            first_row: 0,
-            last_row: 0,
-            valid_size: true,
-        }
+        Selector { menu, selected: initial, cancel, first_row: 0, last_row: 0 }
     }
 
     /// Initializes this selector for a selection without cancel option.
@@ -215,7 +206,7 @@ where
             let screen = session.screen();
 
             match event {
-                Some(Event::Key(keys)) if self.valid_size => match keys {
+                Some(Event::Key(keys)) if screen.valid_size() => match keys {
                     KeyEvent {
                         main_key: Key::Esc,
                         ctrl: false,
@@ -330,14 +321,10 @@ where
 
     /// Should be triggered when screen is resized.
     fn resized(&mut self, evt: ResizeEvent, screen: &mut Screen) {
-        self.valid_size = match evt.size {
-            Some(size) => {
-                self.render(screen);
-                self.update_last_row(size);
-                true
-            },
-            None => false,
-        };
+        if let Some(size) = evt.size {
+            self.render(screen);
+            self.update_last_row(size);
+        }
     }
 
     /// Returns if the selection is currently selecting the cancel option.

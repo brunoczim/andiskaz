@@ -30,7 +30,9 @@ use tokio::{
 /// Shared memory between terminal handle copies.
 #[derive(Debug)]
 pub(crate) struct ScreenData {
+    /// Minimum screen size.
     min_size: Coord2,
+    /// Frame interval time.
     frame_time: Duration,
     /// Whether the terminal handle has been cleaned up (using
     /// terminal.cleanup).
@@ -162,6 +164,12 @@ impl<'terminal> Screen<'terminal> {
     /// Returns the current size of the screen.
     pub fn size(&self) -> Coord2 {
         self.buffer.size()
+    }
+
+    /// Returns whether the stored size is the actual size and the actual size
+    /// is valid.
+    pub fn valid_size(&self) -> bool {
+        self.buffer.valid
     }
 
     /// Returns the minimum size required for the screen.
@@ -329,6 +337,7 @@ impl<'terminal> Screen<'terminal> {
         let min_size = self.data.min_size;
         if new_size.x < min_size.x || new_size.y < min_size.y {
             if guard.is_none() {
+                self.buffer.valid = false;
                 let mut stdout = self.data.stdout.lock().await;
                 self.ask_resize(&mut stdout, min_size).await?;
                 *guard = Some(stdout);
@@ -338,7 +347,7 @@ impl<'terminal> Screen<'terminal> {
                 Some(stdout) => stdout,
                 None => self.data.stdout.lock().await,
             };
-
+            self.buffer.valid = true;
             self.resize(new_size, &mut stdout).await?;
         }
 

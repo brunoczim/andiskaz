@@ -51,7 +51,6 @@ impl InfoDialog {
     /// Runs this dialog showing it to the user, awaiting OK!
     pub async fn run(&self, term: &mut Terminal) -> Result<(), ServicesOff> {
         self.render(term.lock_now().await?.screen());
-        let mut valid_size = true;
 
         loop {
             let mut session = term.listen().await?;
@@ -67,11 +66,10 @@ impl InfoDialog {
                     ctrl: false,
                     alt: false,
                     shift: false,
-                })) if valid_size => break Ok(()),
+                })) if session.screen().valid_size() => break Ok(()),
 
                 Some(Event::Resize(evt)) => {
-                    valid_size = evt.size.is_some();
-                    if valid_size {
+                    if evt.size.is_some() {
                         self.render(session.screen());
                     }
                 },

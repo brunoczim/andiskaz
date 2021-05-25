@@ -148,8 +148,6 @@ where
     has_cancel: bool,
     /// The actual maximum length of the buffer.
     actual_max: Coord,
-    /// Is the screen in a valid size?
-    valid_size: bool,
 }
 
 impl<'dialog, F> Selector<'dialog, F>
@@ -170,7 +168,6 @@ where
             selected,
             has_cancel,
             actual_max: 0,
-            valid_size: true,
             dialog,
         }
     }
@@ -204,7 +201,7 @@ where
             let screen = session.screen();
 
             match event {
-                Some(Event::Key(keys)) if self.valid_size => match keys {
+                Some(Event::Key(keys)) if screen.valid_size() => match keys {
                     KeyEvent {
                         main_key: Key::Up,
                         ctrl: false,
@@ -374,14 +371,10 @@ where
 
     /// Should be triggered when the screen is resized.
     fn resized(&mut self, evt: ResizeEvent, screen: &mut Screen) {
-        self.valid_size = match evt.size {
-            Some(size) => {
-                self.update_actual_max(size);
-                self.render(screen);
-                true
-            },
-            None => false,
-        };
+        if let Some(size) = evt.size {
+            self.update_actual_max(size);
+            self.render(screen);
+        }
     }
 
     /// Renders the whole input dialog.
