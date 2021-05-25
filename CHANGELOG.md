@@ -1,5 +1,5 @@
 # 0.2.0 (WIP)
-    - Fixed a bug on initial screen size check.
+- Fixed a bug on initial screen size check.
 - UI scenes utilities:
     - Info dialog showing a message waiting for user.
     - Menu with multiple options (possibly with cancel option).
