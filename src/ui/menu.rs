@@ -90,7 +90,8 @@ where
     }
 
     /// Asks for the user to select an item of the menu with a cancel option,
-    /// and sets the initial chosen option to the given one.
+    /// and sets the initial chosen option to the given one, together with a
+    /// paramter stating whether cancel option is currently chosen.
     pub async fn select_cancel_initial(
         &self,
         term: &mut Terminal,
@@ -145,15 +146,22 @@ impl MenuOption for DangerPromptOption {
     }
 }
 
+/// Menu selection runner.
 #[derive(Debug)]
 struct Selector<'menu, O>
 where
     O: MenuOption,
 {
+    /// A reference to the original menu.
     menu: &'menu Menu<O>,
+    /// First row currently shown.
     first_row: usize,
+    /// Last row currently shown.
     last_row: usize,
+    /// Row currently selected (or that was previously selected before the
+    /// cancel being currently selected).
     selected: usize,
+    /// Whether the cancel option is currently selected, IF cancel is `Some`.
     cancel: Option<bool>,
 }
 
@@ -161,6 +169,7 @@ impl<'menu, O> Selector<'menu, O>
 where
     O: MenuOption,
 {
+    /// Initializes this selector for a selection without cancel option.
     fn without_cancel(menu: &'menu Menu<O>, initial: usize) -> Self {
         Selector {
             menu,
@@ -171,6 +180,7 @@ where
         }
     }
 
+    /// Initializes this selector for a selection with cancel option.
     fn with_cancel(menu: &'menu Menu<O>, initial: usize, cancel: bool) -> Self {
         Selector {
             menu,
@@ -181,14 +191,17 @@ where
         }
     }
 
+    /// Gets the result for a selection without cancel.
     fn result(&self) -> usize {
         self.selected
     }
 
+    /// Gets the result for a selection with cancel option.
     fn result_with_cancel(&self) -> Option<usize> {
         Some(self.selected).filter(|_| self.cancel != Some(true))
     }
 
+    /// Runs this selector and uses the given terminal.
     async fn run(&mut self, term: &mut Terminal) -> Result<(), ServicesOff> {
         self.init_run(term).await?;
 
@@ -249,6 +262,7 @@ where
         Ok(())
     }
 
+    /// Initializes the run of this selector.
     async fn init_run(
         &mut self,
         term: &mut Terminal,
@@ -260,6 +274,7 @@ where
         Ok(())
     }
 
+    /// Should be triggered when UP key is pressed.
     fn key_up(&mut self, screen: &mut Screen) {
         if self.is_cancelling() && self.menu.options.len() > 0 {
             self.cancel = Some(false);
@@ -274,6 +289,7 @@ where
         }
     }
 
+    /// Should be triggered when DOWN key is pressed.
     fn key_down(&mut self, screen: &mut Screen) {
         if self.selected + 1 < self.menu.options.len() {
             self.selected += 1;
@@ -288,6 +304,7 @@ where
         }
     }
 
+    /// Should be triggered when LEFT key is pressed.
     fn key_left(&mut self, screen: &mut Screen) {
         if self.is_not_cancelling() {
             self.cancel = Some(true);
@@ -295,6 +312,7 @@ where
         }
     }
 
+    /// Should be triggered when RIGHT key is pressed.
     fn key_right(&mut self, screen: &mut Screen) {
         if self.is_cancelling() && self.menu.options.len() > 0 {
             self.cancel = Some(false);
@@ -302,6 +320,7 @@ where
         }
     }
 
+    /// Should be triggered when screen is resized.
     fn resized(&mut self, evt: ResizeEvent, screen: &mut Screen) {
         if let Some(size) = evt.size {
             self.render(screen);
@@ -309,18 +328,23 @@ where
         }
     }
 
+    /// Returns if the selection is currently selecting the cancel option.
     fn is_cancelling(&self) -> bool {
         self.cancel == Some(true)
     }
 
+    /// Returns if the selection is currently not selecting the cancel option
+    /// AND the cancel option is enabled.
     fn is_not_cancelling(&self) -> bool {
         self.cancel == Some(false)
     }
 
+    /// Updates the last row field from the computed end of the screen.
     fn update_last_row(&mut self, screen_size: Coord2) {
         self.last_row = self.screen_end(screen_size);
     }
 
+    /// Returns the index of the last visible option in the screen.
     fn screen_end(&self, screen_size: Coord2) -> usize {
         let cancel = if self.cancel.is_some() { 4 } else { 0 };
         let mut available = screen_size.y - self.menu.title_y;
@@ -329,10 +353,12 @@ where
         self.first_row + extra as usize
     }
 
+    /// Returns the range of the visible options in the screen.
     fn range_of_screen(&self, screen_size: Coord2) -> Range<usize> {
         self.first_row .. self.screen_end(screen_size)
     }
 
+    /// Renders the whole menu.
     fn render(&self, screen: &mut Screen) {
         screen.clear(self.menu.bg);
         self.render_title(screen);
@@ -348,6 +374,7 @@ where
         self.render_cancel(screen, screen.size().y);
     }
 
+    /// Renders the title of the menu.
     fn render_title(&self, screen: &mut Screen) {
         let title_style = Style::new()
             .align(1, 2)
@@ -357,6 +384,7 @@ where
         screen.styled_text(&self.menu.title, title_style);
     }
 
+    /// Renders the UP arrow.
     fn render_up_arrow(&self, screen: &mut Screen, style: Style<Color2>) {
         if self.first_row > 0 {
             let mut option_y = self.y_of_option(self.first_row);
@@ -366,6 +394,7 @@ where
         }
     }
 
+    /// Renders the DOWN arrow and updates the given range of the screen.
     fn render_down_arrow(
         &self,
         screen: &mut Screen,
@@ -381,6 +410,7 @@ where
         }
     }
 
+    /// Renders all the options of the given range.
     fn render_options(&self, screen: &mut Screen, range: Range<usize>) {
         for (i, option) in self.menu.options[range.clone()].iter().enumerate() {
             let is_selected =
@@ -394,6 +424,7 @@ where
         }
     }
 
+    /// Renders a single option.
     fn render_option(
         &self,
         screen: &mut Screen,
@@ -429,6 +460,7 @@ where
         screen.styled_text(&buf, style);
     }
 
+    /// Renders the cancel option, if any.
     fn render_cancel(&self, screen: &mut Screen, cancel_y: Coord) {
         if let Some(selected) = self.cancel {
             let colors = if selected {
@@ -446,6 +478,7 @@ where
         }
     }
 
+    /// Gets the height of a given option (by index).
     fn y_of_option(&self, option: usize) -> Coord {
         let count = (option - self.first_row) as Coord;
         let before = (count + 1) * (self.menu.pad_after_option + 1);

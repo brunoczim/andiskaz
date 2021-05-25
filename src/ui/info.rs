@@ -75,6 +75,7 @@ impl InfoDialog {
         }
     }
 
+    /// Renders the whole dialog.
     fn render(&self, screen: &mut Screen) {
         screen.clear(self.bg);
         self.render_title(screen);
@@ -82,6 +83,7 @@ impl InfoDialog {
         self.render_ok(screen, pos);
     }
 
+    /// Renders the title of the dialog.
     fn render_title(&self, screen: &mut Screen) {
         let style = Style::new()
             .align(1, 2)
@@ -90,10 +92,12 @@ impl InfoDialog {
         screen.styled_text(&self.title, style);
     }
 
+    /// Renders the message of the dialog.
     fn render_message(&self, screen: &mut Screen) -> Coord {
         screen.styled_text(&self.message, self.style)
     }
 
+    /// Renders the OK button.
     fn render_ok(&self, screen: &mut Screen, pos: Coord) {
         let ok_string = tstring!["> OK <"];
         let style = Style::new()
