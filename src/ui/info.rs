@@ -4,7 +4,7 @@ use crate::{
     color::{BasicColor, Color, Color2},
     coord::Coord,
     error::ServicesOff,
-    event::{Event, Key, KeyEvent},
+    event::{Event, Key, KeyEvent, ResizeEvent},
     screen::Screen,
     string::TermString,
     style::Style,
@@ -51,6 +51,7 @@ impl InfoDialog {
     /// Runs this dialog showing it to the user, awaiting OK!
     pub async fn run(&self, term: &mut Terminal) -> Result<(), ServicesOff> {
         self.render(term.lock_now().await?.screen());
+        let mut valid_size = true;
 
         loop {
             let mut session = term.listen().await?;
@@ -66,9 +67,14 @@ impl InfoDialog {
                     ctrl: false,
                     alt: false,
                     shift: false,
-                })) => break Ok(()),
+                })) if valid_size => break Ok(()),
 
-                Some(Event::Resize(_)) => self.render(session.screen()),
+                Some(Event::Resize(evt)) => {
+                    valid_size = evt.size.is_some();
+                    if valid_size {
+                        self.render(session.screen());
+                    }
+                },
 
                 _ => (),
             }

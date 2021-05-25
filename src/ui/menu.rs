@@ -163,32 +163,35 @@ where
     selected: usize,
     /// Whether the cancel option is currently selected, IF cancel is `Some`.
     cancel: Option<bool>,
+    /// Whether the terminal has a currently valid size.
+    valid_size: bool,
 }
 
 impl<'menu, O> Selector<'menu, O>
 where
     O: MenuOption,
 {
-    /// Initializes this selector for a selection without cancel option.
-    fn without_cancel(menu: &'menu Menu<O>, initial: usize) -> Self {
+    /// Generic initialization for this selector, do not call directly unless
+    /// really needed and wrapped.
+    fn new(menu: &'menu Menu<O>, initial: usize, cancel: Option<bool>) -> Self {
         Selector {
             menu,
             selected: initial,
-            cancel: None,
+            cancel,
             first_row: 0,
             last_row: 0,
+            valid_size: true,
         }
+    }
+
+    /// Initializes this selector for a selection without cancel option.
+    fn without_cancel(menu: &'menu Menu<O>, initial: usize) -> Self {
+        Self::new(menu, initial, None)
     }
 
     /// Initializes this selector for a selection with cancel option.
     fn with_cancel(menu: &'menu Menu<O>, initial: usize, cancel: bool) -> Self {
-        Selector {
-            menu,
-            selected: initial,
-            cancel: Some(cancel || menu.options.len() == 0),
-            first_row: 0,
-            last_row: 0,
-        }
+        Selector::new(menu, initial, Some(cancel || menu.options.len() == 0))
     }
 
     /// Gets the result for a selection without cancel.
@@ -211,47 +214,51 @@ where
             let screen = session.screen();
 
             match event {
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Esc,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => break,
+                Some(Event::Key(keys)) if self.valid_size => match keys {
+                    KeyEvent {
+                        main_key: Key::Esc,
+                        ctrl: false,
+                        alt: false,
+                        shift: false,
+                    } => break,
 
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Up,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => self.key_up(screen),
+                    KeyEvent {
+                        main_key: Key::Up,
+                        ctrl: false,
+                        alt: false,
+                        shift: false,
+                    } => self.key_up(screen),
 
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Down,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => self.key_down(screen),
+                    KeyEvent {
+                        main_key: Key::Down,
+                        ctrl: false,
+                        alt: false,
+                        shift: false,
+                    } => self.key_down(screen),
 
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Left,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => self.key_left(screen),
+                    KeyEvent {
+                        main_key: Key::Left,
+                        ctrl: false,
+                        alt: false,
+                        shift: false,
+                    } => self.key_left(screen),
 
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Right,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => self.key_right(screen),
+                    KeyEvent {
+                        main_key: Key::Right,
+                        ctrl: false,
+                        alt: false,
+                        shift: false,
+                    } => self.key_right(screen),
 
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Enter,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => break,
+                    KeyEvent {
+                        main_key: Key::Enter,
+                        ctrl: false,
+                        alt: false,
+                        shift: false,
+                    } => break,
+
+                    _ => (),
+                },
 
                 Some(Event::Resize(evt)) => self.resized(evt, screen),
 
@@ -322,10 +329,14 @@ where
 
     /// Should be triggered when screen is resized.
     fn resized(&mut self, evt: ResizeEvent, screen: &mut Screen) {
-        if let Some(size) = evt.size {
-            self.render(screen);
-            self.update_last_row(size);
-        }
+        self.valid_size = match evt.size {
+            Some(size) => {
+                self.render(screen);
+                self.update_last_row(size);
+                true
+            },
+            None => false,
+        };
     }
 
     /// Returns if the selection is currently selecting the cancel option.
