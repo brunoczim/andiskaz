@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["InputDialogItem","A selected item/option of the input dialog."]],"struct":[["InputDialog","A dialog asking for user input, possibly filtered."]]});

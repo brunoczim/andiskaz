@@ -94,6 +94,9 @@
 <span id="91">91</span>
 <span id="92">92</span>
 <span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
 </pre><pre class="rust">
 <span class="doccomment">//! This module defines the screen (double) buffer and related items.</span>
 
@@ -115,6 +118,8 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ScreenBuffer</span> {
     <span class="doccomment">/// Width of the screen.</span>
     <span class="ident">width</span>: <span class="ident">usize</span>,
+    <span class="doccomment">/// Whether this has a valid screen size.</span>
+    <span class="kw">pub</span> <span class="ident">valid</span>: <span class="ident">bool</span>,
     <span class="doccomment">/// Old screen.</span>
     <span class="kw">pub</span> <span class="ident">old</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Tile</span><span class="op">&gt;</span>,
     <span class="doccomment">/// Currently editing screen.</span>
@@ -130,6 +135,7 @@
         <span class="kw">let</span> <span class="ident">old</span> <span class="op">=</span> <span class="ident">curr</span>.<span class="ident">clone</span>();
         <span class="self">Self</span> {
             <span class="ident">width</span>: <span class="ident">coord::to_index</span>(<span class="ident">size</span>.<span class="ident">x</span>),
+            <span class="ident">valid</span>: <span class="bool-val">true</span>,
             <span class="ident">curr</span>,
             <span class="ident">old</span>,
             <span class="ident">changed</span>: <span class="ident">BTreeSet::new</span>(),

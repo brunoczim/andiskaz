@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["InfoDialog","An info dialog, with just an Ok option."]]});

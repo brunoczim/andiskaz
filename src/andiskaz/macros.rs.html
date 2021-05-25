@@ -84,6 +84,10 @@
 <span id="81">81</span>
 <span id="82">82</span>
 <span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
 </pre><pre class="rust">
 <span class="doccomment">/// Creates a [`TermString`](crate::string::TermString) from string literal.</span>
 <span class="doccomment">/// Currently, invalid string get the unicode replacement character in their</span>
@@ -107,8 +111,12 @@
         <span class="macro-nonterminal">$</span><span class="kw">crate</span><span class="macro-nonterminal">::string::TermString::default</span>()
     };
 
-    [<span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>:<span class="ident">expr</span>] <span class="op">=</span><span class="op">&gt;</span> {
+    [<span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>:<span class="ident">expr</span> $(,)<span class="question-mark">?</span>] <span class="op">=</span><span class="op">&gt;</span> {
         <span class="macro-nonterminal">$</span><span class="kw">crate</span><span class="macro-nonterminal">::string::TermString::new_lossy</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>)
+    };
+
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">fmt</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fst</span>:<span class="ident">expr</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">expr</span>)<span class="op">*</span> $(,)<span class="question-mark">?</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span><span class="macro">::tstring!</span>[<span class="macro">format!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">fmt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fst</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="kw-2">*</span>)]
     };
 }
 

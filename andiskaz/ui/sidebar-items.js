@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["info","An INFO dialong: just shows a message."],["input","This module exports a simple input dialog and related functionality."],["menu","This module exports items related to menus in the UI, such as more extensive menus, or just dialogs for OK/CANCEL."]]});
