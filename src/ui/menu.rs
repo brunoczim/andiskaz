@@ -5,7 +5,7 @@ use crate::{
     color::{BasicColor, Color, Color2},
     coord::{Coord, Coord2},
     error::ServicesOff,
-    event::{Event, Key, KeyEvent},
+    event::{Event, Key, KeyEvent, ResizeEvent},
     screen::Screen,
     string::{TermGrapheme, TermString},
     style::Style,
@@ -76,93 +76,9 @@ where
         term: &mut Terminal,
         initial: usize,
     ) -> Result<usize, ServicesOff> {
-        let mut selected = initial;
-        let mut start = 0;
-
-        let mut last_row = {
-            let mut session = term.lock_now().await?;
-            self.render(session.screen(), start, Some(selected), false);
-            self.screen_end(start, session.screen().size(), false)
-        };
-
-        loop {
-            let mut session = term.listen().await?;
-
-            match session.event() {
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Up,
-                    alt: false,
-                    ctrl: false,
-                    shift: false,
-                })) => {
-                    if selected > 0 {
-                        selected -= 1;
-                        if selected < start {
-                            start -= 1;
-                            last_row = self.screen_end(
-                                start,
-                                session.screen().size(),
-                                false,
-                            );
-                        }
-                        self.render(
-                            session.screen(),
-                            start,
-                            Some(selected),
-                            false,
-                        );
-                    }
-                },
-
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Down,
-                    alt: false,
-                    ctrl: false,
-                    shift: false,
-                })) => {
-                    if selected + 1 < self.options.len() {
-                        selected += 1;
-                        if selected >= last_row {
-                            start += 1;
-                            last_row = self.screen_end(
-                                start,
-                                session.screen().size(),
-                                false,
-                            );
-                        }
-                        self.render(
-                            session.screen(),
-                            start,
-                            Some(selected),
-                            false,
-                        );
-                    }
-                },
-
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Enter,
-                    alt: false,
-                    ctrl: false,
-                    shift: false,
-                })) => break,
-
-                Some(Event::Resize(evt)) => {
-                    if let Some(size) = evt.size {
-                        self.render(
-                            session.screen(),
-                            start,
-                            Some(selected),
-                            false,
-                        );
-                        last_row = self.screen_end(start, size, false);
-                    }
-                },
-
-                _ => (),
-            }
-        }
-
-        Ok(selected)
+        let mut selector = Selector::without_cancel(self, initial);
+        selector.run(term).await?;
+        Ok(selector.result())
     }
 
     /// Asks for the user to select an item of the menu with a cancel option.
@@ -170,289 +86,20 @@ where
         &self,
         term: &mut Terminal,
     ) -> Result<Option<usize>, ServicesOff> {
-        self.select_with_cancel_and_initial(term, Some(0)).await
+        self.select_cancel_initial(term, 0, false).await
     }
 
     /// Asks for the user to select an item of the menu with a cancel option,
     /// and sets the initial chosen option to the given one.
-    pub async fn select_with_cancel_and_initial(
+    pub async fn select_cancel_initial(
         &self,
         term: &mut Terminal,
-        initial: Option<usize>,
+        initial: usize,
+        cancel: bool,
     ) -> Result<Option<usize>, ServicesOff> {
-        let mut selected = initial.unwrap_or(0);
-        let mut is_cancel = initial.is_none();
-        let mut start = 0;
-
-        let mut last_row = {
-            let mut session = term.lock_now().await?;
-            self.render(
-                session.screen(),
-                start,
-                Some(selected).filter(|_| !is_cancel),
-                true,
-            );
-            self.screen_end(start, session.screen().size(), true)
-        };
-
-        let ret = loop {
-            let mut session = term.listen().await?;
-
-            match session.event() {
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Esc,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => break None,
-
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Up,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => {
-                    if is_cancel && self.options.len() > 0 {
-                        is_cancel = false;
-                        self.render(
-                            session.screen(),
-                            start,
-                            Some(selected),
-                            true,
-                        );
-                    } else if selected > 0 {
-                        selected -= 1;
-                        if selected < start {
-                            start -= 1;
-                            last_row = self.screen_end(
-                                start,
-                                session.screen().size(),
-                                true,
-                            );
-                        }
-                        self.render(
-                            session.screen(),
-                            start,
-                            Some(selected).filter(|_| !is_cancel),
-                            true,
-                        );
-                    }
-                },
-
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Down,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => {
-                    if selected + 1 < self.options.len() {
-                        selected += 1;
-                        if selected >= last_row {
-                            start += 1;
-                            last_row = self.screen_end(
-                                start,
-                                session.screen().size(),
-                                true,
-                            );
-                        }
-                        self.render(
-                            session.screen(),
-                            start,
-                            Some(selected).filter(|_| !is_cancel),
-                            true,
-                        );
-                    } else if !is_cancel {
-                        is_cancel = true;
-                        self.render(session.screen(), start, None, true);
-                    }
-                },
-
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Left,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => {
-                    if !is_cancel {
-                        is_cancel = true;
-                        self.render(session.screen(), start, None, true);
-                    }
-                },
-
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Right,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => {
-                    if is_cancel && self.options.len() > 0 {
-                        is_cancel = false;
-                        self.render(
-                            session.screen(),
-                            start,
-                            Some(selected),
-                            true,
-                        );
-                    }
-                },
-
-                Some(Event::Key(KeyEvent {
-                    main_key: Key::Enter,
-                    ctrl: false,
-                    alt: false,
-                    shift: false,
-                })) => break if is_cancel { None } else { Some(selected) },
-
-                Some(Event::Resize(evt)) => {
-                    if let Some(size) = evt.size {
-                        self.render(
-                            session.screen(),
-                            start,
-                            Some(selected),
-                            true,
-                        );
-                        last_row = self.screen_end(start, size, true);
-                    }
-                },
-
-                _ => (),
-            }
-        };
-
-        Ok(ret)
-    }
-
-    fn y_of_option(&self, start: usize, option: usize) -> Coord {
-        let count = (option - start) as Coord;
-        let before = (count + 1) * (self.pad_after_option + 1);
-        before + self.pad_after_title + 1 + self.title_y
-    }
-
-    fn screen_end(
-        &self,
-        start: usize,
-        screen_size: Coord2,
-        cancel: bool,
-    ) -> usize {
-        let cancel = if cancel { 4 } else { 0 };
-        let available = screen_size.y - self.title_y;
-        let available = available - 2 * (self.pad_after_title - 1) - cancel;
-        let extra = available / (self.pad_after_option + 1) - 2;
-        start + extra as usize
-    }
-
-    fn range_of_screen(
-        &self,
-        start: usize,
-        screen_size: Coord2,
-        cancel: bool,
-    ) -> Range<usize> {
-        start .. self.screen_end(start, screen_size, cancel)
-    }
-
-    fn render(
-        &self,
-        screen: &mut Screen,
-        start: usize,
-        selected: Option<usize>,
-        cancel: bool,
-    ) {
-        screen.clear(self.bg);
-        let style = Style::new()
-            .align(1, 2)
-            .top_margin(self.title_y)
-            .colors(self.title_colors)
-            .max_height(self.pad_after_title.saturating_add(1));
-        screen.styled_text(&self.title, style);
-
-        let mut range = self.range_of_screen(start, screen.size(), cancel);
-        if start > 0 {
-            let y = self.y_of_option(start, start) - self.pad_after_option - 1;
-            let style = Style::new()
-                .align(1, 2)
-                .colors(self.arrow_colors)
-                .top_margin(y);
-            screen.styled_text(&tstring!["Ʌ"], style);
-        }
-        if range.end < self.options.len() {
-            let y = self.y_of_option(start, range.end);
-            let style = Style::new()
-                .align(1, 2)
-                .colors(self.arrow_colors)
-                .top_margin(y);
-            screen.styled_text(&tstring!["V"], style);
-        } else {
-            range.end = self.options.len();
-        }
-        for (i, option) in self.options[range.clone()].iter().enumerate() {
-            let is_selected = Some(range.start + i) == selected;
-            self.render_option(
-                screen,
-                option,
-                self.y_of_option(start, range.start + i),
-                is_selected,
-            );
-        }
-
-        if cancel {
-            self.render_cancel(screen, screen.size().y, selected.is_none());
-        }
-    }
-
-    fn render_option(
-        &self,
-        screen: &mut Screen,
-        option: &O,
-        y: Coord,
-        selected: bool,
-    ) {
-        let mut buf = option.name();
-        let mut len = buf.count_graphemes();
-        let screen_size = screen.size();
-
-        if len as Coord % 2 != screen_size.x % 2 {
-            buf = tstring_concat![buf, TermGrapheme::space()];
-            len += 1;
-        }
-
-        if screen_size.x - 4 < len as Coord {
-            buf = tstring_concat![
-                buf.index(.. len - 5),
-                TermGrapheme::new_lossy("…")
-            ];
-            #[allow(unused_assignments)]
-            {
-                len -= 4;
-            }
-        }
-
-        buf = tstring_concat![tstring!["> "], buf, tstring![" <"]];
-
-        let colors = if selected {
-            self.selected_colors
-        } else {
-            self.unselected_colors
-        };
-        let style = Style::new().align(1, 2).colors(colors).top_margin(y);
-        screen.styled_text(&buf, style);
-    }
-
-    fn render_cancel(
-        &self,
-        screen: &mut Screen,
-        cancel_y: Coord,
-        selected: bool,
-    ) {
-        let colors = if selected {
-            self.selected_colors
-        } else {
-            self.unselected_colors
-        };
-        let string = tstring!["> Cancel <"];
-
-        let style =
-            Style::new().align(1, 3).colors(colors).top_margin(cancel_y - 2);
-        screen.styled_text(&string, style);
+        let mut selector = Selector::with_cancel(self, initial, cancel);
+        selector.run(term).await?;
+        Ok(selector.result_with_cancel())
     }
 }
 
@@ -495,5 +142,298 @@ impl MenuOption for DangerPromptOption {
         };
 
         tstring![string]
+    }
+}
+
+#[derive(Debug)]
+struct Selector<'menu, O>
+where
+    O: MenuOption,
+{
+    menu: &'menu Menu<O>,
+    first_row: usize,
+    last_row: usize,
+    selected: usize,
+    cancel: Option<bool>,
+}
+
+impl<'menu, O> Selector<'menu, O>
+where
+    O: MenuOption,
+{
+    fn without_cancel(menu: &'menu Menu<O>, initial: usize) -> Self {
+        Selector {
+            menu,
+            selected: initial,
+            cancel: None,
+            first_row: 0,
+            last_row: 0,
+        }
+    }
+
+    fn with_cancel(menu: &'menu Menu<O>, initial: usize, cancel: bool) -> Self {
+        Selector {
+            menu,
+            selected: initial,
+            cancel: Some(cancel || menu.options.len() == 0),
+            first_row: 0,
+            last_row: 0,
+        }
+    }
+
+    fn result(&self) -> usize {
+        self.selected
+    }
+
+    fn result_with_cancel(&self) -> Option<usize> {
+        Some(self.selected).filter(|_| self.cancel != Some(true))
+    }
+
+    async fn run(&mut self, term: &mut Terminal) -> Result<(), ServicesOff> {
+        self.init_run(term).await?;
+
+        loop {
+            let mut session = term.listen().await?;
+            let event = session.event();
+            let screen = session.screen();
+
+            match event {
+                Some(Event::Key(KeyEvent {
+                    main_key: Key::Esc,
+                    ctrl: false,
+                    alt: false,
+                    shift: false,
+                })) => break,
+
+                Some(Event::Key(KeyEvent {
+                    main_key: Key::Up,
+                    ctrl: false,
+                    alt: false,
+                    shift: false,
+                })) => self.key_up(screen),
+
+                Some(Event::Key(KeyEvent {
+                    main_key: Key::Down,
+                    ctrl: false,
+                    alt: false,
+                    shift: false,
+                })) => self.key_down(screen),
+
+                Some(Event::Key(KeyEvent {
+                    main_key: Key::Left,
+                    ctrl: false,
+                    alt: false,
+                    shift: false,
+                })) => self.key_left(screen),
+
+                Some(Event::Key(KeyEvent {
+                    main_key: Key::Right,
+                    ctrl: false,
+                    alt: false,
+                    shift: false,
+                })) => self.key_right(screen),
+
+                Some(Event::Key(KeyEvent {
+                    main_key: Key::Enter,
+                    ctrl: false,
+                    alt: false,
+                    shift: false,
+                })) => break,
+
+                Some(Event::Resize(evt)) => self.resized(evt, screen),
+
+                _ => (),
+            }
+        }
+
+        Ok(())
+    }
+
+    async fn init_run(
+        &mut self,
+        term: &mut Terminal,
+    ) -> Result<(), ServicesOff> {
+        let mut session = term.lock_now().await?;
+        let screen = session.screen();
+        self.render(screen);
+        self.update_last_row(session.screen().size());
+        Ok(())
+    }
+
+    fn key_up(&mut self, screen: &mut Screen) {
+        if self.is_cancelling() && self.menu.options.len() > 0 {
+            self.cancel = Some(false);
+            self.render(screen);
+        } else if self.selected > 0 {
+            self.selected -= 1;
+            if self.selected < self.first_row {
+                self.first_row -= 1;
+                self.update_last_row(screen.size());
+            }
+            self.render(screen);
+        }
+    }
+
+    fn key_down(&mut self, screen: &mut Screen) {
+        if self.selected + 1 < self.menu.options.len() {
+            self.selected += 1;
+            if self.selected >= self.last_row {
+                self.first_row += 1;
+                self.update_last_row(screen.size());
+            }
+            self.render(screen);
+        } else if self.is_not_cancelling() {
+            self.cancel = Some(true);
+            self.render(screen);
+        }
+    }
+
+    fn key_left(&mut self, screen: &mut Screen) {
+        if self.is_not_cancelling() {
+            self.cancel = Some(true);
+            self.render(screen);
+        }
+    }
+
+    fn key_right(&mut self, screen: &mut Screen) {
+        if self.is_cancelling() && self.menu.options.len() > 0 {
+            self.cancel = Some(false);
+            self.render(screen);
+        }
+    }
+
+    fn resized(&mut self, evt: ResizeEvent, screen: &mut Screen) {
+        if let Some(size) = evt.size {
+            self.render(screen);
+            self.update_last_row(size);
+        }
+    }
+
+    fn is_cancelling(&self) -> bool {
+        self.cancel == Some(true)
+    }
+
+    fn is_not_cancelling(&self) -> bool {
+        self.cancel == Some(false)
+    }
+
+    fn update_last_row(&mut self, screen_size: Coord2) {
+        self.last_row = self.screen_end(screen_size);
+    }
+
+    fn screen_end(&self, screen_size: Coord2) -> usize {
+        let cancel = if self.cancel.is_some() { 4 } else { 0 };
+        let mut available = screen_size.y - self.menu.title_y;
+        available -= 2 * (self.menu.pad_after_title - 1) + cancel;
+        let extra = available / (self.menu.pad_after_option + 1) - 2;
+        self.first_row + extra as usize
+    }
+
+    fn range_of_screen(&self, screen_size: Coord2) -> Range<usize> {
+        self.first_row .. self.screen_end(screen_size)
+    }
+
+    fn render(&self, screen: &mut Screen) {
+        screen.clear(self.menu.bg);
+        let title_style = Style::new()
+            .align(1, 2)
+            .top_margin(self.menu.title_y)
+            .colors(self.menu.title_colors)
+            .max_height(self.menu.pad_after_title.saturating_add(1));
+        screen.styled_text(&self.menu.title, title_style);
+
+        let arrow_style =
+            Style::new().align(1, 2).colors(self.menu.arrow_colors);
+
+        let mut range = self.range_of_screen(screen.size());
+        if self.first_row > 0 {
+            let mut option_y = self.y_of_option(self.first_row);
+            option_y -= self.menu.pad_after_option + 1;
+            let style = arrow_style.top_margin(option_y);
+            screen.styled_text(&tstring!["Ʌ"], style);
+        }
+
+        if range.end < self.menu.options.len() {
+            let option_y = self.y_of_option(range.end);
+            let style = arrow_style.top_margin(option_y);
+            screen.styled_text(&tstring!["V"], style);
+        } else {
+            range.end = self.menu.options.len();
+        }
+
+        for (i, option) in self.menu.options[range.clone()].iter().enumerate() {
+            let is_selected =
+                range.start + i == self.selected && !self.is_cancelling();
+            self.render_option(
+                screen,
+                option,
+                self.y_of_option(range.start + i),
+                is_selected,
+            );
+        }
+
+        self.render_cancel(screen, screen.size().y);
+    }
+
+    fn render_option(
+        &self,
+        screen: &mut Screen,
+        option: &O,
+        option_y: Coord,
+        selected: bool,
+    ) {
+        let mut buf = option.name();
+        let mut len = buf.count_graphemes();
+        let screen_size = screen.size();
+
+        if len as Coord % 2 != screen_size.x % 2 {
+            buf = tstring_concat![buf, TermGrapheme::space()];
+            len += 1;
+        }
+
+        if screen_size.x - 4 < len as Coord {
+            buf = tstring_concat![
+                buf.index(.. len - 5),
+                TermGrapheme::new_lossy("…")
+            ];
+            #[allow(unused_assignments)]
+            {
+                len -= 4;
+            }
+        }
+
+        buf = tstring_concat![tstring!["> "], buf, tstring![" <"]];
+
+        let colors = if selected {
+            self.menu.selected_colors
+        } else {
+            self.menu.unselected_colors
+        };
+        let style =
+            Style::new().align(1, 2).colors(colors).top_margin(option_y);
+        screen.styled_text(&buf, style);
+    }
+
+    fn render_cancel(&self, screen: &mut Screen, cancel_y: Coord) {
+        if let Some(selected) = self.cancel {
+            let colors = if selected {
+                self.menu.selected_colors
+            } else {
+                self.menu.unselected_colors
+            };
+            let string = tstring!["> Cancel <"];
+
+            let style = Style::new()
+                .align(1, 3)
+                .colors(colors)
+                .top_margin(cancel_y - 2);
+            screen.styled_text(&string, style);
+        }
+    }
+
+    fn y_of_option(&self, option: usize) -> Coord {
+        let count = (option - self.first_row) as Coord;
+        let before = (count + 1) * (self.menu.pad_after_option + 1);
+        before + self.menu.pad_after_title + 1 + self.menu.title_y
     }
 }
