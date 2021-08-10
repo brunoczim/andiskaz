@@ -202,7 +202,7 @@
 
 <span class="kw">mod</span> <span class="ident">reactor</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::coord::Coord2</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::coord::Vec2</span>;
 <span class="kw">use</span> <span class="ident">std::sync::Mutex</span>;
 <span class="kw">use</span> <span class="ident">tokio::sync::Notify</span>;
 
@@ -259,7 +259,7 @@
     <span class="doccomment">/// New dimensions of the screen. If set to `None`, then the screen was</span>
     <span class="doccomment">/// resized to an invalid size, and andiskaz&#39;s event reactor is taking care</span>
     <span class="doccomment">/// of this (or andiskis event reactor if you will).</span>
-    <span class="kw">pub</span> <span class="ident">size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Coord2</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec2</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ResizeEvent</span> {

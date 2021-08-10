@@ -493,7 +493,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">color</span>::{<span class="ident">BasicColor</span>, <span class="ident">Color</span>, <span class="ident">Color2</span>},
     <span class="ident">coord</span>,
-    <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">Coord2</span>},
+    <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">Vec2</span>},
     <span class="ident">error::ServicesOff</span>,
     <span class="ident">event</span>::{<span class="ident">Event</span>, <span class="ident">Key</span>, <span class="ident">KeyEvent</span>, <span class="ident">ResizeEvent</span>},
     <span class="ident">screen::Screen</span>,
@@ -828,12 +828,12 @@
     }
 
     <span class="doccomment">/// Updates the last row field from the computed end of the screen.</span>
-    <span class="kw">fn</span> <span class="ident">update_last_row</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Coord2</span>) {
+    <span class="kw">fn</span> <span class="ident">update_last_row</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) {
         <span class="self">self</span>.<span class="ident">last_row</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">screen_end</span>(<span class="ident">screen_size</span>);
     }
 
     <span class="doccomment">/// Returns the index of the last visible option in the screen.</span>
-    <span class="kw">fn</span> <span class="ident">screen_end</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Coord2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">fn</span> <span class="ident">screen_end</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
         <span class="kw">let</span> <span class="ident">cancel</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">cancel</span>.<span class="ident">is_some</span>() { <span class="number">4</span> } <span class="kw">else</span> { <span class="number">0</span> };
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">available</span> <span class="op">=</span> <span class="ident">screen_size</span>.<span class="ident">y</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">menu</span>.<span class="ident">title_y</span>;
         <span class="ident">available</span> <span class="op">-</span><span class="op">=</span> <span class="number">2</span> <span class="op">*</span> (<span class="self">self</span>.<span class="ident">menu</span>.<span class="ident">pad_after_title</span> <span class="op">-</span> <span class="number">1</span>) <span class="op">+</span> <span class="ident">cancel</span>;
@@ -842,7 +842,7 @@
     }
 
     <span class="doccomment">/// Returns the range of the visible options in the screen.</span>
-    <span class="kw">fn</span> <span class="ident">range_of_screen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Coord2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">range_of_screen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">first_row</span> .. <span class="self">self</span>.<span class="ident">screen_end</span>(<span class="ident">screen_size</span>)
     }
 

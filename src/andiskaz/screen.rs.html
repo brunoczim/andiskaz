@@ -525,7 +525,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">color</span>::{<span class="ident">transform::PairTransformer</span>, <span class="ident">Color</span>, <span class="ident">Color2</span>},
     <span class="ident">coord</span>,
-    <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">Coord2</span>},
+    <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">Vec2</span>},
     <span class="ident">error::Error</span>,
     <span class="ident">screen::buffer::ScreenBuffer</span>,
     <span class="ident">stdio</span>,
@@ -550,7 +550,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">ScreenData</span> {
     <span class="doccomment">/// Minimum screen size.</span>
-    <span class="ident">min_size</span>: <span class="ident">Coord2</span>,
+    <span class="ident">min_size</span>: <span class="ident">Vec2</span>,
     <span class="doccomment">/// Frame interval time.</span>
     <span class="ident">frame_time</span>: <span class="ident">Duration</span>,
     <span class="doccomment">/// Whether the terminal handle has been cleaned up (using</span>
@@ -568,7 +568,7 @@
     <span class="doccomment">/// Creates screen data from the given settings. If given actual size is</span>
     <span class="doccomment">/// less than given minimum allowed size, the actual size is replaced by the</span>
     <span class="doccomment">/// minimum size.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">Coord2</span>, <span class="ident">min_size</span>: <span class="ident">Coord2</span>, <span class="ident">frame_time</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">Vec2</span>, <span class="ident">min_size</span>: <span class="ident">Vec2</span>, <span class="ident">frame_time</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">corrected_size</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">size</span>.<span class="ident">x</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">min_size</span>.<span class="ident">x</span> <span class="op">&amp;&amp;</span> <span class="ident">size</span>.<span class="ident">y</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">min_size</span>.<span class="ident">y</span> {
             <span class="ident">size</span>
         } <span class="kw">else</span> {
@@ -649,7 +649,7 @@
 <span class="doccomment">/// that the compiler can make other functions smaller.</span>
 <span class="attribute">#[<span class="ident">cold</span>]</span>
 <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-<span class="kw">fn</span> <span class="ident">out_of_bounds</span>(<span class="ident">point</span>: <span class="ident">Coord2</span>, <span class="ident">size</span>: <span class="ident">Coord2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="op">!</span> {
+<span class="kw">fn</span> <span class="ident">out_of_bounds</span>(<span class="ident">point</span>: <span class="ident">Vec2</span>, <span class="ident">size</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="op">!</span> {
     <span class="macro">panic!</span>(
         <span class="string">&quot;Point x: {}, y: {} out of screen size x: {}, y: {}&quot;</span>,
         <span class="ident">point</span>.<span class="ident">x</span>, <span class="ident">point</span>.<span class="ident">y</span>, <span class="ident">size</span>.<span class="ident">x</span>, <span class="ident">size</span>.<span class="ident">y</span>
@@ -681,7 +681,7 @@
     }
 
     <span class="doccomment">/// Returns the current size of the screen.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord2</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec2</span> {
         <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">size</span>()
     }
 
@@ -692,17 +692,17 @@
     }
 
     <span class="doccomment">/// Returns the minimum size required for the screen.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord2</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec2</span> {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">min_size</span>
     }
 
     <span class="doccomment">/// Sets every attribute of a given [`Tile`]. This operation is buffered.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Coord2</span>, <span class="ident">tile</span>: <span class="ident">Tile</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Vec2</span>, <span class="ident">tile</span>: <span class="ident">Tile</span>) {
         <span class="self">self</span>.<span class="ident">update</span>(<span class="ident">point</span>, <span class="op">|</span><span class="ident">stored</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">stored</span> <span class="op">=</span> <span class="ident">tile</span>);
     }
 
     <span class="doccomment">/// Sets the colors of a given [`Tile`]. This operation is buffered.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">transform_colors</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Coord2</span>, <span class="ident">transformer</span>: <span class="ident">P</span>)
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">transform_colors</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Vec2</span>, <span class="ident">transformer</span>: <span class="ident">P</span>)
     <span class="kw">where</span>
         <span class="ident">P</span>: <span class="ident">PairTransformer</span>,
     {
@@ -714,7 +714,7 @@
     <span class="doccomment">/// Applies an update function to a [`Tile`]. An update function gets access</span>
     <span class="doccomment">/// to a mutable reference of a [`Tile`], updates it, and then the screen</span>
     <span class="doccomment">/// handles any changes made to it. This operation is buffered.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Coord2</span>, <span class="ident">updater</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Vec2</span>, <span class="ident">updater</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Tile</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>,
     {
@@ -733,7 +733,7 @@
 
     <span class="doccomment">/// Gets the attributes of a given [`Tile`], regardless of being flushed to</span>
     <span class="doccomment">/// the screen yet or not.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Coord2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Tile</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Tile</span> {
         <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">buffer</span>
             .<span class="ident">make_index</span>(<span class="ident">point</span>)
@@ -751,7 +751,7 @@
 
         <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">size</span>.<span class="ident">y</span> {
             <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">size</span>.<span class="ident">x</span> {
-                <span class="self">self</span>.<span class="ident">set</span>(<span class="ident">Coord2</span> { <span class="ident">x</span>, <span class="ident">y</span> }, <span class="ident">tile</span>.<span class="ident">clone</span>());
+                <span class="self">self</span>.<span class="ident">set</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>, <span class="ident">y</span> }, <span class="ident">tile</span>.<span class="ident">clone</span>());
             }
         }
     }
@@ -772,7 +772,7 @@
         <span class="kw">let</span> <span class="ident">screen_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">size</span>();
         <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">style</span>.<span class="ident">make_size</span>(<span class="ident">screen_size</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cursor</span> <span class="op">=</span> <span class="ident">Coord2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="ident">style</span>.<span class="ident">top_margin</span> };
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cursor</span> <span class="op">=</span> <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="ident">style</span>.<span class="ident">top_margin</span> };
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">is_inside</span> <span class="op">=</span> <span class="ident">cursor</span>.<span class="ident">y</span> <span class="op">-</span> <span class="ident">style</span>.<span class="ident">top_margin</span> <span class="op">&lt;</span> <span class="ident">size</span>.<span class="ident">y</span>;
 
         <span class="kw">while</span> <span class="ident">len</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">is_inside</span> {
@@ -807,7 +807,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">width</span>: <span class="ident">usize</span>,
         <span class="ident">total_graphemes</span>: <span class="ident">usize</span>,
-        <span class="ident">term_size</span>: <span class="ident">Coord2</span>,
+        <span class="ident">term_size</span>: <span class="ident">Vec2</span>,
         <span class="ident">slice</span>: <span class="kw-2">&amp;</span><span class="ident">TermString</span>,
         <span class="ident">is_inside</span>: <span class="ident">bool</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
@@ -832,7 +832,7 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">slice</span>: <span class="kw-2">&amp;</span><span class="ident">TermString</span>,
         <span class="ident">style</span>: <span class="kw-2">&amp;</span><span class="ident">Style</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>,
-        <span class="ident">cursor</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Coord2</span>,
+        <span class="ident">cursor</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Vec2</span>,
     ) <span class="kw">where</span>
         <span class="ident">P</span>: <span class="ident">PairTransformer</span>,
     {
@@ -850,7 +850,7 @@
     <span class="doccomment">/// locked stdout is put into `guard`.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">check_resize</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">new_size</span>: <span class="ident">Coord2</span>,
+        <span class="ident">new_size</span>: <span class="ident">Vec2</span>,
         <span class="ident">guard</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LockedStdout</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">min_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">min_size</span>;
@@ -877,7 +877,7 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">ask_resize</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">stdout</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">LockedStdout</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>,
-        <span class="ident">min_size</span>: <span class="ident">Coord2</span>,
+        <span class="ident">min_size</span>: <span class="ident">Vec2</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="macro">format!</span>(
             <span class="string">&quot;{}{}RESIZE {}x{}&quot;</span>,
@@ -895,7 +895,7 @@
     <span class="doccomment">/// Triggers the resize of the screen.</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">resize</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">new_size</span>: <span class="ident">Coord2</span>,
+        <span class="ident">new_size</span>: <span class="ident">Vec2</span>,
         <span class="ident">stdout</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">LockedStdout</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="macro">format!</span>(
@@ -923,7 +923,7 @@
         <span class="ident">buf</span>.<span class="ident">clear</span>();
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">colors</span> <span class="op">=</span> <span class="ident">Color2::default</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cursor</span> <span class="op">=</span> <span class="ident">Coord2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="number">0</span> };
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cursor</span> <span class="op">=</span> <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="number">0</span> };
         <span class="self">self</span>.<span class="ident">render_init_term</span>(<span class="ident">buf</span>, <span class="ident">colors</span>, <span class="ident">cursor</span>)<span class="question-mark">?</span>;
 
         <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">coord</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">changed</span>.<span class="ident">iter</span>() {
@@ -950,7 +950,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">buf</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">String</span>,
         <span class="ident">colors</span>: <span class="ident">Color2</span>,
-        <span class="ident">cursor</span>: <span class="ident">Coord2</span>,
+        <span class="ident">cursor</span>: <span class="ident">Vec2</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="macro">write!</span>(
             <span class="ident">buf</span>,
@@ -975,9 +975,9 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">buf</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">String</span>,
         <span class="ident">colors</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Color2</span>,
-        <span class="ident">cursor</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Coord2</span>,
-        <span class="ident">screen_size</span>: <span class="ident">Coord2</span>,
-        <span class="ident">coord</span>: <span class="ident">Coord2</span>,
+        <span class="ident">cursor</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Vec2</span>,
+        <span class="ident">screen_size</span>: <span class="ident">Vec2</span>,
+        <span class="ident">coord</span>: <span class="ident">Vec2</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">cursor</span> <span class="op">!</span><span class="op">=</span> <span class="ident">coord</span> {
             <span class="macro">write!</span>(

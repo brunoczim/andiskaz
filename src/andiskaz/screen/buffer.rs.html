@@ -99,7 +99,7 @@
 </pre><pre class="rust">
 <span class="doccomment">//! This module defines the screen (double) buffer and related items.</span>
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">color::Color2</span>, <span class="ident">coord</span>, <span class="ident">coord::Coord2</span>, <span class="ident">string::TermGrapheme</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">color::Color2</span>, <span class="ident">coord</span>, <span class="ident">coord::Vec2</span>, <span class="ident">string::TermGrapheme</span>};
 <span class="kw">use</span> <span class="ident">std::collections::BTreeSet</span>;
 
 <span class="doccomment">/// A [`Tile`] in the terminal, i.e. a single character with foreground and</span>
@@ -124,12 +124,12 @@
     <span class="doccomment">/// Currently editing screen.</span>
     <span class="kw">pub</span> <span class="ident">curr</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Tile</span><span class="op">&gt;</span>,
     <span class="doccomment">/// List of changed tiles.</span>
-    <span class="kw">pub</span> <span class="ident">changed</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">Coord2</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">changed</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">Vec2</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ScreenBuffer</span> {
     <span class="doccomment">/// A blank screen.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">blank</span>(<span class="ident">size</span>: <span class="ident">Coord2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">blank</span>(<span class="ident">size</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">curr</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">Tile::default</span>(); <span class="ident">coord::to_index</span>(<span class="ident">size</span>.<span class="ident">y</span> <span class="op">*</span> <span class="ident">size</span>.<span class="ident">x</span>)];
         <span class="kw">let</span> <span class="ident">old</span> <span class="op">=</span> <span class="ident">curr</span>.<span class="ident">clone</span>();
         <span class="self">Self</span> {
@@ -142,7 +142,7 @@
     }
 
     <span class="doccomment">/// Resizes the screen using the given size.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">resize</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">Coord2</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">resize</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">size</span>: <span class="ident">Vec2</span>) {
         <span class="kw">let</span> <span class="ident">old_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">curr</span>.<span class="ident">len</span>();
         <span class="kw">let</span> <span class="ident">new_size</span> <span class="op">=</span> <span class="ident">coord::to_index</span>(<span class="ident">size</span>.<span class="ident">y</span> <span class="op">*</span> <span class="ident">size</span>.<span class="ident">x</span>);
         <span class="kw">let</span> <span class="ident">needs_clear</span> <span class="op">=</span> <span class="ident">old_size</span>.<span class="ident">min</span>(<span class="ident">new_size</span>);
@@ -173,8 +173,8 @@
     <span class="doccomment">/// Size of the buffer in coordinates.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Must be in sync with [`Terminal::screen_size`].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord2</span> {
-        <span class="ident">Coord2</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec2</span> {
+        <span class="ident">Vec2</span> {
             <span class="ident">y</span>: <span class="ident">coord::from_index</span>(
                 <span class="self">self</span>.<span class="ident">curr</span>.<span class="ident">len</span>().<span class="ident">checked_div</span>(<span class="self">self</span>.<span class="ident">width</span>).<span class="ident">unwrap_or</span>(<span class="number">0</span>),
             ),
@@ -183,7 +183,7 @@
     }
 
     <span class="doccomment">/// Makes an index from a coordinate.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_index</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Coord2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_index</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">coord::to_index</span>(<span class="ident">point</span>.<span class="ident">x</span>);
         <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">coord::to_index</span>(<span class="ident">point</span>.<span class="ident">y</span>);
         <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">curr</span>.<span class="ident">len</span>() <span class="op">/</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">y</span> {

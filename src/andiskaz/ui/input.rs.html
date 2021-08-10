@@ -474,7 +474,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">color</span>::{<span class="ident">BasicColor</span>, <span class="ident">Color</span>, <span class="ident">Color2</span>},
     <span class="ident">coord</span>,
-    <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">Coord2</span>},
+    <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">Vec2</span>},
     <span class="ident">error::ServicesOff</span>,
     <span class="ident">event</span>::{<span class="ident">Event</span>, <span class="ident">Key</span>, <span class="ident">KeyEvent</span>, <span class="ident">ResizeEvent</span>},
     <span class="ident">screen::Screen</span>,
@@ -775,7 +775,7 @@
     }
 
     <span class="doccomment">/// Updates the actual maximum length for the buffer, given a screen size.</span>
-    <span class="kw">fn</span> <span class="ident">update_actual_max</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Coord2</span>) {
+    <span class="kw">fn</span> <span class="ident">update_actual_max</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) {
         <span class="self">self</span>.<span class="ident">actual_max</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">dialog</span>.<span class="ident">max</span>.<span class="ident">min</span>(<span class="ident">screen_size</span>.<span class="ident">x</span>);
         <span class="kw">let</span> <span class="ident">max_index</span> <span class="op">=</span> <span class="ident">coord::to_index</span>(<span class="self">self</span>.<span class="ident">actual_max</span>).<span class="ident">saturating_sub</span>(<span class="number">1</span>);
         <span class="self">self</span>.<span class="ident">cursor</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">cursor</span>.<span class="ident">min</span>(<span class="ident">max_index</span>);
