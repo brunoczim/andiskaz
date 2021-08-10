@@ -1,0 +1,4 @@
+(function() {var implementors = {};
+implementors["gardiz"] = [{"text":"impl&lt;T&gt; <a class=\"trait\" href=\"num_traits/ops/wrapping/trait.WrappingAdd.html\" title=\"trait num_traits::ops::wrapping::WrappingAdd\">WrappingAdd</a> for <a class=\"struct\" href=\"gardiz/coord/struct.Vec2.html\" title=\"struct gardiz::coord::Vec2\">Vec2</a>&lt;T&gt; <span class=\"where fmt-newline\">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class=\"trait\" href=\"num_traits/ops/wrapping/trait.WrappingAdd.html\" title=\"trait num_traits::ops::wrapping::WrappingAdd\">WrappingAdd</a>,&nbsp;</span>","synthetic":false,"types":["gardiz::coord::Vec2"]}];
+implementors["num_traits"] = [];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

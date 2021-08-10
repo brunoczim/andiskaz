@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Borders","Iterator over inner borders of the rectangle. See [`Rect::borders`]."],["Columns","Iterator over columns of the rectangle. See [`Rect::columns`]."],["Rect","A rectangle in a plane."],["Rows","Iterator over rows of the rectangle. See [`Rect::rows`]."]]});
