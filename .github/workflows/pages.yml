@@ -1,4 +1,4 @@
-name: Gardiz CI - GH Pages
+name: Andiskaz CI - GH Pages
 on: 
   push:
     branches:
@@ -22,7 +22,8 @@ jobs:
       - name: Run cargo doc
         uses: actions-rs/cargo@v1
         with:
-          command: doc --all-features
+          command: doc
+          args: --all-features
 
       - name: Deploy Docs
         uses: peaceiris/actions-gh-pages@v3
