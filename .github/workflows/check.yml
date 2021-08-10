@@ -1,6 +1,5 @@
+name: Gardiz CI - Check
 on: [push, pull_request]
-
-name: Gardiz CI
 
 jobs:
   check:
@@ -22,6 +21,11 @@ jobs:
         with:
           command: check
 
+      - name: Run cargo check with plane
+        uses: actions-rs/cargo@v1
+        with:
+          command: check --features plane
+
   test:
     name: Test Suite
     runs-on: ubuntu-latest
@@ -40,6 +44,11 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
+
+      - name: Run cargo test with plane
+        uses: actions-rs/cargo@v1
+        with:
+          command: test --features plane
 
   lints:
     name: Lints
@@ -62,28 +71,3 @@ jobs:
         with:
           command: fmt
           args: --all -- --check
-
-  docs:
-    name: Documentation
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v2
-
-      - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-
-      - name: Run cargo doc
-        uses: actions-rs/cargo@v1
-        with:
-          command: doc
-
-      - name: Deploy Docs
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/doc
