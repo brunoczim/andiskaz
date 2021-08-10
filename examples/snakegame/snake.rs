@@ -5,7 +5,7 @@ use crate::{
     plane::{Bounds, Direction},
 };
 use andiskaz::{
-    coord::Coord2,
+    coord::Vec2,
     screen::{Screen, Tile},
 };
 use rand::Rng;
@@ -21,7 +21,7 @@ pub struct Snake {
     /// Tile of the snake's head.
     head_tile: Tile,
     /// Coordinates occupied by the snake.
-    segments: VecDeque<Coord2>,
+    segments: VecDeque<Vec2>,
 }
 
 impl Snake {
@@ -36,7 +36,7 @@ impl Snake {
         // Initializes the random number generator (RNG).
         let mut rng = rand::thread_rng();
         // A random head for the snake.
-        let head = Coord2 {
+        let head = Vec2 {
             x: rng.gen_range(bounds.min.x, bounds.max.x + 1),
             y: rng.gen_range(
                 bounds.min.y + distance,
@@ -47,7 +47,7 @@ impl Snake {
         // Initializes the segments, in vertical position.
         let mut segments = VecDeque::new();
         for i in 0 .. length {
-            segments.push_back(Coord2 { y: head.y + i, ..head });
+            segments.push_back(Vec2 { y: head.y + i, ..head });
         }
 
         Self { direction: Direction::Up, segments, body_tile, head_tile }
@@ -80,7 +80,7 @@ impl Snake {
 
     /// Tests whether the given point is part of the snake's segments (head and
     /// body).
-    pub fn contains(&self, point: Coord2) -> bool {
+    pub fn contains(&self, point: Vec2) -> bool {
         self.segments.iter().any(|segment| *segment == point)
     }
 

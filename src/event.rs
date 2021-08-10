@@ -2,7 +2,7 @@
 
 mod reactor;
 
-use crate::coord::Coord2;
+use crate::coord::Vec2;
 use std::sync::Mutex;
 use tokio::sync::Notify;
 
@@ -59,7 +59,7 @@ pub struct ResizeEvent {
     /// New dimensions of the screen. If set to `None`, then the screen was
     /// resized to an invalid size, and andiskaz's event reactor is taking care
     /// of this (or andiskis event reactor if you will).
-    pub size: Option<Coord2>,
+    pub size: Option<Vec2>,
 }
 
 impl ResizeEvent {

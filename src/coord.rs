@@ -2,6 +2,9 @@
 
 use std::convert::TryFrom;
 
+#[cfg(feature = "plane")]
+use gardiz::coord as gardiz;
+
 /// A single scalar coordinate used in the terminal.
 pub type Coord = u16;
 
@@ -25,10 +28,18 @@ pub(crate) fn to_index(coord: Coord) -> usize {
     usize::try_from(coord).unwrap_or(usize::max_value())
 }
 
+#[cfg(feature = "plane")]
 /// A coordinate made of two components `x` and `y`. The `x` axis corresponds to
-/// its expected meaning.
+/// its expected meaning. When the feature `plane` is enabled, this is simply an
+/// alias to [`gardiz::coord::Vec2`], otherwise it is a dedicated struct.
+pub type Vec2 = gardiz::Vec2<Coord>;
+
+/// A coordinate made of two components `x` and `y`. The `x` axis corresponds to
+/// its expected meaning. When the feature `plane` is enabled, this is simply an
+/// alias to [`gardiz::coord::Vec2`], otherwise it is a dedicated struct.
+#[cfg(not(feature = "plane"))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-pub struct Coord2 {
+pub struct Vec2 {
     /// The axis that varies up-down-wise. The smallest value of `x` is in the
     /// left.
     pub y: Coord,

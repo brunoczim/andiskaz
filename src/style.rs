@@ -2,7 +2,7 @@
 
 use crate::{
     color::{transform, transform::PairTransformer},
-    coord::{Coord, Coord2},
+    coord::{Coord, Vec2},
 };
 
 /// Alignment, margin and other settings for texts.
@@ -140,29 +140,29 @@ where
 
     /// Makes a coordinate pair that contains the margin dimensions that are
     /// "less".
-    pub fn make_margin_below(&self) -> Coord2 {
-        Coord2 { x: self.left_margin, y: self.top_margin }
+    pub fn make_margin_below(&self) -> Vec2 {
+        Vec2 { x: self.left_margin, y: self.top_margin }
     }
 
     /// Makes a coordinate pair that contains the margin dimensions that are
     /// "greater".
-    pub fn make_margin_above(&self) -> Coord2 {
-        Coord2 { x: self.right_margin, y: self.bottom_margin }
+    pub fn make_margin_above(&self) -> Vec2 {
+        Vec2 { x: self.right_margin, y: self.bottom_margin }
     }
 
     /// Makes a coordinate pair that contains the minima sizes.
-    pub fn make_min_size(&self) -> Coord2 {
-        Coord2 { x: self.min_width, y: self.min_height }
+    pub fn make_min_size(&self) -> Vec2 {
+        Vec2 { x: self.min_width, y: self.min_height }
     }
 
     /// Makes a coordinate pair that contains the maxima sizes.
-    pub fn make_max_size(&self) -> Coord2 {
-        Coord2 { x: self.max_width, y: self.max_height }
+    pub fn make_max_size(&self) -> Vec2 {
+        Vec2 { x: self.max_width, y: self.max_height }
     }
 
     /// Makes a coordinate pair that contains the actual sizes.
-    pub fn make_size(&self, screen_size: Coord2) -> Coord2 {
-        Coord2 {
+    pub fn make_size(&self, screen_size: Vec2) -> Vec2 {
+        Vec2 {
             y: screen_size
                 .y
                 .saturating_sub(self.make_margin_below().y)

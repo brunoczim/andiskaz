@@ -3,7 +3,7 @@
 use crate::{
     color::{BasicColor, Color, Color2},
     coord,
-    coord::{Coord, Coord2},
+    coord::{Coord, Vec2},
     error::ServicesOff,
     event::{Event, Key, KeyEvent, ResizeEvent},
     screen::Screen,
@@ -304,7 +304,7 @@ where
     }
 
     /// Updates the actual maximum length for the buffer, given a screen size.
-    fn update_actual_max(&mut self, screen_size: Coord2) {
+    fn update_actual_max(&mut self, screen_size: Vec2) {
         self.actual_max = self.dialog.max.min(screen_size.x);
         let max_index = coord::to_index(self.actual_max).saturating_sub(1);
         self.cursor = self.cursor.min(max_index);

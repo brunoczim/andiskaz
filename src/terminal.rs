@@ -2,7 +2,7 @@
 
 use crate::{
     coord,
-    coord::Coord2,
+    coord::Vec2,
     error::{AlreadyRunning, Error, ErrorKind, ServicesOff},
     event,
     event::{Event, Reactor},
@@ -50,7 +50,7 @@ impl Drop for RunGuard {
 #[derive(Debug, Clone)]
 pub struct Builder {
     /// Given minimum screen size.
-    min_screen: Coord2,
+    min_screen: Vec2,
     /// Given time that the screen is updated.
     frame_time: Duration,
     /// Interval between a failed poll and the next poll.
@@ -67,14 +67,14 @@ impl Builder {
     /// Initializes this configuration builder.
     pub fn new() -> Self {
         Self {
-            min_screen: Coord2 { x: 80, y: 25 },
+            min_screen: Vec2 { x: 80, y: 25 },
             frame_time: Duration::from_millis(20),
             event_interval: Duration::from_millis(20),
         }
     }
 
     /// Builds the minimum screen size for the application.
-    pub fn min_screen(self, min_screen: Coord2) -> Self {
+    pub fn min_screen(self, min_screen: Vec2) -> Self {
         Self { min_screen, ..self }
     }
 
@@ -171,20 +171,20 @@ impl Builder {
     }
 
     /// Finds the initial size of the terminal.
-    fn initial_size(&self) -> Result<Coord2, Error> {
+    fn initial_size(&self) -> Result<Vec2, Error> {
         let size_res = task::block_in_place(|| {
             crossterm::terminal::enable_raw_mode()?;
             crossterm::terminal::size()
         });
         let (width, height) = size_res.map_err(Error::from_crossterm)?;
-        Ok(Coord2 {
+        Ok(Vec2 {
             y: coord::from_crossterm(height),
             x: coord::from_crossterm(width),
         })
     }
 
     /// Finishes the builder and produces a terminal handle.
-    async fn finish(&self, screen_size: Coord2) -> Terminal {
+    async fn finish(&self, screen_size: Vec2) -> Terminal {
         let shared = Arc::new(Shared::new(
             screen_size,
             self.min_screen,
@@ -218,7 +218,7 @@ async fn events_task(
     barrier: Arc<Barrier>,
     interval: Duration,
     shared: Arc<Shared>,
-    initial_size: Coord2,
+    initial_size: Vec2,
 ) -> Result<(), Error> {
     let mut reactor = Reactor::new(&shared);
     reactor.pre_loop(initial_size).await?;
@@ -368,8 +368,8 @@ impl Shared {
     /// Creates shared data from: current screen size, minimum screen size,
     /// frame interval time .
     pub fn new(
-        screen_size: Coord2,
-        min_screen: Coord2,
+        screen_size: Vec2,
+        min_screen: Vec2,
         frame_time: Duration,
     ) -> Self {
         Self {

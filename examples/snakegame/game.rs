@@ -7,7 +7,7 @@ use crate::{
 };
 use andiskaz::{
     color::{BasicColor, Color2},
-    coord::Coord2,
+    coord::Vec2,
     error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
     screen::{Screen, Tile},
@@ -176,10 +176,10 @@ impl Game {
     }
 
     /// Computes the plane bounds from the screen size.
-    fn make_bounds(screen_size: Coord2) -> Bounds {
+    fn make_bounds(screen_size: Vec2) -> Bounds {
         Bounds {
-            min: Coord2 { x: 1, y: 2 },
-            max: Coord2 { x: screen_size.x - 2, y: screen_size.y - 2 },
+            min: Vec2 { x: 1, y: 2 },
+            max: Vec2 { x: screen_size.x - 2, y: screen_size.y - 2 },
         }
     }
 
@@ -322,14 +322,14 @@ impl Game {
         // Top border.
         for x in self.bounds.min.x .. self.bounds.max.x + 1 {
             screen.set(
-                Coord2 { x, y: self.bounds.min.y - 1 },
+                Vec2 { x, y: self.bounds.min.y - 1 },
                 self.horizontal_tile.clone(),
             );
         }
         // Down border.
         for x in self.bounds.min.x .. self.bounds.max.x + 1 {
             screen.set(
-                Coord2 { x, y: self.bounds.max.y + 1 },
+                Vec2 { x, y: self.bounds.max.y + 1 },
                 self.horizontal_tile.clone(),
             );
         }
@@ -337,33 +337,33 @@ impl Game {
         // Left border.
         for y in self.bounds.min.y .. self.bounds.max.y + 1 {
             screen.set(
-                Coord2 { y, x: self.bounds.min.x - 1 },
+                Vec2 { y, x: self.bounds.min.x - 1 },
                 self.vertical_tile.clone(),
             );
         }
         // Right border.
         for y in self.bounds.min.y .. self.bounds.max.y + 1 {
             screen.set(
-                Coord2 { y, x: self.bounds.max.x + 1 },
+                Vec2 { y, x: self.bounds.max.x + 1 },
                 self.vertical_tile.clone(),
             );
         }
 
         // Corners.
         screen.set(
-            Coord2 { x: self.bounds.min.x - 1, y: self.bounds.min.y - 1 },
+            Vec2 { x: self.bounds.min.x - 1, y: self.bounds.min.y - 1 },
             self.corner_tile.clone(),
         );
         screen.set(
-            Coord2 { x: self.bounds.min.x - 1, y: self.bounds.max.y + 1 },
+            Vec2 { x: self.bounds.min.x - 1, y: self.bounds.max.y + 1 },
             self.corner_tile.clone(),
         );
         screen.set(
-            Coord2 { x: self.bounds.max.x + 1, y: self.bounds.min.y - 1 },
+            Vec2 { x: self.bounds.max.x + 1, y: self.bounds.min.y - 1 },
             self.corner_tile.clone(),
         );
         screen.set(
-            Coord2 { x: self.bounds.max.x + 1, y: self.bounds.max.y + 1 },
+            Vec2 { x: self.bounds.max.x + 1, y: self.bounds.max.y + 1 },
             self.corner_tile.clone(),
         );
     }

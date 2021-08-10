@@ -4,7 +4,7 @@
 use crate::{
     color::{BasicColor, Color, Color2},
     coord,
-    coord::{Coord, Coord2},
+    coord::{Coord, Vec2},
     error::ServicesOff,
     event::{Event, Key, KeyEvent, ResizeEvent},
     screen::Screen,
@@ -339,12 +339,12 @@ where
     }
 
     /// Updates the last row field from the computed end of the screen.
-    fn update_last_row(&mut self, screen_size: Coord2) {
+    fn update_last_row(&mut self, screen_size: Vec2) {
         self.last_row = self.screen_end(screen_size);
     }
 
     /// Returns the index of the last visible option in the screen.
-    fn screen_end(&self, screen_size: Coord2) -> usize {
+    fn screen_end(&self, screen_size: Vec2) -> usize {
         let cancel = if self.cancel.is_some() { 4 } else { 0 };
         let mut available = screen_size.y - self.menu.title_y;
         available -= 2 * (self.menu.pad_after_title - 1) + cancel;
@@ -353,7 +353,7 @@ where
     }
 
     /// Returns the range of the visible options in the screen.
-    fn range_of_screen(&self, screen_size: Coord2) -> Range<usize> {
+    fn range_of_screen(&self, screen_size: Vec2) -> Range<usize> {
         self.first_row .. self.screen_end(screen_size)
     }
 

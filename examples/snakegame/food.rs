@@ -2,7 +2,7 @@
 
 use crate::{plane::Bounds, snake::Snake};
 use andiskaz::{
-    coord::Coord2,
+    coord::Vec2,
     screen::{Screen, Tile},
 };
 use rand::Rng;
@@ -11,7 +11,7 @@ use rand::Rng;
 #[derive(Debug)]
 pub struct Food {
     /// Position of the food/fruit.
-    pos: Coord2,
+    pos: Vec2,
     /// The tile of a food/fruit.
     tile: Tile,
 }
@@ -40,18 +40,18 @@ impl Food {
     }
 
     /// Returns the position of the food.
-    pub fn pos(&self) -> Coord2 {
+    pub fn pos(&self) -> Vec2 {
         self.pos
     }
 
     /// Generates a random position for the food, such that it is inside of the
     /// bounds, and it is not at the same place as the snake.
-    fn gen_pos(snake: &Snake, bounds: Bounds) -> Coord2 {
+    fn gen_pos(snake: &Snake, bounds: Bounds) -> Vec2 {
         loop {
             // Initializes the random number generator (RNG).
             let mut rng = rand::thread_rng();
             // Generates a random point.
-            let point = Coord2 {
+            let point = Vec2 {
                 x: rng.gen_range(bounds.min.x, bounds.max.x + 1),
                 y: rng.gen_range(bounds.min.y, bounds.max.y + 1),
             };

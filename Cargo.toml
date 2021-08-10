@@ -10,11 +10,15 @@ license-file = "LICENSE"
 keywords = ["terminal", "tui", "double-buffering"]
 categories = ["game-development", "asynchronous"]
 
+[features]
+plane = ["gardiz"]
+
 [dependencies]
 unicode-segmentation = "^1.6.0"
 lazy_static = "^1.4"
 crossterm = "^0.18"
 futures = "^0.3.7"
+gardiz = { git = "https://github.com/brunoczim/gardiz", optional = true }
 
 [dependencies.tokio]
 version = "^1.6"

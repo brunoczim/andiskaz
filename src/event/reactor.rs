@@ -1,7 +1,7 @@
 //! This file defines an event reactor.
 
 use crate::{
-    coord::Coord2,
+    coord::Vec2,
     error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
     stdio::LockedStdout,
@@ -38,7 +38,7 @@ impl<'shared> Reactor<'shared> {
     /// size and correctly dealing with the fact that it is invalid, if it is.
     pub async fn pre_loop(
         &mut self,
-        initial_size: Coord2,
+        initial_size: Vec2,
     ) -> Result<(), Error> {
         let mut screen = self.shared.screen().lock().await;
         let min_size = screen.min_size();
@@ -94,7 +94,7 @@ impl<'shared> Reactor<'shared> {
             },
 
             CrosstermEvent::Resize(width, height) => {
-                let size = Coord2 { x: width, y: height };
+                let size = Vec2 { x: width, y: height };
                 let mut locked_screen = self.shared.screen().lock().await;
                 let prev_size_valid = self.is_size_valid();
                 locked_screen

@@ -1,6 +1,6 @@
 //! This module defines the screen (double) buffer and related items.
 
-use crate::{color::Color2, coord, coord::Coord2, string::TermGrapheme};
+use crate::{color::Color2, coord, coord::Vec2, string::TermGrapheme};
 use std::collections::BTreeSet;
 
 /// A [`Tile`] in the terminal, i.e. a single character with foreground and
@@ -25,12 +25,12 @@ pub struct ScreenBuffer {
     /// Currently editing screen.
     pub curr: Vec<Tile>,
     /// List of changed tiles.
-    pub changed: BTreeSet<Coord2>,
+    pub changed: BTreeSet<Vec2>,
 }
 
 impl ScreenBuffer {
     /// A blank screen.
-    pub fn blank(size: Coord2) -> Self {
+    pub fn blank(size: Vec2) -> Self {
         let curr = vec![Tile::default(); coord::to_index(size.y * size.x)];
         let old = curr.clone();
         Self {
@@ -43,7 +43,7 @@ impl ScreenBuffer {
     }
 
     /// Resizes the screen using the given size.
-    pub fn resize(&mut self, size: Coord2) {
+    pub fn resize(&mut self, size: Vec2) {
         let old_size = self.curr.len();
         let new_size = coord::to_index(size.y * size.x);
         let needs_clear = old_size.min(new_size);
@@ -74,8 +74,8 @@ impl ScreenBuffer {
     /// Size of the buffer in coordinates.
     ///
     /// Must be in sync with [`Terminal::screen_size`].
-    pub fn size(&self) -> Coord2 {
-        Coord2 {
+    pub fn size(&self) -> Vec2 {
+        Vec2 {
             y: coord::from_index(
                 self.curr.len().checked_div(self.width).unwrap_or(0),
             ),
@@ -84,7 +84,7 @@ impl ScreenBuffer {
     }
 
     /// Makes an index from a coordinate.
-    pub fn make_index(&self, point: Coord2) -> Option<usize> {
+    pub fn make_index(&self, point: Vec2) -> Option<usize> {
         let x = coord::to_index(point.x);
         let y = coord::to_index(point.y);
         if x >= self.width || self.curr.len() / self.width <= y {

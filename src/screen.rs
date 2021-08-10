@@ -6,7 +6,7 @@ pub use self::buffer::Tile;
 use crate::{
     color::{transform::PairTransformer, Color, Color2},
     coord,
-    coord::{Coord, Coord2},
+    coord::{Coord, Vec2},
     error::Error,
     screen::buffer::ScreenBuffer,
     stdio,
@@ -31,7 +31,7 @@ use tokio::{
 #[derive(Debug)]
 pub(crate) struct ScreenData {
     /// Minimum screen size.
-    min_size: Coord2,
+    min_size: Vec2,
     /// Frame interval time.
     frame_time: Duration,
     /// Whether the terminal handle has been cleaned up (using
@@ -49,7 +49,7 @@ impl ScreenData {
     /// Creates screen data from the given settings. If given actual size is
     /// less than given minimum allowed size, the actual size is replaced by the
     /// minimum size.
-    pub fn new(size: Coord2, min_size: Coord2, frame_time: Duration) -> Self {
+    pub fn new(size: Vec2, min_size: Vec2, frame_time: Duration) -> Self {
         let corrected_size = if size.x >= min_size.x && size.y >= min_size.y {
             size
         } else {
@@ -130,7 +130,7 @@ impl Drop for ScreenData {
 /// that the compiler can make other functions smaller.
 #[cold]
 #[inline(never)]
-fn out_of_bounds(point: Coord2, size: Coord2) -> ! {
+fn out_of_bounds(point: Vec2, size: Vec2) -> ! {
     panic!(
         "Point x: {}, y: {} out of screen size x: {}, y: {}",
         point.x, point.y, size.x, size.y
@@ -162,7 +162,7 @@ impl<'terminal> Screen<'terminal> {
     }
 
     /// Returns the current size of the screen.
-    pub fn size(&self) -> Coord2 {
+    pub fn size(&self) -> Vec2 {
         self.buffer.size()
     }
 
@@ -173,17 +173,17 @@ impl<'terminal> Screen<'terminal> {
     }
 
     /// Returns the minimum size required for the screen.
-    pub fn min_size(&self) -> Coord2 {
+    pub fn min_size(&self) -> Vec2 {
         self.data.min_size
     }
 
     /// Sets every attribute of a given [`Tile`]. This operation is buffered.
-    pub fn set(&mut self, point: Coord2, tile: Tile) {
+    pub fn set(&mut self, point: Vec2, tile: Tile) {
         self.update(point, |stored| *stored = tile);
     }
 
     /// Sets the colors of a given [`Tile`]. This operation is buffered.
-    pub fn transform_colors<P>(&mut self, point: Coord2, transformer: P)
+    pub fn transform_colors<P>(&mut self, point: Vec2, transformer: P)
     where
         P: PairTransformer,
     {
@@ -195,7 +195,7 @@ impl<'terminal> Screen<'terminal> {
     /// Applies an update function to a [`Tile`]. An update function gets access
     /// to a mutable reference of a [`Tile`], updates it, and then the screen
     /// handles any changes made to it. This operation is buffered.
-    pub fn update<F, T>(&mut self, point: Coord2, updater: F) -> T
+    pub fn update<F, T>(&mut self, point: Vec2, updater: F) -> T
     where
         F: FnOnce(&mut Tile) -> T,
     {
@@ -214,7 +214,7 @@ impl<'terminal> Screen<'terminal> {
 
     /// Gets the attributes of a given [`Tile`], regardless of being flushed to
     /// the screen yet or not.
-    pub fn get(&self, point: Coord2) -> &Tile {
+    pub fn get(&self, point: Vec2) -> &Tile {
         let index = self
             .buffer
             .make_index(point)
@@ -232,7 +232,7 @@ impl<'terminal> Screen<'terminal> {
 
         for y in 0 .. size.y {
             for x in 0 .. size.x {
-                self.set(Coord2 { x, y }, tile.clone());
+                self.set(Vec2 { x, y }, tile.clone());
             }
         }
     }
@@ -253,7 +253,7 @@ impl<'terminal> Screen<'terminal> {
         let screen_size = self.buffer.size();
         let size = style.make_size(screen_size);
 
-        let mut cursor = Coord2 { x: 0, y: style.top_margin };
+        let mut cursor = Vec2 { x: 0, y: style.top_margin };
         let mut is_inside = cursor.y - style.top_margin < size.y;
 
         while len > 0 && is_inside {
@@ -288,7 +288,7 @@ impl<'terminal> Screen<'terminal> {
         &self,
         width: usize,
         total_graphemes: usize,
-        term_size: Coord2,
+        term_size: Vec2,
         slice: &TermString,
         is_inside: bool,
     ) -> usize {
@@ -313,7 +313,7 @@ impl<'terminal> Screen<'terminal> {
         &mut self,
         slice: &TermString,
         style: &Style<P>,
-        cursor: &mut Coord2,
+        cursor: &mut Vec2,
     ) where
         P: PairTransformer,
     {
@@ -331,7 +331,7 @@ impl<'terminal> Screen<'terminal> {
     /// locked stdout is put into `guard`.
     pub(crate) async fn check_resize(
         &mut self,
-        new_size: Coord2,
+        new_size: Vec2,
         guard: &mut Option<LockedStdout<'terminal>>,
     ) -> io::Result<()> {
         let min_size = self.data.min_size;
@@ -358,7 +358,7 @@ impl<'terminal> Screen<'terminal> {
     async fn ask_resize(
         &mut self,
         stdout: &mut LockedStdout<'terminal>,
-        min_size: Coord2,
+        min_size: Vec2,
     ) -> io::Result<()> {
         let buf = format!(
             "{}{}RESIZE {}x{}",
@@ -376,7 +376,7 @@ impl<'terminal> Screen<'terminal> {
     /// Triggers the resize of the screen.
     async fn resize(
         &mut self,
-        new_size: Coord2,
+        new_size: Vec2,
         stdout: &mut LockedStdout<'terminal>,
     ) -> io::Result<()> {
         let buf = format!(
@@ -404,7 +404,7 @@ impl<'terminal> Screen<'terminal> {
         buf.clear();
 
         let mut colors = Color2::default();
-        let mut cursor = Coord2 { x: 0, y: 0 };
+        let mut cursor = Vec2 { x: 0, y: 0 };
         self.render_init_term(buf, colors, cursor)?;
 
         for &coord in self.buffer.changed.iter() {
@@ -431,7 +431,7 @@ impl<'terminal> Screen<'terminal> {
         &self,
         buf: &mut String,
         colors: Color2,
-        cursor: Coord2,
+        cursor: Vec2,
     ) -> Result<(), Error> {
         write!(
             buf,
@@ -456,9 +456,9 @@ impl<'terminal> Screen<'terminal> {
         &self,
         buf: &mut String,
         colors: &mut Color2,
-        cursor: &mut Coord2,
-        screen_size: Coord2,
-        coord: Coord2,
+        cursor: &mut Vec2,
+        screen_size: Vec2,
+        coord: Vec2,
     ) -> Result<(), Error> {
         if *cursor != coord {
             write!(

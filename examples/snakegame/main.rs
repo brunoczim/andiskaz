@@ -9,7 +9,7 @@ mod game;
 use crate::game::{EndKind, Game};
 use andiskaz::{
     color::{BasicColor, Color2},
-    coord::Coord2,
+    coord::Vec2,
     emergency_restore,
     error::Error as AndiskazError,
     style::Style,
@@ -42,7 +42,7 @@ async fn main() {
         // Interval between event polling.
         .event_interval(WAIT_KEY_DELAY / 2)
         // Minimum screen size.
-        .min_screen(Coord2 { x: 50, y: 20 })
+        .min_screen(Vec2 { x: 50, y: 20 })
         // Interval between rendering frames.
         .frame_time(TICK / 2)
         // Runs.

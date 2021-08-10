@@ -66,9 +66,9 @@ macro_rules! tstring_concat {
 ///
 /// # Example
 /// ```no_run
-/// use andiskaz::coord::Coord2;
+/// use andiskaz::coord::Vec2;
 ///
-/// let coords = Coord2 { x: 3, y: 5 };
+/// let coords = Vec2 { x: 3, y: 5 };
 /// andiskaz::tdebug!("coords = {:?}\n", coords);
 /// ```
 #[macro_export]

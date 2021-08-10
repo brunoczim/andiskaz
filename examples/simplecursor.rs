@@ -1,6 +1,6 @@
 use andiskaz::{
     color::{BasicColor, Color, Color2},
-    coord::{Coord, Coord2},
+    coord::{Coord, Vec2},
     emergency_restore,
     error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
@@ -29,7 +29,7 @@ async fn main() {
     let width = game.message.count_graphemes() as Coord;
 
     // Minimum screen size.
-    let min_screen = Coord2 { x: width, y: 2 };
+    let min_screen = Vec2 { x: width, y: 2 };
 
     // Initalizes the terminal handle builder.
     let result = terminal::Builder::new()
@@ -86,7 +86,7 @@ struct Game {
     /// The message we will show at the top of the terminal.
     message: TermString,
     /// The cursor position in the screen (y is always below the message).
-    cursor: Coord2,
+    cursor: Vec2,
 }
 
 impl Game {
@@ -95,7 +95,7 @@ impl Game {
         Self {
             message: tstring!["Use arrows to control, press ESC to exit!"],
             // Y never goes above 1, because 0 is the position of the message.
-            cursor: Coord2 { x: 0, y: 1 },
+            cursor: Vec2 { x: 0, y: 1 },
         }
     }
 
