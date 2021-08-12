@@ -1,13 +1,13 @@
 //! This module provides styles for terminal text.
 
 use crate::{
-    color::{transform, transform::PairTransformer},
+    color::{transform, transform::PairTransformer, Color2},
     coord::{Coord, Vec2},
 };
 
 /// Alignment, margin and other settings for texts.
 #[derive(Debug, Clone, Copy)]
-pub struct Style<P>
+pub struct Style<P = Color2>
 where
     P: PairTransformer,
 {

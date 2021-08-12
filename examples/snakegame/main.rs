@@ -19,12 +19,11 @@ use andiskaz::{
 };
 use backtrace::Backtrace;
 use std::{panic, process::exit, time::Duration};
-use tokio::time;
 
 /// Time interval between game ticks.
 const TICK: Duration = Duration::from_millis(70);
-/// Delay before waiting for a key.
-const WAIT_KEY_DELAY: Duration = Duration::from_millis(100);
+/// Delay before waiting for the user.
+const WAIT_USER_DELAY: Duration = Duration::from_millis(100);
 
 /// Asynchronous main of a tokio project.
 #[tokio::main]
@@ -40,7 +39,7 @@ async fn main() {
     // Creates and runs a terminal with given settings.
     let result = terminal::Builder::default()
         // Interval between event polling.
-        .event_interval(WAIT_KEY_DELAY / 2)
+        .event_interval(WAIT_USER_DELAY / 2)
         // Minimum screen size.
         .min_screen(Vec2 { x: 50, y: 20 })
         // Interval between rendering frames.
@@ -85,7 +84,7 @@ async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
             }
 
             // Waits a key with a delay before waiting for the key.
-            wait_key_delay(&mut terminal).await?;
+            terminal.wait_user(WAIT_USER_DELAY).await?;
         },
 
         // User lost. Print message.
@@ -106,23 +105,9 @@ async fn term_main(mut terminal: Terminal) -> Result<(), AndiskazError> {
             }
 
             // Waits a key with a delay before waiting for the key.
-            wait_key_delay(&mut terminal).await?;
+            terminal.wait_user(WAIT_USER_DELAY).await?;
         },
     }
 
-    Ok(())
-}
-
-/// Waits for a key to be pressed. After an in-game event, the user might press
-/// a key thinking he still is in the game. There is some mental delay here. So,
-/// to compensate the mental delay, we wait a little before actually waiting for
-/// the key.
-async fn wait_key_delay(terminal: &mut Terminal) -> Result<(), AndiskazError> {
-    // We have to wait before clearing the events handler.
-    time::sleep(WAIT_KEY_DELAY).await;
-    // Clears all pending events.
-    terminal.clear_event();
-    // Waits for one more event.
-    terminal.listen().await?.event();
     Ok(())
 }

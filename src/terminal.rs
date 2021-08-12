@@ -19,6 +19,7 @@ use std::{
 use tokio::{
     sync::{Barrier, RwLock, RwLockReadGuard, RwLockWriteGuard},
     task,
+    time,
 };
 
 /// State of the terminal guard. true means acquired, false means released.
@@ -310,6 +311,18 @@ impl Terminal {
     /// as read and it will no longer be available.
     pub fn clear_event(&mut self) {
         self.curr_epoch = self.shared.events().epoch();
+    }
+
+    /// Waits for user input before continuing, but waits for some given time
+    /// (`delay`). Clears any previous event after waiting and listening to a
+    /// new event.
+    pub async fn wait_user<'terminal>(
+        &'terminal mut self,
+        delay: Duration,
+    ) -> Result<TerminalGuard<'terminal>, ServicesOff> {
+        time::sleep(delay).await;
+        self.clear_event();
+        self.listen().await
     }
 }
 
