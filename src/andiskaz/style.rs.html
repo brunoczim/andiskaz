@@ -182,13 +182,13 @@
 <span class="doccomment">//! This module provides styles for terminal text.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">color</span>::{<span class="ident">transform</span>, <span class="ident">transform::PairTransformer</span>},
+    <span class="ident">color</span>::{<span class="ident">transform</span>, <span class="ident">transform::PairTransformer</span>, <span class="ident">Color2</span>},
     <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">Vec2</span>},
 };
 
 <span class="doccomment">/// Alignment, margin and other settings for texts.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Style</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Style</span><span class="op">&lt;</span><span class="ident">P</span> <span class="op">=</span> <span class="ident">Color2</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">P</span>: <span class="ident">PairTransformer</span>,
 {
