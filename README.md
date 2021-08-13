@@ -6,6 +6,14 @@ games
 
 https://brunoczim.github.io/andiskaz/andiskaz/
 
+# Features
+
+## `plane`
+
+Enable this to make `andiskaz`'s `Vec2` be an alias for the crate `gardiz`'s
+`Vec2`. Otherwise, `andiskaz`'s `Vec2` is a new struct.
+
+
 # Example Snake Game
 
 See [this folder](./examples/snakegame/).
