@@ -20,13 +20,13 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --all
+          args: --all-targets
 
       - name: Run cargo check with plane
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --features plane --all
+          args: --features plane --all-targets
 
   test:
     name: Test Suite
