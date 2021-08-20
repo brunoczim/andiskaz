@@ -127,12 +127,9 @@ pub enum DangerPromptOption {
 }
 
 impl DangerPromptOption {
-    /// Creates a menu over a dangerous prompt.
-    pub fn menu(title: TermString) -> Menu<Self> {
-        Menu::new(
-            title,
-            vec![DangerPromptOption::Ok, DangerPromptOption::Cancel],
-        )
+    /// Yields all options of a menu over a dangerous prompt.
+    pub fn all() -> Vec<Self> {
+        vec![DangerPromptOption::Ok, DangerPromptOption::Cancel]
     }
 }
 
