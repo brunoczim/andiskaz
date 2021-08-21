@@ -326,3 +326,43 @@ impl PairTransformer for ContrastBgWithFg {
         }
     }
 }
+
+/// Updates the background of the color.
+pub struct UpdateBg<T>(
+    /// Transformer on background channel.
+    pub T,
+)
+where
+    T: Transformer;
+
+impl<T> PairTransformer for UpdateBg<T>
+where
+    T: Transformer,
+{
+    fn transform_pair(&self, colors: Color2) -> Color2 {
+        Color2 {
+            foreground: colors.foreground,
+            background: self.0.transform(colors.background),
+        }
+    }
+}
+
+/// Updates the foreground of the color.
+pub struct UpdateFg<T>(
+    /// Transformer on foreground channel.
+    pub T,
+)
+where
+    T: Transformer;
+
+impl<T> PairTransformer for UpdateFg<T>
+where
+    T: Transformer,
+{
+    fn transform_pair(&self, colors: Color2) -> Color2 {
+        Color2 {
+            foreground: self.0.transform(colors.foreground),
+            background: colors.background,
+        }
+    }
+}
