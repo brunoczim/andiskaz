@@ -31,13 +31,13 @@ pub(crate) fn to_index(coord: Coord) -> usize {
 #[cfg(feature = "plane")]
 /// A coordinate made of two components `x` and `y`. The `x` axis corresponds to
 /// its expected meaning. When the feature `plane` is enabled, this is simply an
-/// alias to [`gardiz::coord::Vec2`], otherwise it is a dedicated struct.
+/// alias to [`::gardiz::coord::Vec2`], otherwise it is a dedicated struct.
 pub type Vec2 = gardiz::Vec2<Coord>;
 
+#[cfg(not(feature = "plane"))]
 /// A coordinate made of two components `x` and `y`. The `x` axis corresponds to
 /// its expected meaning. When the feature `plane` is enabled, this is simply an
 /// alias to [`gardiz::coord::Vec2`], otherwise it is a dedicated struct.
-#[cfg(not(feature = "plane"))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct Vec2 {
     /// The axis that varies up-down-wise. The smallest value of `x` is in the

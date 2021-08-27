@@ -14,7 +14,7 @@ mod pair;
 pub use self::{
     basic::BasicColor,
     brightness::{ApproxBrightness, Brightness},
-    eight_bit::{CmyColor, Color8, Color8Kind, GrayColor},
+    eight_bit::{CmyColor, Color8Bit, Color8BitKind, GrayColor},
     error::{BadBasicColor, BadCmyColor, BadGrayColor},
     pair::{
         AdaptBgToFg,
@@ -39,7 +39,7 @@ pub enum Color {
     /// ANSI 8-bit color. Totals 256 colors: 16 basic colors (likely the same
     /// as `Color::Basic`), 216 CMY Colors and 24 gray-scale colors. Not as
     /// portable as `Color::Basic`, but still portable (it's ANSI).
-    EightBit(Color8),
+    EightBit(Color8Bit),
     /// RGB color (Red-Green-Blue). Not very portable, but some terminals do
     /// implement it.
     Rgb(RgbColor),
@@ -92,27 +92,27 @@ impl From<BasicColor> for Color {
     }
 }
 
-impl From<Color8> for Color {
-    fn from(color: Color8) -> Self {
+impl From<Color8Bit> for Color {
+    fn from(color: Color8Bit) -> Self {
         Color::EightBit(color)
     }
 }
 
-impl From<Color8Kind> for Color {
-    fn from(kind: Color8Kind) -> Self {
-        Color::from(Color8::from(kind))
+impl From<Color8BitKind> for Color {
+    fn from(kind: Color8BitKind) -> Self {
+        Color::from(Color8Bit::from(kind))
     }
 }
 
 impl From<CmyColor> for Color {
     fn from(color: CmyColor) -> Self {
-        Color::from(Color8::from(color))
+        Color::from(Color8Bit::from(color))
     }
 }
 
 impl From<GrayColor> for Color {
     fn from(color: GrayColor) -> Self {
-        Color::from(Color8::from(color))
+        Color::from(Color8Bit::from(color))
     }
 }
 

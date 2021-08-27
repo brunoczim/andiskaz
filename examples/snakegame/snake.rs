@@ -1,10 +1,12 @@
 //! This module defines the snake type.
 
-use crate::{
-    food::Food,
-    plane::{Bounds, Direction},
+use crate::food::Food;
+use andiskaz::{
+    coord::{Coord, Vec2},
+    screen::Screen,
+    tile::Tile,
 };
-use andiskaz::{coord::Vec2, screen::Screen, tile::Tile};
+use gardiz::{direc::Direction, rect::Rect};
 use rand::Rng;
 use std::collections::VecDeque;
 
@@ -24,7 +26,7 @@ pub struct Snake {
 impl Snake {
     /// Initializes the snake, given the tiles for its head and body, as well
     /// the bounds of the plane.
-    pub fn new(body_tile: Tile, head_tile: Tile, bounds: Bounds) -> Self {
+    pub fn new(body_tile: Tile, head_tile: Tile, bounds: Rect<Coord>) -> Self {
         // Initial length.
         let length = 3;
         // Random head distance from the y-borders.
@@ -34,10 +36,10 @@ impl Snake {
         let mut rng = rand::thread_rng();
         // A random head for the snake.
         let head = Vec2 {
-            x: rng.gen_range(bounds.min.x, bounds.max.x + 1),
+            x: rng.gen_range(bounds.start.x, bounds.end().x),
             y: rng.gen_range(
-                bounds.min.y + distance,
-                bounds.max.y - (distance + length - 1),
+                bounds.start.y + distance,
+                bounds.end().y - (distance + length),
             ),
         };
 
@@ -57,17 +59,20 @@ impl Snake {
     /// - `None` means the snake got out of bounds.
     /// - `Some(ate)` means everything is Ok, and `ate` will tell if the fruit
     ///   has been eaten.
-    pub fn mov(&mut self, bounds: Bounds, food: &Food) -> Option<bool> {
-        let new_head = self.direction.move_coords(self.segments[0], bounds)?;
+    pub fn mov(&mut self, bounds: Rect<Coord>, food: &Food) -> Option<bool> {
+        let new_head = self.segments[0].checked_move(self.direction)?;
+        if bounds.has_point(new_head) {
+            if new_head != food.pos() {
+                // Only pops last segment if no food was eaten.
+                self.segments.pop_back();
+            }
+            // Pushing new head gives the sensation of movement.
+            self.segments.push_front(new_head);
 
-        if new_head != food.pos() {
-            // Only pops last segment if no food was eaten.
-            self.segments.pop_back();
+            Some(new_head == food.pos())
+        } else {
+            None
         }
-        // Pushing new head gives the sensation of movement.
-        self.segments.push_front(new_head);
-
-        Some(new_head == food.pos())
     }
 
     /// Changes the direction to which the snake is going.
@@ -93,28 +98,28 @@ impl Snake {
     /// Tests if all the segments are inside of a bound and saturates points
     /// outside of bounds. Returns whether the saturation happened. Useful when
     /// resizing.
-    pub fn saturate_at_bounds(&mut self, bounds: Bounds) -> bool {
+    pub fn saturate_at_bounds(&mut self, bounds: Rect<Coord>) -> bool {
         // Initially, there is no saturation.
         let mut saturated = false;
 
         for point in &mut self.segments {
             // Saturate X bounds. If saturation happened, register this fact
             // into saturated.
-            if point.x < bounds.min.x {
-                point.x = bounds.min.x;
+            if point.x < bounds.start.x {
+                point.x = bounds.start.x;
                 saturated = true;
-            } else if point.x > bounds.max.x {
-                point.x = bounds.max.x;
+            } else if point.x > bounds.end_inclusive().x {
+                point.x = bounds.end_inclusive().x;
                 saturated = true;
             }
 
             // Saturate X bounds. If saturation happened, register this fact
             // into saturated.
-            if point.y < bounds.min.y {
-                point.y = bounds.min.y;
+            if point.y < bounds.start.y {
+                point.y = bounds.start.y;
                 saturated = true;
-            } else if point.y > bounds.max.y {
-                point.y = bounds.max.y;
+            } else if point.y > bounds.end_inclusive().y {
+                point.y = bounds.end_inclusive().y;
                 saturated = true;
             }
         }

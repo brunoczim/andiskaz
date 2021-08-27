@@ -1,7 +1,6 @@
 //! This example implements the "snake game". It does not have a menu or
 //! anything like that. Arrows control the snake, ESC exits.
 
-mod plane;
 mod snake;
 mod food;
 mod game;

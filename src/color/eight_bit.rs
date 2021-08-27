@@ -205,7 +205,7 @@ impl ApproxBrightness for GrayColor {
 
 /// The kind of a color. `enum` representation of an 8-bit color.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum Color8Kind {
+pub enum Color8BitKind {
     /// 16 Basic colors.
     Basic(BasicColor),
     /// 216 CMY colors.
@@ -214,67 +214,67 @@ pub enum Color8Kind {
     Gray(GrayColor),
 }
 
-impl Not for Color8Kind {
+impl Not for Color8BitKind {
     type Output = Self;
 
     fn not(self) -> Self::Output {
         match self {
-            Color8Kind::Basic(color) => Color8Kind::Basic(!color),
-            Color8Kind::Cmy(color) => Color8Kind::Cmy(!color),
-            Color8Kind::Gray(color) => Color8Kind::Gray(!color),
+            Color8BitKind::Basic(color) => Color8BitKind::Basic(!color),
+            Color8BitKind::Cmy(color) => Color8BitKind::Cmy(!color),
+            Color8BitKind::Gray(color) => Color8BitKind::Gray(!color),
         }
     }
 }
 
-impl From<BasicColor> for Color8Kind {
+impl From<BasicColor> for Color8BitKind {
     fn from(color: BasicColor) -> Self {
-        Color8Kind::Basic(color)
+        Color8BitKind::Basic(color)
     }
 }
 
-impl From<CmyColor> for Color8Kind {
+impl From<CmyColor> for Color8BitKind {
     fn from(color: CmyColor) -> Self {
-        Color8Kind::Cmy(color)
+        Color8BitKind::Cmy(color)
     }
 }
 
-impl From<GrayColor> for Color8Kind {
+impl From<GrayColor> for Color8BitKind {
     fn from(color: GrayColor) -> Self {
-        Color8Kind::Gray(color)
+        Color8BitKind::Gray(color)
     }
 }
 
-impl From<Color8> for Color8Kind {
-    fn from(color: Color8) -> Self {
+impl From<Color8Bit> for Color8BitKind {
+    fn from(color: Color8Bit) -> Self {
         color.kind()
     }
 }
 
-impl ApproxBrightness for Color8Kind {
+impl ApproxBrightness for Color8BitKind {
     fn approx_brightness(&self) -> Brightness {
         match self {
-            Color8Kind::Basic(color) => color.approx_brightness(),
-            Color8Kind::Cmy(color) => color.approx_brightness(),
-            Color8Kind::Gray(color) => color.approx_brightness(),
+            Color8BitKind::Basic(color) => color.approx_brightness(),
+            Color8BitKind::Cmy(color) => color.approx_brightness(),
+            Color8BitKind::Gray(color) => color.approx_brightness(),
         }
     }
 
     fn set_approx_brightness(&mut self, brightness: Brightness) {
         match self {
-            Color8Kind::Basic(color) => color.set_approx_brightness(brightness),
-            Color8Kind::Cmy(color) => color.set_approx_brightness(brightness),
-            Color8Kind::Gray(color) => color.set_approx_brightness(brightness),
+            Color8BitKind::Basic(color) => color.set_approx_brightness(brightness),
+            Color8BitKind::Cmy(color) => color.set_approx_brightness(brightness),
+            Color8BitKind::Gray(color) => color.set_approx_brightness(brightness),
         }
     }
 }
 
 /// An 8-bit encoded color for the terminal.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Color8 {
+pub struct Color8Bit {
     code: u8,
 }
 
-impl Color8 {
+impl Color8Bit {
     /// Size of basic colors.
     const BASIC_SIZE: u8 = 16;
     /// Size of basic colors + CMY colors.
@@ -302,13 +302,13 @@ impl Color8 {
     }
 
     /// Converts to en `enum` representation.
-    pub fn kind(self) -> Color8Kind {
+    pub fn kind(self) -> Color8BitKind {
         if self.code < 16 {
-            Color8Kind::Basic(BasicColor::try_from(self.code).unwrap())
+            Color8BitKind::Basic(BasicColor::try_from(self.code).unwrap())
         } else if self.code < Self::BASIC_CMY_SIZE {
-            Color8Kind::Cmy(CmyColor { code: self.code - Self::BASIC_SIZE })
+            Color8BitKind::Cmy(CmyColor { code: self.code - Self::BASIC_SIZE })
         } else {
-            Color8Kind::Gray(GrayColor {
+            Color8BitKind::Gray(GrayColor {
                 brightness: self.code - Self::BASIC_CMY_SIZE,
             })
         }
@@ -320,13 +320,13 @@ impl Color8 {
     }
 }
 
-impl fmt::Debug for Color8 {
+impl fmt::Debug for Color8Bit {
     fn fmt(&self, fmtr: &mut fmt::Formatter) -> fmt::Result {
-        fmtr.debug_struct("Color8").field("kind", &self.kind()).finish()
+        fmtr.debug_struct("Color8Bit").field("kind", &self.kind()).finish()
     }
 }
 
-impl Not for Color8 {
+impl Not for Color8Bit {
     type Output = Self;
 
     fn not(self) -> Self::Output {
@@ -334,35 +334,35 @@ impl Not for Color8 {
     }
 }
 
-impl From<BasicColor> for Color8 {
+impl From<BasicColor> for Color8Bit {
     fn from(color: BasicColor) -> Self {
         Self::basic(color)
     }
 }
 
-impl From<CmyColor> for Color8 {
+impl From<CmyColor> for Color8Bit {
     fn from(color: CmyColor) -> Self {
         Self::cmy(color)
     }
 }
 
-impl From<GrayColor> for Color8 {
+impl From<GrayColor> for Color8Bit {
     fn from(color: GrayColor) -> Self {
         Self::gray(color)
     }
 }
 
-impl From<Color8Kind> for Color8 {
-    fn from(kind: Color8Kind) -> Self {
+impl From<Color8BitKind> for Color8Bit {
+    fn from(kind: Color8BitKind) -> Self {
         match kind {
-            Color8Kind::Basic(color) => Self::from(color),
-            Color8Kind::Cmy(color) => Self::from(color),
-            Color8Kind::Gray(color) => Self::from(color),
+            Color8BitKind::Basic(color) => Self::from(color),
+            Color8BitKind::Cmy(color) => Self::from(color),
+            Color8BitKind::Gray(color) => Self::from(color),
         }
     }
 }
 
-impl ApproxBrightness for Color8 {
+impl ApproxBrightness for Color8Bit {
     fn approx_brightness(&self) -> Brightness {
         self.kind().approx_brightness()
     }

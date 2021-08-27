@@ -1,13 +1,9 @@
 //! This module defines utilities central to the game state.
 
-use crate::{
-    food::Food,
-    plane::{Bounds, Direction},
-    snake::Snake,
-};
+use crate::{food::Food, snake::Snake};
 use andiskaz::{
     color::{BasicColor, Color2},
-    coord::Vec2,
+    coord::{Coord, Vec2},
     error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
     screen::Screen,
@@ -17,6 +13,7 @@ use andiskaz::{
     tile::Tile,
     tstring,
 };
+use gardiz::{direc::Direction, rect::Rect};
 use std::time::Duration;
 use tokio::time;
 
@@ -46,7 +43,7 @@ enum State {
 #[derive(Debug)]
 pub struct Game {
     /// Bounds of the game's plane.
-    bounds: Bounds,
+    bounds: Rect<Coord>,
     /// Food/fruit's data.
     food: Food,
     /// Snake's data.
@@ -177,11 +174,11 @@ impl Game {
     }
 
     /// Computes the plane bounds from the screen size.
-    fn make_bounds(screen_size: Vec2) -> Bounds {
-        Bounds {
-            min: Vec2 { x: 1, y: 2 },
-            max: Vec2 { x: screen_size.x - 2, y: screen_size.y - 2 },
-        }
+    fn make_bounds(screen_size: Vec2) -> Rect<Coord> {
+        Rect::from_range_incl(
+            Vec2 { x: 1, y: 2 },
+            Vec2 { x: screen_size.x - 2, y: screen_size.y - 2 },
+        )
     }
 
     /// Performs the game's logical operations inside a game tick.
@@ -321,50 +318,50 @@ impl Game {
     /// Renders the borders via the given locked screen.
     fn render_borders(&self, screen: &mut Screen) {
         // Top border.
-        for x in self.bounds.min.x .. self.bounds.max.x + 1 {
+        for x in self.bounds.start.x .. self.bounds.end().x {
             screen.set(
-                Vec2 { x, y: self.bounds.min.y - 1 },
+                Vec2 { x, y: self.bounds.start.y - 1 },
                 self.horizontal_tile.clone(),
             );
         }
         // Down border.
-        for x in self.bounds.min.x .. self.bounds.max.x + 1 {
+        for x in self.bounds.start.x .. self.bounds.end().x {
             screen.set(
-                Vec2 { x, y: self.bounds.max.y + 1 },
+                Vec2 { x, y: self.bounds.end().y },
                 self.horizontal_tile.clone(),
             );
         }
 
         // Left border.
-        for y in self.bounds.min.y .. self.bounds.max.y + 1 {
+        for y in self.bounds.start.y .. self.bounds.end().y + 1 {
             screen.set(
-                Vec2 { y, x: self.bounds.min.x - 1 },
+                Vec2 { y, x: self.bounds.start.x - 1 },
                 self.vertical_tile.clone(),
             );
         }
         // Right border.
-        for y in self.bounds.min.y .. self.bounds.max.y + 1 {
+        for y in self.bounds.start.y .. self.bounds.end().y + 1 {
             screen.set(
-                Vec2 { y, x: self.bounds.max.x + 1 },
+                Vec2 { y, x: self.bounds.end().x },
                 self.vertical_tile.clone(),
             );
         }
 
         // Corners.
         screen.set(
-            Vec2 { x: self.bounds.min.x - 1, y: self.bounds.min.y - 1 },
+            Vec2 { x: self.bounds.start.x - 1, y: self.bounds.start.y - 1 },
             self.corner_tile.clone(),
         );
         screen.set(
-            Vec2 { x: self.bounds.min.x - 1, y: self.bounds.max.y + 1 },
+            Vec2 { x: self.bounds.start.x - 1, y: self.bounds.end().y },
             self.corner_tile.clone(),
         );
         screen.set(
-            Vec2 { x: self.bounds.max.x + 1, y: self.bounds.min.y - 1 },
+            Vec2 { x: self.bounds.end().x, y: self.bounds.start.y - 1 },
             self.corner_tile.clone(),
         );
         screen.set(
-            Vec2 { x: self.bounds.max.x + 1, y: self.bounds.max.y + 1 },
+            Vec2 { x: self.bounds.end().x, y: self.bounds.end().y },
             self.corner_tile.clone(),
         );
     }
@@ -405,8 +402,8 @@ impl Game {
 
     /// Computes the size of the snake when the player wins.
     fn win_size(&self) -> usize {
-        let x = usize::from(self.bounds.max.x + 1 - self.bounds.min.x);
-        let y = usize::from(self.bounds.max.y + 1 - self.bounds.min.y);
+        let x = usize::from(self.bounds.size.x);
+        let y = usize::from(self.bounds.size.y);
 
         // Mean(x,y)/2
         (x + y) / 4

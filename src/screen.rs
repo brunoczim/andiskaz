@@ -137,9 +137,8 @@ fn out_of_bounds(point: Vec2, size: Vec2) -> ! {
     )
 }
 
-/// A locked screen terminal with exclusive access to it. By default,
-/// [`ScreenData`] locks and unlocks every operation. With this struct, a locked
-/// screen handle, one can execute many operations without locking and
+/// A locked screen terminal with exclusive access to it. With this struct, a
+/// locked screen handle, one can execute many operations without locking and
 /// unlocking.
 #[derive(Debug)]
 pub struct Screen<'terminal> {
