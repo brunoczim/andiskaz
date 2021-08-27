@@ -56,3 +56,20 @@ impl Updater for Foreground {
             .with_approx_brightness(!tile.colors.background.approx_brightness())
     }
 }
+
+/// Updates a [`Tile`] to set the background to the given color, but the
+/// foreground will be adapted to contast the color.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct Background {
+    /// Background color to be contrasted with the foreground.
+    pub color: Color,
+}
+
+impl Updater for Background {
+    fn update(self, tile: &mut Tile) {
+        tile.colors.background = self.color;
+        tile.colors.foreground = self
+            .color
+            .with_approx_brightness(!tile.colors.background.approx_brightness())
+    }
+}
