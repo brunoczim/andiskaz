@@ -80,6 +80,7 @@ pub mod error;
 pub mod string;
 pub mod coord;
 pub mod color;
+pub mod tile;
 pub mod style;
 pub mod screen;
 pub mod event;

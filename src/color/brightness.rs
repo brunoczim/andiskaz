@@ -10,6 +10,16 @@ pub struct Brightness {
 }
 
 impl Brightness {
+    /// Minimum brightness (i.e. dark).
+    pub fn min() -> Self {
+        Self { level: u16::min_value() }
+    }
+
+    /// Maximum brightness (i.e. white).
+    pub fn max() -> Self {
+        Self { level: u16::max_value() }
+    }
+
     /// Spreads this brightness so it becomes distributed along the range of
     /// brightness, assuming the maximum value it could be is the one given
     /// by `soft_max`.
@@ -38,6 +48,12 @@ impl Brightness {
         let converted = (level * soft_max + max / 2 + 1) / max;
 
         Self { level: u16::try_from(converted).expect("Color brigthness bug") }
+    }
+}
+
+impl Default for Brightness {
+    fn default() -> Self {
+        Self::max()
     }
 }
 

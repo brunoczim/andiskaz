@@ -9,11 +9,11 @@ use crate::color::{
     Brightness,
 };
 use crossterm::style::Color as CrosstermColor;
-use std::{convert::TryFrom, ops::Not};
+use std::{convert::TryFrom, fmt, ops::Not};
 
 /// A CMY (Cyan-Magenta-Yellow) color. The lower one of its component is, the
 /// more it subtracts.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct CmyColor {
     /// `(0 .. 216)` Color code.
     code: u8,
@@ -103,6 +103,16 @@ impl CmyColor {
             Channel::new(self.magenta(), 59),
             Channel::new(self.yellow(), 11),
         ]
+    }
+}
+
+impl fmt::Debug for CmyColor {
+    fn fmt(&self, fmtr: &mut fmt::Formatter) -> fmt::Result {
+        fmtr.debug_struct("CmyColor")
+            .field("cyan", &self.cyan())
+            .field("magenta", &self.magenta())
+            .field("yellow", &self.yellow())
+            .finish()
     }
 }
 
@@ -259,7 +269,7 @@ impl ApproxBrightness for Color8Kind {
 }
 
 /// An 8-bit encoded color for the terminal.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Color8 {
     code: u8,
 }
@@ -307,6 +317,12 @@ impl Color8 {
     /// Translates this color to a crossterm color.
     pub(crate) fn to_crossterm(self) -> CrosstermColor {
         CrosstermColor::AnsiValue(self.code())
+    }
+}
+
+impl fmt::Debug for Color8 {
+    fn fmt(&self, fmtr: &mut fmt::Formatter) -> fmt::Result {
+        fmtr.debug_struct("Color8").field("kind", &self.kind()).finish()
     }
 }
 

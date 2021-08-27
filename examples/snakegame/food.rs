@@ -1,10 +1,7 @@
 //! This module defines the food type.
 
 use crate::{plane::Bounds, snake::Snake};
-use andiskaz::{
-    coord::Vec2,
-    screen::{Screen, Tile},
-};
+use andiskaz::{coord::Vec2, screen::Screen, tile::Tile};
 use rand::Rng;
 
 /// A food in the game, or a fruit, or whatever our snake eats.

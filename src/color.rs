@@ -9,53 +9,27 @@ mod brightness;
 mod basic;
 mod eight_bit;
 mod rgb;
-
-pub mod transform;
+mod pair;
 
 pub use self::{
     basic::BasicColor,
     brightness::{ApproxBrightness, Brightness},
     eight_bit::{CmyColor, Color8, Color8Kind, GrayColor},
     error::{BadBasicColor, BadCmyColor, BadGrayColor},
+    pair::{
+        AdaptBgToFg,
+        AdaptFgToBg,
+        Color2,
+        ContrastBgWithFg,
+        ContrastFgWithBg,
+        UpdateBg,
+        UpdateFg,
+        Updater,
+    },
     rgb::RgbColor,
 };
-
 use crossterm::style::Color as CrosstermColor;
 use std::ops::Not;
-
-/// A pair of colors (foreground and background).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Color2 {
-    /// The foreground of this pair.
-    pub foreground: Color,
-    /// The background of this pair.
-    pub background: Color,
-}
-
-impl Color2 {
-    /// Just a convenience method for creating color pairs with conversion.
-    pub fn new<F, B>(foreground: F, background: B) -> Self
-    where
-        F: Into<Color>,
-        B: Into<Color>,
-    {
-        Self { foreground: foreground.into(), background: background.into() }
-    }
-}
-
-impl Default for Color2 {
-    fn default() -> Self {
-        Self::new(BasicColor::White, BasicColor::Black)
-    }
-}
-
-impl Not for Color2 {
-    type Output = Color2;
-
-    fn not(self) -> Self::Output {
-        Color2 { foreground: !self.foreground, background: !self.background }
-    }
-}
 
 /// A color usable in the terminal.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]

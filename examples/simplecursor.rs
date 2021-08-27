@@ -4,11 +4,12 @@ use andiskaz::{
     emergency_restore,
     error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
-    screen::{Screen, Tile},
+    screen::Screen,
     string::{TermGrapheme, TermString},
     style::Style,
     terminal,
     terminal::Terminal,
+    tile::Tile,
     tstring,
 };
 use std::{panic, process::exit};

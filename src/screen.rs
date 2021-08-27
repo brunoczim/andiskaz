@@ -2,9 +2,8 @@
 
 mod buffer;
 
-pub use self::buffer::Tile;
 use crate::{
-    color::{transform::PairTransformer, Color, Color2},
+    color::{self, Color, Color2},
     coord,
     coord::{Coord, Vec2},
     error::Error,
@@ -14,6 +13,7 @@ use crate::{
     string::{TermGrapheme, TermString},
     style::Style,
     terminal::Shared,
+    tile::{self, Tile},
 };
 use std::{
     fmt::Write,
@@ -177,33 +177,20 @@ impl<'terminal> Screen<'terminal> {
         self.data.min_size
     }
 
-    /// Sets every attribute of a given [`Tile`]. This operation is buffered.
-    pub fn set(&mut self, point: Vec2, tile: Tile) {
-        self.update(point, |stored| *stored = tile);
-    }
-
-    /// Sets the colors of a given [`Tile`]. This operation is buffered.
-    pub fn transform_colors<P>(&mut self, point: Vec2, transformer: P)
-    where
-        P: PairTransformer,
-    {
-        self.update(point, |stored| {
-            stored.colors = transformer.transform_pair(stored.colors)
-        })
-    }
-
     /// Applies an update function to a [`Tile`]. An update function gets access
     /// to a mutable reference of a [`Tile`], updates it, and then the screen
-    /// handles any changes made to it. This operation is buffered.
-    pub fn update<F, T>(&mut self, point: Vec2, updater: F) -> T
+    /// handles any changes made to it. A regular [`Tile`] can be used as an
+    /// updater, in which the case a simple replacement is made. This operation
+    /// is buffered.
+    pub fn set<T>(&mut self, point: Vec2, updater: T)
     where
-        F: FnOnce(&mut Tile) -> T,
+        T: tile::Updater,
     {
         let index = self
             .buffer
             .make_index(point)
             .unwrap_or_else(|| out_of_bounds(point, self.buffer.size()));
-        let ret = updater(&mut self.buffer.curr[index]);
+        let ret = updater.update(&mut self.buffer.curr[index]);
         if self.buffer.old[index] != self.buffer.curr[index] {
             self.buffer.changed.insert(point);
         } else {
@@ -240,13 +227,13 @@ impl<'terminal> Screen<'terminal> {
     /// Prints a grapheme-encoded text (a [`TermString`]) using some style
     /// options like ratio to the screen, color, margin and others. See
     /// [`Style`].
-    pub fn styled_text<P>(
+    pub fn styled_text<C>(
         &mut self,
         tstring: &TermString,
-        style: Style<P>,
+        style: Style<C>,
     ) -> Coord
     where
-        P: PairTransformer,
+        C: color::Updater,
     {
         let mut len = tstring.count_graphemes();
         let mut slice = tstring.index(..);
@@ -270,9 +257,9 @@ impl<'terminal> Screen<'terminal> {
             self.write_styled_slice(&slice, &style, &mut cursor);
 
             if pos != len && !is_inside {
-                self.update(cursor, |tile| {
+                self.set(cursor, |tile: &mut Tile| {
                     let grapheme = TermGrapheme::new_lossy("…");
-                    let colors = style.colors.transform_pair(tile.colors);
+                    let colors = style.colors.update(tile.colors);
                     *tile = Tile { grapheme, colors };
                 });
             }
@@ -309,18 +296,18 @@ impl<'terminal> Screen<'terminal> {
     }
 
     /// Writes a slice using the given style. It should fit in one line.
-    fn write_styled_slice<P>(
+    fn write_styled_slice<C>(
         &mut self,
         slice: &TermString,
-        style: &Style<P>,
+        style: &Style<C>,
         cursor: &mut Vec2,
     ) where
-        P: PairTransformer,
+        C: color::Updater,
     {
         for grapheme in slice {
-            self.update(*cursor, |tile| {
-                let colors = style.colors.transform_pair(tile.colors);
-                *tile = Tile { grapheme: grapheme.clone(), colors };
+            self.set(*cursor, |tile: &mut Tile| {
+                tile.grapheme = grapheme;
+                tile.colors = style.colors.update(tile.colors);
             });
             cursor.x += 1;
         }

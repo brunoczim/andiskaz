@@ -1,11 +1,14 @@
 use crate::color::{
-    transform,
-    transform::Transformer,
     ApproxBrightness,
     Brightness,
     CmyColor,
+    Color2,
+    ContrastFgWithBg,
     GrayColor,
     RgbColor,
+    UpdateBg,
+    UpdateFg,
+    Updater,
 };
 
 #[test]
@@ -62,21 +65,23 @@ fn rgb_color_brightness() {
 }
 
 #[test]
-fn transformers() {
-    let transformer = transform::Seq(
-        transform::Adapt(Brightness { level: 34192 }),
-        transform::Id,
+fn updaters() {
+    let updater = (
+        UpdateFg(CmyColor::new(1, 2, 3).into()),
+        ContrastFgWithBg,
+        UpdateBg(CmyColor::new(4, 4, 5).into()),
     );
+
+    let pair = Color2 {
+        foreground: RgbColor { red: 0, green: 0, blue: 0 }.into(),
+        background: CmyColor::new(1, 0, 0).into(),
+    };
+
     assert_eq!(
-        transformer.transform(GrayColor::new(3).into()),
-        GrayColor::new(12).into()
-    );
-    assert_eq!(
-        transformer.transform(CmyColor::new(1, 2, 3).into()),
-        CmyColor::new(1, 3, 4).into()
-    );
-    assert_eq!(
-        transformer.transform(RgbColor { red: 20, green: 39, blue: 2 }.into()),
-        RgbColor { red: 91, green: 178, blue: 9 }.into()
+        updater.update(pair),
+        Color2 {
+            foreground: CmyColor::new(3, 5, 5).into(),
+            background: CmyColor::new(4, 4, 5).into(),
+        }
     );
 }

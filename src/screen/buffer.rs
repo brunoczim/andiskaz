@@ -1,17 +1,7 @@
 //! This module defines the screen (double) buffer and related items.
 
-use crate::{color::Color2, coord, coord::Vec2, string::TermGrapheme};
+use crate::{coord, coord::Vec2, tile::Tile};
 use std::collections::BTreeSet;
-
-/// A [`Tile`] in the terminal, i.e. a single character with foreground and
-/// background colors.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-pub struct Tile {
-    /// Grapheme shown in this [`Tile`].
-    pub grapheme: TermGrapheme,
-    /// The foreground-background pair of colors.
-    pub colors: Color2,
-}
 
 /// The (double) buffer of the buffer of a screen.
 #[derive(Debug)]

@@ -19,7 +19,7 @@ pub struct InfoDialog {
     /// Long text message to be shown.
     pub message: TermString,
     /// Settings such as margin and alignment.
-    pub style: Style<Color2>,
+    pub style: Style,
     /// Colors shown with the title.
     pub title_colors: Color2,
     /// Colors shown with the selected option.
@@ -36,7 +36,7 @@ impl InfoDialog {
         Self {
             title,
             message,
-            style: Style::new()
+            style: Style::default()
                 .align(1, 2)
                 .colors(Color2::default())
                 .top_margin(4)
@@ -89,7 +89,7 @@ impl InfoDialog {
 
     /// Renders the title of the dialog.
     fn render_title(&self, screen: &mut Screen) {
-        let style = Style::new()
+        let style = Style::default()
             .align(1, 2)
             .colors(self.title_colors)
             .top_margin(self.title_y);
@@ -104,7 +104,7 @@ impl InfoDialog {
     /// Renders the OK button.
     fn render_ok(&self, screen: &mut Screen, pos: Coord) {
         let ok_string = tstring!["> OK <"];
-        let style = Style::new()
+        let style = Style::default()
             .align(1, 2)
             .colors(self.selected_colors)
             .top_margin(pos + 2);

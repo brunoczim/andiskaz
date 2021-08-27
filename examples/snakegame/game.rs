@@ -10,10 +10,11 @@ use andiskaz::{
     coord::Vec2,
     error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
-    screen::{Screen, Tile},
+    screen::Screen,
     string::{TermGrapheme, TermString},
     style::Style,
     terminal::Terminal,
+    tile::Tile,
     tstring,
 };
 use std::time::Duration;

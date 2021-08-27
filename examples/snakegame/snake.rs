@@ -4,10 +4,7 @@ use crate::{
     food::Food,
     plane::{Bounds, Direction},
 };
-use andiskaz::{
-    coord::Vec2,
-    screen::{Screen, Tile},
-};
+use andiskaz::{coord::Vec2, screen::Screen, tile::Tile};
 use rand::Rng;
 use std::collections::VecDeque;
 

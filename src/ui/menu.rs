@@ -360,7 +360,7 @@ where
         self.render_title(screen);
 
         let arrow_style =
-            Style::new().align(1, 2).colors(self.menu.arrow_colors);
+            Style::default().align(1, 2).colors(self.menu.arrow_colors);
 
         let mut range = self.range_of_screen(screen.size());
         self.render_up_arrow(screen, arrow_style);
@@ -372,7 +372,7 @@ where
 
     /// Renders the title of the menu.
     fn render_title(&self, screen: &mut Screen) {
-        let title_style = Style::new()
+        let title_style = Style::default()
             .align(1, 2)
             .top_margin(self.menu.title_y)
             .colors(self.menu.title_colors)
@@ -381,7 +381,7 @@ where
     }
 
     /// Renders the UP arrow.
-    fn render_up_arrow(&self, screen: &mut Screen, style: Style<Color2>) {
+    fn render_up_arrow(&self, screen: &mut Screen, style: Style) {
         if self.first_row > 0 {
             let mut option_y = self.y_of_option(self.first_row);
             option_y -= self.menu.pad_after_option + 1;
@@ -394,7 +394,7 @@ where
     fn render_down_arrow(
         &self,
         screen: &mut Screen,
-        style: Style<Color2>,
+        style: Style,
         range: &mut Range<usize>,
     ) {
         if range.end < self.menu.options.len() {
@@ -452,7 +452,7 @@ where
             self.menu.unselected_colors
         };
         let style =
-            Style::new().align(1, 2).colors(colors).top_margin(option_y);
+            Style::default().align(1, 2).colors(colors).top_margin(option_y);
         screen.styled_text(&buf, style);
     }
 
@@ -466,7 +466,7 @@ where
             };
             let string = tstring!["> Cancel <"];
 
-            let style = Style::new()
+            let style = Style::default()
                 .align(1, 3)
                 .colors(colors)
                 .top_margin(cancel_y - 2);

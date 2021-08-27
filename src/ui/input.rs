@@ -390,7 +390,7 @@ where
 
     /// Renders the title of the input dialog.
     fn render_title(&self, screen: &mut Screen) {
-        let style = Style::new()
+        let style = Style::default()
             .left_margin(1)
             .right_margin(1)
             .align(1, 2)
@@ -405,7 +405,7 @@ where
         let additional = coord::to_index(self.actual_max) - self.buffer.len();
         field.extend(iter::repeat(' ').take(additional));
 
-        let style = Style::new()
+        let style = Style::default()
             .align(1, 2)
             .top_margin(self.y_of_box())
             .colors(self.dialog.box_colors);
@@ -425,7 +425,7 @@ where
             }
         }
 
-        let style = Style::new()
+        let style = Style::default()
             .align(1, 2)
             .top_margin(self.y_of_box() + 1)
             .left_margin(1)
@@ -446,7 +446,7 @@ where
             self.dialog.unselected_colors
         };
 
-        let style = Style::new().align(1, 2).colors(colors).top_margin(y);
+        let style = Style::default().align(1, 2).colors(colors).top_margin(y);
         let string = tstring![option];
         screen.styled_text(&string, style);
     }

@@ -1,15 +1,15 @@
 //! This module provides styles for terminal text.
 
 use crate::{
-    color::{transform, transform::PairTransformer, Color2},
+    color::{self, Color2},
     coord::{Coord, Vec2},
 };
 
 /// Alignment, margin and other settings for texts.
 #[derive(Debug, Clone, Copy)]
-pub struct Style<P = Color2>
+pub struct Style<C = Color2>
 where
-    P: PairTransformer,
+    C: color::Updater,
 {
     /// Left margin.
     pub left_margin: Coord,
@@ -32,31 +32,21 @@ where
     /// Alignment align_denomominator.
     pub align_denom: Coord,
     /// Foreground-background color pair.
-    pub colors: P,
+    pub colors: C,
 }
 
-impl<P> Default for Style<P>
-where
-    P: PairTransformer + Default,
-{
+impl Default for Style {
     fn default() -> Self {
-        Self::with_colors(P::default())
+        Self::with_colors(Color2::default())
     }
 }
 
-impl Style<transform::Id> {
-    /// Default settings.
-    pub fn new() -> Self {
-        Self::default()
-    }
-}
-
-impl<P> Style<P>
+impl<C> Style<C>
 where
-    P: PairTransformer,
+    C: color::Updater,
 {
-    /// Creates the style object from the color transformer.
-    pub fn with_colors(colors: P) -> Self {
+    /// Creates a style with the given colors.
+    pub fn with_colors(colors: C) -> Self {
         Self {
             left_margin: 0,
             right_margin: 0,
@@ -68,6 +58,26 @@ where
             max_height: Coord::max_value(),
             align_numer: 0,
             align_denom: 1,
+            colors,
+        }
+    }
+
+    /// Updates the style to the given color updater.
+    pub fn colors<D>(self, colors: D) -> Style<D>
+    where
+        D: color::Updater,
+    {
+        Style {
+            left_margin: self.left_margin,
+            right_margin: self.right_margin,
+            top_margin: self.top_margin,
+            bottom_margin: self.bottom_margin,
+            min_width: self.min_width,
+            max_width: self.max_width,
+            min_height: self.min_height,
+            max_height: self.max_height,
+            align_numer: self.align_numer,
+            align_denom: self.align_denom,
             colors,
         }
     }
@@ -116,26 +126,6 @@ where
     /// `line\[index\] * align_numer / align_denom == screen\[index\]`
     pub fn align(self, align_numer: Coord, align_denom: Coord) -> Self {
         Self { align_numer, align_denom, ..self }
-    }
-
-    /// Sets foreground and background colors.
-    pub fn colors<Q>(&self, colors: Q) -> Style<Q>
-    where
-        Q: PairTransformer,
-    {
-        Style {
-            left_margin: self.left_margin,
-            right_margin: self.right_margin,
-            top_margin: self.top_margin,
-            bottom_margin: self.bottom_margin,
-            min_width: self.max_width,
-            max_width: self.max_width,
-            min_height: self.min_height,
-            max_height: self.max_height,
-            align_numer: self.align_numer,
-            align_denom: self.align_denom,
-            colors,
-        }
     }
 
     /// Makes a coordinate pair that contains the margin dimensions that are
