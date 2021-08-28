@@ -19,7 +19,12 @@ unicode-segmentation = "^1.6.0"
 lazy_static = "^1.4"
 crossterm = "^0.18"
 futures = "^0.3.7"
-gardiz = { git = "https://github.com/brunoczim/gardiz", optional = true }
+
+# TODO: use crates.io
+[dependencies.gardiz]
+git = "https://github.com/brunoczim/gardiz"
+branch = "dev"
+optional = true
 
 [dependencies.tokio]
 version = "^1.6"
