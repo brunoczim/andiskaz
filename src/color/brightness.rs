@@ -11,14 +11,10 @@ pub struct Brightness {
 
 impl Brightness {
     /// Minimum brightness (i.e. dark).
-    pub fn min() -> Self {
-        Self { level: u16::min_value() }
-    }
+    pub const MIN: Self = Self { level: u16::min_value() };
 
     /// Maximum brightness (i.e. white).
-    pub fn max() -> Self {
-        Self { level: u16::max_value() }
-    }
+    pub const MAX: Self = Self { level: u16::max_value() };
 
     /// Spreads this brightness so it becomes distributed along the range of
     /// brightness, assuming the maximum value it could be is the one given
@@ -53,7 +49,7 @@ impl Brightness {
 
 impl Default for Brightness {
     fn default() -> Self {
-        Self::max()
+        Self::MAX
     }
 }
 
@@ -61,7 +57,13 @@ impl Not for Brightness {
     type Output = Self;
 
     fn not(self) -> Self::Output {
-        Self { level: u16::max_value() - self.level }
+        Self {
+            level: if Self::MAX.level / 3 > self.level {
+                self.level * 3
+            } else {
+                self.level / 3
+            },
+        }
     }
 }
 

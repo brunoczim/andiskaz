@@ -74,13 +74,13 @@ fn updaters() {
 
     let pair = Color2 {
         foreground: RgbColor { red: 0, green: 0, blue: 0 }.into(),
-        background: CmyColor::new(1, 0, 0).into(),
+        background: CmyColor::new(1, 1, 1).into(),
     };
 
     assert_eq!(
         updater.update(pair),
         Color2 {
-            foreground: CmyColor::new(3, 5, 5).into(),
+            foreground: CmyColor::new(2, 3, 5).into(),
             background: CmyColor::new(4, 4, 5).into(),
         }
     );
