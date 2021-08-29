@@ -68,8 +68,9 @@ pub struct Background {
 impl Updater for Background {
     fn update(self, tile: &mut Tile) {
         tile.colors.background = self.color;
-        tile.colors.foreground = self
-            .color
+        tile.colors.foreground = tile
+            .colors
+            .foreground
             .with_approx_brightness(!tile.colors.background.approx_brightness())
     }
 }
