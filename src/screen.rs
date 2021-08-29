@@ -189,13 +189,12 @@ impl<'terminal> Screen<'terminal> {
             .buffer
             .make_index(point)
             .unwrap_or_else(|| out_of_bounds(point, self.buffer.size()));
-        let ret = updater.update(&mut self.buffer.curr[index]);
+        updater.update(&mut self.buffer.curr[index]);
         if self.buffer.old[index] != self.buffer.curr[index] {
             self.buffer.changed.insert(point);
         } else {
             self.buffer.changed.remove(&point);
         }
-        ret
     }
 
     /// Gets the attributes of a given [`Tile`], regardless of being flushed to
