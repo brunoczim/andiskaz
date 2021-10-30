@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/git/checkouts/gardiz-d4ef844b3a2be992/a5adeed/src/bits.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bits.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../gardiz/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `&#x2F;home&#x2F;runner&#x2F;.cargo&#x2F;registry&#x2F;src&#x2F;github.com-1ecc6299db9ec823&#x2F;gardiz-0.1.1&#x2F;src&#x2F;bits.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bits.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../gardiz/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -242,8 +240,7 @@
 <span id="240">240</span>
 <span id="241">241</span>
 <span id="242">242</span>
-</pre><pre class="rust">
-<span class="doccomment">//! A collection of traits related to manipulating integer bits or similar</span>
+</pre><pre class="rust"><code><span class="doccomment">//! A collection of traits related to manipulating integer bits or similar</span>
 <span class="doccomment">//! operations, such as (absolute) distance.</span>
 
 <span class="kw">use</span> <span class="ident">num</span>::{
@@ -261,7 +258,7 @@
     <span class="kw">type</span> <span class="ident">Target</span>;
 
     <span class="doccomment">/// Bit-casts the given (`self`) unsigned number into a signed version.</span>
-    <span class="kw">fn</span> <span class="ident">cast_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Target</span>;
+    <span class="kw">fn</span> <span class="ident">cast_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Target</span>;
 }
 
 <span class="doccomment">/// Trait for bit-casts from 2&#39;s complement signed integers to unsigned</span>
@@ -271,7 +268,7 @@
     <span class="kw">type</span> <span class="ident">Target</span>;
 
     <span class="doccomment">/// Bit-casts the given (`self`) signed number into an unsigned version.</span>
-    <span class="kw">fn</span> <span class="ident">cast_unsigned</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Target</span>;
+    <span class="kw">fn</span> <span class="ident">cast_unsigned</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Target</span>;
 }
 
 <span class="macro">macro_rules!</span> <span class="ident">cast_signedness</span> {
@@ -279,7 +276,7 @@
         <span class="kw">impl</span> <span class="ident">CastSigned</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">utype</span> {
             <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">itype</span>;
 
-            <span class="kw">fn</span> <span class="ident">cast_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Target</span> {
+            <span class="kw">fn</span> <span class="ident">cast_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Target</span> {
                 <span class="kw-2">*</span><span class="self">self</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">itype</span>
             }
         }
@@ -287,7 +284,7 @@
         <span class="kw">impl</span> <span class="ident">CastUnsigned</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">itype</span> {
             <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">utype</span>;
 
-            <span class="kw">fn</span> <span class="ident">cast_unsigned</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Target</span> {
+            <span class="kw">fn</span> <span class="ident">cast_unsigned</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Target</span> {
                 <span class="kw-2">*</span><span class="self">self</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">utype</span>
             }
         }
@@ -309,7 +306,7 @@
 
     <span class="doccomment">/// Computes the absolute (without sign) distance between the given two</span>
     <span class="doccomment">/// numbers.</span>
-    <span class="kw">fn</span> <span class="ident">distance</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="ident">Rhs</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Output</span>;
+    <span class="kw">fn</span> <span class="ident">distance</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="ident">Rhs</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span>;
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> <span class="ident">Distance</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">A</span>
@@ -318,7 +315,7 @@
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="ident">A::Output</span>;
 
-    <span class="kw">fn</span> <span class="ident">distance</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Output</span> {
+    <span class="kw">fn</span> <span class="ident">distance</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span> {
         <span class="kw">if</span> <span class="self">self</span> <span class="op">&gt;</span> <span class="ident">other</span> {
             <span class="self">self</span> <span class="op">-</span> <span class="ident">other</span>
         } <span class="kw">else</span> {
@@ -346,7 +343,7 @@
     <span class="ident">N</span>: <span class="ident">Unsigned</span> <span class="op">+</span> <span class="ident">Bounded</span>,
 {
     <span class="kw">fn</span> <span class="ident">half_excess</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::max_value</span>() <span class="op">/</span> (<span class="self">Self</span><span class="ident">::one</span>() <span class="op">+</span> <span class="self">Self</span><span class="ident">::one</span>()) <span class="op">+</span> <span class="self">Self</span><span class="ident">::one</span>()
+        <span class="ident"><span class="self">Self</span>::max_value</span>() <span class="op">/</span> (<span class="ident"><span class="self">Self</span>::one</span>() <span class="op">+</span> <span class="ident"><span class="self">Self</span>::one</span>()) <span class="op">+</span> <span class="ident"><span class="self">Self</span>::one</span>()
     }
 }
 
@@ -360,16 +357,16 @@
 {
     <span class="doccomment">/// Performs a conversion from an &quot;excess of N&quot; number to a 2&#39;s complement</span>
     <span class="doccomment">/// number. The input is actually unsigned.</span>
-    <span class="kw">fn</span> <span class="ident">excess_to_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">excess</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Target</span>;
+    <span class="kw">fn</span> <span class="ident">excess_to_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">excess</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Target</span>;
 
     <span class="doccomment">/// Performs a conversion from an &quot;excess of N&quot; number to a 2&#39;s complement</span>
     <span class="doccomment">/// number, where `N` is half the maximum value of the unsigned input</span>
     <span class="doccomment">/// number.</span>
-    <span class="kw">fn</span> <span class="ident">half_exc_to_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Target</span>
+    <span class="kw">fn</span> <span class="ident">half_exc_to_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Target</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">HalfExcess</span>,
     {
-        <span class="self">self</span>.<span class="ident">excess_to_signed</span>(<span class="kw-2">&amp;</span><span class="self">Self</span><span class="ident">::half_excess</span>())
+        <span class="self">self</span>.<span class="ident">excess_to_signed</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::half_excess</span>())
     }
 }
 
@@ -377,7 +374,7 @@
 <span class="kw">where</span>
     <span class="ident">N</span>: <span class="ident">CastSigned</span> <span class="op">+</span> <span class="ident">WrappingSub</span>,
 {
-    <span class="kw">fn</span> <span class="ident">excess_to_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">excess</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Target</span> {
+    <span class="kw">fn</span> <span class="ident">excess_to_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">excess</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Target</span> {
         <span class="self">self</span>.<span class="ident">wrapping_sub</span>(<span class="ident">excess</span>).<span class="ident">cast_signed</span>()
     }
 }
@@ -392,16 +389,16 @@
 {
     <span class="doccomment">/// Performs a conversion from a 2&#39;s complement number into an &quot;excess of N&quot;</span>
     <span class="doccomment">/// number. The input is actually signed.</span>
-    <span class="kw">fn</span> <span class="ident">signed_to_excess</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">excess</span>: <span class="kw-2">&amp;</span><span class="self">Self</span><span class="ident">::Target</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Target</span>;
+    <span class="kw">fn</span> <span class="ident">signed_to_excess</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">excess</span>: <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Target</span>;
 
     <span class="doccomment">/// Performs a conversion from a 2&#39;s complement number into an &quot;excess of N&quot;</span>
     <span class="doccomment">/// number, where `N` is half the maximum value of the unsigned input</span>
     <span class="doccomment">/// number.</span>
-    <span class="kw">fn</span> <span class="ident">signed_to_half_exc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Target</span>
+    <span class="kw">fn</span> <span class="ident">signed_to_half_exc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Target</span>
     <span class="kw">where</span>
-        <span class="self">Self</span><span class="ident">::Target</span>: <span class="ident">HalfExcess</span>,
+        <span class="ident"><span class="self">Self</span>::Target</span>: <span class="ident">HalfExcess</span>,
     {
-        <span class="self">self</span>.<span class="ident">signed_to_excess</span>(<span class="kw-2">&amp;</span><span class="self">Self</span><span class="ident">::Target::half_excess</span>())
+        <span class="self">self</span>.<span class="ident">signed_to_excess</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target::half_excess</span>())
     }
 }
 
@@ -410,7 +407,7 @@
     <span class="ident">N</span>: <span class="ident">CastUnsigned</span>,
     <span class="ident">N::Target</span>: <span class="ident">WrappingAdd</span>,
 {
-    <span class="kw">fn</span> <span class="ident">signed_to_excess</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">excess</span>: <span class="kw-2">&amp;</span><span class="self">Self</span><span class="ident">::Target</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Target</span> {
+    <span class="kw">fn</span> <span class="ident">signed_to_excess</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">excess</span>: <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Target</span> {
         <span class="self">self</span>.<span class="ident">cast_unsigned</span>().<span class="ident">wrapping_add</span>(<span class="ident">excess</span>)
     }
 }
@@ -485,5 +482,7 @@
         <span class="macro">assert_eq!</span>(<span class="number">128u8</span>.<span class="ident">cast_signed</span>(), <span class="op">-</span><span class="number">128</span>);
     }
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="gardiz" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>
+</code></pre></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="gardiz" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</body></html>

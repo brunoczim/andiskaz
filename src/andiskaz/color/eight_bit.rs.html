@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/color/eight_bit.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>eight_bit.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../andiskaz/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img src="../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src&#x2F;color&#x2F;eight_bit.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>eight_bit.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../andiskaz/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -357,10 +355,25 @@
 <span id="355">355</span>
 <span id="356">356</span>
 <span id="357">357</span>
-</pre><pre class="rust">
-<span class="doccomment">//! This module provides 8-bit color utilies.</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+</pre><pre class="rust"><code><span class="doccomment">//! This module provides 8-bit color utilies.</span>
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::color</span>::{
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::color</span>::{
     <span class="ident">brightness</span>::{<span class="ident">Channel</span>, <span class="ident">ChannelVector</span>},
     <span class="ident">ApproxBrightness</span>,
     <span class="ident">BadCmyColor</span>,
@@ -369,11 +382,11 @@
     <span class="ident">Brightness</span>,
 };
 <span class="kw">use</span> <span class="ident">crossterm::style::Color</span> <span class="kw">as</span> <span class="ident">CrosstermColor</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">ops::Not</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::TryFrom</span>, <span class="ident">fmt</span>, <span class="ident">ops::Not</span>};
 
 <span class="doccomment">/// A CMY (Cyan-Magenta-Yellow) color. The lower one of its component is, the</span>
 <span class="doccomment">/// more it subtracts.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Hash</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CmyColor</span> {
     <span class="doccomment">/// `(0 .. 216)` Color code.</span>
     <span class="ident">code</span>: <span class="ident">u8</span>,
@@ -390,11 +403,11 @@
         <span class="ident">magenta</span>: <span class="ident">u8</span>,
         <span class="ident">yellow</span>: <span class="ident">u8</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">BadCmyColor</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">cyan</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">|</span><span class="op">|</span> <span class="ident">magenta</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">|</span><span class="op">|</span> <span class="ident">yellow</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">Self</span><span class="ident">::BASE</span> {
+        <span class="kw">if</span> <span class="ident">cyan</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">|</span><span class="op">|</span> <span class="ident">magenta</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">|</span><span class="op">|</span> <span class="ident">yellow</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident"><span class="self">Self</span>::BASE</span> {
             <span class="prelude-val">Err</span>(<span class="ident">BadCmyColor</span> { <span class="ident">cyan</span>, <span class="ident">magenta</span>, <span class="ident">yellow</span> })
         } <span class="kw">else</span> {
             <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-                <span class="ident">code</span>: <span class="ident">cyan</span> <span class="op">*</span> <span class="self">Self</span><span class="ident">::BASE</span>.<span class="ident">pow</span>(<span class="number">2</span>) <span class="op">+</span> <span class="ident">magenta</span> <span class="op">*</span> <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">+</span> <span class="ident">yellow</span>,
+                <span class="ident">code</span>: <span class="ident">cyan</span> <span class="op">*</span> <span class="ident"><span class="self">Self</span>::BASE</span>.<span class="ident">pow</span>(<span class="number">2</span>) <span class="op">+</span> <span class="ident">magenta</span> <span class="op">*</span> <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">+</span> <span class="ident">yellow</span>,
             })
         }
     }
@@ -404,22 +417,22 @@
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">/// Panics if any of the components is `&gt;= `[`Self::BASE`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cyan</span>: <span class="ident">u8</span>, <span class="ident">magenta</span>: <span class="ident">u8</span>, <span class="ident">yellow</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::try_new</span>(<span class="ident">cyan</span>, <span class="ident">magenta</span>, <span class="ident">yellow</span>).<span class="ident">expect</span>(<span class="string">&quot;Bad Cmy Color&quot;</span>)
+        <span class="ident"><span class="self">Self</span>::try_new</span>(<span class="ident">cyan</span>, <span class="ident">magenta</span>, <span class="ident">yellow</span>).<span class="ident">expect</span>(<span class="string">&quot;Bad Cmy Color&quot;</span>)
     }
 
     <span class="doccomment">/// The level of cyan component.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cyan</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
-        <span class="self">self</span>.<span class="ident">code</span> <span class="op">/</span> <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">/</span> <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">%</span> <span class="self">Self</span><span class="ident">::BASE</span>
+        <span class="self">self</span>.<span class="ident">code</span> <span class="op">/</span> <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">/</span> <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">%</span> <span class="ident"><span class="self">Self</span>::BASE</span>
     }
 
     <span class="doccomment">/// The level of magenta component.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">magenta</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
-        <span class="self">self</span>.<span class="ident">code</span> <span class="op">/</span> <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">%</span> <span class="self">Self</span><span class="ident">::BASE</span>
+        <span class="self">self</span>.<span class="ident">code</span> <span class="op">/</span> <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">%</span> <span class="ident"><span class="self">Self</span>::BASE</span>
     }
 
     <span class="doccomment">/// The level of yellow component.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">yellow</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
-        <span class="self">self</span>.<span class="ident">code</span> <span class="op">%</span> <span class="self">Self</span><span class="ident">::BASE</span>
+        <span class="self">self</span>.<span class="ident">code</span> <span class="op">%</span> <span class="ident"><span class="self">Self</span>::BASE</span>
     }
 
     <span class="doccomment">/// The resulting code of the color.</span>
@@ -432,7 +445,7 @@
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">/// Panics if the component is `&gt;= `[`Self::BASE`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_cyan</span>(<span class="self">self</span>, <span class="ident">cyan</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">cyan</span>, <span class="self">self</span>.<span class="ident">magenta</span>(), <span class="self">self</span>.<span class="ident">yellow</span>())
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">cyan</span>, <span class="self">self</span>.<span class="ident">magenta</span>(), <span class="self">self</span>.<span class="ident">yellow</span>())
     }
 
     <span class="doccomment">/// Sets the magenta component.</span>
@@ -440,7 +453,7 @@
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">/// Panics if the component is `&gt;= `[`Self::BASE`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_magenta</span>(<span class="self">self</span>, <span class="ident">magenta</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="self">self</span>.<span class="ident">cyan</span>(), <span class="ident">magenta</span>, <span class="self">self</span>.<span class="ident">yellow</span>())
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="self">self</span>.<span class="ident">cyan</span>(), <span class="ident">magenta</span>, <span class="self">self</span>.<span class="ident">yellow</span>())
     }
 
     <span class="doccomment">/// Sets the yellow component.</span>
@@ -448,12 +461,12 @@
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">/// Panics if the component is `&gt;= `[`Self::BASE`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_yellow</span>(<span class="self">self</span>, <span class="ident">yellow</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="self">self</span>.<span class="ident">cyan</span>(), <span class="self">self</span>.<span class="ident">magenta</span>(), <span class="ident">yellow</span>)
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="self">self</span>.<span class="ident">cyan</span>(), <span class="self">self</span>.<span class="ident">magenta</span>(), <span class="ident">yellow</span>)
     }
 
     <span class="doccomment">/// Creates a CMY color from the given channels.</span>
     <span class="kw">fn</span> <span class="ident">from_channels</span>(<span class="ident">channels</span>: [<span class="ident">Channel</span>; <span class="number">3</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="ident">channels</span>[<span class="number">0</span>].<span class="ident">value</span>(), <span class="ident">channels</span>[<span class="number">1</span>].<span class="ident">value</span>(), <span class="ident">channels</span>[<span class="number">2</span>].<span class="ident">value</span>())
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">channels</span>[<span class="number">0</span>].<span class="ident">value</span>(), <span class="ident">channels</span>[<span class="number">1</span>].<span class="ident">value</span>(), <span class="ident">channels</span>[<span class="number">2</span>].<span class="ident">value</span>())
     }
 
     <span class="doccomment">/// Returns a CMY color&#39;s channels.</span>
@@ -466,14 +479,24 @@
     }
 }
 
+<span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">CmyColor</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmtr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+        <span class="ident">fmtr</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;CmyColor&quot;</span>)
+            .<span class="ident">field</span>(<span class="string">&quot;cyan&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cyan</span>())
+            .<span class="ident">field</span>(<span class="string">&quot;magenta&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">magenta</span>())
+            .<span class="ident">field</span>(<span class="string">&quot;yellow&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">yellow</span>())
+            .<span class="ident">finish</span>()
+    }
+}
+
 <span class="kw">impl</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">CmyColor</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
 
-    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Output</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(
-            <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">cyan</span>(),
-            <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">magenta</span>(),
-            <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">yellow</span>(),
+    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span> {
+        <span class="ident"><span class="self">Self</span>::new</span>(
+            <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">cyan</span>(),
+            <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">magenta</span>(),
+            <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">yellow</span>(),
         )
     }
 }
@@ -481,15 +504,15 @@
 <span class="kw">impl</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">CmyColor</span> {
     <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Brightness</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">channels</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">channels</span>();
-        <span class="kw">let</span> <span class="ident">vector</span> <span class="op">=</span> <span class="ident">ChannelVector::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">channels</span>, <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">-</span> <span class="number">1</span>);
+        <span class="kw">let</span> <span class="ident">vector</span> <span class="op">=</span> <span class="ident">ChannelVector::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">channels</span>, <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">-</span> <span class="number">1</span>);
         <span class="ident">vector</span>.<span class="ident">approx_brightness</span>()
     }
 
     <span class="kw">fn</span> <span class="ident">set_approx_brightness</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">brightness</span>: <span class="ident">Brightness</span>) {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">channels</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">channels</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vector</span> <span class="op">=</span> <span class="ident">ChannelVector::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">channels</span>, <span class="self">Self</span><span class="ident">::BASE</span> <span class="op">-</span> <span class="number">1</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vector</span> <span class="op">=</span> <span class="ident">ChannelVector::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">channels</span>, <span class="ident"><span class="self">Self</span>::BASE</span> <span class="op">-</span> <span class="number">1</span>);
         <span class="ident">vector</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>);
-        <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="self">Self</span><span class="ident">::from_channels</span>(<span class="ident">channels</span>);
+        <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::from_channels</span>(<span class="ident">channels</span>);
     }
 }
 
@@ -511,7 +534,7 @@
     <span class="doccomment">/// Creates a new gray-scale color given its brightness. Returns an error if</span>
     <span class="doccomment">/// `brightness &gt; MAX`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_new</span>(<span class="ident">brightness</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">BadGrayColor</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">brightness</span> <span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::MAX</span>.<span class="ident">brightness</span>() {
+        <span class="kw">if</span> <span class="ident">brightness</span> <span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::MAX</span>.<span class="ident">brightness</span>() {
             <span class="prelude-val">Err</span>(<span class="ident">BadGrayColor</span> { <span class="ident">brightness</span> })
         } <span class="kw">else</span> {
             <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">brightness</span> })
@@ -523,7 +546,7 @@
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">/// Panics if `brightness &gt; MAX`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">brightness</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::try_new</span>(<span class="ident">brightness</span>).<span class="ident">expect</span>(<span class="string">&quot;Bad gray color&quot;</span>)
+        <span class="ident"><span class="self">Self</span>::try_new</span>(<span class="ident">brightness</span>).<span class="ident">expect</span>(<span class="string">&quot;Bad gray color&quot;</span>)
     }
 
     <span class="doccomment">/// Returns the brightness of this color.</span>
@@ -535,19 +558,19 @@
 <span class="kw">impl</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">GrayColor</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
 
-    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Output</span> {
-        <span class="self">Self</span><span class="ident">::new</span>(<span class="self">Self</span><span class="ident">::MAX</span>.<span class="ident">brightness</span>() <span class="op">+</span> <span class="number">1</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">brightness</span>)
+    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span> {
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident"><span class="self">Self</span>::MAX</span>.<span class="ident">brightness</span>() <span class="op">+</span> <span class="number">1</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">brightness</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">GrayColor</span> {
     <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Brightness</span> {
         <span class="kw">let</span> <span class="ident">brightness</span> <span class="op">=</span> <span class="ident">Brightness</span> { <span class="ident">level</span>: <span class="ident">u16::from</span>(<span class="self">self</span>.<span class="ident">brightness</span>) };
-        <span class="ident">brightness</span>.<span class="ident">spread</span>(<span class="ident">u16::from</span>(<span class="self">Self</span><span class="ident">::MAX</span>.<span class="ident">brightness</span>))
+        <span class="ident">brightness</span>.<span class="ident">spread</span>(<span class="ident">u16::from</span>(<span class="ident"><span class="self">Self</span>::MAX</span>.<span class="ident">brightness</span>))
     }
 
     <span class="kw">fn</span> <span class="ident">set_approx_brightness</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">brightness</span>: <span class="ident">Brightness</span>) {
-        <span class="kw">let</span> <span class="ident">compressed</span> <span class="op">=</span> <span class="ident">brightness</span>.<span class="ident">compress</span>(<span class="ident">u16::from</span>(<span class="self">Self</span><span class="ident">::MAX</span>.<span class="ident">brightness</span>));
+        <span class="kw">let</span> <span class="ident">compressed</span> <span class="op">=</span> <span class="ident">brightness</span>.<span class="ident">compress</span>(<span class="ident">u16::from</span>(<span class="ident"><span class="self">Self</span>::MAX</span>.<span class="ident">brightness</span>));
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">u8::try_from</span>(<span class="ident">compressed</span>.<span class="ident">level</span>);
         <span class="self">self</span>.<span class="ident">brightness</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">expect</span>(<span class="string">&quot;Color brightness bug&quot;</span>);
     }
@@ -555,7 +578,7 @@
 
 <span class="doccomment">/// The kind of a color. `enum` representation of an 8-bit color.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Color8Kind</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Color8BitKind</span> {
     <span class="doccomment">/// 16 Basic colors.</span>
     <span class="ident">Basic</span>(<span class="ident">BasicColor</span>),
     <span class="doccomment">/// 216 CMY colors.</span>
@@ -564,72 +587,72 @@
     <span class="ident">Gray</span>(<span class="ident">GrayColor</span>),
 }
 
-<span class="kw">impl</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">Color8Kind</span> {
+<span class="kw">impl</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">Color8BitKind</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
 
-    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Output</span> {
+    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Color8Kind::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color8Kind::Basic</span>(<span class="op">!</span><span class="ident">color</span>),
-            <span class="ident">Color8Kind::Cmy</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color8Kind::Cmy</span>(<span class="op">!</span><span class="ident">color</span>),
-            <span class="ident">Color8Kind::Gray</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color8Kind::Gray</span>(<span class="op">!</span><span class="ident">color</span>),
+            <span class="ident">Color8BitKind::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color8BitKind::Basic</span>(<span class="op">!</span><span class="ident">color</span>),
+            <span class="ident">Color8BitKind::Cmy</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color8BitKind::Cmy</span>(<span class="op">!</span><span class="ident">color</span>),
+            <span class="ident">Color8BitKind::Gray</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color8BitKind::Gray</span>(<span class="op">!</span><span class="ident">color</span>),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BasicColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8Kind</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BasicColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8BitKind</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">BasicColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Color8Kind::Basic</span>(<span class="ident">color</span>)
+        <span class="ident">Color8BitKind::Basic</span>(<span class="ident">color</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">CmyColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8Kind</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">CmyColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8BitKind</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">CmyColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Color8Kind::Cmy</span>(<span class="ident">color</span>)
+        <span class="ident">Color8BitKind::Cmy</span>(<span class="ident">color</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">GrayColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8Kind</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">GrayColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8BitKind</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">GrayColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Color8Kind::Gray</span>(<span class="ident">color</span>)
+        <span class="ident">Color8BitKind::Gray</span>(<span class="ident">color</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Color8</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8Kind</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">Color8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Color8Bit</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8BitKind</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">Color8Bit</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">color</span>.<span class="ident">kind</span>()
     }
 }
 
-<span class="kw">impl</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">Color8Kind</span> {
+<span class="kw">impl</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">Color8BitKind</span> {
     <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Brightness</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Color8Kind::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
-            <span class="ident">Color8Kind::Cmy</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
-            <span class="ident">Color8Kind::Gray</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
+            <span class="ident">Color8BitKind::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
+            <span class="ident">Color8BitKind::Cmy</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
+            <span class="ident">Color8BitKind::Gray</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
         }
     }
 
     <span class="kw">fn</span> <span class="ident">set_approx_brightness</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">brightness</span>: <span class="ident">Brightness</span>) {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Color8Kind::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
-            <span class="ident">Color8Kind::Cmy</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
-            <span class="ident">Color8Kind::Gray</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
+            <span class="ident">Color8BitKind::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
+            <span class="ident">Color8BitKind::Cmy</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
+            <span class="ident">Color8BitKind::Gray</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
         }
     }
 }
 
 <span class="doccomment">/// An 8-bit encoded color for the terminal.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Color8</span> {
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Hash</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Color8Bit</span> {
     <span class="ident">code</span>: <span class="ident">u8</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">Color8</span> {
+<span class="kw">impl</span> <span class="ident">Color8Bit</span> {
     <span class="doccomment">/// Size of basic colors.</span>
     <span class="kw">const</span> <span class="ident">BASIC_SIZE</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">16</span>;
     <span class="doccomment">/// Size of basic colors + CMY colors.</span>
     <span class="kw">const</span> <span class="ident">BASIC_CMY_SIZE</span>: <span class="ident">u8</span> <span class="op">=</span>
-        <span class="self">Self</span><span class="ident">::BASIC_SIZE</span> <span class="op">+</span> <span class="ident">CmyColor::BASE</span> <span class="op">*</span> <span class="ident">CmyColor::BASE</span> <span class="op">*</span> <span class="ident">CmyColor::BASE</span>;
+        <span class="ident"><span class="self">Self</span>::BASIC_SIZE</span> <span class="op">+</span> <span class="ident">CmyColor::BASE</span> <span class="op">*</span> <span class="ident">CmyColor::BASE</span> <span class="op">*</span> <span class="ident">CmyColor::BASE</span>;
 
     <span class="doccomment">/// Creates a color that is basic.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">basic</span>(<span class="ident">color</span>: <span class="ident">BasicColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
@@ -638,12 +661,12 @@
 
     <span class="doccomment">/// Creates a color that is CMY.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cmy</span>(<span class="ident">color</span>: <span class="ident">CmyColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">code</span>: <span class="ident">color</span>.<span class="ident">code</span>() <span class="op">+</span> <span class="self">Self</span><span class="ident">::BASIC_SIZE</span> }
+        <span class="self">Self</span> { <span class="ident">code</span>: <span class="ident">color</span>.<span class="ident">code</span>() <span class="op">+</span> <span class="ident"><span class="self">Self</span>::BASIC_SIZE</span> }
     }
 
     <span class="doccomment">/// Creates a color that is gray-scale.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">gray</span>(<span class="ident">color</span>: <span class="ident">GrayColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">code</span>: <span class="ident">color</span>.<span class="ident">brightness</span>() <span class="op">+</span> <span class="self">Self</span><span class="ident">::BASIC_CMY_SIZE</span> }
+        <span class="self">Self</span> { <span class="ident">code</span>: <span class="ident">color</span>.<span class="ident">brightness</span>() <span class="op">+</span> <span class="ident"><span class="self">Self</span>::BASIC_CMY_SIZE</span> }
     }
 
     <span class="doccomment">/// Returns the color code.</span>
@@ -652,14 +675,14 @@
     }
 
     <span class="doccomment">/// Converts to en `enum` representation.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kind</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Color8Kind</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kind</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Color8BitKind</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">code</span> <span class="op">&lt;</span> <span class="number">16</span> {
-            <span class="ident">Color8Kind::Basic</span>(<span class="ident">BasicColor::try_from</span>(<span class="self">self</span>.<span class="ident">code</span>).<span class="ident">unwrap</span>())
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">code</span> <span class="op">&lt;</span> <span class="self">Self</span><span class="ident">::BASIC_CMY_SIZE</span> {
-            <span class="ident">Color8Kind::Cmy</span>(<span class="ident">CmyColor</span> { <span class="ident">code</span>: <span class="self">self</span>.<span class="ident">code</span> <span class="op">-</span> <span class="self">Self</span><span class="ident">::BASIC_SIZE</span> })
+            <span class="ident">Color8BitKind::Basic</span>(<span class="ident">BasicColor::try_from</span>(<span class="self">self</span>.<span class="ident">code</span>).<span class="ident">unwrap</span>())
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">code</span> <span class="op">&lt;</span> <span class="ident"><span class="self">Self</span>::BASIC_CMY_SIZE</span> {
+            <span class="ident">Color8BitKind::Cmy</span>(<span class="ident">CmyColor</span> { <span class="ident">code</span>: <span class="self">self</span>.<span class="ident">code</span> <span class="op">-</span> <span class="ident"><span class="self">Self</span>::BASIC_SIZE</span> })
         } <span class="kw">else</span> {
-            <span class="ident">Color8Kind::Gray</span>(<span class="ident">GrayColor</span> {
-                <span class="ident">brightness</span>: <span class="self">self</span>.<span class="ident">code</span> <span class="op">-</span> <span class="self">Self</span><span class="ident">::BASIC_CMY_SIZE</span>,
+            <span class="ident">Color8BitKind::Gray</span>(<span class="ident">GrayColor</span> {
+                <span class="ident">brightness</span>: <span class="self">self</span>.<span class="ident">code</span> <span class="op">-</span> <span class="ident"><span class="self">Self</span>::BASIC_CMY_SIZE</span>,
             })
         }
     }
@@ -670,50 +693,58 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">Color8</span> {
+<span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">Color8Bit</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmtr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+        <span class="ident">fmtr</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Color8Bit&quot;</span>).<span class="ident">field</span>(<span class="string">&quot;kind&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">kind</span>()).<span class="ident">finish</span>()
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">Color8Bit</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
 
-    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Output</span> {
-        <span class="self">Self</span><span class="ident">::from</span>(<span class="op">!</span><span class="self">self</span>.<span class="ident">kind</span>())
+    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span> {
+        <span class="ident"><span class="self">Self</span>::from</span>(<span class="op">!</span><span class="self">self</span>.<span class="ident">kind</span>())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BasicColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BasicColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8Bit</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">BasicColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::basic</span>(<span class="ident">color</span>)
+        <span class="ident"><span class="self">Self</span>::basic</span>(<span class="ident">color</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">CmyColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">CmyColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8Bit</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">CmyColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::cmy</span>(<span class="ident">color</span>)
+        <span class="ident"><span class="self">Self</span>::cmy</span>(<span class="ident">color</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">GrayColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">GrayColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8Bit</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">GrayColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span><span class="ident">::gray</span>(<span class="ident">color</span>)
+        <span class="ident"><span class="self">Self</span>::gray</span>(<span class="ident">color</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Color8Kind</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">kind</span>: <span class="ident">Color8Kind</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Color8BitKind</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color8Bit</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">kind</span>: <span class="ident">Color8BitKind</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">kind</span> {
-            <span class="ident">Color8Kind::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::from</span>(<span class="ident">color</span>),
-            <span class="ident">Color8Kind::Cmy</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::from</span>(<span class="ident">color</span>),
-            <span class="ident">Color8Kind::Gray</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::from</span>(<span class="ident">color</span>),
+            <span class="ident">Color8BitKind::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">color</span>),
+            <span class="ident">Color8BitKind::Cmy</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">color</span>),
+            <span class="ident">Color8BitKind::Gray</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">color</span>),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">Color8</span> {
+<span class="kw">impl</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">Color8Bit</span> {
     <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Brightness</span> {
         <span class="self">self</span>.<span class="ident">kind</span>().<span class="ident">approx_brightness</span>()
     }
 
     <span class="kw">fn</span> <span class="ident">set_approx_brightness</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">brightness</span>: <span class="ident">Brightness</span>) {
-        <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="self">Self</span><span class="ident">::from</span>(<span class="self">self</span>.<span class="ident">kind</span>().<span class="ident">with_approx_brightness</span>(<span class="ident">brightness</span>));
+        <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::from</span>(<span class="self">self</span>.<span class="ident">kind</span>().<span class="ident">with_approx_brightness</span>(<span class="ident">brightness</span>));
     }
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="andiskaz" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script></body></html>
+</code></pre></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="andiskaz" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
+    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script>
+</body></html>
