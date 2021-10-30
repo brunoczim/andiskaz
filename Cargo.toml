@@ -22,8 +22,7 @@ futures = "^0.3.7"
 
 # TODO: use crates.io
 [dependencies.gardiz]
-git = "https://github.com/brunoczim/gardiz"
-branch = "dev"
+version = "^0.1.1"
 optional = true
 
 [dependencies.tokio]
