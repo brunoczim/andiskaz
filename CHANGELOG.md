@@ -1,5 +1,7 @@
 # 0.2.0
 - Optional depedency on `gardiz` for coordinates.
+- Better color brightness adpating/contrasting.
+- Better API for color transformation.
 - Fixed a bug on initial screen size check.
 - UI scenes utilities:
     - Info dialog showing a message waiting for user.
