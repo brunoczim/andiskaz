@@ -11,7 +11,7 @@ keywords = ["terminal", "tui", "double-buffering"]
 categories = ["game-development", "asynchronous"]
 
 [features]
-default = ["plane"]
+default = []
 plane = ["gardiz"]
 
 [dependencies]
