@@ -3,7 +3,7 @@
 use crate::{
     color::{BasicColor, Color, Color2},
     coord::Coord,
-    error::ServicesOff,
+    error::Error,
     event::{Event, Key, KeyEvent},
     screen::Screen,
     string::TermString,
@@ -49,7 +49,7 @@ impl InfoDialog {
     }
 
     /// Runs this dialog showing it to the user, awaiting OK!
-    pub async fn run(&self, term: &mut Terminal) -> Result<(), ServicesOff> {
+    pub async fn run(&self, term: &mut Terminal) -> Result<(), Error> {
         self.render(term.lock_now().await?.screen());
 
         loop {

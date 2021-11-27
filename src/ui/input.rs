@@ -4,7 +4,7 @@ use crate::{
     color::{BasicColor, Color, Color2},
     coord,
     coord::{Coord, Vec2},
-    error::{Error, ServicesOff},
+    error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
     screen::Screen,
     string::TermString,
@@ -301,10 +301,7 @@ where
     }
 
     /// Initializes a run over this selector.
-    async fn init_run(
-        &mut self,
-        term: &mut Terminal,
-    ) -> Result<(), ServicesOff> {
+    async fn init_run(&mut self, term: &mut Terminal) -> Result<(), Error> {
         let mut session = term.lock_now().await?;
         self.selected = InputDialogItem::Ok;
         self.buffer = self.dialog.buffer.chars().collect::<Vec<_>>();
