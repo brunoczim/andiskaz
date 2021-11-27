@@ -28,6 +28,18 @@ jobs:
           command: check
           args: --features plane --all-targets
 
+      - name: Run cargo check with clipboard
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --features clipboard --all-targets
+
+      - name: Run cargo check with all features
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --all-features --all-targets
+
   test:
     name: Test Suite
     runs-on: ubuntu-latest
@@ -52,6 +64,18 @@ jobs:
         with:
           command: test
           args: --features plane
+
+      - name: Run cargo test with clipboard
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --features clipboard
+
+      - name: Run cargo test with all features
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-features
 
   lints:
     name: Lints
