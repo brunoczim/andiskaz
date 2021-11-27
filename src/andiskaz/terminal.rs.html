@@ -766,7 +766,7 @@
         <span class="kw">let</span> <span class="ident">screen</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">screen</span>().<span class="ident">lock</span>().<span class="kw">await</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">TerminalGuard</span> {
             <span class="ident">screen</span>,
-            <span class="ident">guard</span>,
+            <span class="ident">_guard</span>: <span class="ident">guard</span>,
             <span class="ident">event</span>,
             <span class="ident">curr_epoch</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">curr_epoch</span>,
         })
@@ -809,7 +809,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TerminalGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Synchronization lock for application (exclusive).</span>
-    <span class="ident">guard</span>: <span class="ident">AppSyncGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>,
+    <span class="ident">_guard</span>: <span class="ident">AppSyncGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The result of reading the event channel (event epoch, event itself).</span>
     <span class="ident">event</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">event::Epoch</span>, <span class="ident">Event</span>)<span class="op">&gt;</span>,
     <span class="doccomment">/// Reference to the current epoch so we can update it when the event is</span>
@@ -888,7 +888,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">service_guard</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="lifetime">&#39;this</span> <span class="self">self</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServiceSyncGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">ServiceSyncGuard</span> { <span class="ident">inner</span>: <span class="self">self</span>.<span class="ident">sync</span>.<span class="ident">read</span>().<span class="kw">await</span> };
+        <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">ServiceSyncGuard</span> { <span class="ident">_inner</span>: <span class="self">self</span>.<span class="ident">sync</span>.<span class="ident">read</span>().<span class="kw">await</span> };
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_connected</span>() {
             <span class="prelude-val">Ok</span>(<span class="ident">guard</span>)
         } <span class="kw">else</span> {
@@ -901,7 +901,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">app_guard</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="lifetime">&#39;this</span> <span class="self">self</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">AppSyncGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">AppSyncGuard</span> { <span class="ident">inner</span>: <span class="self">self</span>.<span class="ident">sync</span>.<span class="ident">write</span>().<span class="kw">await</span> };
+        <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">AppSyncGuard</span> { <span class="ident">_inner</span>: <span class="self">self</span>.<span class="ident">sync</span>.<span class="ident">write</span>().<span class="kw">await</span> };
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_connected</span>() {
             <span class="prelude-val">Ok</span>(<span class="ident">guard</span>)
         } <span class="kw">else</span> {
@@ -930,14 +930,14 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">ServiceSyncGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;shared</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Inner lock guard.</span>
-    <span class="ident">inner</span>: <span class="ident">RwLockReadGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;shared</span>, ()<span class="op">&gt;</span>,
+    <span class="ident">_inner</span>: <span class="ident">RwLockReadGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;shared</span>, ()<span class="op">&gt;</span>,
 }
 
 <span class="doccomment">/// Synchronization guard acquired by an application handle (exclusive).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">AppSyncGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;shared</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Inner lock guard.</span>
-    <span class="ident">inner</span>: <span class="ident">RwLockWriteGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;shared</span>, ()<span class="op">&gt;</span>,
+    <span class="ident">_inner</span>: <span class="ident">RwLockWriteGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;shared</span>, ()<span class="op">&gt;</span>,
 }
 
 <span class="doccomment">/// Connection guard for shared data. Disconnects when dropped.</span>

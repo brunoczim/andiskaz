@@ -88,6 +88,9 @@
 <span id="88">88</span>
 <span id="89">89</span>
 <span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
 </pre><pre class="rust"><code><span class="doccomment">//! This crate provides basic utilities for writing applications with Terminal</span>
 <span class="doccomment">//! User Interface (TUI). It provides an event listener, and it provides a</span>
 <span class="doccomment">//! handle to a double buffered screen renderer.</span>
@@ -176,6 +179,9 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">event</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">terminal</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ui</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clipboard&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">clipboard</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::stdio::emergency_restore</span>;
 </code></pre></div>

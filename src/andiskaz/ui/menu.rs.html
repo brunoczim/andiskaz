@@ -475,12 +475,6 @@
 <span id="475">475</span>
 <span id="476">476</span>
 <span id="477">477</span>
-<span id="478">478</span>
-<span id="479">479</span>
-<span id="480">480</span>
-<span id="481">481</span>
-<span id="482">482</span>
-<span id="483">483</span>
 </pre><pre class="rust"><code><span class="doccomment">//! This module exports items related to menus in the UI, such as more extensive</span>
 <span class="doccomment">//! menus, or just dialogs for OK/CANCEL.</span>
 
@@ -488,7 +482,7 @@
     <span class="ident">color</span>::{<span class="ident">BasicColor</span>, <span class="ident">Color</span>, <span class="ident">Color2</span>},
     <span class="ident">coord</span>,
     <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">Vec2</span>},
-    <span class="ident">error::ServicesOff</span>,
+    <span class="ident">error::Error</span>,
     <span class="ident">event</span>::{<span class="ident">Event</span>, <span class="ident">Key</span>, <span class="ident">KeyEvent</span>, <span class="ident">ResizeEvent</span>},
     <span class="ident">screen::Screen</span>,
     <span class="ident">string</span>::{<span class="ident">TermGrapheme</span>, <span class="ident">TermString</span>},
@@ -546,10 +540,7 @@
     }
 
     <span class="doccomment">/// Asks for the user to select an item of the menu without cancel option.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">select</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">select</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">select_with_initial</span>(<span class="ident">term</span>, <span class="number">0</span>).<span class="kw">await</span>
     }
 
@@ -559,7 +550,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
         <span class="ident">initial</span>: <span class="ident">usize</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">selector</span> <span class="op">=</span> <span class="ident">Selector::without_cancel</span>(<span class="self">self</span>, <span class="ident">initial</span>);
         <span class="ident">selector</span>.<span class="ident">run</span>(<span class="ident">term</span>).<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">selector</span>.<span class="ident">result</span>())
@@ -569,7 +560,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">select_with_cancel</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">select_cancel_initial</span>(<span class="ident">term</span>, <span class="number">0</span>, <span class="bool-val">false</span>).<span class="kw">await</span>
     }
 
@@ -581,7 +572,7 @@
         <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
         <span class="ident">initial</span>: <span class="ident">usize</span>,
         <span class="ident">cancel</span>: <span class="ident">bool</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">selector</span> <span class="op">=</span> <span class="ident">Selector::with_cancel</span>(<span class="self">self</span>, <span class="ident">initial</span>, <span class="ident">cancel</span>);
         <span class="ident">selector</span>.<span class="ident">run</span>(<span class="ident">term</span>).<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">selector</span>.<span class="ident">result_with_cancel</span>())
@@ -677,7 +668,7 @@
     }
 
     <span class="doccomment">/// Runs this selector and uses the given terminal.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">init_run</span>(<span class="ident">term</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">loop</span> {
@@ -742,10 +733,7 @@
     }
 
     <span class="doccomment">/// Initializes the run of this selector.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">init_run</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">init_run</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">session</span> <span class="op">=</span> <span class="ident">term</span>.<span class="ident">lock_now</span>().<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">screen</span> <span class="op">=</span> <span class="ident">session</span>.<span class="ident">screen</span>();
         <span class="self">self</span>.<span class="ident">render</span>(<span class="ident">screen</span>);

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["WaylandClipboardContext","Interface to the clipboard for Wayland windowing systems."]]});

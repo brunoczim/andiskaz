@@ -466,13 +466,35 @@
 <span id="466">466</span>
 <span id="467">467</span>
 <span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
 </pre><pre class="rust"><code><span class="doccomment">//! This module exports a simple input dialog and related functionality.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">color</span>::{<span class="ident">BasicColor</span>, <span class="ident">Color</span>, <span class="ident">Color2</span>},
     <span class="ident">coord</span>,
     <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">Vec2</span>},
-    <span class="ident">error::ServicesOff</span>,
+    <span class="ident">error::Error</span>,
     <span class="ident">event</span>::{<span class="ident">Event</span>, <span class="ident">Key</span>, <span class="ident">KeyEvent</span>, <span class="ident">ResizeEvent</span>},
     <span class="ident">screen::Screen</span>,
     <span class="ident">string::TermString</span>,
@@ -481,6 +503,9 @@
 };
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">iter</span>, <span class="ident">mem</span>};
 <span class="kw">use</span> <span class="ident">unicode_segmentation::UnicodeSegmentation</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clipboard&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::clipboard</span>;
 
 <span class="doccomment">/// A selected item/option of the input dialog.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
@@ -560,7 +585,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">select</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TermString</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TermString</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">select_with_initial</span>(<span class="ident">term</span>, <span class="number">0</span>).<span class="kw">await</span>
     }
 
@@ -570,7 +595,7 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
         <span class="ident">cursor</span>: <span class="ident">usize</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TermString</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TermString</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">selector</span> <span class="op">=</span> <span class="ident">Selector::without_cancel</span>(<span class="self">self</span>, <span class="ident">cursor</span>);
         <span class="ident">selector</span>.<span class="ident">run</span>(<span class="ident">term</span>).<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">selector</span>.<span class="ident">result</span>())
@@ -581,7 +606,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">select_with_cancel</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TermString</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TermString</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">select_cancel_initial</span>(<span class="ident">term</span>, <span class="number">0</span>, <span class="ident">InputDialogItem::Ok</span>).<span class="kw">await</span>
     }
 
@@ -592,7 +617,7 @@
         <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
         <span class="ident">cursor</span>: <span class="ident">usize</span>,
         <span class="ident">selected</span>: <span class="ident">InputDialogItem</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TermString</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TermString</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">selector</span> <span class="op">=</span> <span class="ident">Selector::with_cancel</span>(<span class="self">self</span>, <span class="ident">cursor</span>, <span class="ident">selected</span>);
         <span class="ident">selector</span>.<span class="ident">run</span>(<span class="ident">term</span>).<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">selector</span>.<span class="ident">result_with_cancel</span>())
@@ -660,7 +685,7 @@
     }
 
     <span class="doccomment">/// Runs the selector.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">init_run</span>(<span class="ident">term</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">loop</span> {
@@ -722,6 +747,14 @@
                         <span class="ident">shift</span>: <span class="bool-val">false</span>,
                     } <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">key_backspace</span>(<span class="ident">screen</span>),
 
+                    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clipboard&quot;</span>)]</span>
+                    <span class="ident">KeyEvent</span> {
+                        <span class="ident">main_key</span>: <span class="ident">Key::Char</span>(<span class="string">&#39;v&#39;</span>),
+                        <span class="ident">ctrl</span>: <span class="bool-val">true</span>,
+                        <span class="ident">alt</span>: <span class="bool-val">false</span>,
+                        <span class="ident">shift</span>: <span class="bool-val">false</span>,
+                    } <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">key_paste</span>(<span class="ident">screen</span>)<span class="question-mark">?</span>,
+
                     <span class="ident">KeyEvent</span> {
                         <span class="ident">main_key</span>: <span class="ident">Key::Char</span>(<span class="ident">ch</span>),
                         <span class="ident">ctrl</span>: <span class="bool-val">false</span>,
@@ -758,10 +791,7 @@
     }
 
     <span class="doccomment">/// Initializes a run over this selector.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">init_run</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">init_run</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">session</span> <span class="op">=</span> <span class="ident">term</span>.<span class="ident">lock_now</span>().<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">selected</span> <span class="op">=</span> <span class="ident">InputDialogItem::Ok</span>;
         <span class="self">self</span>.<span class="ident">buffer</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">dialog</span>.<span class="ident">buffer</span>.<span class="ident">chars</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
@@ -822,8 +852,22 @@
         }
     }
 
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clipboard&quot;</span>)]</span>
+    <span class="doccomment">/// Should be triggered when Ctrl-Shift-V is pressed (paste).</span>
+    <span class="kw">fn</span> <span class="ident">key_paste</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">screen</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Screen</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">content</span> <span class="op">=</span> <span class="ident">clipboard::get</span>()<span class="question-mark">?</span>;
+        <span class="kw">for</span> <span class="ident">ch</span> <span class="kw">in</span> <span class="ident">content</span>.<span class="ident">chars</span>() {
+            <span class="self">self</span>.<span class="ident">insert</span>(<span class="ident">screen</span>, <span class="ident">ch</span>);
+        }
+        <span class="prelude-val">Ok</span>(())
+    }
+
     <span class="doccomment">/// Should be triggered when generic character key is pressed.</span>
     <span class="kw">fn</span> <span class="ident">key_char</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">screen</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Screen</span>, <span class="ident">ch</span>: <span class="ident">char</span>) {
+        <span class="self">self</span>.<span class="ident">insert</span>(<span class="ident">screen</span>, <span class="ident">ch</span>);
+    }
+
+    <span class="kw">fn</span> <span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">screen</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Screen</span>, <span class="ident">ch</span>: <span class="ident">char</span>) {
         <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">dialog</span>.<span class="ident">filter</span>)(<span class="ident">ch</span>) {
             <span class="kw">let</span> <span class="ident">test_string</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;a{}&quot;</span>, <span class="ident">ch</span>);
             <span class="kw">if</span> <span class="ident">test_string</span>.<span class="ident">graphemes</span>(<span class="bool-val">true</span>).<span class="ident">count</span>() <span class="op">&gt;</span> <span class="number">1</span> {

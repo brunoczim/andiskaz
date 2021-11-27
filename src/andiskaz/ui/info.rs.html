@@ -116,7 +116,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">color</span>::{<span class="ident">BasicColor</span>, <span class="ident">Color</span>, <span class="ident">Color2</span>},
     <span class="ident">coord::Coord</span>,
-    <span class="ident">error::ServicesOff</span>,
+    <span class="ident">error::Error</span>,
     <span class="ident">event</span>::{<span class="ident">Event</span>, <span class="ident">Key</span>, <span class="ident">KeyEvent</span>},
     <span class="ident">screen::Screen</span>,
     <span class="ident">string::TermString</span>,
@@ -162,7 +162,7 @@
     }
 
     <span class="doccomment">/// Runs this dialog showing it to the user, awaiting OK!</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">render</span>(<span class="ident">term</span>.<span class="ident">lock_now</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">screen</span>());
 
         <span class="kw">loop</span> {

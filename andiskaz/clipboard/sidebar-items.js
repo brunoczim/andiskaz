@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["get","Gets the content of the clipboard. May fail if clipboard is not an UTF-8 string or for another low-level cause."],["set","Sets the content of the clipboard to the given string. May fail if clipboard is not an UTF-8 string or for another low-level cause."]]});
