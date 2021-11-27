@@ -289,7 +289,7 @@ impl Terminal {
         let screen = self.shared.screen().lock().await;
         Ok(TerminalGuard {
             screen,
-            guard,
+            _guard: guard,
             event,
             curr_epoch: &mut self.curr_epoch,
         })
@@ -332,7 +332,7 @@ impl Terminal {
 #[derive(Debug)]
 pub struct TerminalGuard<'terminal> {
     /// Synchronization lock for application (exclusive).
-    guard: AppSyncGuard<'terminal>,
+    _guard: AppSyncGuard<'terminal>,
     /// The result of reading the event channel (event epoch, event itself).
     event: Option<(event::Epoch, Event)>,
     /// Reference to the current epoch so we can update it when the event is
@@ -411,7 +411,7 @@ impl Shared {
     pub async fn service_guard<'this>(
         &'this self,
     ) -> Result<ServiceSyncGuard<'this>, ServicesOff> {
-        let guard = ServiceSyncGuard { inner: self.sync.read().await };
+        let guard = ServiceSyncGuard { _inner: self.sync.read().await };
         if self.is_connected() {
             Ok(guard)
         } else {
@@ -424,7 +424,7 @@ impl Shared {
     pub async fn app_guard<'this>(
         &'this self,
     ) -> Result<AppSyncGuard<'this>, ServicesOff> {
-        let guard = AppSyncGuard { inner: self.sync.write().await };
+        let guard = AppSyncGuard { _inner: self.sync.write().await };
         if self.is_connected() {
             Ok(guard)
         } else {
@@ -453,14 +453,14 @@ impl Shared {
 #[derive(Debug)]
 pub(crate) struct ServiceSyncGuard<'shared> {
     /// Inner lock guard.
-    inner: RwLockReadGuard<'shared, ()>,
+    _inner: RwLockReadGuard<'shared, ()>,
 }
 
 /// Synchronization guard acquired by an application handle (exclusive).
 #[derive(Debug)]
 pub(crate) struct AppSyncGuard<'shared> {
     /// Inner lock guard.
-    inner: RwLockWriteGuard<'shared, ()>,
+    _inner: RwLockWriteGuard<'shared, ()>,
 }
 
 /// Connection guard for shared data. Disconnects when dropped.

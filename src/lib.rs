@@ -87,4 +87,7 @@ pub mod event;
 pub mod terminal;
 pub mod ui;
 
+#[cfg(feature = "clipboard")]
+pub mod clipboard;
+
 pub use self::stdio::emergency_restore;
