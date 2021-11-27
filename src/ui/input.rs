@@ -4,7 +4,7 @@ use crate::{
     color::{BasicColor, Color, Color2},
     coord,
     coord::{Coord, Vec2},
-    error::ServicesOff,
+    error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
     screen::Screen,
     string::TermString,
@@ -13,6 +13,9 @@ use crate::{
 };
 use std::{iter, mem};
 use unicode_segmentation::UnicodeSegmentation;
+
+#[cfg(feature = "clipboard")]
+use crate::clipboard;
 
 /// A selected item/option of the input dialog.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -92,7 +95,7 @@ where
     pub async fn select(
         &mut self,
         term: &mut Terminal,
-    ) -> Result<TermString, ServicesOff> {
+    ) -> Result<TermString, Error> {
         self.select_with_initial(term, 0).await
     }
 
@@ -102,7 +105,7 @@ where
         &mut self,
         term: &mut Terminal,
         cursor: usize,
-    ) -> Result<TermString, ServicesOff> {
+    ) -> Result<TermString, Error> {
         let mut selector = Selector::without_cancel(self, cursor);
         selector.run(term).await?;
         Ok(selector.result())
@@ -113,7 +116,7 @@ where
     pub async fn select_with_cancel(
         &mut self,
         term: &mut Terminal,
-    ) -> Result<Option<TermString>, ServicesOff> {
+    ) -> Result<Option<TermString>, Error> {
         self.select_cancel_initial(term, 0, InputDialogItem::Ok).await
     }
 
@@ -124,7 +127,7 @@ where
         term: &mut Terminal,
         cursor: usize,
         selected: InputDialogItem,
-    ) -> Result<Option<TermString>, ServicesOff> {
+    ) -> Result<Option<TermString>, Error> {
         let mut selector = Selector::with_cancel(self, cursor, selected);
         selector.run(term).await?;
         Ok(selector.result_with_cancel())
@@ -192,7 +195,7 @@ where
     }
 
     /// Runs the selector.
-    async fn run(&mut self, term: &mut Terminal) -> Result<(), ServicesOff> {
+    async fn run(&mut self, term: &mut Terminal) -> Result<(), Error> {
         self.init_run(term).await?;
 
         loop {
@@ -254,6 +257,14 @@ where
                         shift: false,
                     } => self.key_backspace(screen),
 
+                    #[cfg(feature = "clipboard")]
+                    KeyEvent {
+                        main_key: Key::Char('v'),
+                        ctrl: true,
+                        alt: false,
+                        shift: false,
+                    } => self.key_paste(screen)?,
+
                     KeyEvent {
                         main_key: Key::Char(ch),
                         ctrl: false,
@@ -290,10 +301,7 @@ where
     }
 
     /// Initializes a run over this selector.
-    async fn init_run(
-        &mut self,
-        term: &mut Terminal,
-    ) -> Result<(), ServicesOff> {
+    async fn init_run(&mut self, term: &mut Terminal) -> Result<(), Error> {
         let mut session = term.lock_now().await?;
         self.selected = InputDialogItem::Ok;
         self.buffer = self.dialog.buffer.chars().collect::<Vec<_>>();
@@ -354,8 +362,22 @@ where
         }
     }
 
+    #[cfg(feature = "clipboard")]
+    /// Should be triggered when Ctrl-Shift-V is pressed (paste).
+    fn key_paste(&mut self, screen: &mut Screen) -> Result<(), Error> {
+        let content = clipboard::get()?;
+        for ch in content.chars() {
+            self.insert(screen, ch);
+        }
+        Ok(())
+    }
+
     /// Should be triggered when generic character key is pressed.
     fn key_char(&mut self, screen: &mut Screen, ch: char) {
+        self.insert(screen, ch);
+    }
+
+    fn insert(&mut self, screen: &mut Screen, ch: char) {
         if (self.dialog.filter)(ch) {
             let test_string = format!("a{}", ch);
             if test_string.graphemes(true).count() > 1 {

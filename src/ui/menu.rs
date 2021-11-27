@@ -5,7 +5,7 @@ use crate::{
     color::{BasicColor, Color, Color2},
     coord,
     coord::{Coord, Vec2},
-    error::ServicesOff,
+    error::Error,
     event::{Event, Key, KeyEvent, ResizeEvent},
     screen::Screen,
     string::{TermGrapheme, TermString},
@@ -63,10 +63,7 @@ where
     }
 
     /// Asks for the user to select an item of the menu without cancel option.
-    pub async fn select(
-        &self,
-        term: &mut Terminal,
-    ) -> Result<usize, ServicesOff> {
+    pub async fn select(&self, term: &mut Terminal) -> Result<usize, Error> {
         self.select_with_initial(term, 0).await
     }
 
@@ -76,7 +73,7 @@ where
         &self,
         term: &mut Terminal,
         initial: usize,
-    ) -> Result<usize, ServicesOff> {
+    ) -> Result<usize, Error> {
         let mut selector = Selector::without_cancel(self, initial);
         selector.run(term).await?;
         Ok(selector.result())
@@ -86,7 +83,7 @@ where
     pub async fn select_with_cancel(
         &self,
         term: &mut Terminal,
-    ) -> Result<Option<usize>, ServicesOff> {
+    ) -> Result<Option<usize>, Error> {
         self.select_cancel_initial(term, 0, false).await
     }
 
@@ -98,7 +95,7 @@ where
         term: &mut Terminal,
         initial: usize,
         cancel: bool,
-    ) -> Result<Option<usize>, ServicesOff> {
+    ) -> Result<Option<usize>, Error> {
         let mut selector = Selector::with_cancel(self, initial, cancel);
         selector.run(term).await?;
         Ok(selector.result_with_cancel())
@@ -194,7 +191,7 @@ where
     }
 
     /// Runs this selector and uses the given terminal.
-    async fn run(&mut self, term: &mut Terminal) -> Result<(), ServicesOff> {
+    async fn run(&mut self, term: &mut Terminal) -> Result<(), Error> {
         self.init_run(term).await?;
 
         loop {
@@ -259,10 +256,7 @@ where
     }
 
     /// Initializes the run of this selector.
-    async fn init_run(
-        &mut self,
-        term: &mut Terminal,
-    ) -> Result<(), ServicesOff> {
+    async fn init_run(&mut self, term: &mut Terminal) -> Result<(), Error> {
         let mut session = term.lock_now().await?;
         let screen = session.screen();
         self.render(screen);

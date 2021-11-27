@@ -34,6 +34,30 @@ impl fmt::Display for ServicesOff {
 
 impl ErrorTrait for ServicesOff {}
 
+/// Error returned when accessing the clipboard fails.
+#[cfg(feature = "clipboard")]
+#[derive(Debug)]
+pub struct ClipboardError {
+    inner: anyhow::Error,
+}
+
+#[cfg(feature = "clipboard")]
+impl ClipboardError {
+    pub(crate) fn new(inner: anyhow::Error) -> Self {
+        Self { inner }
+    }
+}
+
+#[cfg(feature = "clipboard")]
+impl fmt::Display for ClipboardError {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(fmt, "Clipboard error: {}", self.inner)
+    }
+}
+
+#[cfg(feature = "clipboard")]
+impl ErrorTrait for ClipboardError {}
+
 /// The kind of an error that may happen when executing a terminal operation.
 #[derive(Debug)]
 #[non_exhaustive]
@@ -52,6 +76,9 @@ pub enum ErrorKind {
     Utf8(FromUtf8Error),
     /// This is an error from a bad join.
     Join(JoinError),
+    /// This is an error that may happen accessing clipboard.
+    #[cfg(feature = "clipboard")]
+    Clipboard(ClipboardError),
     /// A custom error, stored in a trait object.
     Custom(Box<dyn ErrorTrait + Send + Sync>),
 }
@@ -67,6 +94,8 @@ impl ErrorKind {
             ErrorKind::ParseInt(error) => error,
             ErrorKind::Utf8(error) => error,
             ErrorKind::Join(error) => error,
+            #[cfg(feature = "clipboard")]
+            ErrorKind::Clipboard(error) => error,
             ErrorKind::Custom(error) => &**error,
         }
     }
@@ -122,6 +151,13 @@ impl From<fmt::Error> for ErrorKind {
 impl From<JoinError> for ErrorKind {
     fn from(error: JoinError) -> Self {
         ErrorKind::Join(error)
+    }
+}
+
+#[cfg(feature = "clipboard")]
+impl From<ClipboardError> for ErrorKind {
+    fn from(error: ClipboardError) -> Self {
+        ErrorKind::Clipboard(error)
     }
 }
 
@@ -216,6 +252,13 @@ impl From<fmt::Error> for Error {
 
 impl From<JoinError> for Error {
     fn from(error: JoinError) -> Self {
+        Self::new(ErrorKind::from(error))
+    }
+}
+
+#[cfg(feature = "clipboard")]
+impl From<ClipboardError> for Error {
+    fn from(error: ClipboardError) -> Self {
         Self::new(ErrorKind::from(error))
     }
 }
