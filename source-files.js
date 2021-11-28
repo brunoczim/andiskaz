@@ -66,7 +66,6 @@ sourcesIndex["petgraph"] = {"name":"","dirs":[{"name":"algo","files":["dominator
 sourcesIndex["pin_project_lite"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pin_utils"] = {"name":"","files":["lib.rs","projection.rs","stack_pin.rs"]};
 sourcesIndex["ppv_lite86"] = {"name":"","dirs":[{"name":"x86_64","files":["mod.rs","sse2.rs"]}],"files":["lib.rs","soft.rs","types.rs"]};
-sourcesIndex["priority_queue"] = {"name":"","dirs":[{"name":"double_priority_queue","files":["iterators.rs","mod.rs"]},{"name":"priority_queue","files":["iterators.rs","mod.rs"]}],"files":["core_iterators.rs","lib.rs","store.rs"]};
 sourcesIndex["proc_macro2"] = {"name":"","files":["detection.rs","fallback.rs","lib.rs","marker.rs","parse.rs","wrapper.rs"]};
 sourcesIndex["proc_macro_error"] = {"name":"","dirs":[{"name":"imp","files":["fallback.rs"]}],"files":["diagnostic.rs","dummy.rs","lib.rs","macros.rs","sealed.rs"]};
 sourcesIndex["proc_macro_error_attr"] = {"name":"","files":["lib.rs","parse.rs","settings.rs"]};

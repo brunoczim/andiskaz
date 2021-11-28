@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["IntoSortedIter","A consuming iterator over the couples `(item, priority)` of the `PriorityQueue` ordered by priority, from the lowest to the highest."],["IterMut","A mutable iterator over the couples `(item, priority)` of the `DoublePriorityQueue` in arbitrary order."]]});
