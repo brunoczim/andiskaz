@@ -36,10 +36,10 @@ impl Snake {
         let mut rng = rand::thread_rng();
         // A random head for the snake.
         let head = Vec2 {
-            x: rng.gen_range(bounds.start.x, bounds.end().x),
+            x: rng.gen_range(bounds.start.x .. bounds.end().x),
             y: rng.gen_range(
-                bounds.start.y + distance,
-                bounds.end().y - (distance + length),
+                bounds.start.y + distance
+                    .. bounds.end().y - (distance + length),
             ),
         };
 

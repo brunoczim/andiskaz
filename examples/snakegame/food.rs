@@ -51,8 +51,8 @@ impl Food {
             let mut rng = rand::thread_rng();
             // Generates a random point.
             let point = Vec2 {
-                x: rng.gen_range(bounds.start.x, bounds.end().x),
-                y: rng.gen_range(bounds.start.y, bounds.end().y),
+                x: rng.gen_range(bounds.start.x .. bounds.end().x),
+                y: rng.gen_range(bounds.start.y .. bounds.end().y),
             };
 
             let valid = !snake.contains(point);
