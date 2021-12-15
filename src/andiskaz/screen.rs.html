@@ -550,7 +550,7 @@
     <span class="doccomment">/// Creates screen data from the given settings. If given actual size is</span>
     <span class="doccomment">/// less than given minimum allowed size, the actual size is replaced by the</span>
     <span class="doccomment">/// minimum size.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">Vec2</span>, <span class="ident">min_size</span>: <span class="ident">Vec2</span>, <span class="ident">frame_time</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">size</span>: <span class="ident">Vec2</span>, <span class="ident">min_size</span>: <span class="ident">Vec2</span>, <span class="ident">frame_time</span>: <span class="ident">Duration</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">corrected_size</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">size</span>.<span class="ident">x</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">min_size</span>.<span class="ident">x</span> <span class="op">&amp;&amp;</span> <span class="ident">size</span>.<span class="ident">y</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">min_size</span>.<span class="ident">y</span> {
             <span class="ident">size</span>
         } <span class="kw">else</span> {
@@ -577,12 +577,12 @@
     }
 
     <span class="doccomment">/// Locks the screen data into an actual screen handle.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">lock</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;this</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Screen</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">lock</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;this</span> <span class="self">self</span>) -&gt; <span class="ident">Screen</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span> {
         <span class="ident">Screen::new</span>(<span class="self">self</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Initialization of the terminal, such as cleaning the screen.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">setup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">setup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">String::new</span>();
         <span class="ident">save_screen</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>)<span class="question-mark">?</span>;
         <span class="macro">write!</span>(
@@ -602,7 +602,7 @@
     }
 
     <span class="doccomment">/// Asynchronous cleanup. It is preferred to call this before dropping.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">cleanup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">cleanup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">task::block_in_place</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">crossterm::terminal::disable_raw_mode</span>())
             .<span class="ident">map_err</span>(<span class="ident">Error::from_crossterm</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">String::new</span>();
@@ -631,7 +631,7 @@
 <span class="doccomment">/// that the compiler can make other functions smaller.</span>
 <span class="attribute">#[<span class="ident">cold</span>]</span>
 <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-<span class="kw">fn</span> <span class="ident">out_of_bounds</span>(<span class="ident">point</span>: <span class="ident">Vec2</span>, <span class="ident">size</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="op">!</span> {
+<span class="kw">fn</span> <span class="ident">out_of_bounds</span>(<span class="ident">point</span>: <span class="ident">Vec2</span>, <span class="ident">size</span>: <span class="ident">Vec2</span>) -&gt; <span class="op">!</span> {
     <span class="macro">panic!</span>(
         <span class="string">&quot;Point x: {}, y: {} out of screen size x: {}, y: {}&quot;</span>,
         <span class="ident">point</span>.<span class="ident">x</span>, <span class="ident">point</span>.<span class="ident">y</span>, <span class="ident">size</span>.<span class="ident">x</span>, <span class="ident">size</span>.<span class="ident">y</span>
@@ -654,7 +654,7 @@
     <span class="doccomment">/// and a locked guard to the buffer.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="lifetime">&#39;param</span><span class="op">&gt;</span>(
         <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;param</span> <span class="ident">ScreenData</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Screen</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>
+    ) -&gt; <span class="ident">Screen</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="lifetime">&#39;param</span>: <span class="lifetime">&#39;terminal</span>,
     {
@@ -662,18 +662,18 @@
     }
 
     <span class="doccomment">/// Returns the current size of the screen.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec2</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec2</span> {
         <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">size</span>()
     }
 
     <span class="doccomment">/// Returns whether the stored size is the actual size and the actual size</span>
     <span class="doccomment">/// is valid.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">valid_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">valid_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">valid</span>
     }
 
     <span class="doccomment">/// Returns the minimum size required for the screen.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec2</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec2</span> {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">min_size</span>
     }
 
@@ -700,7 +700,7 @@
 
     <span class="doccomment">/// Gets the attributes of a given [`Tile`], regardless of being flushed to</span>
     <span class="doccomment">/// the screen yet or not.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Tile</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">point</span>: <span class="ident">Vec2</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Tile</span> {
         <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">buffer</span>
             .<span class="ident">make_index</span>(<span class="ident">point</span>)
@@ -730,7 +730,7 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">tstring</span>: <span class="kw-2">&amp;</span><span class="ident">TermString</span>,
         <span class="ident">style</span>: <span class="ident">Style</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord</span>
+    ) -&gt; <span class="ident">Coord</span>
     <span class="kw">where</span>
         <span class="ident">C</span>: <span class="ident">color::Updater</span>,
     {
@@ -777,13 +777,13 @@
         <span class="ident">term_size</span>: <span class="ident">Vec2</span>,
         <span class="ident">slice</span>: <span class="kw-2">&amp;</span><span class="ident">TermString</span>,
         <span class="ident">is_inside</span>: <span class="ident">bool</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    ) -&gt; <span class="ident">usize</span> {
         <span class="kw">if</span> <span class="ident">width</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">slice</span>.<span class="ident">len</span>() {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pos</span> <span class="op">=</span> <span class="ident">slice</span>
                 .<span class="ident">index</span>(.. <span class="ident">coord::to_index</span>(<span class="ident">term_size</span>.<span class="ident">x</span>))
                 .<span class="ident">iter</span>()
                 .<span class="ident">rev</span>()
-                .<span class="ident">position</span>(<span class="op">|</span><span class="ident">grapheme</span><span class="op">|</span> <span class="ident">grapheme</span> <span class="op">=</span><span class="op">=</span> <span class="ident">TermGrapheme::space</span>())
+                .<span class="ident">position</span>(<span class="op">|</span><span class="ident">grapheme</span><span class="op">|</span> <span class="ident">grapheme</span> <span class="op">==</span> <span class="ident">TermGrapheme::space</span>())
                 .<span class="ident">map_or</span>(<span class="ident">width</span>, <span class="op">|</span><span class="ident">rev</span><span class="op">|</span> <span class="ident">total_graphemes</span> <span class="op">-</span> <span class="ident">rev</span>);
             <span class="kw">if</span> <span class="op">!</span><span class="ident">is_inside</span> {
                 <span class="ident">pos</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
@@ -819,7 +819,7 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">new_size</span>: <span class="ident">Vec2</span>,
         <span class="ident">guard</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LockedStdout</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">min_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">min_size</span>;
         <span class="kw">if</span> <span class="ident">new_size</span>.<span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">min_size</span>.<span class="ident">x</span> <span class="op">|</span><span class="op">|</span> <span class="ident">new_size</span>.<span class="ident">y</span> <span class="op">&lt;</span> <span class="ident">min_size</span>.<span class="ident">y</span> {
             <span class="kw">if</span> <span class="ident">guard</span>.<span class="ident">is_none</span>() {
@@ -830,8 +830,8 @@
             }
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">guard</span>.<span class="ident">take</span>() {
-                <span class="prelude-val">Some</span>(<span class="ident">stdout</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">stdout</span>,
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">stdout</span>.<span class="ident">lock</span>().<span class="kw">await</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">stdout</span>) =&gt; <span class="ident">stdout</span>,
+                <span class="prelude-val">None</span> =&gt; <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">stdout</span>.<span class="ident">lock</span>().<span class="kw">await</span>,
             };
             <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">valid</span> <span class="op">=</span> <span class="bool-val">true</span>;
             <span class="self">self</span>.<span class="ident">resize</span>(<span class="ident">new_size</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stdout</span>).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -845,7 +845,7 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">stdout</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">LockedStdout</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>,
         <span class="ident">min_size</span>: <span class="ident">Vec2</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="macro">format!</span>(
             <span class="string">&quot;{}{}RESIZE {}x{}&quot;</span>,
             <span class="ident">crossterm::terminal::Clear</span>(<span class="ident">crossterm::terminal::ClearType::All</span>),
@@ -864,7 +864,7 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">new_size</span>: <span class="ident">Vec2</span>,
         <span class="ident">stdout</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">LockedStdout</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="macro">format!</span>(
             <span class="string">&quot;{}{}{}&quot;</span>,
             <span class="ident">crossterm::style::SetForegroundColor</span>(
@@ -885,7 +885,7 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">render</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">buf</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">String</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">screen_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">size</span>();
         <span class="ident">buf</span>.<span class="ident">clear</span>();
 
@@ -918,7 +918,7 @@
         <span class="ident">buf</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">String</span>,
         <span class="ident">colors</span>: <span class="ident">Color2</span>,
         <span class="ident">cursor</span>: <span class="ident">Vec2</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="macro">write!</span>(
             <span class="ident">buf</span>,
             <span class="string">&quot;{}{}{}&quot;</span>,
@@ -945,7 +945,7 @@
         <span class="ident">cursor</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Vec2</span>,
         <span class="ident">screen_size</span>: <span class="ident">Vec2</span>,
         <span class="ident">coord</span>: <span class="ident">Vec2</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">cursor</span> <span class="op">!</span><span class="op">=</span> <span class="ident">coord</span> {
             <span class="macro">write!</span>(
                 <span class="ident">buf</span>,
@@ -981,7 +981,7 @@
 
 <span class="doccomment">/// The renderer loop. Should be called only when setting up a terminal handler.</span>
 <span class="doccomment">/// Exits on error or when notified that it should exit.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">renderer</span>(<span class="ident">shared</span>: <span class="kw-2">&amp;</span><span class="ident">Shared</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">renderer</span>(<span class="ident">shared</span>: <span class="kw-2">&amp;</span><span class="ident">Shared</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">interval</span> <span class="op">=</span> <span class="ident">time::interval</span>(<span class="ident">shared</span>.<span class="ident">screen</span>().<span class="ident">frame_time</span>);
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">String::new</span>();
 
@@ -993,8 +993,8 @@
         }
 
         <span class="macro">tokio::select!</span> {
-            <span class="kw">_</span> <span class="op">=</span> <span class="ident">interval</span>.<span class="ident">tick</span>() <span class="op">=</span><span class="op">&gt;</span> (),
-            <span class="kw">_</span> <span class="op">=</span> <span class="ident">shared</span>.<span class="ident">screen</span>().<span class="ident">subscribe</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
+            <span class="kw">_</span> <span class="op">=</span> <span class="ident">interval</span>.<span class="ident">tick</span>() =&gt; (),
+            <span class="kw">_</span> <span class="op">=</span> <span class="ident">shared</span>.<span class="ident">screen</span>().<span class="ident">subscribe</span>() =&gt; <span class="kw">break</span>,
         };
     }
 

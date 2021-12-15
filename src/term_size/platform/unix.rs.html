@@ -222,23 +222,23 @@
 <span class="kw">static</span> <span class="ident">TIOCGWINSZ</span>: <span class="ident">c_ulong</span> <span class="op">=</span> <span class="number">0x5468</span>;
 
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
-    <span class="kw">fn</span> <span class="ident">ioctl</span>(<span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">request</span>: <span class="ident">c_ulong</span>, ...) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">fn</span> <span class="ident">ioctl</span>(<span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">request</span>: <span class="ident">c_ulong</span>, ...) -&gt; <span class="ident">c_int</span>;
 }
 
 <span class="doccomment">/// Runs the ioctl command. Returns (0, 0) if all of the streams are not to a terminal, or</span>
 <span class="doccomment">/// there is an error. (0, 0) is an invalid size to have anyway, which is why</span>
 <span class="doccomment">/// it can be used as a nil value.</span>
-<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_dimensions_any</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">winsize</span> {
+<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_dimensions_any</span>() -&gt; <span class="ident">winsize</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">window</span>: <span class="ident">winsize</span> <span class="op">=</span> <span class="ident">zeroed</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ioctl</span>(<span class="ident">STDOUT_FILENO</span>, <span class="ident">TIOCGWINSZ</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">window</span>);
 
-    <span class="kw">if</span> <span class="ident">result</span> <span class="op">=</span><span class="op">=</span> <span class="op">-</span><span class="number">1</span> {
+    <span class="kw">if</span> <span class="ident">result</span> <span class="op">==</span> <span class="op">-</span><span class="number">1</span> {
         <span class="ident">window</span> <span class="op">=</span> <span class="ident">zeroed</span>();
         <span class="ident">result</span> <span class="op">=</span> <span class="ident">ioctl</span>(<span class="ident">STDIN_FILENO</span>, <span class="ident">TIOCGWINSZ</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">window</span>);
-        <span class="kw">if</span> <span class="ident">result</span> <span class="op">=</span><span class="op">=</span> <span class="op">-</span><span class="number">1</span> {
+        <span class="kw">if</span> <span class="ident">result</span> <span class="op">==</span> <span class="op">-</span><span class="number">1</span> {
             <span class="ident">window</span> <span class="op">=</span> <span class="ident">zeroed</span>();
             <span class="ident">result</span> <span class="op">=</span> <span class="ident">ioctl</span>(<span class="ident">STDERR_FILENO</span>, <span class="ident">TIOCGWINSZ</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">window</span>);
-            <span class="kw">if</span> <span class="ident">result</span> <span class="op">=</span><span class="op">=</span> <span class="op">-</span><span class="number">1</span> {
+            <span class="kw">if</span> <span class="ident">result</span> <span class="op">==</span> <span class="op">-</span><span class="number">1</span> {
                 <span class="kw">return</span> <span class="ident">zeroed</span>();
             }
         }
@@ -249,7 +249,7 @@
 <span class="doccomment">/// Runs the ioctl command. Returns (0, 0) if the output is not to a terminal, or</span>
 <span class="doccomment">/// there is an error. (0, 0) is an invalid size to have anyway, which is why</span>
 <span class="doccomment">/// it can be used as a nil value.</span>
-<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_dimensions_out</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">winsize</span> {
+<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_dimensions_out</span>() -&gt; <span class="ident">winsize</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">window</span>: <span class="ident">winsize</span> <span class="op">=</span> <span class="ident">zeroed</span>();
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ioctl</span>(<span class="ident">STDOUT_FILENO</span>, <span class="ident">TIOCGWINSZ</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">window</span>);
 
@@ -262,7 +262,7 @@
 <span class="doccomment">/// Runs the ioctl command. Returns (0, 0) if the input is not to a terminal, or</span>
 <span class="doccomment">/// there is an error. (0, 0) is an invalid size to have anyway, which is why</span>
 <span class="doccomment">/// it can be used as a nil value.</span>
-<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_dimensions_in</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">winsize</span> {
+<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_dimensions_in</span>() -&gt; <span class="ident">winsize</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">window</span>: <span class="ident">winsize</span> <span class="op">=</span> <span class="ident">zeroed</span>();
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ioctl</span>(<span class="ident">STDIN_FILENO</span>, <span class="ident">TIOCGWINSZ</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">window</span>);
 
@@ -275,7 +275,7 @@
 <span class="doccomment">/// Runs the ioctl command. Returns (0, 0) if the error is not to a terminal, or</span>
 <span class="doccomment">/// there is an error. (0, 0) is an invalid size to have anyway, which is why</span>
 <span class="doccomment">/// it can be used as a nil value.</span>
-<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_dimensions_err</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">winsize</span> {
+<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_dimensions_err</span>() -&gt; <span class="ident">winsize</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">window</span>: <span class="ident">winsize</span> <span class="op">=</span> <span class="ident">zeroed</span>();
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ioctl</span>(<span class="ident">STDERR_FILENO</span>, <span class="ident">TIOCGWINSZ</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">window</span>);
 
@@ -305,10 +305,10 @@
 <span class="doccomment">///     println!(&quot;Unable to get term size :(&quot;)</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dimensions</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dimensions</span>() -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">w</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">get_dimensions_any</span>() };
 
-    <span class="kw">if</span> <span class="ident">w</span>.<span class="ident">ws_col</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+    <span class="kw">if</span> <span class="ident">w</span>.<span class="ident">ws_col</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="prelude-val">None</span>
     } <span class="kw">else</span> {
         <span class="prelude-val">Some</span>((<span class="ident">w</span>.<span class="ident">ws_col</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="kw">as</span> <span class="ident">usize</span>))
@@ -335,10 +335,10 @@
 <span class="doccomment">///     println!(&quot;Unable to get term size :(&quot;)</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dimensions_stdout</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dimensions_stdout</span>() -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">w</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">get_dimensions_out</span>() };
 
-    <span class="kw">if</span> <span class="ident">w</span>.<span class="ident">ws_col</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+    <span class="kw">if</span> <span class="ident">w</span>.<span class="ident">ws_col</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="prelude-val">None</span>
     } <span class="kw">else</span> {
         <span class="prelude-val">Some</span>((<span class="ident">w</span>.<span class="ident">ws_col</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="kw">as</span> <span class="ident">usize</span>))
@@ -365,10 +365,10 @@
 <span class="doccomment">///     println!(&quot;Unable to get term size :(&quot;)</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dimensions_stdin</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dimensions_stdin</span>() -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">w</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">get_dimensions_in</span>() };
 
-    <span class="kw">if</span> <span class="ident">w</span>.<span class="ident">ws_col</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+    <span class="kw">if</span> <span class="ident">w</span>.<span class="ident">ws_col</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="prelude-val">None</span>
     } <span class="kw">else</span> {
         <span class="prelude-val">Some</span>((<span class="ident">w</span>.<span class="ident">ws_col</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="kw">as</span> <span class="ident">usize</span>))
@@ -395,10 +395,10 @@
 <span class="doccomment">///     println!(&quot;Unable to get term size :(&quot;)</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dimensions_stderr</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dimensions_stderr</span>() -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">w</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">get_dimensions_err</span>() };
 
-    <span class="kw">if</span> <span class="ident">w</span>.<span class="ident">ws_col</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+    <span class="kw">if</span> <span class="ident">w</span>.<span class="ident">ws_col</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="prelude-val">None</span>
     } <span class="kw">else</span> {
         <span class="prelude-val">Some</span>((<span class="ident">w</span>.<span class="ident">ws_col</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">w</span>.<span class="ident">ws_row</span> <span class="kw">as</span> <span class="ident">usize</span>))

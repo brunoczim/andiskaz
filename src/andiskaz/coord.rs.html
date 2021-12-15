@@ -58,22 +58,22 @@
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Coord</span> <span class="op">=</span> <span class="ident">u16</span>;
 
 <span class="doccomment">/// Convert a crossterm coordinate to a Andiskaz coordinate.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_crossterm</span>(<span class="ident">coord</span>: <span class="ident">u16</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_crossterm</span>(<span class="ident">coord</span>: <span class="ident">u16</span>) -&gt; <span class="ident">Coord</span> {
     <span class="ident">Coord::try_from</span>(<span class="ident">coord</span>).<span class="ident">unwrap_or</span>(<span class="ident">Coord::max_value</span>())
 }
 
 <span class="doccomment">/// Converts an Andiskaz coordinate to a crossterm coordinate.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">to_crossterm</span>(<span class="ident">coord</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u16</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">to_crossterm</span>(<span class="ident">coord</span>: <span class="ident">Coord</span>) -&gt; <span class="ident">u16</span> {
     <span class="ident">u16::try_from</span>(<span class="ident">coord</span>).<span class="ident">unwrap_or</span>(<span class="ident">u16::max_value</span>())
 }
 
 <span class="doccomment">/// Convert a crossterm coordinate to a Andiskaz coordinate.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_index</span>(<span class="ident">index</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_index</span>(<span class="ident">index</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Coord</span> {
     <span class="ident">Coord::try_from</span>(<span class="ident">index</span>).<span class="ident">unwrap_or</span>(<span class="ident">Coord::max_value</span>())
 }
 
 <span class="doccomment">/// Converts an Andiskaz coordinate to a crossterm coordinate.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">to_index</span>(<span class="ident">coord</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">to_index</span>(<span class="ident">coord</span>: <span class="ident">Coord</span>) -&gt; <span class="ident">usize</span> {
     <span class="ident">usize::try_from</span>(<span class="ident">coord</span>).<span class="ident">unwrap_or</span>(<span class="ident">usize::max_value</span>())
 }
 

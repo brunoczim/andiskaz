@@ -830,14 +830,14 @@
 <span class="kw">impl</span> <span class="ident">FromStr</span> <span class="kw">for</span> <span class="ident">Timestamp</span> {
     <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">String</span>;
 
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">s</span> {
-            <span class="string">&quot;ns&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Timestamp::Nanosecond</span>),
-            <span class="string">&quot;ms&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Timestamp::Millisecond</span>),
-            <span class="string">&quot;us&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Timestamp::Microsecond</span>),
-            <span class="string">&quot;sec&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Timestamp::Second</span>),
-            <span class="string">&quot;none&quot;</span> <span class="op">|</span> <span class="string">&quot;off&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Timestamp::Off</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;invalid value&quot;</span>.<span class="ident">into</span>()),
+            <span class="string">&quot;ns&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Timestamp::Nanosecond</span>),
+            <span class="string">&quot;ms&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Timestamp::Millisecond</span>),
+            <span class="string">&quot;us&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Timestamp::Microsecond</span>),
+            <span class="string">&quot;sec&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Timestamp::Second</span>),
+            <span class="string">&quot;none&quot;</span> <span class="op">|</span> <span class="string">&quot;off&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Timestamp::Off</span>),
+            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="string">&quot;invalid value&quot;</span>.<span class="ident">into</span>()),
         }
     }
 }
@@ -854,7 +854,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">StdErrLog</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;StdErrLog&quot;</span>)
             .<span class="ident">field</span>(<span class="string">&quot;verbosity&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">verbosity</span>)
             .<span class="ident">field</span>(<span class="string">&quot;quiet&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">quiet</span>)
@@ -868,7 +868,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">StdErrLog</span> {
-    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StdErrLog</span> {
+    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">StdErrLog</span> {
         <span class="ident">StdErrLog</span> {
             <span class="ident">modules</span>: <span class="self">self</span>.<span class="ident">modules</span>.<span class="ident">clone</span>(),
             <span class="ident">writer</span>: <span class="ident">CachedThreadLocal::new</span>(),
@@ -878,7 +878,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Log</span> <span class="kw">for</span> <span class="ident">StdErrLog</span> {
-    <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">metadata</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">metadata</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span>) -&gt; <span class="ident">bool</span> {
         <span class="ident">metadata</span>.<span class="ident">level</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">log_level_filter</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">includes_module</span>(<span class="ident">metadata</span>.<span class="ident">target</span>())
     }
 
@@ -893,11 +893,11 @@
         <span class="kw">let</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">writer</span>.<span class="ident">borrow_mut</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">io::LineWriter::new</span>(<span class="ident">writer</span>.<span class="ident">lock</span>());
         <span class="kw">let</span> <span class="ident">color</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">record</span>.<span class="ident">metadata</span>().<span class="ident">level</span>() {
-            <span class="ident">Level::Error</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color::Red</span>,
-            <span class="ident">Level::Warn</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color::Magenta</span>,
-            <span class="ident">Level::Info</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color::Yellow</span>,
-            <span class="ident">Level::Debug</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color::Cyan</span>,
-            <span class="ident">Level::Trace</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color::Blue</span>,
+            <span class="ident">Level::Error</span> =&gt; <span class="ident">Color::Red</span>,
+            <span class="ident">Level::Warn</span> =&gt; <span class="ident">Color::Magenta</span>,
+            <span class="ident">Level::Info</span> =&gt; <span class="ident">Color::Yellow</span>,
+            <span class="ident">Level::Debug</span> =&gt; <span class="ident">Color::Cyan</span>,
+            <span class="ident">Level::Trace</span> =&gt; <span class="ident">Color::Blue</span>,
         };
         {
             <span class="ident">writer</span>
@@ -906,23 +906,23 @@
                 .<span class="ident">expect</span>(<span class="string">&quot;failed to set color&quot;</span>);
         }
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">timestamp</span> {
-            <span class="ident">Timestamp::Second</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Timestamp::Second</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;%Y-%m-%dT%H:%M:%S%:z&quot;</span>;
                 <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{} - &quot;</span>, <span class="ident">Local::now</span>().<span class="ident">format</span>(<span class="ident">fmt</span>));
             }
-            <span class="ident">Timestamp::Millisecond</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Timestamp::Millisecond</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;%Y-%m-%dT%H:%M:%S%.3f%:z&quot;</span>;
                 <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{} - &quot;</span>, <span class="ident">Local::now</span>().<span class="ident">format</span>(<span class="ident">fmt</span>));
             }
-            <span class="ident">Timestamp::Microsecond</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Timestamp::Microsecond</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;%Y-%m-%dT%H:%M:%S%.6f%:z&quot;</span>;
                 <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{} - &quot;</span>, <span class="ident">Local::now</span>().<span class="ident">format</span>(<span class="ident">fmt</span>));
             }
-            <span class="ident">Timestamp::Nanosecond</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Timestamp::Nanosecond</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">fmt</span> <span class="op">=</span> <span class="string">&quot;%Y-%m-%dT%H:%M:%S%.9f%:z&quot;</span>;
                 <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{} - &quot;</span>, <span class="ident">Local::now</span>().<span class="ident">format</span>(<span class="ident">fmt</span>));
             }
-            <span class="ident">Timestamp::Off</span> <span class="op">=</span><span class="op">&gt;</span> {}
+            <span class="ident">Timestamp::Off</span> =&gt; {}
         }
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">show_level</span> {
             <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{} - &quot;</span>, <span class="ident">record</span>.<span class="ident">level</span>());
@@ -943,7 +943,7 @@
 
 <span class="kw">impl</span> <span class="ident">StdErrLog</span> {
     <span class="doccomment">/// creates a new stderr logger</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StdErrLog</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">StdErrLog</span> {
         <span class="ident">StdErrLog</span> {
             <span class="ident">verbosity</span>: <span class="ident">LevelFilter::Error</span>,
             <span class="ident">quiet</span>: <span class="bool-val">false</span>,
@@ -956,13 +956,13 @@
     }
 
     <span class="doccomment">/// Sets the verbosity level of messages that will be displayed</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">verbosity</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">verbosity</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">verbosity</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">verbosity</span>: <span class="ident">usize</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
         <span class="kw">let</span> <span class="ident">log_lvl</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">verbosity</span> {
-            <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LevelFilter::Error</span>,
-            <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LevelFilter::Warn</span>,
-            <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LevelFilter::Info</span>,
-            <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LevelFilter::Debug</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LevelFilter::Trace</span>,
+            <span class="number">0</span> =&gt; <span class="ident">LevelFilter::Error</span>,
+            <span class="number">1</span> =&gt; <span class="ident">LevelFilter::Warn</span>,
+            <span class="number">2</span> =&gt; <span class="ident">LevelFilter::Info</span>,
+            <span class="number">3</span> =&gt; <span class="ident">LevelFilter::Debug</span>,
+            <span class="kw">_</span> =&gt; <span class="ident">LevelFilter::Trace</span>,
         };
 
         <span class="self">self</span>.<span class="ident">verbosity</span> <span class="op">=</span> <span class="ident">log_lvl</span>;
@@ -970,39 +970,39 @@
     }
 
     <span class="doccomment">/// silence all output, no matter the value of verbosity</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">quiet</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">quiet</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">quiet</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">quiet</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
         <span class="self">self</span>.<span class="ident">quiet</span> <span class="op">=</span> <span class="ident">quiet</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Enables or disables the use of timestamps in log messages (default is true)</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_level</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">levels</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_level</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">levels</span>: <span class="ident">bool</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
         <span class="self">self</span>.<span class="ident">show_level</span> <span class="op">=</span> <span class="ident">levels</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Enables or disables the use of timestamps in log messages</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">timestamp</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">timestamp</span>: <span class="ident">Timestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">timestamp</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">timestamp</span>: <span class="ident">Timestamp</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
         <span class="self">self</span>.<span class="ident">timestamp</span> <span class="op">=</span> <span class="ident">timestamp</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Enables or disables the use of color in log messages</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">color</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">choice</span>: <span class="ident">ColorChoice</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">color</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">choice</span>: <span class="ident">ColorChoice</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
         <span class="self">self</span>.<span class="ident">color_choice</span> <span class="op">=</span> <span class="ident">choice</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// specify a module to allow to log to stderr</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">module</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">module</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="ident">T</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
         <span class="self">self</span>.<span class="ident">_module</span>(<span class="ident">module</span>.<span class="ident">into</span>())
     }
 
-    <span class="kw">fn</span> <span class="ident">_module</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
+    <span class="kw">fn</span> <span class="ident">_module</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">module</span>: <span class="ident">String</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
         <span class="comment">// If Ok, the module was already found</span>
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">i</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">modules</span>.<span class="ident">binary_search</span>(<span class="kw-2">&amp;</span><span class="ident">module</span>) {
             <span class="comment">// If a super-module of the current module already exists, don&#39;t insert this module</span>
-            <span class="kw">if</span> <span class="ident">i</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="ident">is_submodule</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">modules</span>[<span class="ident">i</span> <span class="op">-</span> <span class="number">1</span>], <span class="kw-2">&amp;</span><span class="ident">module</span>) {
+            <span class="kw">if</span> <span class="ident">i</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="ident">is_submodule</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">modules</span>[<span class="ident">i</span> <span class="op">-</span> <span class="number">1</span>], <span class="kw-2">&amp;</span><span class="ident">module</span>) {
                 <span class="comment">// Remove any submodules of the module we&#39;re inserting</span>
                 <span class="kw">let</span> <span class="ident">submodule_count</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">modules</span>[<span class="ident">i</span>..]
                     .<span class="ident">iter</span>()
@@ -1019,14 +1019,14 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">modules</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">modules</span>: <span class="ident">I</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
+    ) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StdErrLog</span> {
         <span class="kw">for</span> <span class="ident">module</span> <span class="kw">in</span> <span class="ident">modules</span> {
             <span class="self">self</span>.<span class="ident">module</span>(<span class="ident">module</span>);
         }
         <span class="self">self</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">log_level_filter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LevelFilter</span> {
+    <span class="kw">fn</span> <span class="ident">log_level_filter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">LevelFilter</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">quiet</span> {
             <span class="ident">LevelFilter::Off</span>
         } <span class="kw">else</span> {
@@ -1034,7 +1034,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">includes_module</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">module_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">includes_module</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">module_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
         <span class="comment">// If modules is empty, include all module paths</span>
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">modules</span>.<span class="ident">is_empty</span>() {
             <span class="kw">return</span> <span class="bool-val">true</span>;
@@ -1045,33 +1045,33 @@
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">modules</span>
             .<span class="ident">binary_search_by</span>(<span class="op">|</span><span class="ident">module</span><span class="op">|</span> <span class="ident">module</span>.<span class="ident">as_str</span>().<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">module_path</span>))
         {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; {
                 <span class="comment">// Found exact module: return true</span>
                 <span class="bool-val">true</span>
             }
-            <span class="prelude-val">Err</span>(<span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Err</span>(<span class="number">0</span>) =&gt; {
                 <span class="comment">// if there&#39;s no item which would be located before module_path, no prefix is there</span>
                 <span class="bool-val">false</span>
             }
-            <span class="prelude-val">Err</span>(<span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">is_submodule</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">modules</span>[<span class="ident">i</span> <span class="op">-</span> <span class="number">1</span>], <span class="ident">module_path</span>),
+            <span class="prelude-val">Err</span>(<span class="ident">i</span>) =&gt; <span class="ident">is_submodule</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">modules</span>[<span class="ident">i</span> <span class="op">-</span> <span class="number">1</span>], <span class="ident">module_path</span>),
         }
     }
 
     <span class="doccomment">/// sets the the logger as active</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">log::SetLoggerError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">log::SetLoggerError</span><span class="op">&gt;</span> {
         <span class="comment">/* if the user is using auto color choices then
          * detect if stderr is a tty, if it is continue
          * otherwise turn off colors by default
          */</span>
         <span class="self">self</span>.<span class="ident">color_choice</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">color_choice</span> {
-            <span class="ident">ColorChoice::Auto</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ColorChoice::Auto</span> =&gt; {
                 <span class="kw">if</span> <span class="ident">atty::is</span>(<span class="ident">Stream::Stderr</span>) {
                     <span class="ident">ColorChoice::Auto</span>
                 } <span class="kw">else</span> {
                     <span class="ident">ColorChoice::Never</span>
                 }
             },
-            <span class="ident">other</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">other</span>,
+            <span class="ident">other</span> =&gt; <span class="ident">other</span>,
         };
         <span class="ident">log::set_max_level</span>(<span class="self">self</span>.<span class="ident">log_level_filter</span>());
         <span class="ident">log::set_boxed_logger</span>(<span class="ident">Box::new</span>(<span class="self">self</span>.<span class="ident">clone</span>()))
@@ -1079,17 +1079,17 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">StdErrLog</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident">StdErrLog::new</span>()
     }
 }
 
 <span class="doccomment">/// creates a new stderr logger</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StdErrLog</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">StdErrLog</span> {
     <span class="ident">StdErrLog::new</span>()
 }
 
-<span class="kw">fn</span> <span class="ident">is_submodule</span>(<span class="ident">parent</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">possible_child</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">is_submodule</span>(<span class="ident">parent</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">possible_child</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
     <span class="comment">// Treat as bytes, because we&#39;ll be doing slicing, and we only care about &#39;:&#39; chars</span>
     <span class="kw">let</span> <span class="ident">parent</span> <span class="op">=</span> <span class="ident">parent</span>.<span class="ident">as_bytes</span>();
     <span class="kw">let</span> <span class="ident">possible_child</span> <span class="op">=</span> <span class="ident">possible_child</span>.<span class="ident">as_bytes</span>();
@@ -1107,8 +1107,8 @@
     <span class="comment">// Either the path is exactly the same, or the sub module should have a &quot;::&quot; after</span>
     <span class="comment">// the length of the parent path. This prevents things like &#39;a::bad&#39; being considered</span>
     <span class="comment">// a submodule of &#39;a::b&#39;</span>
-    <span class="ident">parent</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">possible_child</span>.<span class="ident">len</span>()
-        <span class="op">|</span><span class="op">|</span> <span class="ident">possible_child</span>.<span class="ident">get</span>(<span class="ident">parent</span>.<span class="ident">len</span>()..<span class="ident">parent</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="number">2</span>) <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">b&quot;::&quot;</span>)
+    <span class="ident">parent</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="ident">possible_child</span>.<span class="ident">len</span>()
+        <span class="op">|</span><span class="op">|</span> <span class="ident">possible_child</span>.<span class="ident">get</span>(<span class="ident">parent</span>.<span class="ident">len</span>()..<span class="ident">parent</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="number">2</span>) <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">b&quot;::&quot;</span>)
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>

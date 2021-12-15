@@ -182,12 +182,12 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;shared</span><span class="op">&gt;</span> <span class="ident">Reactor</span><span class="op">&lt;</span><span class="lifetime">&#39;shared</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Constructs the reactor from a reference to shared data on which it will</span>
     <span class="doccomment">/// place the events.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">shared</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;shared</span> <span class="ident">Shared</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">shared</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;shared</span> <span class="ident">Shared</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">shared</span>, <span class="ident">stdout_guard</span>: <span class="prelude-val">None</span> }
     }
 
     <span class="doccomment">/// Returns whether the current screen size is valid.</span>
-    <span class="kw">fn</span> <span class="ident">is_size_valid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_size_valid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">stdout_guard</span>.<span class="ident">is_none</span>()
     }
 
@@ -196,7 +196,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">pre_loop</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">initial_size</span>: <span class="ident">Vec2</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">screen</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">screen</span>().<span class="ident">lock</span>().<span class="kw">await</span>;
         <span class="kw">let</span> <span class="ident">min_size</span> <span class="op">=</span> <span class="ident">screen</span>.<span class="ident">min_size</span>();
         <span class="kw">if</span> <span class="ident">initial_size</span>.<span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">min_size</span>.<span class="ident">x</span> <span class="op">|</span><span class="op">|</span> <span class="ident">initial_size</span>.<span class="ident">y</span> <span class="op">&lt;</span> <span class="ident">min_size</span>.<span class="ident">y</span> {
@@ -212,15 +212,15 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">react_loop</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">event_interval</span>: <span class="ident">Duration</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">interval</span> <span class="op">=</span> <span class="ident">time::interval</span>(<span class="ident">event_interval</span>);
 
         <span class="kw">while</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">is_connected</span>() {
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">poll</span>().<span class="kw">await</span><span class="question-mark">?</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">crossterm</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">react</span>(<span class="ident">crossterm</span>).<span class="kw">await</span><span class="question-mark">?</span>,
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">tokio::select!</span> {
-                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">interval</span>.<span class="ident">tick</span>() <span class="op">=</span><span class="op">&gt;</span> (),
-                    <span class="kw">_</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">events</span>().<span class="ident">subscribe</span>() <span class="op">=</span><span class="op">&gt;</span> (),
+                <span class="prelude-val">Some</span>(<span class="ident">crossterm</span>) =&gt; <span class="self">self</span>.<span class="ident">react</span>(<span class="ident">crossterm</span>).<span class="kw">await</span><span class="question-mark">?</span>,
+                <span class="prelude-val">None</span> =&gt; <span class="macro">tokio::select!</span> {
+                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">interval</span>.<span class="ident">tick</span>() =&gt; (),
+                    <span class="kw">_</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">events</span>().<span class="ident">subscribe</span>() =&gt; (),
                 },
             }
         }
@@ -230,11 +230,11 @@
 
     <span class="doccomment">/// Reacts to a single event. Input uses the crossterm encoding for the</span>
     <span class="doccomment">/// event.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">react</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">crossterm</span>: <span class="ident">CrosstermEvent</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">react</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">crossterm</span>: <span class="ident">CrosstermEvent</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">service_guard</span>().<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">match</span> <span class="ident">crossterm</span> {
-            <span class="ident">CrosstermEvent::Key</span>(<span class="ident">key</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">CrosstermEvent::Key</span>(<span class="ident">key</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">maybe_key</span> <span class="op">=</span> <span class="ident">key_from_crossterm</span>(<span class="ident">key</span>.<span class="ident">code</span>);
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">main_key</span>) <span class="op">=</span> <span class="ident">maybe_key</span> {
                     <span class="kw">use</span> <span class="ident">crossterm::event::KeyModifiers</span> <span class="kw">as</span> <span class="ident">Mod</span>;
@@ -250,7 +250,7 @@
                 }
             },
 
-            <span class="ident">CrosstermEvent::Resize</span>(<span class="ident">width</span>, <span class="ident">height</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">CrosstermEvent::Resize</span>(<span class="ident">width</span>, <span class="ident">height</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="ident">width</span>, <span class="ident">y</span>: <span class="ident">height</span> };
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">locked_screen</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">screen</span>().<span class="ident">lock</span>().<span class="kw">await</span>;
                 <span class="kw">let</span> <span class="ident">prev_size_valid</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">is_size_valid</span>();
@@ -267,18 +267,18 @@
                 }
             },
 
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+            <span class="kw">_</span> =&gt; (),
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 
     <span class="doccomment">/// Polls for a single event from the OS.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">poll</span><span class="op">&lt;</span><span class="lifetime">&#39;guard</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CrosstermEvent</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">poll</span><span class="op">&lt;</span><span class="lifetime">&#39;guard</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CrosstermEvent</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">task::block_in_place</span>(<span class="op">|</span><span class="op">|</span> {
             <span class="kw">match</span> <span class="ident">crossterm::event::poll</span>(<span class="ident">Duration::from_millis</span>(<span class="number">0</span>))<span class="question-mark">?</span> {
-                <span class="bool-val">true</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">crossterm::event::read</span>().<span class="ident">map</span>(<span class="prelude-val">Some</span>),
-                <span class="bool-val">false</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
+                <span class="bool-val">true</span> =&gt; <span class="ident">crossterm::event::read</span>().<span class="ident">map</span>(<span class="prelude-val">Some</span>),
+                <span class="bool-val">false</span> =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
             }
         });
 
@@ -299,17 +299,17 @@
 }
 
 <span class="doccomment">/// Translates a crossterm key to an Andiskaz key.</span>
-<span class="kw">fn</span> <span class="ident">key_from_crossterm</span>(<span class="ident">crossterm</span>: <span class="ident">CrosstermKey</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">key_from_crossterm</span>(<span class="ident">crossterm</span>: <span class="ident">CrosstermKey</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span> {
     <span class="kw">match</span> <span class="ident">crossterm</span> {
-        <span class="ident">CrosstermKey::Esc</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Key::Esc</span>),
-        <span class="ident">CrosstermKey::Backspace</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Key::Backspace</span>),
-        <span class="ident">CrosstermKey::Enter</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Key::Enter</span>),
-        <span class="ident">CrosstermKey::Up</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Key::Up</span>),
-        <span class="ident">CrosstermKey::Down</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Key::Down</span>),
-        <span class="ident">CrosstermKey::Left</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Key::Left</span>),
-        <span class="ident">CrosstermKey::Right</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Key::Right</span>),
-        <span class="ident">CrosstermKey::Char</span>(<span class="ident">ch</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Key::Char</span>(<span class="ident">ch</span>)),
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+        <span class="ident">CrosstermKey::Esc</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">Key::Esc</span>),
+        <span class="ident">CrosstermKey::Backspace</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">Key::Backspace</span>),
+        <span class="ident">CrosstermKey::Enter</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">Key::Enter</span>),
+        <span class="ident">CrosstermKey::Up</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">Key::Up</span>),
+        <span class="ident">CrosstermKey::Down</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">Key::Down</span>),
+        <span class="ident">CrosstermKey::Left</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">Key::Left</span>),
+        <span class="ident">CrosstermKey::Right</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">Key::Right</span>),
+        <span class="ident">CrosstermKey::Char</span>(<span class="ident">ch</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">Key::Char</span>(<span class="ident">ch</span>)),
+        <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
     }
 }
 </code></pre></div>

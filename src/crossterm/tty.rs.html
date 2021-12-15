@@ -65,16 +65,16 @@
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IsTty</span> {
     <span class="doccomment">/// Returns true when an instance is a terminal teletype, otherwise false.</span>
-    <span class="kw">fn</span> <span class="ident">is_tty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
+    <span class="kw">fn</span> <span class="ident">is_tty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span>;
 }
 
 <span class="doccomment">/// On unix, the `isatty()` function returns true if a file</span>
 <span class="doccomment">/// descriptor is a terminal.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRawFd</span><span class="op">&gt;</span> <span class="ident">IsTty</span> <span class="kw">for</span> <span class="ident">S</span> {
-    <span class="kw">fn</span> <span class="ident">is_tty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_tty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="ident">fd</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_raw_fd</span>();
-        <span class="kw">unsafe</span> { <span class="ident">libc::isatty</span>(<span class="ident">fd</span>) <span class="op">=</span><span class="op">=</span> <span class="number">1</span> }
+        <span class="kw">unsafe</span> { <span class="ident">libc::isatty</span>(<span class="ident">fd</span>) <span class="op">==</span> <span class="number">1</span> }
     }
 }
 
@@ -82,10 +82,10 @@
 <span class="doccomment">/// Otherwise false.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRawHandle</span><span class="op">&gt;</span> <span class="ident">IsTty</span> <span class="kw">for</span> <span class="ident">S</span> {
-    <span class="kw">fn</span> <span class="ident">is_tty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_tty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mode</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="ident">ok</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">GetConsoleMode</span>(<span class="self">self</span>.<span class="ident">as_raw_handle</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">mode</span>) };
-        <span class="ident">ok</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span>
+        <span class="ident">ok</span> <span class="op">==</span> <span class="number">1</span>
     }
 }
 </code></pre></div>

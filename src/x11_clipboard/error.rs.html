@@ -88,40 +88,40 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="kw">use</span> <span class="ident"><span class="self">self</span>::Error</span>::<span class="kw-2">*</span>;
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Set</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;XCB - couldn&#39;t set atom: {:?}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">XcbConn</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;XCB connection error: {:?}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">XcbGeneric</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;XCB generic error: {:?}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">XcbReply</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;XCB reply error: {:?}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">Lock</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;XCB: Lock is poisoned&quot;</span>),
-            <span class="ident">Timeout</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Selection timed out&quot;</span>),
-            <span class="ident">Owner</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Failed to set new owner of XCB selection&quot;</span>),
-            <span class="ident">UnexpectedType</span>(<span class="ident">target</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Unexpected Reply type: {}&quot;</span>, <span class="ident">target</span>),
-            <span class="ident">__Unknown</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>()
+            <span class="ident">Set</span>(<span class="ident">e</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;XCB - couldn&#39;t set atom: {:?}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">XcbConn</span>(<span class="ident">e</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;XCB connection error: {:?}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">XcbGeneric</span>(<span class="ident">e</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;XCB generic error: {:?}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">XcbReply</span>(<span class="ident">e</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;XCB reply error: {:?}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">Lock</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;XCB: Lock is poisoned&quot;</span>),
+            <span class="ident">Timeout</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Selection timed out&quot;</span>),
+            <span class="ident">Owner</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Failed to set new owner of XCB selection&quot;</span>),
+            <span class="ident">UnexpectedType</span>(<span class="ident">target</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Unexpected Reply type: {}&quot;</span>, <span class="ident">target</span>),
+            <span class="ident">__Unknown</span> =&gt; <span class="macro">unreachable!</span>()
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">StdError</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="ident">dyn</span> <span class="ident">StdError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="ident">dyn</span> <span class="ident">StdError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
         <span class="kw">use</span> <span class="ident"><span class="self">self</span>::Error</span>::<span class="kw-2">*</span>;
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Set</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>),
-            <span class="ident">XcbConn</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>),
-            <span class="ident">XcbGeneric</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>),
-            <span class="ident">XcbReply</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>),
-            <span class="ident">Lock</span> <span class="op">|</span> <span class="ident">Timeout</span> <span class="op">|</span> <span class="ident">Owner</span> <span class="op">|</span> <span class="ident">UnexpectedType</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">__Unknown</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>()
+            <span class="ident">Set</span>(<span class="ident">e</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">e</span>),
+            <span class="ident">XcbConn</span>(<span class="ident">e</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">e</span>),
+            <span class="ident">XcbGeneric</span>(<span class="ident">e</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">e</span>),
+            <span class="ident">XcbReply</span>(<span class="ident">e</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">e</span>),
+            <span class="ident">Lock</span> <span class="op">|</span> <span class="ident">Timeout</span> <span class="op">|</span> <span class="ident">Owner</span> <span class="op">|</span> <span class="ident">UnexpectedType</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">__Unknown</span> =&gt; <span class="macro">unreachable!</span>()
         }
     }
 }
 
 <span class="macro">macro_rules!</span> <span class="ident">define_from</span> {
-    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>:<span class="ident">ident</span> <span class="ident">from</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span>:<span class="ident">ty</span> ) <span class="op">=</span><span class="op">&gt;</span> {
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>:<span class="ident">ident</span> <span class="ident">from</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span>:<span class="ident">ty</span> ) =&gt; {
         <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span>) -&gt; <span class="ident">Error</span> {
                 <span class="ident">Error</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>(<span class="ident">err</span>)
             }
         }

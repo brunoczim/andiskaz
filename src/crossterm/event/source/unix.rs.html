@@ -281,11 +281,11 @@
 }
 
 <span class="kw">impl</span> <span class="ident">UnixInternalEventSource</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">UnixInternalEventSource::from_file_descriptor</span>(<span class="ident">tty_fd</span>()<span class="question-mark">?</span>)<span class="question-mark">?</span>)
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_file_descriptor</span>(<span class="ident">input_fd</span>: <span class="ident">FileDesc</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_file_descriptor</span>(<span class="ident">input_fd</span>: <span class="ident">FileDesc</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">poll</span> <span class="op">=</span> <span class="ident">Poll::new</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">registry</span> <span class="op">=</span> <span class="ident">poll</span>.<span class="ident">registry</span>();
 
@@ -313,7 +313,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">EventSource</span> <span class="kw">for</span> <span class="ident">UnixInternalEventSource</span> {
-    <span class="kw">fn</span> <span class="ident">try_read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">try_read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">event</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">parser</span>.<span class="ident">next</span>() {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">event</span>));
         }
@@ -325,7 +325,7 @@
                 <span class="comment">// Mio will throw an interrupted error in case of cursor position retrieval. We need to retry until it succeeds.</span>
                 <span class="comment">// Previous versions of Mio (&lt; 0.7) would automatically retry the poll call if it was interrupted (if EINTR was returned).</span>
                 <span class="comment">// https://docs.rs/mio/0.7.0/mio/struct.Poll.html#notes</span>
-                <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">io::ErrorKind::Interrupted</span> {
+                <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">==</span> <span class="ident">io::ErrorKind::Interrupted</span> {
                     <span class="kw">continue</span>;
                 } <span class="kw">else</span> {
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind::IoError</span>(<span class="ident">e</span>));
@@ -339,28 +339,28 @@
 
             <span class="kw">for</span> <span class="ident">token</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">token</span>()) {
                 <span class="kw">match</span> <span class="ident">token</span> {
-                    <span class="ident">TTY_TOKEN</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">TTY_TOKEN</span> =&gt; {
                         <span class="kw">loop</span> {
                             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">tty_fd</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">tty_buffer</span>, <span class="ident">TTY_BUFFER_SIZE</span>) {
-                                <span class="prelude-val">Ok</span>(<span class="ident">read_count</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="prelude-val">Ok</span>(<span class="ident">read_count</span>) =&gt; {
                                     <span class="kw">if</span> <span class="ident">read_count</span> <span class="op">&gt;</span> <span class="number">0</span> {
                                         <span class="self">self</span>.<span class="ident">parser</span>.<span class="ident">advance</span>(
                                             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">tty_buffer</span>[..<span class="ident">read_count</span>],
-                                            <span class="ident">read_count</span> <span class="op">=</span><span class="op">=</span> <span class="ident">TTY_BUFFER_SIZE</span>,
+                                            <span class="ident">read_count</span> <span class="op">==</span> <span class="ident">TTY_BUFFER_SIZE</span>,
                                         );
                                     }
                                 }
-                                <span class="prelude-val">Err</span>(<span class="ident">ErrorKind::IoError</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="prelude-val">Err</span>(<span class="ident">ErrorKind::IoError</span>(<span class="ident">e</span>)) =&gt; {
                                     <span class="comment">// No more data to read at the moment. We will receive another event</span>
-                                    <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">io::ErrorKind::WouldBlock</span> {
+                                    <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">==</span> <span class="ident">io::ErrorKind::WouldBlock</span> {
                                         <span class="kw">break</span>;
                                     }
                                     <span class="comment">// once more data is available to read.</span>
-                                    <span class="kw">else</span> <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">io::ErrorKind::Interrupted</span> {
+                                    <span class="kw">else</span> <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">==</span> <span class="ident">io::ErrorKind::Interrupted</span> {
                                         <span class="kw">continue</span>;
                                     }
                                 }
-                                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+                                <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
                             };
 
                             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">event</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">parser</span>.<span class="ident">next</span>() {
@@ -368,10 +368,10 @@
                             }
                         }
                     }
-                    <span class="ident">SIGNAL_TOKEN</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">SIGNAL_TOKEN</span> =&gt; {
                         <span class="kw">for</span> <span class="ident">signal</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">signals</span> {
                             <span class="kw">match</span> <span class="ident">signal</span> <span class="kw">as</span> <span class="ident">libc::c_int</span> {
-                                <span class="ident">signal_hook::SIGWINCH</span> <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="ident">signal_hook::SIGWINCH</span> =&gt; {
                                     <span class="comment">// TODO Should we remove tput?</span>
                                     <span class="comment">//</span>
                                     <span class="comment">// This can take a really long time, because terminal::size can</span>
@@ -384,19 +384,19 @@
                                         <span class="ident">new_size</span>.<span class="number">0</span>, <span class="ident">new_size</span>.<span class="number">1</span>,
                                     ))));
                                 }
-                                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(<span class="string">&quot;Synchronize signal registration &amp; handling&quot;</span>),
+                                <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;Synchronize signal registration &amp; handling&quot;</span>),
                             };
                         }
                     }
                     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;event-stream&quot;</span>)]</span>
-                    <span class="ident">WAKE_TOKEN</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">WAKE_TOKEN</span> =&gt; {
                         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">std::io::Error::new</span>(
                             <span class="ident">std::io::ErrorKind::Interrupted</span>,
                             <span class="string">&quot;Poll operation was woken up by `Waker::wake`&quot;</span>,
                         )
                         .<span class="ident">into</span>());
                     }
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(<span class="string">&quot;Synchronize Evented handle registration &amp; token handling&quot;</span>),
+                    <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;Synchronize Evented handle registration &amp; token handling&quot;</span>),
                 }
             }
 
@@ -408,7 +408,7 @@
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;event-stream&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">waker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Waker</span> {
+    <span class="kw">fn</span> <span class="ident">waker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Waker</span> {
         <span class="self">self</span>.<span class="ident">waker</span>.<span class="ident">clone</span>()
     }
 }
@@ -426,7 +426,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Parser</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident">Parser</span> {
             <span class="comment">// This buffer is used for -&gt; 1 &lt;- ANSI escape sequence. Are we</span>
             <span class="comment">// aware of any ANSI escape sequence that is bigger? Can we make</span>
@@ -457,15 +457,15 @@
             <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">push</span>(<span class="kw-2">*</span><span class="ident">byte</span>);
 
             <span class="kw">match</span> <span class="ident">parse_event</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>, <span class="ident">more</span>) {
-                <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">ie</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">ie</span>)) =&gt; {
                     <span class="self">self</span>.<span class="ident">internal_events</span>.<span class="ident">push_back</span>(<span class="ident">ie</span>);
                     <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">clear</span>();
                 }
-                <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) =&gt; {
                     <span class="comment">// Event can&#39;t be parsed, because we don&#39;t have enough bytes for</span>
                     <span class="comment">// the current sequence. Keep the buffer and process next bytes.</span>
                 }
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
                     <span class="comment">// Event can&#39;t be parsed (not enough parameters, parameter is not a number, ...).</span>
                     <span class="comment">// Clear the buffer and continue with another sequence.</span>
                     <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">clear</span>();
@@ -478,7 +478,7 @@
 <span class="kw">impl</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">Parser</span> {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">InternalEvent</span>;
 
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">internal_events</span>.<span class="ident">pop_front</span>()
     }
 }

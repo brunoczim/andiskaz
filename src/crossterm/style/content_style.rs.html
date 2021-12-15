@@ -106,19 +106,19 @@
 <span class="kw">impl</span> <span class="ident">ContentStyle</span> {
     <span class="doccomment">/// Creates a `StyledContent` by applying the style to the given `val`.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Display</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">val</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Display</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">val</span>: <span class="ident">D</span>) -&gt; <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span> {
         <span class="ident">StyledContent::new</span>(<span class="self">self</span>, <span class="ident">val</span>)
     }
 
     <span class="doccomment">/// Creates a new `ContentStyle`.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ContentStyle</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">ContentStyle</span> {
         <span class="ident">ContentStyle::default</span>()
     }
 
     <span class="doccomment">/// Sets the background color.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">background</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ContentStyle</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">background</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) -&gt; <span class="ident">ContentStyle</span> {
         <span class="self">Self</span> {
             <span class="ident">background_color</span>: <span class="prelude-val">Some</span>(<span class="ident">color</span>),
             ..<span class="self">self</span>
@@ -127,7 +127,7 @@
 
     <span class="doccomment">/// Sets the foreground color.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">foreground</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ContentStyle</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">foreground</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) -&gt; <span class="ident">ContentStyle</span> {
         <span class="self">Self</span> {
             <span class="ident">foreground_color</span>: <span class="prelude-val">Some</span>(<span class="ident">color</span>),
             ..<span class="self">self</span>
@@ -138,7 +138,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// You can add more attributes by calling this method multiple times.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">attribute</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">attr</span>: <span class="ident">Attribute</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ContentStyle</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">attribute</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">attr</span>: <span class="ident">Attribute</span>) -&gt; <span class="ident">ContentStyle</span> {
         <span class="self">self</span>.<span class="ident">attributes</span>.<span class="ident">set</span>(<span class="ident">attr</span>);
         <span class="self">self</span>
     }

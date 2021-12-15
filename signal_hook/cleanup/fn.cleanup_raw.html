@@ -4,7 +4,7 @@ doesn’t remove the hooks (though they will not get called), it doesn’t handl
 doesn’t return any previous chained signals. The hooks will simply stay registered but dormant.</p>
 <p>This function is async-signal-safe. However, you might prefer to use either <a href="fn.cleanup_signal.html" title="cleanup_signal">cleanup_signal</a> or
 <a href="fn.register.html" title="register">register</a>.</p>
-<h1 id="warning" class="section-header"><a href="#warning">Warning</a></h1>
+<h2 id="warning" class="section-header"><a href="#warning">Warning</a></h2>
 <p>This action is irreversible, once called, registering more hooks for the same signal will have
 no effect (neither the old nor the new ones will be active but the registration will appear to
 have succeeded).</p>

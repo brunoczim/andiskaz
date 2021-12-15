@@ -364,7 +364,7 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::SigId</span>;
 
 <span class="doccomment">/// Registers an action to set the flag to `true` whenever the given signal arrives.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register</span>(<span class="ident">signal</span>: <span class="ident">c_int</span>, <span class="ident">flag</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicBool</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SigId</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register</span>(<span class="ident">signal</span>: <span class="ident">c_int</span>, <span class="ident">flag</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicBool</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SigId</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="comment">// We use SeqCst for two reasons:</span>
     <span class="comment">// * Signals should not come very often, so the performance does not really matter.</span>
     <span class="comment">// * We promise the order of actions, but setting different atomics with Relaxed or similar</span>
@@ -373,7 +373,7 @@
 }
 
 <span class="doccomment">/// Registers an action to set the flag to the given value whenever the signal arrives.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_usize</span>(<span class="ident">signal</span>: <span class="ident">c_int</span>, <span class="ident">flag</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicUsize</span><span class="op">&gt;</span>, <span class="ident">value</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SigId</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_usize</span>(<span class="ident">signal</span>: <span class="ident">c_int</span>, <span class="ident">flag</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicUsize</span><span class="op">&gt;</span>, <span class="ident">value</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SigId</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="kw">unsafe</span> { <span class="ident"><span class="kw">crate</span>::register</span>(<span class="ident">signal</span>, <span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">flag</span>.<span class="ident">store</span>(<span class="ident">value</span>, <span class="ident">Ordering::SeqCst</span>)) }
 }
 
@@ -393,7 +393,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">wait_flag</span>(<span class="ident">flag</span>: <span class="kw-2">&amp;</span><span class="ident">AtomicBool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">wait_flag</span>(<span class="ident">flag</span>: <span class="kw-2">&amp;</span><span class="ident">AtomicBool</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="ident">start</span> <span class="op">=</span> <span class="ident">Instant::now</span>();
         <span class="kw">while</span> <span class="op">!</span><span class="ident">flag</span>.<span class="ident">load</span>(<span class="ident">Ordering::Relaxed</span>) {
             <span class="ident">atomic::spin_loop_hint</span>();

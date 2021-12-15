@@ -18,7 +18,7 @@ to link to <code>libwayland-client.so</code> for communication instead. A <code>
 available for loading <code>libwayland-client.so</code> dynamically at runtime rather than linking to it.</p>
 <p>The code of the crate itself (and the code of the example utilities) is 100% safe Rust. This
 doesn’t include the dependencies.</p>
-<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
+<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
 <p>Copying to the regular clipboard:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">wl_clipboard_rs::copy</span>::{<span class="ident">MimeType</span>, <span class="ident">Options</span>, <span class="ident">Source</span>};
@@ -32,17 +32,17 @@ doesn’t include the dependencies.</p>
 
 <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">get_contents</span>(<span class="ident">ClipboardType::Regular</span>, <span class="ident">Seat::Unspecified</span>, <span class="ident">MimeType::Text</span>);
 <span class="kw">match</span> <span class="ident">result</span> {
-    <span class="prelude-val">Ok</span>((<span class="kw-2">mut</span> <span class="ident">pipe</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>((<span class="kw-2">mut</span> <span class="ident">pipe</span>, <span class="kw">_</span>)) =&gt; {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">contents</span> <span class="op">=</span> <span class="macro">vec!</span>[];
         <span class="ident">pipe</span>.<span class="ident">read_to_end</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">contents</span>)<span class="question-mark">?</span>;
         <span class="macro">println!</span>(<span class="string">&quot;Pasted: {}&quot;</span>, <span class="ident">String::from_utf8_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">contents</span>));
     }
 
-    <span class="prelude-val">Err</span>(<span class="ident">Error::NoSeats</span>) <span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::ClipboardEmpty</span>) <span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::NoMimeType</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Err</span>(<span class="ident">Error::NoSeats</span>) <span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::ClipboardEmpty</span>) <span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::NoMimeType</span>) =&gt; {
         <span class="comment">// The clipboard is empty or doesn&#39;t contain text, nothing to worry about.</span>
     }
 
-    <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>)<span class="question-mark">?</span>
+    <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>)<span class="question-mark">?</span>
 }</code></pre></div>
 <p>Checking if the “primary” clipboard is supported (note that this might be unnecessary depending
 on your crate usage, the regular copying and pasting functions do report if the primary
@@ -51,12 +51,12 @@ selection is unsupported when it is requested):</p>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">wl_clipboard_rs::utils</span>::{<span class="ident">is_primary_selection_supported</span>, <span class="ident">PrimarySelectionCheckError</span>};
 
 <span class="kw">match</span> <span class="ident">is_primary_selection_supported</span>() {
-    <span class="prelude-val">Ok</span>(<span class="ident">supported</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>(<span class="ident">supported</span>) =&gt; {
         <span class="comment">// We have our definitive result. False means that either data-control version 1</span>
         <span class="comment">// is present (which does not support the primary selection), or that data-control</span>
         <span class="comment">// version 2 is present and it did not signal the primary selection support.</span>
     },
-    <span class="prelude-val">Err</span>(<span class="ident">PrimarySelectionCheckError::NoSeats</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Err</span>(<span class="ident">PrimarySelectionCheckError::NoSeats</span>) =&gt; {
         <span class="comment">// Impossible to give a definitive result. Primary selection may or may not be</span>
         <span class="comment">// supported.</span>
 
@@ -64,15 +64,15 @@ selection is unsupported when it is requested):</p>
         <span class="comment">// Unfortunately, at least one seat is needed to check for the primary clipboard</span>
         <span class="comment">// support.</span>
     },
-    <span class="prelude-val">Err</span>(<span class="ident">PrimarySelectionCheckError::MissingProtocol</span> { .. }) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Err</span>(<span class="ident">PrimarySelectionCheckError::MissingProtocol</span> { .. }) =&gt; {
         <span class="comment">// The data-control protocol (required for wl-clipboard-rs operation) is not</span>
         <span class="comment">// supported by the compositor.</span>
     },
-    <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
         <span class="comment">// Some communication error occurred.</span>
     }
 }</code></pre></div>
-<h1 id="included-terminal-utilities" class="section-header"><a href="#included-terminal-utilities">Included terminal utilities</a></h1>
+<h2 id="included-terminal-utilities" class="section-header"><a href="#included-terminal-utilities">Included terminal utilities</a></h2>
 <ul>
 <li><code>wl-paste</code>: implements <code>wl-paste</code> from
 <a href="https://github.com/bugaevc/wl-clipboard">wl-clipboard</a>.</li>
@@ -80,9 +80,9 @@ selection is unsupported when it is requested):</p>
 <li><code>wl-clip</code>: a Wayland version of <code>xclip</code>.</li>
 </ul>
 </div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
-<div class="item-table"><div class="item-left module-item"><a class="mod" href="copy/index.html" title="wl_clipboard_rs::copy mod">copy</a></div><div class="item-right docblock-short"><p>Copying and clearing clipboard contents.</p>
-</div><div class="item-left module-item"><a class="mod" href="paste/index.html" title="wl_clipboard_rs::paste mod">paste</a></div><div class="item-right docblock-short"><p>Getting the offered MIME types and the clipboard contents.</p>
-</div><div class="item-left module-item"><a class="mod" href="utils/index.html" title="wl_clipboard_rs::utils mod">utils</a></div><div class="item-right docblock-short"><p>Helper functions.</p>
-</div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="wl_clipboard_rs" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="copy/index.html" title="wl_clipboard_rs::copy mod">copy</a></div><div class="item-right docblock-short"><p>Copying and clearing clipboard contents.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="paste/index.html" title="wl_clipboard_rs::paste mod">paste</a></div><div class="item-right docblock-short"><p>Getting the offered MIME types and the clipboard contents.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="utils/index.html" title="wl_clipboard_rs::utils mod">utils</a></div><div class="item-right docblock-short"><p>Helper functions.</p>
+</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="wl_clipboard_rs" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
     <script src="../main.js"></script>
 </body></html>

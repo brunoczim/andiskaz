@@ -254,12 +254,12 @@ limitations under the License.
     <span class="doccomment">/// In addition to returning Err on communication errors (such as</span>
     <span class="doccomment">/// when operating in an X11 environment), will also return Err if</span>
     <span class="doccomment">/// the compositor does not support the data-control protocol.</span>
-    <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">WaylandClipboardContext</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">WaylandClipboardContext</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">supports_primary_selection</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">utils::is_primary_selection_supported</span>() {
-            <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">v</span>,
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">e</span> {
-                <span class="ident">utils::PrimarySelectionCheckError::NoSeats</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">into_boxed_error</span>(<span class="ident">e</span>)),
+            <span class="prelude-val">Ok</span>(<span class="ident">v</span>) =&gt; <span class="ident">v</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="kw">match</span> <span class="ident">e</span> {
+                <span class="ident">utils::PrimarySelectionCheckError::NoSeats</span> =&gt; <span class="bool-val">false</span>,
+                <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">into_boxed_error</span>(<span class="ident">e</span>)),
             },
         };
 
@@ -279,23 +279,23 @@ limitations under the License.
     <span class="doccomment">/// An empty clipboard is not considered an error, but the</span>
     <span class="doccomment">/// clipboard must indicate a text MIME type and the contained text</span>
     <span class="doccomment">/// must be valid UTF-8.</span>
-    <span class="kw">fn</span> <span class="ident">get_contents</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_contents</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">supports_primary_selection</span> {
             <span class="kw">match</span> <span class="ident">paste::get_contents</span>(
                 <span class="ident">paste::ClipboardType::Primary</span>,
                 <span class="ident">paste::Seat::Unspecified</span>,
                 <span class="ident">paste::MimeType::Text</span>,
             ) {
-                <span class="prelude-val">Ok</span>((<span class="kw-2">mut</span> <span class="ident">reader</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Ok</span>((<span class="kw-2">mut</span> <span class="ident">reader</span>, <span class="kw">_</span>)) =&gt; {
                     <span class="comment">// this looks weird, but rustc won&#39;t let me do it</span>
                     <span class="comment">// the natural way</span>
                     <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">read_into_string</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">reader</span>).<span class="ident">map_err</span>(<span class="ident">Box::new</span>)<span class="question-mark">?</span>);
                 }
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">e</span> {
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="kw">match</span> <span class="ident">e</span> {
                     <span class="ident">paste::Error::NoSeats</span>
                     <span class="op">|</span> <span class="ident">paste::Error::ClipboardEmpty</span>
-                    <span class="op">|</span> <span class="ident">paste::Error::NoMimeType</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>()),
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+                    <span class="op">|</span> <span class="ident">paste::Error::NoMimeType</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>()),
+                    <span class="kw">_</span> =&gt; (),
                 },
             }
         }
@@ -305,12 +305,12 @@ limitations under the License.
             <span class="ident">paste::Seat::Unspecified</span>,
             <span class="ident">paste::MimeType::Text</span>,
         ) {
-            <span class="prelude-val">Ok</span>((<span class="ident">reader</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">reader</span>,
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">e</span> {
-                <span class="ident">paste::Error::NoSeats</span> <span class="op">|</span> <span class="ident">paste::Error::ClipboardEmpty</span> <span class="op">|</span> <span class="ident">paste::Error::NoMimeType</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>((<span class="ident">reader</span>, <span class="kw">_</span>)) =&gt; <span class="ident">reader</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="kw">match</span> <span class="ident">e</span> {
+                <span class="ident">paste::Error::NoSeats</span> <span class="op">|</span> <span class="ident">paste::Error::ClipboardEmpty</span> <span class="op">|</span> <span class="ident">paste::Error::NoMimeType</span> =&gt; {
                     <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>());
                 }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">into_boxed_error</span>(<span class="ident">e</span>)),
+                <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">into_boxed_error</span>(<span class="ident">e</span>)),
             },
         };
 
@@ -323,7 +323,7 @@ limitations under the License.
     <span class="doccomment">/// this context was constructed, this will copy to both the</span>
     <span class="doccomment">/// primary selection and the regular clipboard. Otherwise, only</span>
     <span class="doccomment">/// the regular clipboard will be pasted to.</span>
-    <span class="kw">fn</span> <span class="ident">set_contents</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">set_contents</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">String</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">options</span> <span class="op">=</span> <span class="ident">Options::new</span>();
 
         <span class="ident">options</span>
@@ -346,7 +346,7 @@ limitations under the License.
             .<span class="ident">map_err</span>(<span class="ident">into_boxed_error</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">supports_primary_selection</span> {
             <span class="ident">clear</span>(<span class="ident">copy::ClipboardType::Both</span>, <span class="ident">copy::Seat::All</span>).<span class="ident">map_err</span>(<span class="ident">into_boxed_error</span>)
         } <span class="kw">else</span> {
@@ -355,11 +355,11 @@ limitations under the License.
     }
 }
 
-<span class="kw">fn</span> <span class="ident">into_boxed_error</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Fail</span><span class="op">&gt;</span>(<span class="ident">fail</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Error</span> {
+<span class="kw">fn</span> <span class="ident">into_boxed_error</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Fail</span><span class="op">&gt;</span>(<span class="ident">fail</span>: <span class="ident">F</span>) -&gt; <span class="ident">anyhow::Error</span> {
     <span class="ident">fail</span>.<span class="ident">compat</span>().<span class="ident">into</span>()
 }
 
-<span class="kw">fn</span> <span class="ident">read_into_string</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Read</span><span class="op">&gt;</span>(<span class="ident">reader</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">read_into_string</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Read</span><span class="op">&gt;</span>(<span class="ident">reader</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">R</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">String::new</span>();
     <span class="ident">reader</span>.<span class="ident">read_to_string</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">contents</span>)<span class="question-mark">?</span>;
 

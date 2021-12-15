@@ -243,7 +243,7 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">make</span>(
         <span class="ident">map</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">ObjectMap</span><span class="op">&lt;</span><span class="ident"><span class="self">self</span>::proxy::ObjectMeta</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">connection</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident"><span class="self">self</span>::connection::Connection</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProxyMap</span> {
+    ) -&gt; <span class="ident">ProxyMap</span> {
         <span class="ident">ProxyMap</span> { <span class="ident">map</span>, <span class="ident">connection</span> }
     }
 
@@ -251,9 +251,9 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span> <span class="op">+</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">id</span>: <span class="ident">u32</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="ident">ProxyInner::from_id</span>(<span class="ident">id</span>, <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">clone</span>(), <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">clone</span>()).<span class="ident">map</span>(<span class="op">|</span><span class="ident">object</span><span class="op">|</span> {
-            <span class="macro">debug_assert!</span>(<span class="ident">I::NAME</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;&lt;anonymous&gt;&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">object</span>.<span class="ident">is_interface</span>::<span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>());
+            <span class="macro">debug_assert!</span>(<span class="ident">I::NAME</span> <span class="op">==</span> <span class="string">&quot;&lt;anonymous&gt;&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">object</span>.<span class="ident">is_interface</span>::<span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>());
             <span class="ident">Proxy::wrap</span>(<span class="ident">object</span>)
         })
     }
@@ -262,7 +262,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_or_dead</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span> <span class="op">+</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">id</span>: <span class="ident">u32</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="ident">id</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> {
             <span class="ident">Proxy::wrap</span>(<span class="ident">ProxyInner::dead</span>::<span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">id</span>, <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">clone</span>(), <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">clone</span>()))
         })
@@ -272,7 +272,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_new</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span> <span class="op">+</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">id</span>: <span class="ident">u32</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Main</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Main</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="macro">debug_assert!</span>(<span class="self">self</span>
             .<span class="ident">map</span>
             .<span class="ident">lock</span>()
@@ -301,7 +301,7 @@
         <span class="ident">proxy</span>: <span class="ident">ProxyInner</span>,
         <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ProxyMap</span>,
         <span class="ident">data</span>: <span class="ident"><span class="kw">crate</span>::DispatchData</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Dispatched</span>;
+    ) -&gt; <span class="ident">Dispatched</span>;
 }
 
 <span class="kw">mod</span> <span class="ident">dispatcher_impl</span> {
@@ -331,7 +331,7 @@
         <span class="ident">proxy</span>: <span class="ident">ProxyInner</span>,
         <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ProxyMap</span>,
         <span class="ident">data</span>: <span class="ident"><span class="kw">crate</span>::DispatchData</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Dispatched</span> {
+    ) -&gt; <span class="ident">Dispatched</span> {
         <span class="kw">let</span> <span class="ident">opcode</span> <span class="op">=</span> <span class="ident">msg</span>.<span class="ident">opcode</span> <span class="kw">as</span> <span class="ident">usize</span>;
 
         <span class="kw">if</span> <span class="ident">WAYLAND_DEBUG</span>.<span class="ident">load</span>(<span class="ident">Ordering::Relaxed</span>) {
@@ -344,8 +344,8 @@
         }
 
         <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">I::Event::from_raw</span>(<span class="ident">msg</span>, <span class="ident">map</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">v</span>,
-            <span class="prelude-val">Err</span>(()) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Dispatched::BadMsg</span>,
+            <span class="prelude-val">Ok</span>(<span class="ident">v</span>) =&gt; <span class="ident">v</span>,
+            <span class="prelude-val">Err</span>(()) =&gt; <span class="kw">return</span> <span class="ident">Dispatched::BadMsg</span>,
         };
 
         <span class="kw">if</span> <span class="ident">message</span>.<span class="ident">since</span>() <span class="op">&gt;</span> <span class="ident">proxy</span>.<span class="ident">version</span>() {
@@ -383,7 +383,7 @@
     }
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">make_dispatcher</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="ident">filter</span>: <span class="ident">Filter</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Dispatcher</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span><span class="op">&gt;</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">make_dispatcher</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="ident">filter</span>: <span class="ident">Filter</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>) -&gt; <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Dispatcher</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">I</span>: <span class="ident">Interface</span> <span class="op">+</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Sync</span>,
     <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span>(<span class="ident">Main</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>, <span class="ident">I::Event</span>)<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -396,7 +396,7 @@
     }))
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">default_dispatcher</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Dispatcher</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">default_dispatcher</span>() -&gt; <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Dispatcher</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">struct</span> <span class="ident">DefaultDisp</span>;
     <span class="kw">impl</span> <span class="ident">Dispatcher</span> <span class="kw">for</span> <span class="ident">DefaultDisp</span> {
         <span class="kw">fn</span> <span class="ident">dispatch</span>(
@@ -405,7 +405,7 @@
             <span class="ident">proxy</span>: <span class="ident">ProxyInner</span>,
             <span class="ident">_map</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ProxyMap</span>,
             <span class="ident">_data</span>: <span class="ident"><span class="kw">crate</span>::DispatchData</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Dispatched</span> {
+        ) -&gt; <span class="ident">Dispatched</span> {
             <span class="ident">Dispatched::NoDispatch</span>(<span class="ident">msg</span>, <span class="ident">proxy</span>)
         }
     }

@@ -145,7 +145,7 @@
 
 <span class="kw">impl</span> <span class="ident">InfoDialog</span> {
     <span class="doccomment">/// Creates a dialog with default style settings.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">title</span>: <span class="ident">TermString</span>, <span class="ident">message</span>: <span class="ident">TermString</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">title</span>: <span class="ident">TermString</span>, <span class="ident">message</span>: <span class="ident">TermString</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">title</span>,
             <span class="ident">message</span>,
@@ -162,7 +162,7 @@
     }
 
     <span class="doccomment">/// Runs this dialog showing it to the user, awaiting OK!</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">render</span>(<span class="ident">term</span>.<span class="ident">lock_now</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">screen</span>());
 
         <span class="kw">loop</span> {
@@ -179,15 +179,15 @@
                     <span class="ident">ctrl</span>: <span class="bool-val">false</span>,
                     <span class="ident">alt</span>: <span class="bool-val">false</span>,
                     <span class="ident">shift</span>: <span class="bool-val">false</span>,
-                })) <span class="kw">if</span> <span class="ident">session</span>.<span class="ident">screen</span>().<span class="ident">valid_size</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span> <span class="prelude-val">Ok</span>(()),
+                })) <span class="kw">if</span> <span class="ident">session</span>.<span class="ident">screen</span>().<span class="ident">valid_size</span>() =&gt; <span class="kw">break</span> <span class="prelude-val">Ok</span>(()),
 
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">evt</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">evt</span>)) =&gt; {
                     <span class="kw">if</span> <span class="ident">evt</span>.<span class="ident">size</span>.<span class="ident">is_some</span>() {
                         <span class="self">self</span>.<span class="ident">render</span>(<span class="ident">session</span>.<span class="ident">screen</span>());
                     }
                 },
 
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+                <span class="kw">_</span> =&gt; (),
             }
         }
     }
@@ -210,7 +210,7 @@
     }
 
     <span class="doccomment">/// Renders the message of the dialog.</span>
-    <span class="kw">fn</span> <span class="ident">render_message</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Screen</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord</span> {
+    <span class="kw">fn</span> <span class="ident">render_message</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Screen</span>) -&gt; <span class="ident">Coord</span> {
         <span class="ident">screen</span>.<span class="ident">styled_text</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">message</span>, <span class="self">self</span>.<span class="ident">style</span>)
     }
 

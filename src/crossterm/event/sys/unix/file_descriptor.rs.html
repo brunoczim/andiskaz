@@ -106,11 +106,11 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `fd` - raw file descriptor</span>
     <span class="doccomment">/// * `close_on_drop` - specify if the raw file descriptor should be closed once the `FileDesc` is dropped</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">fd</span>: <span class="ident">RawFd</span>, <span class="ident">close_on_drop</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FileDesc</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">fd</span>: <span class="ident">RawFd</span>, <span class="ident">close_on_drop</span>: <span class="ident">bool</span>) -&gt; <span class="ident">FileDesc</span> {
         <span class="ident">FileDesc</span> { <span class="ident">fd</span>, <span class="ident">close_on_drop</span> }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="ident">size</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="ident">size</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> {
             <span class="ident">libc::read</span>(
                 <span class="self">self</span>.<span class="ident">fd</span>,
@@ -127,7 +127,7 @@
     }
 
     <span class="doccomment">/// Returns the underlying file descriptor.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">raw_fd</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RawFd</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">raw_fd</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">RawFd</span> {
         <span class="self">self</span>.<span class="ident">fd</span>
     }
 }
@@ -146,8 +146,8 @@
 }
 
 <span class="doccomment">/// Creates a file descriptor pointing to the standard input or `/dev/tty`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tty_fd</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FileDesc</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> (<span class="ident">fd</span>, <span class="ident">close_on_drop</span>) <span class="op">=</span> <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">libc::isatty</span>(<span class="ident">libc::STDIN_FILENO</span>) <span class="op">=</span><span class="op">=</span> <span class="number">1</span> } {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tty_fd</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FileDesc</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> (<span class="ident">fd</span>, <span class="ident">close_on_drop</span>) <span class="op">=</span> <span class="kw">if</span> <span class="kw">unsafe</span> { <span class="ident">libc::isatty</span>(<span class="ident">libc::STDIN_FILENO</span>) <span class="op">==</span> <span class="number">1</span> } {
         (<span class="ident">libc::STDIN_FILENO</span>, <span class="bool-val">false</span>)
     } <span class="kw">else</span> {
         (

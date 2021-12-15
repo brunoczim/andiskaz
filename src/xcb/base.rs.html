@@ -949,7 +949,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">response_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">response_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u8</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">gev</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xcb_generic_event_t</span> <span class="op">=</span> <span class="ident">mem::transmute</span>(<span class="self">self</span>.<span class="ident">ptr</span>);
             (<span class="kw-2">*</span><span class="ident">gev</span>).<span class="ident">response_type</span>
@@ -972,7 +972,7 @@
 
 <span class="doccomment">/// Casts the generic event to the right event. Assumes that the given</span>
 <span class="doccomment">/// event is really the correct type.</span>
-<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">cast_event</span><span class="op">&lt;</span><span class="lifetime">&#39;r</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">event</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;r</span> <span class="ident">GenericEvent</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;r</span> <span class="ident">T</span> {
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">cast_event</span><span class="op">&lt;</span><span class="lifetime">&#39;r</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">event</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;r</span> <span class="ident">GenericEvent</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;r</span> <span class="ident">T</span> {
     <span class="ident">mem::transmute</span>(<span class="ident">event</span>)
 }
 
@@ -984,13 +984,13 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">response_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">response_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u8</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">ger</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xcb_generic_error_t</span> <span class="op">=</span> <span class="ident">mem::transmute</span>(<span class="self">self</span>.<span class="ident">ptr</span>);
             (<span class="kw-2">*</span><span class="ident">ger</span>).<span class="ident">response_type</span>
         }
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u8</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">ger</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xcb_generic_error_t</span> <span class="op">=</span> <span class="ident">mem::transmute</span>(<span class="self">self</span>.<span class="ident">ptr</span>);
             (<span class="kw-2">*</span><span class="ident">ger</span>).<span class="ident">error_code</span>
@@ -1007,7 +1007,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="macro">write!</span>(
             <span class="ident">f</span>,
             <span class="string">&quot;xcb::Error {{ response_type: {}, error_code: {} }}&quot;</span>,
@@ -1017,7 +1017,7 @@
     }
 }
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">fmt::Debug</span><span class="op">&gt;</span> <span class="ident">error::Error</span> <span class="kw">for</span> <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="string">&quot;xcb::Error&quot;</span>
     }
 }
@@ -1028,7 +1028,7 @@
 
 <span class="doccomment">/// Casts the generic error to the right error. Assumes that the given</span>
 <span class="doccomment">/// error is really the correct type.</span>
-<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">cast_error</span><span class="op">&lt;</span><span class="lifetime">&#39;r</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;r</span> <span class="ident">GenericError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;r</span> <span class="ident">T</span> {
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">cast_error</span><span class="op">&lt;</span><span class="lifetime">&#39;r</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;r</span> <span class="ident">GenericError</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;r</span> <span class="ident">T</span> {
     <span class="ident">mem::transmute</span>(<span class="ident">error</span>)
 }
 
@@ -1044,7 +1044,7 @@
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">VoidCookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">xcb_void_cookie_t</span><span class="op">&gt;</span>;
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">VoidCookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">request_check</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ReplyError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">request_check</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ReplyError</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">c</span>: <span class="ident">xcb_void_cookie_t</span> <span class="op">=</span> <span class="ident">mem::transmute</span>(<span class="self">self</span>.<span class="ident">cookie</span>);
             <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">xcb_request_check</span>(<span class="self">self</span>.<span class="ident">conn</span>.<span class="ident">get_raw_conn</span>(), <span class="ident">c</span>);
@@ -1052,9 +1052,9 @@
             <span class="kw">let</span> <span class="ident">conn_is_ok</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">conn</span>.<span class="ident">has_error</span>().<span class="ident">is_ok</span>();
             <span class="ident">std::mem::forget</span>(<span class="self">self</span>);
             <span class="kw">match</span> (<span class="ident">err</span>.<span class="ident">is_null</span>(), <span class="ident">conn_is_ok</span>) {
-                (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(()),
-                (<span class="bool-val">true</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ReplyError::NullResponse</span>),
-                (<span class="bool-val">false</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ReplyError::GenericError</span> {
+                (<span class="bool-val">true</span>, <span class="bool-val">true</span>) =&gt; <span class="prelude-val">Ok</span>(()),
+                (<span class="bool-val">true</span>, <span class="bool-val">false</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">ReplyError::NullResponse</span>),
+                (<span class="bool-val">false</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">ReplyError::GenericError</span> {
                     <span class="number">0</span>: <span class="ident">GenericError</span> { <span class="ident">ptr</span>: <span class="ident">err</span> },
                 }),
             }
@@ -1063,13 +1063,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">CookieSeq</span> <span class="kw">for</span> <span class="ident">xcb_void_cookie_t</span> {
-    <span class="kw">fn</span> <span class="ident">sequence</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">libc::c_uint</span> {
+    <span class="kw">fn</span> <span class="ident">sequence</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">libc::c_uint</span> {
         <span class="self">self</span>.<span class="ident">sequence</span>
     }
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">CookieSeq</span> {
-    <span class="kw">fn</span> <span class="ident">sequence</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">libc::c_uint</span>;
+    <span class="kw">fn</span> <span class="ident">sequence</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">libc::c_uint</span>;
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">CookieSeq</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
@@ -1113,16 +1113,16 @@
 }
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">ReplyError</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;xcb::ReplyError: &quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::NullResponse</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident"><span class="self">Self</span>::NullResponse</span> =&gt; {
                 <span class="macro">write!</span>(
                     <span class="ident">f</span>,
                     <span class="string">&quot;Unexpected null pointer(check pending errors on connection)&quot;</span>
                 )
             }
-            <span class="ident"><span class="self">Self</span>::GenericError</span>(<span class="ident">g</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident"><span class="self">Self</span>::GenericError</span>(<span class="ident">g</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">g</span>)
             }
         }
@@ -1130,7 +1130,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">ReplyError</span> {
-    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="string">&quot;xcb::ReplyError&quot;</span>
     }
 }
@@ -1165,19 +1165,19 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ConnError</span> {
-    <span class="kw">fn</span> <span class="ident">to_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">fn</span> <span class="ident">to_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">ConnError::Connection</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Connection error, possible I/O error&quot;</span>,
-            <span class="ident">ConnError::ClosedExtNotSupported</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Connection closed, X extension not supported&quot;</span>,
-            <span class="ident">ConnError::ClosedMemInsufficient</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Connection closed, insufficient memory&quot;</span>,
-            <span class="ident">ConnError::ClosedReqLenExceed</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ConnError::Connection</span> =&gt; <span class="string">&quot;Connection error, possible I/O error&quot;</span>,
+            <span class="ident">ConnError::ClosedExtNotSupported</span> =&gt; <span class="string">&quot;Connection closed, X extension not supported&quot;</span>,
+            <span class="ident">ConnError::ClosedMemInsufficient</span> =&gt; <span class="string">&quot;Connection closed, insufficient memory&quot;</span>,
+            <span class="ident">ConnError::ClosedReqLenExceed</span> =&gt; {
                 <span class="string">&quot;Connection closed, exceeded request length that server accepts.&quot;</span>
             }
-            <span class="ident">ConnError::ClosedParseErr</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Connection closed, error during parsing display string&quot;</span>,
-            <span class="ident">ConnError::ClosedInvalidScreen</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ConnError::ClosedParseErr</span> =&gt; <span class="string">&quot;Connection closed, error during parsing display string&quot;</span>,
+            <span class="ident">ConnError::ClosedInvalidScreen</span> =&gt; {
                 <span class="string">&quot;Connection closed, the server does not have a screen matching the display&quot;</span>
             }
-            <span class="ident">ConnError::ClosedFdPassingFailed</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ConnError::ClosedFdPassingFailed</span> =&gt; {
                 <span class="string">&quot;Connection closed, file-descriptor passing operation failed&quot;</span>
             }
         }
@@ -1185,13 +1185,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">ConnError</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="self">self</span>.<span class="ident">to_str</span>().<span class="ident">fmt</span>(<span class="ident">f</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">error::Error</span> <span class="kw">for</span> <span class="ident">ConnError</span> {
-    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="self">self</span>.<span class="ident">to_str</span>()
     }
 }
@@ -1217,7 +1217,7 @@
     <span class="doccomment">/// until the write is complete.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Return `true` on success, `false` otherwise.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">unsafe</span> { <span class="ident">xcb_flush</span>(<span class="self">self</span>.<span class="ident">c</span>) <span class="op">&gt;</span> <span class="number">0</span> }
     }
 
@@ -1232,7 +1232,7 @@
     <span class="doccomment">/// Note that this length is measured in four-byte units, making the</span>
     <span class="doccomment">/// theoretical maximum lengths roughly 256kB without BIG-REQUESTS and</span>
     <span class="doccomment">/// 16GB with.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_maximum_request_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_maximum_request_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u32</span> {
         <span class="kw">unsafe</span> { <span class="ident">xcb_get_maximum_request_length</span>(<span class="self">self</span>.<span class="ident">c</span>) }
     }
 
@@ -1261,7 +1261,7 @@
     <span class="doccomment">/// Returns the next event or error from the server, or returns `None` in</span>
     <span class="doccomment">/// the event of an I/O error. Blocks until either an event or error</span>
     <span class="doccomment">/// arrive, or an I/O error occurs.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wait_for_event</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GenericEvent</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wait_for_event</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GenericEvent</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">event</span> <span class="op">=</span> <span class="ident">xcb_wait_for_event</span>(<span class="self">self</span>.<span class="ident">c</span>);
             <span class="kw">if</span> <span class="ident">event</span>.<span class="ident">is_null</span>() {
@@ -1279,7 +1279,7 @@
     <span class="doccomment">/// might be because an I/O error like connection close occurred while</span>
     <span class="doccomment">/// attempting to read the next event, in which case the connection is</span>
     <span class="doccomment">/// shut down when this function returns.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll_for_event</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GenericEvent</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll_for_event</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GenericEvent</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">event</span> <span class="op">=</span> <span class="ident">xcb_poll_for_event</span>(<span class="self">self</span>.<span class="ident">c</span>);
             <span class="kw">if</span> <span class="ident">event</span>.<span class="ident">is_null</span>() {
@@ -1300,7 +1300,7 @@
     <span class="doccomment">/// interesting events have already been read from the connection. For</span>
     <span class="doccomment">/// example, callers might use `wait_for_reply` and be interested</span>
     <span class="doccomment">/// only of events that preceded a specific reply.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll_for_queued_event</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GenericEvent</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll_for_queued_event</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GenericEvent</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">event</span> <span class="op">=</span> <span class="ident">xcb_poll_for_queued_event</span>(<span class="self">self</span>.<span class="ident">c</span>);
             <span class="kw">if</span> <span class="ident">event</span>.<span class="ident">is_null</span>() {
@@ -1323,7 +1323,7 @@
     <span class="doccomment">/// - and other assorted information.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// See the X protocol specification for more details.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_setup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Setup</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_setup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Setup</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">setup</span> <span class="op">=</span> <span class="ident">xcb_get_setup</span>(<span class="self">self</span>.<span class="ident">c</span>);
             <span class="kw">if</span> <span class="ident">setup</span>.<span class="ident">is_null</span>() {
@@ -1340,18 +1340,18 @@
     <span class="doccomment">/// connection is shut down and further operations on the</span>
     <span class="doccomment">/// `Connection` have no effect, but memory will not be freed until</span>
     <span class="doccomment">/// the `Connection` is dropped.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">has_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ConnResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">has_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ConnResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">xcb_connection_has_error</span>(<span class="self">self</span>.<span class="ident">c</span>) {
-                <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(()),
-                <span class="ident">XCB_CONN_ERROR</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ConnError::Connection</span>),
-                <span class="ident">XCB_CONN_CLOSED_EXT_NOTSUPPORTED</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedExtNotSupported</span>),
-                <span class="ident">XCB_CONN_CLOSED_MEM_INSUFFICIENT</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedMemInsufficient</span>),
-                <span class="ident">XCB_CONN_CLOSED_REQ_LEN_EXCEED</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedReqLenExceed</span>),
-                <span class="ident">XCB_CONN_CLOSED_PARSE_ERR</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedParseErr</span>),
-                <span class="ident">XCB_CONN_CLOSED_INVALID_SCREEN</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedInvalidScreen</span>),
-                <span class="ident">XCB_CONN_CLOSED_FDPASSING_FAILED</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedFdPassingFailed</span>),
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="number">0</span> =&gt; <span class="prelude-val">Ok</span>(()),
+                <span class="ident">XCB_CONN_ERROR</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ConnError::Connection</span>),
+                <span class="ident">XCB_CONN_CLOSED_EXT_NOTSUPPORTED</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedExtNotSupported</span>),
+                <span class="ident">XCB_CONN_CLOSED_MEM_INSUFFICIENT</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedMemInsufficient</span>),
+                <span class="ident">XCB_CONN_CLOSED_REQ_LEN_EXCEED</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedReqLenExceed</span>),
+                <span class="ident">XCB_CONN_CLOSED_PARSE_ERR</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedParseErr</span>),
+                <span class="ident">XCB_CONN_CLOSED_INVALID_SCREEN</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedInvalidScreen</span>),
+                <span class="ident">XCB_CONN_CLOSED_FDPASSING_FAILED</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ConnError::ClosedFdPassingFailed</span>),
+                <span class="kw">_</span> =&gt; {
                     <span class="macro">warn!</span>(<span class="string">&quot;XCB: unexpected error code from xcb_connection_has_error&quot;</span>);
                     <span class="macro">warn!</span>(<span class="string">&quot;XCB: Default to ConnError::Connection&quot;</span>);
                     <span class="prelude-val">Err</span>(<span class="ident">ConnError::Connection</span>)
@@ -1364,17 +1364,17 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Allocates an XID for a new object. Typically used just prior to</span>
     <span class="doccomment">/// various object creation functions, such as `xcb::create_window`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">generate_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">generate_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u32</span> {
         <span class="kw">unsafe</span> { <span class="ident">xcb_generate_id</span>(<span class="self">self</span>.<span class="ident">c</span>) }
     }
 
     <span class="doccomment">/// Returns the inner ffi `xcb_connection_t` pointer</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_raw_conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xcb_connection_t</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_raw_conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xcb_connection_t</span> {
         <span class="self">self</span>.<span class="ident">c</span>
     }
 
     <span class="doccomment">/// Consumes this object, returning the inner ffi `xcb_connection_t` pointer</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_raw_conn</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xcb_connection_t</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_raw_conn</span>(<span class="self">self</span>) -&gt; <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xcb_connection_t</span> {
         <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">c</span>;
         <span class="ident">mem::forget</span>(<span class="self">self</span>);
         <span class="ident">c</span>
@@ -1382,7 +1382,7 @@
 
     <span class="doccomment">/// Returns the inner ffi `xlib::Display` pointer.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;xlib_xcb&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_raw_dpy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xlib::Display</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_raw_dpy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xlib::Display</span> {
         <span class="self">self</span>.<span class="ident">dpy</span>
     }
 
@@ -1407,7 +1407,7 @@
     <span class="doccomment">/// xcb_query_extension to retrieve extension information from the</span>
     <span class="doccomment">/// server, and may block until extension data is received from the</span>
     <span class="doccomment">/// server.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_extension_data</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">ext</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Extension</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryExtensionData</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_extension_data</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">ext</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Extension</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryExtensionData</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">xcb_get_extension_data</span>(<span class="self">self</span>.<span class="ident">c</span>, <span class="ident">ext</span>);
             <span class="kw">if</span> <span class="op">!</span><span class="ident">ptr</span>.<span class="ident">is_null</span>() {
@@ -1430,8 +1430,8 @@
             <span class="ident">XSetEventQueueOwner</span>(
                 <span class="self">self</span>.<span class="ident">dpy</span>,
                 <span class="kw">match</span> <span class="ident">owner</span> {
-                    <span class="ident">EventQueueOwner::Xcb</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">XCBOwnsEventQueue</span>,
-                    <span class="ident">EventQueueOwner::Xlib</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">XlibOwnsEventQueue</span>,
+                    <span class="ident">EventQueueOwner::Xcb</span> =&gt; <span class="ident">XCBOwnsEventQueue</span>,
+                    <span class="ident">EventQueueOwner::Xlib</span> =&gt; <span class="ident">XlibOwnsEventQueue</span>,
                 },
             );
         }
@@ -1447,7 +1447,7 @@
     <span class="doccomment">/// Returns Ok(connection object, preferred screen) in case of success, or</span>
     <span class="doccomment">/// Err(ConnError) in case of error. If no screen is preferred, the second</span>
     <span class="doccomment">/// member of the tuple is set to 0.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect</span>(<span class="ident">displayname</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ConnResult</span><span class="op">&lt;</span>(<span class="ident">Connection</span>, <span class="ident">i32</span>)<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect</span>(<span class="ident">displayname</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="ident">ConnResult</span><span class="op">&lt;</span>(<span class="ident">Connection</span>, <span class="ident">i32</span>)<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">screen_num</span>: <span class="ident">c_int</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="ident">displayname</span> <span class="op">=</span> <span class="ident">displayname</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">CString::new</span>(<span class="ident">s</span>).<span class="ident">unwrap</span>());
         <span class="kw">unsafe</span> {
@@ -1472,7 +1472,7 @@
     <span class="doccomment">/// One would need to open an XCB connection with Xlib in order to use</span>
     <span class="doccomment">/// OpenGL.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;xlib_xcb&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect_with_xlib_display</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ConnResult</span><span class="op">&lt;</span>(<span class="ident">Connection</span>, <span class="ident">i32</span>)<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect_with_xlib_display</span>() -&gt; <span class="ident">ConnResult</span><span class="op">&lt;</span>(<span class="ident">Connection</span>, <span class="ident">i32</span>)<span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">dpy</span> <span class="op">=</span> <span class="ident">xlib::XOpenDisplay</span>(<span class="ident">null</span>());
             <span class="kw">let</span> <span class="ident">cconn</span> <span class="op">=</span> <span class="ident">XGetXCBConnection</span>(<span class="ident">dpy</span>);
@@ -1491,7 +1491,7 @@
     <span class="doccomment">/// wraps a `xlib::Display` and get an XCB connection from an exisiting object</span>
     <span class="doccomment">/// `xlib::XCloseDisplay` will be called when the returned object is dropped</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;xlib_xcb&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new_from_xlib_display</span>(<span class="ident">dpy</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xlib::Display</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Connection</span> {
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new_from_xlib_display</span>(<span class="ident">dpy</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xlib::Display</span>) -&gt; <span class="ident">Connection</span> {
         <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">dpy</span>.<span class="ident">is_null</span>(), <span class="string">&quot;attempt connect with null display&quot;</span>);
         <span class="ident">Connection</span> {
             <span class="ident">c</span>: <span class="ident">XGetXCBConnection</span>(<span class="ident">dpy</span>),
@@ -1511,7 +1511,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect_with_auth_info</span>(
         <span class="ident">displayname</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
         <span class="ident">auth_info</span>: <span class="kw-2">&amp;</span><span class="ident">AuthInfo</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ConnResult</span><span class="op">&lt;</span>(<span class="ident">Connection</span>, <span class="ident">i32</span>)<span class="op">&gt;</span> {
+    ) -&gt; <span class="ident">ConnResult</span><span class="op">&lt;</span>(<span class="ident">Connection</span>, <span class="ident">i32</span>)<span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">screen_num</span>: <span class="ident">c_int</span> <span class="op">=</span> <span class="number">0</span>;
             <span class="kw">let</span> <span class="ident">displayname</span> <span class="op">=</span> <span class="ident">displayname</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">CString::new</span>(<span class="ident">s</span>).<span class="ident">unwrap</span>());
@@ -1540,7 +1540,7 @@
     }
 
     <span class="doccomment">/// builds a new Connection object from an available connection</span>
-    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_raw_conn</span>(<span class="ident">conn</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xcb_connection_t</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Connection</span> {
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_raw_conn</span>(<span class="ident">conn</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">xcb_connection_t</span>) -&gt; <span class="ident">Connection</span> {
         <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">conn</span>.<span class="ident">is_null</span>());
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;xlib_xcb&quot;</span>))]</span>
@@ -1555,7 +1555,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">AsRawFd</span> <span class="kw">for</span> <span class="ident">Connection</span> {
-    <span class="kw">fn</span> <span class="ident">as_raw_fd</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RawFd</span> {
+    <span class="kw">fn</span> <span class="ident">as_raw_fd</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">RawFd</span> {
         <span class="kw">unsafe</span> { <span class="ident">xcb_get_file_descriptor</span>(<span class="self">self</span>.<span class="ident">c</span>) }
     }
 }
@@ -1588,81 +1588,81 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">QueryExtensionData</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">present</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">present</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">unsafe</span> { (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">ptr</span>).<span class="ident">present</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> }
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">major_opcode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">major_opcode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u8</span> {
         <span class="kw">unsafe</span> { (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">ptr</span>).<span class="ident">major_opcode</span> }
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">first_event</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">first_event</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u8</span> {
         <span class="kw">unsafe</span> { (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">ptr</span>).<span class="ident">first_event</span> }
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">first_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">first_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u8</span> {
         <span class="kw">unsafe</span> { (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">ptr</span>).<span class="ident">first_error</span> }
     }
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Zero</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="self">Self</span>;
 }
 
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">u8</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">u8</span> {
         <span class="number">0</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">u16</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u16</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">u16</span> {
         <span class="number">0</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">u32</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">u32</span> {
         <span class="number">0</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">u64</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">u64</span> {
         <span class="number">0</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">usize</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">usize</span> {
         <span class="number">0</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">i8</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i8</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">i8</span> {
         <span class="number">0</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">i16</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i16</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">i16</span> {
         <span class="number">0</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">i32</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">i32</span> {
         <span class="number">0</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">i64</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i64</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">i64</span> {
         <span class="number">0</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">isize</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">isize</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">isize</span> {
         <span class="number">0</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">f32</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f32</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">f32</span> {
         <span class="number">0f32</span>
     }
 }
 <span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">f64</span> {
-    <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="ident">f64</span> {
         <span class="number">0f64</span>
     }
 }
@@ -1684,7 +1684,7 @@
 <span class="doccomment">///     assert_eq!(pack_bitfield(&amp;mut values), ffi_values);</span>
 <span class="doccomment">/// ```</span>
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pack_bitfield</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">L</span><span class="op">&gt;</span>(<span class="ident">bf</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">L</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">T</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">L</span><span class="op">&gt;</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pack_bitfield</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">L</span><span class="op">&gt;</span>(<span class="ident">bf</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">L</span>)<span class="op">&gt;</span>) -&gt; (<span class="ident">T</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">L</span><span class="op">&gt;</span>)
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Zero</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">BitAnd</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">BitOr</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>,
     <span class="ident">L</span>: <span class="ident">Copy</span>,

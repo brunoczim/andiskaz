@@ -183,7 +183,7 @@
             $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>:<span class="ident">ident</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>]</span>)<span class="op">*</span>
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">sgr</span>:<span class="ident">expr</span>,
         )<span class="op">*</span>
-    ) <span class="op">=</span><span class="op">&gt;</span> {
+    ) =&gt; {
         <span class="doccomment">/// Represents an attribute.</span>
         <span class="doccomment">///</span>
         <span class="doccomment">/// # Platform-specific Notes</span>
@@ -249,7 +249,7 @@
 
         <span class="kw">impl</span> <span class="ident">Attribute</span> {
             <span class="doccomment">/// Iterates over all the variants of the Attribute enum.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iterator</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Attribute</span><span class="op">&gt;</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iterator</span>() -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Attribute</span><span class="op">&gt;</span> {
                 <span class="kw">use</span> <span class="ident"><span class="self">self</span>::Attribute</span>::<span class="kw-2">*</span>;
                 [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>,)<span class="op">*</span> ].<span class="ident">iter</span>().<span class="ident">copied</span>()
             }
@@ -312,7 +312,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Attribute</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">::std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std::result::Result</span><span class="op">&lt;</span>(), <span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">::std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::result::Result</span><span class="op">&lt;</span>(), <span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">SetAttribute</span>(<span class="kw-2">*</span><span class="self">self</span>))<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
@@ -326,13 +326,13 @@
     <span class="doccomment">/// The +1 enables storing Reset (whose index is 0)</span>
     <span class="doccomment">///  in the bitset Attributes.</span>
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="self">self</span>) -&gt; <span class="ident">u32</span> {
         <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> ((<span class="self">self</span> <span class="kw">as</span> <span class="ident">u32</span>) <span class="op">+</span> <span class="number">1</span>)
     }
     <span class="doccomment">/// Returns the SGR attribute value.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// See https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sgr</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i16</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sgr</span>(<span class="self">self</span>) -&gt; <span class="ident">i16</span> {
         <span class="ident">SGR</span>[<span class="self">self</span> <span class="kw">as</span> <span class="ident">usize</span>]
     }
 }

@@ -1245,9 +1245,9 @@
 <span class="kw">use</span> <span class="ident">traits</span>::{<span class="ident">Compare</span>,<span class="ident">CompareResult</span>,<span class="ident">Slice</span>};
 
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tag_cl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>,<span class="lifetime">&#39;b</span><span class="op">&gt;</span>(<span class="ident">rec</span>:<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span>  <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-  <span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>]<span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">rec</span>.<span class="ident">len</span>() <span class="op">&amp;&amp;</span> <span class="kw-2">&amp;</span><span class="ident">i</span>[<span class="number">0</span>..<span class="ident">rec</span>.<span class="ident">len</span>()] <span class="op">=</span><span class="op">=</span> <span class="ident">rec</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tag_cl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>,<span class="lifetime">&#39;b</span><span class="op">&gt;</span>(<span class="ident">rec</span>:<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span>[<span class="ident">u8</span>]) -&gt;  <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+  <span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>]<span class="op">|</span> -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">rec</span>.<span class="ident">len</span>() <span class="op">&amp;&amp;</span> <span class="kw-2">&amp;</span><span class="ident">i</span>[<span class="number">0</span>..<span class="ident">rec</span>.<span class="ident">len</span>()] <span class="op">==</span> <span class="ident">rec</span> {
       <span class="ident">Done</span>(<span class="kw-2">&amp;</span><span class="ident">i</span>[<span class="ident">rec</span>.<span class="ident">len</span>()..], <span class="kw-2">&amp;</span><span class="ident">i</span>[<span class="number">0</span>..<span class="ident">rec</span>.<span class="ident">len</span>()])
     } <span class="kw">else</span> {
       <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::TagClosure</span>, <span class="ident">i</span>))
@@ -1257,53 +1257,53 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">print</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Debug</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, ()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">print</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Debug</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, ()<span class="op">&gt;</span> {
   <span class="macro">println!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">input</span>);
   <span class="ident">Done</span>(<span class="ident">input</span>, ())
 }
 
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">begin</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span>(), <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">begin</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span>(), <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
   <span class="ident">Done</span>((), <span class="ident">input</span>)
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">crlf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">crlf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
   <span class="ident">T</span>:<span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
   <span class="ident">T</span>: <span class="ident">InputIter</span>,
   <span class="ident">T</span>: <span class="ident">Compare</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> {
     <span class="kw">match</span> <span class="ident">input</span>.<span class="ident">compare</span>(<span class="string">&quot;\r\n&quot;</span>) {
       <span class="comment">//FIXME: is this the right index?</span>
-      <span class="ident">CompareResult::Ok</span>         <span class="op">=</span><span class="op">&gt;</span> {
+      <span class="ident">CompareResult::Ok</span>         =&gt; {
         <span class="ident">IResult::Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">2</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="number">2</span>))
       },
-      <span class="ident">CompareResult::Incomplete</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">IResult::Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">2</span>)),
-      <span class="ident">CompareResult::Error</span>      <span class="op">=</span><span class="op">&gt;</span> <span class="ident">IResult::Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::CrLf</span>, <span class="ident">input</span>))
+      <span class="ident">CompareResult::Incomplete</span> =&gt; <span class="ident">IResult::Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">2</span>)),
+      <span class="ident">CompareResult::Error</span>      =&gt; <span class="ident">IResult::Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::CrLf</span>, <span class="ident">input</span>))
     }
 }
 
 <span class="comment">// FIXME: when rust-lang/rust#17436 is fixed, macros will be able to export</span>
 <span class="comment">// public methods</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">not_line_ending</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">not_line_ending</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>:<span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputIter</span><span class="op">+</span><span class="ident">InputLength</span>,
     <span class="ident">T</span>: <span class="ident">Compare</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>,
     <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span><span class="ident">::Item</span>: <span class="ident">AsChar</span> {
       <span class="kw">match</span> <span class="ident">input</span>.<span class="ident">iter_elements</span>().<span class="ident">position</span>(<span class="op">|</span><span class="ident">item</span><span class="op">|</span> {
         <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="ident">item</span>.<span class="ident">as_char</span>();
-        <span class="ident">c</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39;\r&#39;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">c</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39;\n&#39;</span>
+        <span class="ident">c</span> <span class="op">==</span> <span class="string">&#39;\r&#39;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">c</span> <span class="op">==</span> <span class="string">&#39;\n&#39;</span>
       }) {
-        <span class="prelude-val">None</span>        <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">input</span>.<span class="ident">input_len</span>()..), <span class="ident">input</span>),
-        <span class="prelude-val">Some</span>(<span class="ident">index</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>        =&gt; <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">input</span>.<span class="ident">input_len</span>()..), <span class="ident">input</span>),
+        <span class="prelude-val">Some</span>(<span class="ident">index</span>) =&gt; {
           <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">it</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">iter_elements</span>();
           <span class="kw">let</span> <span class="ident">nth</span>    <span class="op">=</span> <span class="ident">it</span>.<span class="ident">nth</span>(<span class="ident">index</span>).<span class="ident">unwrap</span>().<span class="ident">as_char</span>();
-          <span class="kw">if</span> <span class="ident">nth</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39;\r&#39;</span> {
+          <span class="kw">if</span> <span class="ident">nth</span> <span class="op">==</span> <span class="string">&#39;\r&#39;</span> {
             <span class="kw">let</span> <span class="ident">sliced</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">index</span>..);
             <span class="kw">let</span> <span class="ident">comp</span>   <span class="op">=</span> <span class="ident">sliced</span>.<span class="ident">compare</span>(<span class="string">&quot;\r\n&quot;</span>);
             <span class="kw">match</span> <span class="ident">comp</span> {
               <span class="comment">//FIXME: calculate the right index</span>
-              <span class="ident">CompareResult::Incomplete</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Unknown</span>),
-              <span class="ident">CompareResult::Error</span>      <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::Tag</span>, <span class="ident">input</span>)),
-              <span class="ident">CompareResult::Ok</span>         <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">index</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(..<span class="ident">index</span>))
+              <span class="ident">CompareResult::Incomplete</span> =&gt; <span class="ident">Incomplete</span>(<span class="ident">Needed::Unknown</span>),
+              <span class="ident">CompareResult::Error</span>      =&gt; <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::Tag</span>, <span class="ident">input</span>)),
+              <span class="ident">CompareResult::Ok</span>         =&gt; <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">index</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(..<span class="ident">index</span>))
             }
           } <span class="kw">else</span> {
             <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">index</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(..<span class="ident">index</span>))
@@ -1313,24 +1313,24 @@
 }
 
 <span class="doccomment">/// Recognizes an end of line (both &#39;\n&#39; and &#39;\r\n&#39;)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">line_ending</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">line_ending</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputIter</span><span class="op">+</span><span class="ident">InputLength</span>,
     <span class="ident">T</span>: <span class="ident">Compare</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> {
 
   <span class="kw">match</span> <span class="ident">input</span>.<span class="ident">compare</span>(<span class="string">&quot;\n&quot;</span>) {
-    <span class="ident">CompareResult::Ok</span>         <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">1</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="number">1</span>)),
-    <span class="ident">CompareResult::Incomplete</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">1</span>)),
-    <span class="ident">CompareResult::Error</span>      <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">input</span>.<span class="ident">compare</span>(<span class="string">&quot;\r\n&quot;</span>) {
+    <span class="ident">CompareResult::Ok</span>         =&gt; <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">1</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="number">1</span>)),
+    <span class="ident">CompareResult::Incomplete</span> =&gt; <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">1</span>)),
+    <span class="ident">CompareResult::Error</span>      =&gt; <span class="kw">match</span> <span class="ident">input</span>.<span class="ident">compare</span>(<span class="string">&quot;\r\n&quot;</span>) {
       <span class="comment">//FIXME: is this the right index?</span>
-      <span class="ident">CompareResult::Ok</span>         <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">2</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="number">2</span>)),
-      <span class="ident">CompareResult::Incomplete</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">2</span>)),
-      <span class="ident">CompareResult::Error</span>      <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::CrLf</span>, <span class="ident">input</span>))
+      <span class="ident">CompareResult::Ok</span>         =&gt; <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">2</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="number">2</span>)),
+      <span class="ident">CompareResult::Incomplete</span> =&gt; <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">2</span>)),
+      <span class="ident">CompareResult::Error</span>      =&gt; <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::CrLf</span>, <span class="ident">input</span>))
     }
   }
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eol</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eol</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputIter</span><span class="op">+</span><span class="ident">InputLength</span>,
     <span class="ident">T</span>: <span class="ident">Compare</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> {
@@ -1339,19 +1339,19 @@
 
 <span class="doccomment">/// Tests if byte is ASCII alphabetic: A-Z, a-z</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_alphabetic</span>(<span class="ident">chr</span>:<span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_alphabetic</span>(<span class="ident">chr</span>:<span class="ident">u8</span>) -&gt; <span class="ident">bool</span> {
   (<span class="ident">chr</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0x41</span> <span class="op">&amp;&amp;</span> <span class="ident">chr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0x5A</span>) <span class="op">|</span><span class="op">|</span> (<span class="ident">chr</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0x61</span> <span class="op">&amp;&amp;</span> <span class="ident">chr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0x7A</span>)
 }
 
 <span class="doccomment">/// Tests if byte is ASCII digit: 0-9</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_digit</span>(<span class="ident">chr</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_digit</span>(<span class="ident">chr</span>: <span class="ident">u8</span>) -&gt; <span class="ident">bool</span> {
   <span class="ident">chr</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0x30</span> <span class="op">&amp;&amp;</span> <span class="ident">chr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0x39</span>
 }
 
 <span class="doccomment">/// Tests if byte is ASCII hex digit: 0-9, A-F, a-f</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_hex_digit</span>(<span class="ident">chr</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_hex_digit</span>(<span class="ident">chr</span>: <span class="ident">u8</span>) -&gt; <span class="ident">bool</span> {
   (<span class="ident">chr</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0x30</span> <span class="op">&amp;&amp;</span> <span class="ident">chr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0x39</span>) <span class="op">|</span><span class="op">|</span>
   (<span class="ident">chr</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0x41</span> <span class="op">&amp;&amp;</span> <span class="ident">chr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0x46</span>) <span class="op">|</span><span class="op">|</span>
   (<span class="ident">chr</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0x61</span> <span class="op">&amp;&amp;</span> <span class="ident">chr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0x66</span>)
@@ -1359,20 +1359,20 @@
 
 <span class="doccomment">/// Tests if byte is ASCII octal digit: 0-7</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_oct_digit</span>(<span class="ident">chr</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_oct_digit</span>(<span class="ident">chr</span>: <span class="ident">u8</span>) -&gt; <span class="ident">bool</span> {
   <span class="ident">chr</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0x30</span> <span class="op">&amp;&amp;</span> <span class="ident">chr</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0x37</span>
 }
 
 <span class="doccomment">/// Tests if byte is ASCII alphanumeric: A-Z, a-z, 0-9</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_alphanumeric</span>(<span class="ident">chr</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_alphanumeric</span>(<span class="ident">chr</span>: <span class="ident">u8</span>) -&gt; <span class="ident">bool</span> {
   <span class="ident">is_alphabetic</span>(<span class="ident">chr</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">is_digit</span>(<span class="ident">chr</span>)
 }
 
 <span class="doccomment">/// Tests if byte is ASCII space or tab</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_space</span>(<span class="ident">chr</span>:<span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-  <span class="ident">chr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39; &#39;</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">|</span><span class="op">|</span> <span class="ident">chr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39;\t&#39;</span> <span class="kw">as</span> <span class="ident">u8</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_space</span>(<span class="ident">chr</span>:<span class="ident">u8</span>) -&gt; <span class="ident">bool</span> {
+  <span class="ident">chr</span> <span class="op">==</span> <span class="string">&#39; &#39;</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">|</span><span class="op">|</span> <span class="ident">chr</span> <span class="op">==</span> <span class="string">&#39;\t&#39;</span> <span class="kw">as</span> <span class="ident">u8</span>
 }
 
 <span class="comment">// FIXME: when rust-lang/rust#17436 is fixed, macros will be able to export</span>
@@ -1383,18 +1383,18 @@
 <span class="comment">//pub filter!(alphanumeric is_alphanumeric)</span>
 
 <span class="doccomment">/// Recognizes one or more lowercase and uppercase alphabetic characters: a-zA-Z</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">alpha</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">alpha</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputIter</span><span class="op">+</span><span class="ident">InputLength</span>,
     <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span><span class="ident">::Item</span>: <span class="ident">AsChar</span> {
   <span class="kw">let</span> <span class="ident">input_length</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">input_len</span>();
-  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">==</span> <span class="number">0</span> {
     <span class="kw">return</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Unknown</span>);
   }
 
   <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">item</span>) <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">iter_indices</span>() {
     <span class="kw">if</span> <span class="op">!</span> <span class="ident">item</span>.<span class="ident">is_alpha</span>() {
-      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="kw">return</span> <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::Alpha</span>, <span class="ident">input</span>))
       } <span class="kw">else</span> {
         <span class="kw">return</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">idx</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="ident">idx</span>))
@@ -1405,18 +1405,18 @@
 }
 
 <span class="doccomment">/// Recognizes one or more numerical characters: 0-9</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">digit</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">digit</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputIter</span><span class="op">+</span><span class="ident">InputLength</span>,
     <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span><span class="ident">::Item</span>: <span class="ident">AsChar</span> {
   <span class="kw">let</span> <span class="ident">input_length</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">input_len</span>();
-  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">==</span> <span class="number">0</span> {
     <span class="kw">return</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Unknown</span>);
   }
 
   <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">item</span>) <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">iter_indices</span>() {
     <span class="kw">if</span> <span class="op">!</span> <span class="ident">item</span>.<span class="ident">is_dec_digit</span>() {
-      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="kw">return</span> <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::Digit</span>, <span class="ident">input</span>))
       } <span class="kw">else</span> {
         <span class="kw">return</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">idx</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="ident">idx</span>))
@@ -1427,18 +1427,18 @@
 }
 
 <span class="doccomment">/// Recognizes one or more hexadecimal numerical characters: 0-9, A-F, a-f</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hex_digit</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hex_digit</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputIter</span><span class="op">+</span><span class="ident">InputLength</span>,
     <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span><span class="ident">::Item</span>: <span class="ident">AsChar</span> {
   <span class="kw">let</span> <span class="ident">input_length</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">input_len</span>();
-  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">==</span> <span class="number">0</span> {
     <span class="kw">return</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Unknown</span>);
   }
 
   <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">item</span>) <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">iter_indices</span>() {
     <span class="kw">if</span> <span class="op">!</span> <span class="ident">item</span>.<span class="ident">is_hex_digit</span>() {
-      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="kw">return</span> <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::HexDigit</span>, <span class="ident">input</span>))
       } <span class="kw">else</span> {
         <span class="kw">return</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">idx</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="ident">idx</span>))
@@ -1449,18 +1449,18 @@
 }
 
 <span class="doccomment">/// Recognizes one or more octal characters: 0-7</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">oct_digit</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">oct_digit</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputIter</span><span class="op">+</span><span class="ident">InputLength</span>,
     <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span><span class="ident">::Item</span>: <span class="ident">AsChar</span> {
   <span class="kw">let</span> <span class="ident">input_length</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">input_len</span>();
-  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">==</span> <span class="number">0</span> {
     <span class="kw">return</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Unknown</span>);
   }
 
   <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">item</span>) <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">iter_indices</span>() {
     <span class="kw">if</span> <span class="op">!</span> <span class="ident">item</span>.<span class="ident">is_oct_digit</span>() {
-      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="kw">return</span> <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::OctDigit</span>, <span class="ident">input</span>))
       } <span class="kw">else</span> {
         <span class="kw">return</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">idx</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="ident">idx</span>))
@@ -1471,18 +1471,18 @@
 }
 
 <span class="doccomment">/// Recognizes one or more numerical and alphabetic characters: 0-9a-zA-Z</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">alphanumeric</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">alphanumeric</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputIter</span><span class="op">+</span><span class="ident">InputLength</span>,
     <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span><span class="ident">::Item</span>: <span class="ident">AsChar</span> {
   <span class="kw">let</span> <span class="ident">input_length</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">input_len</span>();
-  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">==</span> <span class="number">0</span> {
     <span class="kw">return</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Unknown</span>);
   }
 
   <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">item</span>) <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">iter_indices</span>() {
     <span class="kw">if</span> <span class="op">!</span> <span class="ident">item</span>.<span class="ident">is_alphanum</span>() {
-      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="kw">return</span> <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::AlphaNumeric</span>, <span class="ident">input</span>))
       } <span class="kw">else</span> {
         <span class="kw">return</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">idx</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="ident">idx</span>))
@@ -1493,19 +1493,19 @@
 }
 
 <span class="doccomment">/// Recognizes one or more spaces and tabs</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">space</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">space</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputIter</span><span class="op">+</span><span class="ident">InputLength</span>,
     <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span><span class="ident">::Item</span>: <span class="ident">AsChar</span> {
   <span class="kw">let</span> <span class="ident">input_length</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">input_len</span>();
-  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">==</span> <span class="number">0</span> {
     <span class="kw">return</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Unknown</span>);
   }
 
   <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">item</span>) <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">iter_indices</span>() {
     <span class="kw">let</span> <span class="ident">chr</span> <span class="op">=</span> <span class="ident">item</span>.<span class="ident">as_char</span>();
-    <span class="kw">if</span> <span class="op">!</span> (<span class="ident">chr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39; &#39;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">chr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39;\t&#39;</span>)  {
-      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+    <span class="kw">if</span> <span class="op">!</span> (<span class="ident">chr</span> <span class="op">==</span> <span class="string">&#39; &#39;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">chr</span> <span class="op">==</span> <span class="string">&#39;\t&#39;</span>)  {
+      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="kw">return</span> <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::Space</span>, <span class="ident">input</span>))
       } <span class="kw">else</span> {
         <span class="kw">return</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">idx</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="ident">idx</span>))
@@ -1516,19 +1516,19 @@
 }
 
 <span class="doccomment">/// Recognizes one or more spaces, tabs, carriage returns and line feeds</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">multispace</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">multispace</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputIter</span><span class="op">+</span><span class="ident">InputLength</span>,
     <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span><span class="ident">::Item</span>: <span class="ident">AsChar</span> {
   <span class="kw">let</span> <span class="ident">input_length</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">input_len</span>();
-  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+  <span class="kw">if</span> <span class="ident">input_length</span> <span class="op">==</span> <span class="number">0</span> {
     <span class="kw">return</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Unknown</span>);
   }
 
   <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">item</span>) <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">iter_indices</span>() {
     <span class="kw">let</span> <span class="ident">chr</span> <span class="op">=</span> <span class="ident">item</span>.<span class="ident">as_char</span>();
-    <span class="kw">if</span> <span class="op">!</span> (<span class="ident">chr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39; &#39;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">chr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39;\t&#39;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">chr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39;\r&#39;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">chr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39;\n&#39;</span>)  {
-      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+    <span class="kw">if</span> <span class="op">!</span> (<span class="ident">chr</span> <span class="op">==</span> <span class="string">&#39; &#39;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">chr</span> <span class="op">==</span> <span class="string">&#39;\t&#39;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">chr</span> <span class="op">==</span> <span class="string">&#39;\r&#39;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">chr</span> <span class="op">==</span> <span class="string">&#39;\n&#39;</span>)  {
+      <span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="kw">return</span> <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::MultiSpace</span>, <span class="ident">input</span>))
       } <span class="kw">else</span> {
         <span class="kw">return</span> <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">idx</span>..), <span class="ident">input</span>.<span class="ident">slice</span>(<span class="number">0</span>..<span class="ident">idx</span>))
@@ -1538,7 +1538,7 @@
   <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">input_length</span>..), <span class="ident">input</span>)
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sized_buffer</span>(<span class="ident">input</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sized_buffer</span>(<span class="ident">input</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">input</span>.<span class="ident">is_empty</span>() {
     <span class="kw">return</span> <span class="ident">Incomplete</span>(<span class="ident">Needed::Unknown</span>)
   }
@@ -1554,7 +1554,7 @@
 
 <span class="doccomment">/// Recognizes an unsigned 1 byte integer (equivalent to take!(1)</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u8</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u8</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u8</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u8</span><span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">1</span> {
     <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">1</span>))
   } <span class="kw">else</span> {
@@ -1564,7 +1564,7 @@
 
 <span class="doccomment">/// Recognizes big endian unsigned 2 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u16</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u16</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u16</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u16</span><span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">2</span> {
     <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">2</span>))
   } <span class="kw">else</span> {
@@ -1575,7 +1575,7 @@
 
 <span class="doccomment">/// Recognizes big endian unsigned 3 byte integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u24</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u24</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u32</span><span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">3</span> {
     <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">3</span>))
   } <span class="kw">else</span> {
@@ -1586,7 +1586,7 @@
 
 <span class="doccomment">/// Recognizes big endian unsigned 4 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u32</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u32</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u32</span><span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">4</span> {
     <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">4</span>))
   } <span class="kw">else</span> {
@@ -1597,7 +1597,7 @@
 
 <span class="doccomment">/// Recognizes big endian unsigned 8 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u64</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u64</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u64</span><span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">8</span> {
     <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">8</span>))
   } <span class="kw">else</span> {
@@ -1609,38 +1609,38 @@
 
 <span class="doccomment">/// Recognizes a signed 1 byte integer (equivalent to take!(1)</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i8</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i8</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i8</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i8</span><span class="op">&gt;</span> {
   <span class="macro">map!</span>(<span class="ident">i</span>, <span class="ident">be_u8</span>, <span class="op">|</span> <span class="ident">x</span> <span class="op">|</span> { <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i8</span> })
 }
 
 <span class="doccomment">/// Recognizes big endian signed 2 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i16</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i16</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i16</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i16</span><span class="op">&gt;</span> {
   <span class="macro">map!</span>(<span class="ident">i</span>, <span class="ident">be_u16</span>, <span class="op">|</span> <span class="ident">x</span> <span class="op">|</span> { <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i16</span> })
 }
 
 <span class="doccomment">/// Recognizes big endian signed 3 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i24</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i24</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i32</span><span class="op">&gt;</span> {
   <span class="comment">// Same as the unsigned version but we need to sign-extend manually here</span>
   <span class="macro">map!</span>(<span class="ident">i</span>, <span class="ident">be_u24</span>, <span class="op">|</span> <span class="ident">x</span> <span class="op">|</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&amp;</span> <span class="number">0x80_00_00</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { (<span class="ident">x</span> <span class="op">|</span> <span class="number">0xff_00_00_00</span>) <span class="kw">as</span> <span class="ident">i32</span> } <span class="kw">else</span> { <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i32</span> })
 }
 
 <span class="doccomment">/// Recognizes big endian signed 4 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i32</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i32</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i32</span><span class="op">&gt;</span> {
   <span class="macro">map!</span>(<span class="ident">i</span>, <span class="ident">be_u32</span>, <span class="op">|</span> <span class="ident">x</span> <span class="op">|</span> { <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i32</span> })
 }
 
 <span class="doccomment">/// Recognizes big endian signed 8 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i64</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i64</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i64</span><span class="op">&gt;</span> {
   <span class="macro">map!</span>(<span class="ident">i</span>, <span class="ident">be_u64</span>, <span class="op">|</span> <span class="ident">x</span> <span class="op">|</span> { <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i64</span> })
 }
 
 <span class="doccomment">/// Recognizes an unsigned 1 byte integer (equivalent to take!(1)</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u8</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u8</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u8</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u8</span><span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">1</span> {
     <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">1</span>))
   } <span class="kw">else</span> {
@@ -1650,7 +1650,7 @@
 
 <span class="doccomment">/// Recognizes little endian unsigned 2 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u16</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u16</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u16</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u16</span><span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">2</span> {
     <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">2</span>))
   } <span class="kw">else</span> {
@@ -1661,7 +1661,7 @@
 
 <span class="doccomment">/// Recognizes little endian unsigned 3 byte integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u24</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u24</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u32</span><span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">3</span> {
     <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">3</span>))
   } <span class="kw">else</span> {
@@ -1672,7 +1672,7 @@
 
 <span class="doccomment">/// Recognizes little endian unsigned 4 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u32</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u32</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u32</span><span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">4</span> {
     <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">4</span>))
   } <span class="kw">else</span> {
@@ -1683,7 +1683,7 @@
 
 <span class="doccomment">/// Recognizes little endian unsigned 8 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u64</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u64</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u64</span><span class="op">&gt;</span> {
   <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">8</span> {
     <span class="ident">Incomplete</span>(<span class="ident">Needed::Size</span>(<span class="number">8</span>))
   } <span class="kw">else</span> {
@@ -1695,32 +1695,32 @@
 
 <span class="doccomment">/// Recognizes a signed 1 byte integer (equivalent to take!(1)</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i8</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i8</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i8</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i8</span><span class="op">&gt;</span> {
   <span class="macro">map!</span>(<span class="ident">i</span>, <span class="ident">le_u8</span>, <span class="op">|</span> <span class="ident">x</span> <span class="op">|</span> { <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i8</span> })
 }
 
 <span class="doccomment">/// Recognizes little endian signed 2 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i16</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i16</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i16</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i16</span><span class="op">&gt;</span> {
   <span class="macro">map!</span>(<span class="ident">i</span>, <span class="ident">le_u16</span>, <span class="op">|</span> <span class="ident">x</span> <span class="op">|</span> { <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i16</span> })
 }
 
 <span class="doccomment">/// Recognizes little endian signed 3 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i24</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i24</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i32</span><span class="op">&gt;</span> {
   <span class="comment">// Same as the unsigned version but we need to sign-extend manually here</span>
   <span class="macro">map!</span>(<span class="ident">i</span>, <span class="ident">le_u24</span>, <span class="op">|</span> <span class="ident">x</span> <span class="op">|</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">&amp;</span> <span class="number">0x80_00_00</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { (<span class="ident">x</span> <span class="op">|</span> <span class="number">0xff_00_00_00</span>) <span class="kw">as</span> <span class="ident">i32</span> } <span class="kw">else</span> { <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i32</span> })
 }
 
 <span class="doccomment">/// Recognizes little endian signed 4 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i32</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i32</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i32</span><span class="op">&gt;</span> {
   <span class="macro">map!</span>(<span class="ident">i</span>, <span class="ident">le_u32</span>, <span class="op">|</span> <span class="ident">x</span> <span class="op">|</span> { <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i32</span> })
 }
 
 <span class="doccomment">/// Recognizes little endian signed 8 bytes integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i64</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i64</span>(<span class="ident">i</span>:<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i64</span><span class="op">&gt;</span> {
   <span class="macro">map!</span>(<span class="ident">i</span>, <span class="ident">le_u64</span>, <span class="op">|</span> <span class="ident">x</span> <span class="op">|</span> { <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i64</span> })
 }
 
@@ -1734,36 +1734,36 @@
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian u16 integer,</span>
 <span class="doccomment">/// otherwise a little endian u16 integer</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">u16</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">=</span><span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_u16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_u16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="macro">macro_rules!</span> <span class="ident">u16</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) =&gt; ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_u16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_u16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian u32 integer,</span>
 <span class="doccomment">/// otherwise a little endian u32 integer</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">u32</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">=</span><span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_u32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_u32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="macro">macro_rules!</span> <span class="ident">u32</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) =&gt; ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_u32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_u32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian u64 integer,</span>
 <span class="doccomment">/// otherwise a little endian u64 integer</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">u64</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">=</span><span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_u64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_u64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="macro">macro_rules!</span> <span class="ident">u64</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) =&gt; ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_u64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_u64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian i16 integer,</span>
 <span class="doccomment">/// otherwise a little endian i16 integer</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">i16</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">=</span><span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_i16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_i16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="macro">macro_rules!</span> <span class="ident">i16</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) =&gt; ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_i16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_i16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian i32 integer,</span>
 <span class="doccomment">/// otherwise a little endian i32 integer</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">i32</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">=</span><span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_i32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_i32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="macro">macro_rules!</span> <span class="ident">i32</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) =&gt; ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_i32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_i32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian i64 integer,</span>
 <span class="doccomment">/// otherwise a little endian i64 integer</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">i64</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">=</span><span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_i64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_i64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="macro">macro_rules!</span> <span class="ident">i64</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) =&gt; ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Endianness::Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::be_i64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::le_i64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 
 <span class="doccomment">/// Recognizes big endian 4 bytes floating point number</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_f32</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_f32</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f32</span><span class="op">&gt;</span> {
   <span class="kw">match</span> <span class="ident">be_u32</span>(<span class="ident">input</span>) {
-    <span class="ident">Error</span>(<span class="ident">e</span>)      <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error</span>(<span class="ident">e</span>),
-    <span class="ident">Incomplete</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Incomplete</span>(<span class="ident">e</span>),
-    <span class="ident">Done</span>(<span class="ident">i</span>,<span class="ident">o</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="ident">Error</span>(<span class="ident">e</span>)      =&gt; <span class="ident">Error</span>(<span class="ident">e</span>),
+    <span class="ident">Incomplete</span>(<span class="ident">e</span>) =&gt; <span class="ident">Incomplete</span>(<span class="ident">e</span>),
+    <span class="ident">Done</span>(<span class="ident">i</span>,<span class="ident">o</span>) =&gt; {
       <span class="kw">unsafe</span> {
         <span class="ident">Done</span>(<span class="ident">i</span>, <span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">f32</span><span class="op">&gt;</span>(<span class="ident">o</span>))
       }
@@ -1773,11 +1773,11 @@
 
 <span class="doccomment">/// Recognizes big endian 8 bytes floating point number</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_f64</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_f64</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f64</span><span class="op">&gt;</span> {
   <span class="kw">match</span> <span class="ident">be_u64</span>(<span class="ident">input</span>) {
-    <span class="ident">Error</span>(<span class="ident">e</span>)      <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error</span>(<span class="ident">e</span>),
-    <span class="ident">Incomplete</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Incomplete</span>(<span class="ident">e</span>),
-    <span class="ident">Done</span>(<span class="ident">i</span>,<span class="ident">o</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="ident">Error</span>(<span class="ident">e</span>)      =&gt; <span class="ident">Error</span>(<span class="ident">e</span>),
+    <span class="ident">Incomplete</span>(<span class="ident">e</span>) =&gt; <span class="ident">Incomplete</span>(<span class="ident">e</span>),
+    <span class="ident">Done</span>(<span class="ident">i</span>,<span class="ident">o</span>) =&gt; {
       <span class="kw">unsafe</span> {
         <span class="ident">Done</span>(<span class="ident">i</span>, <span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">f64</span><span class="op">&gt;</span>(<span class="ident">o</span>))
       }
@@ -1787,11 +1787,11 @@
 
 <span class="doccomment">/// Recognizes little endian 4 bytes floating point number</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_f32</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_f32</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f32</span><span class="op">&gt;</span> {
   <span class="kw">match</span> <span class="ident">le_u32</span>(<span class="ident">input</span>) {
-    <span class="ident">Error</span>(<span class="ident">e</span>)      <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error</span>(<span class="ident">e</span>),
-    <span class="ident">Incomplete</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Incomplete</span>(<span class="ident">e</span>),
-    <span class="ident">Done</span>(<span class="ident">i</span>,<span class="ident">o</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="ident">Error</span>(<span class="ident">e</span>)      =&gt; <span class="ident">Error</span>(<span class="ident">e</span>),
+    <span class="ident">Incomplete</span>(<span class="ident">e</span>) =&gt; <span class="ident">Incomplete</span>(<span class="ident">e</span>),
+    <span class="ident">Done</span>(<span class="ident">i</span>,<span class="ident">o</span>) =&gt; {
       <span class="kw">unsafe</span> {
         <span class="ident">Done</span>(<span class="ident">i</span>, <span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">f32</span><span class="op">&gt;</span>(<span class="ident">o</span>))
       }
@@ -1801,11 +1801,11 @@
 
 <span class="doccomment">/// Recognizes little endian 8 bytes floating point number</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_f64</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_f64</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f64</span><span class="op">&gt;</span> {
   <span class="kw">match</span> <span class="ident">le_u64</span>(<span class="ident">input</span>) {
-    <span class="ident">Error</span>(<span class="ident">e</span>)      <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error</span>(<span class="ident">e</span>),
-    <span class="ident">Incomplete</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Incomplete</span>(<span class="ident">e</span>),
-    <span class="ident">Done</span>(<span class="ident">i</span>,<span class="ident">o</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="ident">Error</span>(<span class="ident">e</span>)      =&gt; <span class="ident">Error</span>(<span class="ident">e</span>),
+    <span class="ident">Incomplete</span>(<span class="ident">e</span>) =&gt; <span class="ident">Incomplete</span>(<span class="ident">e</span>),
+    <span class="ident">Done</span>(<span class="ident">i</span>,<span class="ident">o</span>) =&gt; {
       <span class="kw">unsafe</span> {
         <span class="ident">Done</span>(<span class="ident">i</span>, <span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">f64</span><span class="op">&gt;</span>(<span class="ident">o</span>))
       }
@@ -1815,11 +1815,11 @@
 
 <span class="doccomment">/// Recognizes a hex-encoded integer</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hex_u32</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hex_u32</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u32</span><span class="op">&gt;</span> {
   <span class="kw">match</span> <span class="macro">is_a!</span>(<span class="ident">input</span>, <span class="kw-2">&amp;</span><span class="string">b&quot;0123456789abcdefABCDEF&quot;</span>[..]) {
-    <span class="ident">Error</span>(<span class="ident">e</span>)    <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error</span>(<span class="ident">e</span>),
-    <span class="ident">Incomplete</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Incomplete</span>(<span class="ident">e</span>),
-    <span class="ident">Done</span>(<span class="ident">i</span>,<span class="ident">o</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    <span class="ident">Error</span>(<span class="ident">e</span>)    =&gt; <span class="ident">Error</span>(<span class="ident">e</span>),
+    <span class="ident">Incomplete</span>(<span class="ident">e</span>) =&gt; <span class="ident">Incomplete</span>(<span class="ident">e</span>),
+    <span class="ident">Done</span>(<span class="ident">i</span>,<span class="ident">o</span>) =&gt; {
       <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="number">0u32</span>;
 
       <span class="comment">// Do not parse more than 8 characters for a u32</span>
@@ -1842,10 +1842,10 @@
 
 <span class="doccomment">/// Recognizes non empty buffers</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">non_empty</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">non_empty</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>:<span class="ident">T</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>,<span class="ident">T</span><span class="op">&gt;</span> <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">+</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">InputLength</span> {
-  <span class="kw">if</span> <span class="ident">input</span>.<span class="ident">input_len</span>() <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+  <span class="kw">if</span> <span class="ident">input</span>.<span class="ident">input_len</span>() <span class="op">==</span> <span class="number">0</span> {
     <span class="ident">Error</span>(<span class="macro">error_position!</span>(<span class="ident">ErrorKind::NonEmpty</span>, <span class="ident">input</span>))
   } <span class="kw">else</span> {
     <span class="ident">Done</span>(<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">input</span>.<span class="ident">input_len</span>()..), <span class="ident">input</span>)
@@ -1854,19 +1854,19 @@
 
 <span class="doccomment">/// Return the remaining input.</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rest</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rest</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
     <span class="ident">IResult::Done</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>[<span class="ident">input</span>.<span class="ident">len</span>()..], <span class="ident">input</span>)
 }
 
 <span class="doccomment">/// Return the remaining input, for strings.</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rest_s</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rest_s</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
     <span class="ident">IResult::Done</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>[<span class="ident">input</span>.<span class="ident">len</span>()..], <span class="ident">input</span>)
 }
 
 <span class="doccomment">/// Recognizes floating point number in a byte string and returns a f32</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">float</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>],<span class="ident">f32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">float</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>],<span class="ident">f32</span><span class="op">&gt;</span> {
   <span class="macro">flat_map!</span>(<span class="ident">input</span>,
     <span class="macro">recognize!</span>(
       <span class="macro">tuple!</span>(
@@ -1889,7 +1889,7 @@
 
 <span class="doccomment">/// Recognizes floating point number in a string and returns a f32</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">float_s</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span>,<span class="ident">f32</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">float_s</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span>,<span class="ident">f32</span><span class="op">&gt;</span> {
   <span class="macro">flat_map!</span>(<span class="ident">input</span>,
     <span class="macro">recognize!</span>(
       <span class="macro">tuple!</span>(
@@ -1912,7 +1912,7 @@
 
 <span class="doccomment">/// Recognizes floating point number in a byte string and returns a f64</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">double</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>],<span class="ident">f64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">double</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>],<span class="ident">f64</span><span class="op">&gt;</span> {
   <span class="macro">flat_map!</span>(<span class="ident">input</span>,
     <span class="macro">recognize!</span>(
       <span class="macro">tuple!</span>(
@@ -1935,7 +1935,7 @@
 
 <span class="doccomment">/// Recognizes floating point number in a string and returns a f64</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">double_s</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span>,<span class="ident">f64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">double_s</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span>,<span class="ident">f64</span><span class="op">&gt;</span> {
   <span class="macro">flat_map!</span>(<span class="ident">input</span>,
     <span class="macro">recognize!</span>(
       <span class="macro">tuple!</span>(
@@ -2047,32 +2047,32 @@
     <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="string">b&quot;123abcDEF&quot;</span>[..];
 
     <span class="kw">match</span> <span class="ident">alpha</span>(<span class="ident">a</span>) {
-        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">a</span>.<span class="ident">len</span>()); }
-        <span class="kw">_</span>           <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for alpha&quot;</span>) }
+        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  =&gt; { <span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">a</span>.<span class="ident">len</span>()); }
+        <span class="kw">_</span>           =&gt; { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for alpha&quot;</span>) }
     }
     <span class="kw">match</span> <span class="ident">digit</span>(<span class="ident">b</span>) {
-        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">assert_eq!</span>(<span class="ident">b</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">b</span>.<span class="ident">len</span>()); }
-        <span class="kw">_</span>           <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for digit&quot;</span>) }
+        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  =&gt; { <span class="macro">assert_eq!</span>(<span class="ident">b</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">b</span>.<span class="ident">len</span>()); }
+        <span class="kw">_</span>           =&gt; { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for digit&quot;</span>) }
     }
     <span class="kw">match</span> <span class="ident">alphanumeric</span>(<span class="ident">c</span>) {
-        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">assert_eq!</span>(<span class="ident">c</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">c</span>.<span class="ident">len</span>()); }
-        <span class="kw">_</span>           <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for alphanumeric&quot;</span>) }
+        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  =&gt; { <span class="macro">assert_eq!</span>(<span class="ident">c</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">c</span>.<span class="ident">len</span>()); }
+        <span class="kw">_</span>           =&gt; { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for alphanumeric&quot;</span>) }
     }
     <span class="kw">match</span> <span class="ident">space</span>(<span class="ident">d</span>) {
-        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">assert_eq!</span>(<span class="ident">d</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">d</span>.<span class="ident">len</span>()); }
-        <span class="kw">_</span>           <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for space&quot;</span>) }
+        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  =&gt; { <span class="macro">assert_eq!</span>(<span class="ident">d</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">d</span>.<span class="ident">len</span>()); }
+        <span class="kw">_</span>           =&gt; { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for space&quot;</span>) }
     }
     <span class="kw">match</span> <span class="ident">multispace</span>(<span class="ident">e</span>) {
-        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">assert_eq!</span>(<span class="ident">e</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">e</span>.<span class="ident">len</span>()); }
-        <span class="kw">_</span>           <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for multispace&quot;</span>) }
+        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  =&gt; { <span class="macro">assert_eq!</span>(<span class="ident">e</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">e</span>.<span class="ident">len</span>()); }
+        <span class="kw">_</span>           =&gt; { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for multispace&quot;</span>) }
     }
     <span class="kw">match</span> <span class="ident">hex_digit</span>(<span class="ident">f</span>) {
-        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">assert_eq!</span>(<span class="ident">f</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">f</span>.<span class="ident">len</span>()); }
-        <span class="kw">_</span>           <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for hex_digit&quot;</span>) }
+        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  =&gt; { <span class="macro">assert_eq!</span>(<span class="ident">f</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">f</span>.<span class="ident">len</span>()); }
+        <span class="kw">_</span>           =&gt; { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for hex_digit&quot;</span>) }
     }
     <span class="kw">match</span> <span class="ident">oct_digit</span>(<span class="ident">f</span>) {
-        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">assert_eq!</span>(<span class="ident">f</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">f</span>.<span class="ident">len</span>()); }
-        <span class="kw">_</span>           <span class="op">=</span><span class="op">&gt;</span> { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for oct_digit&quot;</span>) }
+        <span class="ident">Done</span>(<span class="ident">i</span>, <span class="kw">_</span>)  =&gt; { <span class="macro">assert_eq!</span>(<span class="ident">f</span>.<span class="ident">offset</span>(<span class="ident">i</span>) <span class="op">+</span> <span class="ident">i</span>.<span class="ident">len</span>(), <span class="ident">f</span>.<span class="ident">len</span>()); }
+        <span class="kw">_</span>           =&gt; { <span class="macro">panic!</span>(<span class="string">&quot;wrong return type in offset test for oct_digit&quot;</span>) }
     }
   }
 
@@ -2317,7 +2317,7 @@
   <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
   <span class="kw">fn</span> <span class="ident">manual_configurable_endianness_test</span>() {
     <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="number">1</span>;
-    <span class="kw">let</span> <span class="ident">int_parse</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Fn</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u16</span><span class="op">&gt;</span> <span class="op">&gt;</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="number">2</span> {
+    <span class="kw">let</span> <span class="ident">int_parse</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Fn</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u16</span><span class="op">&gt;</span> <span class="op">&gt;</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">2</span> {
       <span class="ident">Box::new</span>(<span class="ident">be_u16</span>)
     } <span class="kw">else</span> {
       <span class="ident">Box::new</span>(<span class="ident">le_u16</span>)
@@ -2327,7 +2327,7 @@
   }
 
   <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-  <span class="kw">fn</span> <span class="ident">custom_error</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], ()<span class="op">&gt;</span> {
+  <span class="kw">fn</span> <span class="ident">custom_error</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], ()<span class="op">&gt;</span> {
     <span class="macro">fix_error!</span>(<span class="ident">input</span>, (), <span class="ident">alphanumeric</span>)
   }
 

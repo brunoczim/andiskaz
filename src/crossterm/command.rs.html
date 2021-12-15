@@ -204,7 +204,7 @@
     <span class="doccomment">/// However, only Windows 10 and UNIX systems support this.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command Api](../#command-api)</span>
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span>;
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span>;
 
     <span class="doccomment">/// Execute this command.</span>
     <span class="doccomment">///</span>
@@ -213,14 +213,14 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command Api](../#command-api)</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
     <span class="doccomment">/// Returns whether the ansi code representation of this command is supported by windows.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// A list of supported ANSI escape codes</span>
     <span class="doccomment">/// can be found [here](https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences).</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="ident"><span class="kw">super</span>::ansi_support::supports_ansi</span>()
     }
 }
@@ -229,19 +229,19 @@
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">T::AnsiType</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span> {
         <span class="ident">T::ansi_code</span>(<span class="self">self</span>)
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">T::execute_winapi</span>(<span class="self">self</span>, <span class="ident">_writer</span>)
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="ident">T::is_ansi_code_supported</span>(<span class="self">self</span>)
     }
 }
@@ -249,13 +249,13 @@
 <span class="doccomment">/// An interface for commands that can be queued for further execution.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">QueueableCommand</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span>: <span class="ident">Sized</span> {
     <span class="doccomment">/// Queues the given command for further execution.</span>
-    <span class="kw">fn</span> <span class="ident">queue</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">queue</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// An interface for commands that are directly executed.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ExecutableCommand</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span>: <span class="ident">Sized</span> {
     <span class="doccomment">/// Executes the given command directly.</span>
-    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>;
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">A</span><span class="op">&gt;</span> <span class="ident">QueueableCommand</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">T</span>
@@ -314,7 +314,7 @@
     <span class="doccomment">///     and can therefore not be written to the given `writer`.</span>
     <span class="doccomment">///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)</span>
     <span class="doccomment">///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.</span>
-    <span class="kw">fn</span> <span class="ident">queue</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">A</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">queue</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">A</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="macro">queue!</span>(<span class="self">self</span>, <span class="ident">command</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
@@ -365,7 +365,7 @@
     <span class="doccomment">///     and can therefore not be written to the given `writer`.</span>
     <span class="doccomment">///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)</span>
     <span class="doccomment">///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.</span>
-    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">A</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">A</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="macro">execute!</span>(<span class="self">self</span>, <span class="ident">command</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }

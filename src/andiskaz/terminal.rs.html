@@ -509,7 +509,7 @@
 
 <span class="kw">impl</span> <span class="ident">RunGuard</span> {
     <span class="doccomment">/// Acquires the guard. Returns an error if the guard was already acquired.</span>
-    <span class="kw">fn</span> <span class="ident">acquire</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">AlreadyRunning</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">acquire</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">AlreadyRunning</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">RUN_GUARD_STATE</span>.<span class="ident">swap</span>(<span class="bool-val">true</span>, <span class="ident">Acquire</span>) {
             <span class="prelude-val">Err</span>(<span class="ident">AlreadyRunning</span>)
         } <span class="kw">else</span> {
@@ -536,14 +536,14 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Builder</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::new</span>()
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Builder</span> {
     <span class="doccomment">/// Initializes this configuration builder.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">min_screen</span>: <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">80</span>, <span class="ident">y</span>: <span class="number">25</span> },
             <span class="ident">frame_time</span>: <span class="ident">Duration::from_millis</span>(<span class="number">20</span>),
@@ -552,17 +552,17 @@
     }
 
     <span class="doccomment">/// Builds the minimum screen size for the application.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_screen</span>(<span class="self">self</span>, <span class="ident">min_screen</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_screen</span>(<span class="self">self</span>, <span class="ident">min_screen</span>: <span class="ident">Vec2</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">min_screen</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Builds the rate that the screen is updated.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">frame_time</span>(<span class="self">self</span>, <span class="ident">frame_time</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">frame_time</span>(<span class="self">self</span>, <span class="ident">frame_time</span>: <span class="ident">Duration</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">frame_time</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Interval waited when a poll for an event fails.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">event_interval</span>(<span class="self">self</span>, <span class="ident">event_interval</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">event_interval</span>(<span class="self">self</span>, <span class="ident">event_interval</span>: <span class="ident">Duration</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">event_interval</span>, ..<span class="self">self</span> }
     }
 
@@ -582,9 +582,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Beware! If the given `start` future returns a `Result`, then `run` will</span>
     <span class="doccomment">/// return a double `Result`!!</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">start</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">start</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">A</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">Terminal</span>) -&gt; <span class="ident">A</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">A</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">T</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
@@ -631,16 +631,16 @@
         <span class="comment">// Matches the error of events task result.</span>
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>) <span class="op">=</span> <span class="ident">events_ret</span><span class="question-mark">?</span> {
             <span class="kw">match</span> <span class="ident">error</span>.<span class="ident">kind</span>() {
-                <span class="ident">ErrorKind::ServicesOff</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>)<span class="question-mark">?</span>,
+                <span class="ident">ErrorKind::ServicesOff</span>(<span class="kw">_</span>) =&gt; (),
+                <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">error</span>)<span class="question-mark">?</span>,
             }
         }
 
         <span class="comment">// Matches the error of renderer task result.</span>
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>) <span class="op">=</span> <span class="ident">renderer_ret</span><span class="question-mark">?</span> {
             <span class="kw">match</span> <span class="ident">error</span>.<span class="ident">kind</span>() {
-                <span class="ident">ErrorKind::ServicesOff</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>)<span class="question-mark">?</span>,
+                <span class="ident">ErrorKind::ServicesOff</span>(<span class="kw">_</span>) =&gt; (),
+                <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">error</span>)<span class="question-mark">?</span>,
             }
         }
 
@@ -649,7 +649,7 @@
     }
 
     <span class="doccomment">/// Finds the initial size of the terminal.</span>
-    <span class="kw">fn</span> <span class="ident">initial_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec2</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">initial_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec2</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">size_res</span> <span class="op">=</span> <span class="ident">task::block_in_place</span>(<span class="op">|</span><span class="op">|</span> {
             <span class="ident">crossterm::terminal::enable_raw_mode</span>()<span class="question-mark">?</span>;
             <span class="ident">crossterm::terminal::size</span>()
@@ -662,7 +662,7 @@
     }
 
     <span class="doccomment">/// Finishes the builder and produces a terminal handle.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Terminal</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) -&gt; <span class="ident">Terminal</span> {
         <span class="kw">let</span> <span class="ident">shared</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">Shared::new</span>(
             <span class="ident">screen_size</span>,
             <span class="self">self</span>.<span class="ident">min_screen</span>,
@@ -678,9 +678,9 @@
     <span class="ident">barrier</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Barrier</span><span class="op">&gt;</span>,
     <span class="ident">terminal</span>: <span class="ident">Terminal</span>,
     <span class="ident">start</span>: <span class="ident">F</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
+) -&gt; <span class="ident">T</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">A</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">Terminal</span>) -&gt; <span class="ident">A</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">A</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">T</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -697,7 +697,7 @@
     <span class="ident">interval</span>: <span class="ident">Duration</span>,
     <span class="ident">shared</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Shared</span><span class="op">&gt;</span>,
     <span class="ident">initial_size</span>: <span class="ident">Vec2</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reactor</span> <span class="op">=</span> <span class="ident">Reactor::new</span>(<span class="kw-2">&amp;</span><span class="ident">shared</span>);
     <span class="ident">reactor</span>.<span class="ident">pre_loop</span>(<span class="ident">initial_size</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="ident">barrier</span>.<span class="ident">wait</span>().<span class="kw">await</span>;
@@ -709,7 +709,7 @@
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">renderer_task</span>(
     <span class="ident">barrier</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Barrier</span><span class="op">&gt;</span>,
     <span class="ident">shared</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Shared</span><span class="op">&gt;</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">shared</span>.<span class="ident">conn_guard</span>();
     <span class="ident">barrier</span>.<span class="ident">wait</span>().<span class="kw">await</span>;
     <span class="ident">renderer</span>(<span class="kw-2">&amp;</span><span class="ident">shared</span>).<span class="kw">await</span>
@@ -744,9 +744,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Beware! If the given `start` future returns a `Result`, then `run` will</span>
     <span class="doccomment">/// return a double `Result`!!</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">start</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">start</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">A</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">Terminal</span>) -&gt; <span class="ident">A</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">A</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">T</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
@@ -760,7 +760,7 @@
     <span class="doccomment">/// Screen is locked, event channel is locked.</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">lock_now</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="lifetime">&#39;terminal</span> <span class="kw-2">mut</span> <span class="self">self</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TerminalGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TerminalGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">app_guard</span>().<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">event</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">events</span>().<span class="ident">read</span>(<span class="self">self</span>.<span class="ident">curr_epoch</span>);
         <span class="kw">let</span> <span class="ident">screen</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">screen</span>().<span class="ident">lock</span>().<span class="kw">await</span>;
@@ -779,7 +779,7 @@
     <span class="doccomment">/// Screen is locked, event channel is locked.</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">listen</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="lifetime">&#39;terminal</span> <span class="kw-2">mut</span> <span class="self">self</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TerminalGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TerminalGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">shared</span>.<span class="ident">events</span>.<span class="ident">subscribe</span>().<span class="kw">await</span>;
         <span class="self">self</span>.<span class="ident">lock_now</span>().<span class="kw">await</span>
     }
@@ -796,7 +796,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">wait_user</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="lifetime">&#39;terminal</span> <span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">delay</span>: <span class="ident">Duration</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TerminalGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TerminalGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
         <span class="ident">time::sleep</span>(<span class="ident">delay</span>).<span class="kw">await</span>;
         <span class="self">self</span>.<span class="ident">clear_event</span>();
         <span class="self">self</span>.<span class="ident">listen</span>().<span class="kw">await</span>
@@ -824,7 +824,7 @@
     <span class="doccomment">/// read, and in subsequent locks to the terminal handle, it won&#39;t be</span>
     <span class="doccomment">/// available. If not called and no other event arrives, this will not</span>
     <span class="doccomment">/// be marked as read and it will be available in the next locking.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">event</span>.<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">new_epoch</span>, <span class="ident">event</span>)<span class="op">|</span> {
             <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">curr_epoch</span> <span class="op">=</span> <span class="ident">new_epoch</span>;
             <span class="ident">event</span>
@@ -832,7 +832,7 @@
     }
 
     <span class="doccomment">/// Returns a locked handle to the screen.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">screen</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Screen</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">screen</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Screen</span><span class="op">&lt;</span><span class="lifetime">&#39;terminal</span><span class="op">&gt;</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">screen</span>
     }
 }
@@ -861,7 +861,7 @@
         <span class="ident">screen_size</span>: <span class="ident">Vec2</span>,
         <span class="ident">min_screen</span>: <span class="ident">Vec2</span>,
         <span class="ident">frame_time</span>: <span class="ident">Duration</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    ) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">sync</span>: <span class="ident">RwLock::new</span>(()),
             <span class="ident">connected</span>: <span class="ident">AtomicBool::new</span>(<span class="bool-val">true</span>),
@@ -871,7 +871,7 @@
     }
 
     <span class="doccomment">/// Whether all parties are connected.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_connected</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_connected</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">connected</span>.<span class="ident">load</span>(<span class="ident">Acquire</span>)
     }
 
@@ -887,7 +887,7 @@
     <span class="doccomment">/// services (shared).</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">service_guard</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="lifetime">&#39;this</span> <span class="self">self</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServiceSyncGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServiceSyncGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">ServiceSyncGuard</span> { <span class="ident">_inner</span>: <span class="self">self</span>.<span class="ident">sync</span>.<span class="ident">read</span>().<span class="kw">await</span> };
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_connected</span>() {
             <span class="prelude-val">Ok</span>(<span class="ident">guard</span>)
@@ -900,7 +900,7 @@
     <span class="doccomment">/// application (exclusive).</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">app_guard</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="lifetime">&#39;this</span> <span class="self">self</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">AppSyncGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">AppSyncGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;this</span><span class="op">&gt;</span>, <span class="ident">ServicesOff</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">AppSyncGuard</span> { <span class="ident">_inner</span>: <span class="self">self</span>.<span class="ident">sync</span>.<span class="ident">write</span>().<span class="kw">await</span> };
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_connected</span>() {
             <span class="prelude-val">Ok</span>(<span class="ident">guard</span>)
@@ -910,18 +910,18 @@
     }
 
     <span class="doccomment">/// Returns reference to the events&#39; channel used by this application.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">events</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">event::Channel</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">events</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">event::Channel</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">events</span>
     }
 
     <span class="doccomment">/// Returns reference to the screen manager&#39;s data used by this application.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">screen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">ScreenData</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">screen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">ScreenData</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">screen</span>
     }
 
     <span class="doccomment">/// Creates a connection guard. A connection guard disconnects the shared</span>
     <span class="doccomment">/// data when the guard is dropped.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">conn_guard</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ConnGuard</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">conn_guard</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ConnGuard</span> {
         <span class="ident">ConnGuard</span> { <span class="ident">shared</span>: <span class="self">self</span> }
     }
 }

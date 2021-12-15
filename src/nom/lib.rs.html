@@ -902,7 +902,7 @@
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_macros</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">compiler_error</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) =&gt; {
       <span class="ident">INVALID_NOM_SYNTAX_PLEASE_SEE_FAQ</span> <span class="comment">//https://github.com/Geal/nom/blob/master/doc/FAQ.md#using-nightly-to-get-better-error-messages</span>
     }
 }

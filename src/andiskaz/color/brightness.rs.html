@@ -256,7 +256,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">/// Panics if `self.level &gt; soft_max` (or if conversion is incorrect).</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">spread</span>(<span class="self">self</span>, <span class="ident">soft_max</span>: <span class="ident">u16</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">spread</span>(<span class="self">self</span>, <span class="ident">soft_max</span>: <span class="ident">u16</span>) -&gt; <span class="self">Self</span> {
         <span class="macro">assert!</span>(<span class="self">self</span>.<span class="ident">level</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">soft_max</span>);
         <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span> <span class="ident">u32::from</span>(<span class="self">self</span>.<span class="ident">level</span>);
         <span class="kw">let</span> <span class="ident">soft_max</span> <span class="op">=</span> <span class="ident">u32::from</span>(<span class="ident">soft_max</span>);
@@ -271,7 +271,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">/// Panics if conversion is incorrect.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">compress</span>(<span class="self">self</span>, <span class="ident">soft_max</span>: <span class="ident">u16</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">compress</span>(<span class="self">self</span>, <span class="ident">soft_max</span>: <span class="ident">u16</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span> <span class="ident">u32::from</span>(<span class="self">self</span>.<span class="ident">level</span>);
         <span class="kw">let</span> <span class="ident">soft_max</span> <span class="op">=</span> <span class="ident">u32::from</span>(<span class="ident">soft_max</span>);
         <span class="kw">let</span> <span class="ident">max</span> <span class="op">=</span> <span class="ident">u32::from</span>(<span class="ident">u16::max_value</span>());
@@ -282,7 +282,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Brightness</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::MAX</span>
     }
 }
@@ -290,7 +290,7 @@
 <span class="kw">impl</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">Brightness</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
 
-    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span> {
+    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Output</span> {
         <span class="self">Self</span> {
             <span class="ident">level</span>: <span class="kw">if</span> <span class="ident"><span class="self">Self</span>::MAX</span>.<span class="ident">level</span> <span class="op">/</span> <span class="number">3</span> <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">level</span> {
                 <span class="self">self</span>.<span class="ident">level</span> <span class="op">*</span> <span class="number">3</span>
@@ -304,13 +304,13 @@
 <span class="doccomment">/// A trait for types that can approximate their brightness.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ApproxBrightness</span> {
     <span class="doccomment">/// Approximate the brightness of the color.</span>
-    <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Brightness</span>;
+    <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Brightness</span>;
     <span class="doccomment">/// Set the approximate brightness of the color.</span>
     <span class="kw">fn</span> <span class="ident">set_approx_brightness</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">brightness</span>: <span class="ident">Brightness</span>);
 
     <span class="doccomment">/// Like [`Self::set_approx_brightness`] but takes and returns `self`</span>
     <span class="doccomment">/// instead of mutating it.</span>
-    <span class="kw">fn</span> <span class="ident">with_approx_brightness</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">brightness</span>: <span class="ident">Brightness</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
+    <span class="kw">fn</span> <span class="ident">with_approx_brightness</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">brightness</span>: <span class="ident">Brightness</span>) -&gt; <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
@@ -332,25 +332,25 @@
 
 <span class="kw">impl</span> <span class="ident">Channel</span> {
     <span class="doccomment">/// Creates channel data from value and weight.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">value</span>: <span class="ident">u8</span>, <span class="ident">weight</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">value</span>: <span class="ident">u8</span>, <span class="ident">weight</span>: <span class="ident">u8</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">Self</span> { <span class="ident">value</span>, <span class="ident">weight</span>, <span class="ident">weighted</span>: <span class="number">0</span> };
         <span class="ident">this</span>.<span class="ident">update_cache</span>();
         <span class="ident">this</span>
     }
 
     <span class="doccomment">/// Channel&#39;s value.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">value</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">value</span>(<span class="self">self</span>) -&gt; <span class="ident">u8</span> {
         <span class="self">self</span>.<span class="ident">value</span>
     }
 
     <span class="doccomment">/// Channel&#39;s weight.</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">weight</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">weight</span>(<span class="self">self</span>) -&gt; <span class="ident">u8</span> {
         <span class="self">self</span>.<span class="ident">weight</span>
     }
 
     <span class="doccomment">/// Computed channel&#39;s value applied to the weight.</span>
-    <span class="kw">fn</span> <span class="ident">weighted</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u16</span> {
+    <span class="kw">fn</span> <span class="ident">weighted</span>(<span class="self">self</span>) -&gt; <span class="ident">u16</span> {
         <span class="self">self</span>.<span class="ident">weighted</span>
     }
 
@@ -384,7 +384,7 @@
     <span class="doccomment">/// the channels.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `soft_max * sum of weights` must fit into an `u16`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">channels</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;channels</span> <span class="kw-2">mut</span> [<span class="ident">Channel</span>], <span class="ident">soft_max</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">channels</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;channels</span> <span class="kw-2">mut</span> [<span class="ident">Channel</span>], <span class="ident">soft_max</span>: <span class="ident">u8</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span>
             <span class="self">Self</span> { <span class="ident">total_value</span>: <span class="number">0</span>, <span class="ident">channels</span>, <span class="ident">soft_max</span>, <span class="ident">total_weights</span>: <span class="number">0</span> };
         <span class="ident">this</span>.<span class="ident">update_cache</span>();
@@ -395,14 +395,14 @@
     }
 
     <span class="doccomment">/// Returns the raw brightness of this vector.</span>
-    <span class="kw">fn</span> <span class="ident">raw_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+    <span class="kw">fn</span> <span class="ident">raw_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
         (<span class="self">self</span>.<span class="ident">total_value</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">total_weights</span> <span class="op">/</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">/</span> <span class="self">self</span>.<span class="ident">total_weights</span>
     }
 
     <span class="doccomment">/// Updates the vector given an updater and recomputes the total value.</span>
-    <span class="kw">fn</span> <span class="ident">update</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">updater</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
+    <span class="kw">fn</span> <span class="ident">update</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">updater</span>: <span class="ident">F</span>) -&gt; <span class="ident">T</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">Channel</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">Channel</span>]) -&gt; <span class="ident">T</span>,
     {
         <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="ident">updater</span>(<span class="self">self</span>.<span class="ident">channels</span>);
         <span class="self">self</span>.<span class="ident">update_cache</span>();
@@ -448,7 +448,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;channels</span><span class="op">&gt;</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">ChannelVector</span><span class="op">&lt;</span><span class="lifetime">&#39;channels</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Brightness</span> {
+    <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Brightness</span> {
         <span class="kw">let</span> <span class="ident">max</span> <span class="op">=</span> <span class="ident">u16::from</span>(<span class="self">self</span>.<span class="ident">soft_max</span>);
         <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span>
             <span class="ident">u16::try_from</span>(<span class="self">self</span>.<span class="ident">raw_brightness</span>()).<span class="ident">expect</span>(<span class="string">&quot;Color brightness bug&quot;</span>);
@@ -459,7 +459,7 @@
         <span class="kw">let</span> <span class="ident">max</span> <span class="op">=</span> <span class="ident">u64::from</span>(<span class="self">self</span>.<span class="ident">soft_max</span>) <span class="op">*</span> <span class="self">self</span>.<span class="ident">total_weights</span>;
         <span class="kw">let</span> <span class="ident">max</span> <span class="op">=</span> <span class="ident">u16::try_from</span>(<span class="ident">max</span>).<span class="ident">expect</span>(<span class="string">&quot;Color brightness bug&quot;</span>);
         <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span> <span class="ident">u64::from</span>(<span class="ident">brightness</span>.<span class="ident">compress</span>(<span class="ident">max</span>).<span class="ident">level</span>);
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">total_value</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">total_value</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="self">self</span>.<span class="ident">set_brightness_total_zero</span>(<span class="ident">level</span>);
         } <span class="kw">else</span> {
             <span class="self">self</span>.<span class="ident">set_brightness_total_nonzero</span>(<span class="ident">level</span>);

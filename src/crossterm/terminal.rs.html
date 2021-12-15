@@ -524,21 +524,21 @@
 <span class="doccomment">/// Enables raw mode.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Please have a look at the [raw mode](./#raw-mode) section.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enable_raw_mode</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enable_raw_mode</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">sys::enable_raw_mode</span>()
 }
 
 <span class="doccomment">/// Disables raw mode.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Please have a look at the [raw mode](./#raw-mode) section.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">disable_raw_mode</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">disable_raw_mode</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">sys::disable_raw_mode</span>()
 }
 
 <span class="doccomment">/// Returns the terminal size `(columns, rows)`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The top left cell is represented `(1, 1)`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">u16</span>, <span class="ident">u16</span>)<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">u16</span>, <span class="ident">u16</span>)<span class="op">&gt;</span> {
     <span class="ident">sys::size</span>()
 }
 
@@ -549,12 +549,12 @@
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">DisableLineWrap</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span> {
         <span class="ident">ansi::DISABLE_LINE_WRAP_CSI_SEQUENCE</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">screen_buffer</span> <span class="op">=</span> <span class="ident">ScreenBuffer::current</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">console_mode</span> <span class="op">=</span> <span class="ident">ConsoleMode::from</span>(<span class="ident">screen_buffer</span>.<span class="ident">handle</span>().<span class="ident">clone</span>());
         <span class="kw">let</span> <span class="ident">new_mode</span> <span class="op">=</span> <span class="ident">console_mode</span>.<span class="ident">mode</span>()<span class="question-mark">?</span> <span class="op">&amp;</span> <span class="op">!</span><span class="ident">ENABLE_WRAP_AT_EOL_OUTPUT</span>;
@@ -570,12 +570,12 @@
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">EnableLineWrap</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span> {
         <span class="ident">ansi::ENABLE_LINE_WRAP_CSI_SEQUENCE</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">screen_buffer</span> <span class="op">=</span> <span class="ident">ScreenBuffer::current</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">console_mode</span> <span class="op">=</span> <span class="ident">ConsoleMode::from</span>(<span class="ident">screen_buffer</span>.<span class="ident">handle</span>().<span class="ident">clone</span>());
         <span class="kw">let</span> <span class="ident">new_mode</span> <span class="op">=</span> <span class="ident">console_mode</span>.<span class="ident">mode</span>()<span class="question-mark">?</span> <span class="op">|</span> <span class="ident">ENABLE_WRAP_AT_EOL_OUTPUT</span>;
@@ -612,12 +612,12 @@
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">EnterAlternateScreen</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span> {
         <span class="ident">ansi::ENTER_ALTERNATE_SCREEN_CSI_SEQUENCE</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">alternate_screen</span> <span class="op">=</span> <span class="ident">ScreenBuffer::create</span>();
         <span class="ident">alternate_screen</span>.<span class="ident">show</span>()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
@@ -652,12 +652,12 @@
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">LeaveAlternateScreen</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span> {
         <span class="ident">ansi::LEAVE_ALTERNATE_SCREEN_CSI_SEQUENCE</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">screen_buffer</span> <span class="op">=</span> <span class="ident">ScreenBuffer::from</span>(<span class="ident">Handle::current_out_handle</span>()<span class="question-mark">?</span>);
         <span class="ident">screen_buffer</span>.<span class="ident">show</span>()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
@@ -691,12 +691,12 @@
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">ScrollUp</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">String</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span> {
         <span class="ident">ansi::scroll_up_csi_sequence</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">sys::scroll_up</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -712,12 +712,12 @@
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">ScrollDown</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">String</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span> {
         <span class="ident">ansi::scroll_down_csi_sequence</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">sys::scroll_down</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -735,18 +735,18 @@
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">Clear</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
-            <span class="ident">ClearType::All</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ansi::CLEAR_ALL_CSI_SEQUENCE</span>,
-            <span class="ident">ClearType::FromCursorDown</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ansi::CLEAR_FROM_CURSOR_DOWN_CSI_SEQUENCE</span>,
-            <span class="ident">ClearType::FromCursorUp</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ansi::CLEAR_FROM_CURSOR_UP_CSI_SEQUENCE</span>,
-            <span class="ident">ClearType::CurrentLine</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ansi::CLEAR_FROM_CURRENT_LINE_CSI_SEQUENCE</span>,
-            <span class="ident">ClearType::UntilNewLine</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ansi::CLEAR_UNTIL_NEW_LINE_CSI_SEQUENCE</span>,
+            <span class="ident">ClearType::All</span> =&gt; <span class="ident">ansi::CLEAR_ALL_CSI_SEQUENCE</span>,
+            <span class="ident">ClearType::FromCursorDown</span> =&gt; <span class="ident">ansi::CLEAR_FROM_CURSOR_DOWN_CSI_SEQUENCE</span>,
+            <span class="ident">ClearType::FromCursorUp</span> =&gt; <span class="ident">ansi::CLEAR_FROM_CURSOR_UP_CSI_SEQUENCE</span>,
+            <span class="ident">ClearType::CurrentLine</span> =&gt; <span class="ident">ansi::CLEAR_FROM_CURRENT_LINE_CSI_SEQUENCE</span>,
+            <span class="ident">ClearType::UntilNewLine</span> =&gt; <span class="ident">ansi::CLEAR_UNTIL_NEW_LINE_CSI_SEQUENCE</span>,
         }
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">sys::clear</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -762,12 +762,12 @@
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetSize</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">String</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span> {
         <span class="ident">ansi::set_size_csi_sequence</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1</span>)
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">sys::set_size</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1</span>)
     }
 }
@@ -783,12 +783,12 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetTitle</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">AnsiType</span> <span class="op">=</span> <span class="ident">String</span>;
 
-    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::AnsiType</span> {
+    <span class="kw">fn</span> <span class="ident">ansi_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::AnsiType</span> {
         <span class="ident">ansi::set_title_ansi_sequence</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">sys::set_window_title</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -833,7 +833,7 @@
         <span class="macro">assert_eq!</span>((<span class="ident">width</span>, <span class="ident">height</span>), <span class="ident">size</span>().<span class="ident">unwrap</span>());
     }
 
-    <span class="kw">fn</span> <span class="ident">try_enable_ansi</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">try_enable_ansi</span>() -&gt; <span class="ident">bool</span> {
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
         {
             <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;windows&quot;</span>) {
@@ -841,8 +841,8 @@
 
                 <span class="comment">// if it is not listed we should try with WinApi to check if we do support ANSI-codes.</span>
                 <span class="kw">match</span> <span class="ident">set_virtual_terminal_processing</span>(<span class="bool-val">true</span>) {
-                    <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">true</span>,
-                    <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">false</span>,
+                    <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="bool-val">true</span>,
+                    <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="bool-val">false</span>,
                 }
             }
         }

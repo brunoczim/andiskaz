@@ -328,11 +328,11 @@
 <span class="doccomment">/// assert!(is_text(&quot;text/plain&quot;));</span>
 <span class="doccomment">/// assert!(!is_text(&quot;application/octet-stream&quot;));</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_text</span>(<span class="ident">mime_type</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_text</span>(<span class="ident">mime_type</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
     <span class="kw">match</span> <span class="ident">mime_type</span> {
-        <span class="string">&quot;TEXT&quot;</span> <span class="op">|</span> <span class="string">&quot;STRING&quot;</span> <span class="op">|</span> <span class="string">&quot;UTF8_STRING&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
-        <span class="ident">x</span> <span class="kw">if</span> <span class="ident">x</span>.<span class="ident">starts_with</span>(<span class="string">&quot;text/&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+        <span class="string">&quot;TEXT&quot;</span> <span class="op">|</span> <span class="string">&quot;STRING&quot;</span> <span class="op">|</span> <span class="string">&quot;UTF8_STRING&quot;</span> =&gt; <span class="bool-val">true</span>,
+        <span class="ident">x</span> <span class="kw">if</span> <span class="ident">x</span>.<span class="ident">starts_with</span>(<span class="string">&quot;text/&quot;</span>) =&gt; <span class="bool-val">true</span>,
+        <span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
     }
 }
 
@@ -392,7 +392,7 @@
 <span class="doccomment">/// # Ok(())</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">copy_data</span>(<span class="ident">from_fd</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RawFd</span><span class="op">&gt;</span>, <span class="ident">to_fd</span>: <span class="ident">RawFd</span>, <span class="ident">wait</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">CopyDataError</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">copy_data</span>(<span class="ident">from_fd</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RawFd</span><span class="op">&gt;</span>, <span class="ident">to_fd</span>: <span class="ident">RawFd</span>, <span class="ident">wait</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">CopyDataError</span><span class="op">&gt;</span> {
     <span class="comment">// We use the cat utility for data copying. It&#39;s easier (no need to implement any comlpex</span>
     <span class="comment">// buffering logic), surprisingly safer (a Rust implementation would likely require usage of</span>
     <span class="comment">// `from_raw_fd()` which is unsafe) and ideally faster (cat&#39;s been around for a while and is</span>
@@ -410,7 +410,7 @@
     <span class="comment">// Fork and exec cat.</span>
     <span class="kw">let</span> <span class="ident">fork_result</span> <span class="op">=</span> <span class="ident">fork</span>().<span class="ident">map_err</span>(<span class="ident">CopyDataError::Fork</span>)<span class="question-mark">?</span>;
     <span class="kw">match</span> <span class="ident">fork_result</span> {
-        <span class="ident">ForkResult::Child</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">ForkResult::Child</span> =&gt; {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">fd</span>) <span class="op">=</span> <span class="ident">from_fd</span> {
                 <span class="comment">// Redirect the &quot;from&quot; fd to stdin.</span>
                 <span class="kw">if</span> <span class="ident">dup2</span>(<span class="ident">fd</span>, <span class="ident">STDIN_FILENO</span>).<span class="ident">is_err</span>() {
@@ -439,7 +439,7 @@
                 <span class="ident">abort</span>();
             }
         }
-        <span class="ident">ForkResult::Parent</span> { <span class="ident">child</span> } <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">ForkResult::Parent</span> { <span class="ident">child</span> } =&gt; {
             <span class="comment">// Close the fds in the parent process.</span>
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">fd</span>) <span class="op">=</span> <span class="ident">from_fd</span> {
                 <span class="ident">close</span>(<span class="ident">fd</span>).<span class="ident">map_err</span>(<span class="ident">CopyDataError::CloseSourceFd</span>)<span class="question-mark">?</span>;
@@ -450,12 +450,12 @@
             <span class="kw">if</span> <span class="ident">wait</span> {
                 <span class="comment">// Wait for the child process to exit.</span>
                 <span class="kw">match</span> <span class="ident">waitpid</span>(<span class="ident">child</span>, <span class="prelude-val">None</span>).<span class="ident">map_err</span>(<span class="ident">CopyDataError::Wait</span>)<span class="question-mark">?</span> {
-                    <span class="ident">WaitStatus::Exited</span>(<span class="kw">_</span>, <span class="ident">status</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">WaitStatus::Exited</span>(<span class="kw">_</span>, <span class="ident">status</span>) =&gt; {
                         <span class="kw">if</span> <span class="ident">status</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
                             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">CopyDataError::ChildError</span>(<span class="ident">status</span>));
                         }
                     }
-                    <span class="ident">x</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">CopyDataError::WaitUnexpected</span>(<span class="ident">x</span>)),
+                    <span class="ident">x</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">CopyDataError::WaitUnexpected</span>(<span class="ident">x</span>)),
                 }
             }
         }
@@ -518,16 +518,16 @@
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_primary_selection_supported</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span>, <span class="ident">PrimarySelectionCheckError</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_primary_selection_supported</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span>, <span class="ident">PrimarySelectionCheckError</span><span class="op">&gt;</span> {
     <span class="ident">is_primary_selection_supported_internal</span>(<span class="prelude-val">None</span>)
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">is_primary_selection_supported_internal</span>(<span class="ident">socket_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span>)
-                                                      <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span>, <span class="ident">PrimarySelectionCheckError</span><span class="op">&gt;</span> {
+                                                      -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span>, <span class="ident">PrimarySelectionCheckError</span><span class="op">&gt;</span> {
     <span class="comment">// Connect to the Wayland compositor.</span>
     <span class="kw">let</span> <span class="ident">display</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">socket_name</span> {
-                      <span class="prelude-val">Some</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Display::connect_to_name</span>(<span class="ident">name</span>),
-                      <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Display::connect_to_env</span>(),
+                      <span class="prelude-val">Some</span>(<span class="ident">name</span>) =&gt; <span class="ident">Display::connect_to_name</span>(<span class="ident">name</span>),
+                      <span class="prelude-val">None</span> =&gt; <span class="ident">Display::connect_to_env</span>(),
                   }.<span class="ident">map_err</span>(<span class="ident">PrimarySelectionCheckError::WaylandConnection</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">queue</span> <span class="op">=</span> <span class="ident">display</span>.<span class="ident">create_event_queue</span>();
     <span class="kw">let</span> <span class="ident">display</span> <span class="op">=</span> <span class="ident">display</span>.<span class="ident">attach</span>(<span class="ident">queue</span>.<span class="ident">token</span>());
@@ -552,12 +552,12 @@
     <span class="comment">// missing protocol error, but if it&#39;s present with version 1 then return false as version 1</span>
     <span class="comment">// does not support primary clipboard.</span>
     <span class="kw">let</span> <span class="ident">clipboard_manager</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">global_manager</span>.<span class="ident">instantiate_exact</span>::<span class="op">&lt;</span><span class="ident">ZwlrDataControlManagerV1</span><span class="op">&gt;</span>(<span class="number">2</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">manager</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">manager</span>,
-        <span class="prelude-val">Err</span>(<span class="ident">GlobalError::Missing</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident">manager</span>) =&gt; <span class="ident">manager</span>,
+        <span class="prelude-val">Err</span>(<span class="ident">GlobalError::Missing</span>) =&gt; {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">PrimarySelectionCheckError::MissingProtocol</span> { <span class="ident">name</span>: <span class="ident">ZwlrDataControlManagerV1::NAME</span>,
                                                                      <span class="ident">version</span>: <span class="number">1</span> })
         }
-        <span class="prelude-val">Err</span>(<span class="ident">GlobalError::VersionTooLow</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>),
+        <span class="prelude-val">Err</span>(<span class="ident">GlobalError::VersionTooLow</span>(<span class="kw">_</span>)) =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>),
     };
 
     <span class="comment">// Check if there are no seats.</span>

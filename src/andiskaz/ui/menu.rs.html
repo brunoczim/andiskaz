@@ -475,6 +475,11 @@
 <span id="475">475</span>
 <span id="476">476</span>
 <span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
 </pre><pre class="rust"><code><span class="doccomment">//! This module exports items related to menus in the UI, such as more extensive</span>
 <span class="doccomment">//! menus, or just dialogs for OK/CANCEL.</span>
 
@@ -524,7 +529,7 @@
     <span class="ident">O</span>: <span class="ident">MenuOption</span>,
 {
     <span class="doccomment">/// Creates a new menu with default styles.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">title</span>: <span class="ident">TermString</span>, <span class="ident">options</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">O</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">title</span>: <span class="ident">TermString</span>, <span class="ident">options</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">O</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">title</span>,
             <span class="ident">options</span>,
@@ -540,7 +545,7 @@
     }
 
     <span class="doccomment">/// Asks for the user to select an item of the menu without cancel option.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">select</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">select</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">select_with_initial</span>(<span class="ident">term</span>, <span class="number">0</span>).<span class="kw">await</span>
     }
 
@@ -550,7 +555,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
         <span class="ident">initial</span>: <span class="ident">usize</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">selector</span> <span class="op">=</span> <span class="ident">Selector::without_cancel</span>(<span class="self">self</span>, <span class="ident">initial</span>);
         <span class="ident">selector</span>.<span class="ident">run</span>(<span class="ident">term</span>).<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">selector</span>.<span class="ident">result</span>())
@@ -560,7 +565,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">select_with_cancel</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">select_cancel_initial</span>(<span class="ident">term</span>, <span class="number">0</span>, <span class="bool-val">false</span>).<span class="kw">await</span>
     }
 
@@ -572,7 +577,7 @@
         <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>,
         <span class="ident">initial</span>: <span class="ident">usize</span>,
         <span class="ident">cancel</span>: <span class="ident">bool</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">selector</span> <span class="op">=</span> <span class="ident">Selector::with_cancel</span>(<span class="self">self</span>, <span class="ident">initial</span>, <span class="ident">cancel</span>);
         <span class="ident">selector</span>.<span class="ident">run</span>(<span class="ident">term</span>).<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">selector</span>.<span class="ident">result_with_cancel</span>())
@@ -582,11 +587,11 @@
 <span class="doccomment">/// A trait representing a menu option.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">MenuOption</span> {
     <span class="doccomment">/// Returns the display name of this option.</span>
-    <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TermString</span>;
+    <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TermString</span>;
 }
 
 <span class="kw">impl</span> <span class="ident">MenuOption</span> <span class="kw">for</span> <span class="ident">TermString</span> {
-    <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TermString</span> {
+    <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TermString</span> {
         <span class="self">self</span>.<span class="ident">clone</span>()
     }
 }
@@ -602,16 +607,16 @@
 
 <span class="kw">impl</span> <span class="ident">DangerPromptOption</span> {
     <span class="doccomment">/// Yields all options of a menu over a dangerous prompt.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">all</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">all</span>() -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="macro">vec!</span>[<span class="ident">DangerPromptOption::Ok</span>, <span class="ident">DangerPromptOption::Cancel</span>]
     }
 }
 
 <span class="kw">impl</span> <span class="ident">MenuOption</span> <span class="kw">for</span> <span class="ident">DangerPromptOption</span> {
-    <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TermString</span> {
+    <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TermString</span> {
         <span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">DangerPromptOption::Cancel</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;CANCEL&quot;</span>,
-            <span class="ident">DangerPromptOption::Ok</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;OK&quot;</span>,
+            <span class="ident">DangerPromptOption::Cancel</span> =&gt; <span class="string">&quot;CANCEL&quot;</span>,
+            <span class="ident">DangerPromptOption::Ok</span> =&gt; <span class="string">&quot;OK&quot;</span>,
         };
 
         <span class="macro">tstring!</span>[<span class="ident">string</span>]
@@ -643,32 +648,32 @@
 {
     <span class="doccomment">/// Generic initialization for this selector, do not call directly unless</span>
     <span class="doccomment">/// really needed and wrapped.</span>
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">menu</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;menu</span> <span class="ident">Menu</span><span class="op">&lt;</span><span class="ident">O</span><span class="op">&gt;</span>, <span class="ident">initial</span>: <span class="ident">usize</span>, <span class="ident">cancel</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">menu</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;menu</span> <span class="ident">Menu</span><span class="op">&lt;</span><span class="ident">O</span><span class="op">&gt;</span>, <span class="ident">initial</span>: <span class="ident">usize</span>, <span class="ident">cancel</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Selector</span> { <span class="ident">menu</span>, <span class="ident">selected</span>: <span class="ident">initial</span>, <span class="ident">cancel</span>, <span class="ident">first_row</span>: <span class="number">0</span>, <span class="ident">last_row</span>: <span class="number">0</span> }
     }
 
     <span class="doccomment">/// Initializes this selector for a selection without cancel option.</span>
-    <span class="kw">fn</span> <span class="ident">without_cancel</span>(<span class="ident">menu</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;menu</span> <span class="ident">Menu</span><span class="op">&lt;</span><span class="ident">O</span><span class="op">&gt;</span>, <span class="ident">initial</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">without_cancel</span>(<span class="ident">menu</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;menu</span> <span class="ident">Menu</span><span class="op">&lt;</span><span class="ident">O</span><span class="op">&gt;</span>, <span class="ident">initial</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">menu</span>, <span class="ident">initial</span>, <span class="prelude-val">None</span>)
     }
 
     <span class="doccomment">/// Initializes this selector for a selection with cancel option.</span>
-    <span class="kw">fn</span> <span class="ident">with_cancel</span>(<span class="ident">menu</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;menu</span> <span class="ident">Menu</span><span class="op">&lt;</span><span class="ident">O</span><span class="op">&gt;</span>, <span class="ident">initial</span>: <span class="ident">usize</span>, <span class="ident">cancel</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Selector::new</span>(<span class="ident">menu</span>, <span class="ident">initial</span>, <span class="prelude-val">Some</span>(<span class="ident">cancel</span> <span class="op">|</span><span class="op">|</span> <span class="ident">menu</span>.<span class="ident">options</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">=</span> <span class="number">0</span>))
+    <span class="kw">fn</span> <span class="ident">with_cancel</span>(<span class="ident">menu</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;menu</span> <span class="ident">Menu</span><span class="op">&lt;</span><span class="ident">O</span><span class="op">&gt;</span>, <span class="ident">initial</span>: <span class="ident">usize</span>, <span class="ident">cancel</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident">Selector::new</span>(<span class="ident">menu</span>, <span class="ident">initial</span>, <span class="prelude-val">Some</span>(<span class="ident">cancel</span> <span class="op">|</span><span class="op">|</span> <span class="ident">menu</span>.<span class="ident">options</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">0</span>))
     }
 
     <span class="doccomment">/// Gets the result for a selection without cancel.</span>
-    <span class="kw">fn</span> <span class="ident">result</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">fn</span> <span class="ident">result</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">selected</span>
     }
 
     <span class="doccomment">/// Gets the result for a selection with cancel option.</span>
-    <span class="kw">fn</span> <span class="ident">result_with_cancel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">result_with_cancel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">selected</span>).<span class="ident">filter</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">cancel</span> <span class="op">!</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="bool-val">true</span>))
     }
 
     <span class="doccomment">/// Runs this selector and uses the given terminal.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">init_run</span>(<span class="ident">term</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">loop</span> {
@@ -677,55 +682,60 @@
             <span class="kw">let</span> <span class="ident">screen</span> <span class="op">=</span> <span class="ident">session</span>.<span class="ident">screen</span>();
 
             <span class="kw">match</span> <span class="ident">event</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">keys</span>)) <span class="kw">if</span> <span class="ident">screen</span>.<span class="ident">valid_size</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">keys</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">keys</span>)) <span class="kw">if</span> <span class="ident">screen</span>.<span class="ident">valid_size</span>() =&gt; <span class="kw">match</span> <span class="ident">keys</span> {
                     <span class="ident">KeyEvent</span> {
                         <span class="ident">main_key</span>: <span class="ident">Key::Esc</span>,
                         <span class="ident">ctrl</span>: <span class="bool-val">false</span>,
                         <span class="ident">alt</span>: <span class="bool-val">false</span>,
                         <span class="ident">shift</span>: <span class="bool-val">false</span>,
-                    } <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
+                    } =&gt; {
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cancel</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">cancel</span>.<span class="ident">as_mut</span>() {
+                            <span class="kw-2">*</span><span class="ident">cancel</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                            <span class="kw">break</span>;
+                        }
+                    },
 
                     <span class="ident">KeyEvent</span> {
                         <span class="ident">main_key</span>: <span class="ident">Key::Up</span>,
                         <span class="ident">ctrl</span>: <span class="bool-val">false</span>,
                         <span class="ident">alt</span>: <span class="bool-val">false</span>,
                         <span class="ident">shift</span>: <span class="bool-val">false</span>,
-                    } <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">key_up</span>(<span class="ident">screen</span>),
+                    } =&gt; <span class="self">self</span>.<span class="ident">key_up</span>(<span class="ident">screen</span>),
 
                     <span class="ident">KeyEvent</span> {
                         <span class="ident">main_key</span>: <span class="ident">Key::Down</span>,
                         <span class="ident">ctrl</span>: <span class="bool-val">false</span>,
                         <span class="ident">alt</span>: <span class="bool-val">false</span>,
                         <span class="ident">shift</span>: <span class="bool-val">false</span>,
-                    } <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">key_down</span>(<span class="ident">screen</span>),
+                    } =&gt; <span class="self">self</span>.<span class="ident">key_down</span>(<span class="ident">screen</span>),
 
                     <span class="ident">KeyEvent</span> {
                         <span class="ident">main_key</span>: <span class="ident">Key::Left</span>,
                         <span class="ident">ctrl</span>: <span class="bool-val">false</span>,
                         <span class="ident">alt</span>: <span class="bool-val">false</span>,
                         <span class="ident">shift</span>: <span class="bool-val">false</span>,
-                    } <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">key_left</span>(<span class="ident">screen</span>),
+                    } =&gt; <span class="self">self</span>.<span class="ident">key_left</span>(<span class="ident">screen</span>),
 
                     <span class="ident">KeyEvent</span> {
                         <span class="ident">main_key</span>: <span class="ident">Key::Right</span>,
                         <span class="ident">ctrl</span>: <span class="bool-val">false</span>,
                         <span class="ident">alt</span>: <span class="bool-val">false</span>,
                         <span class="ident">shift</span>: <span class="bool-val">false</span>,
-                    } <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">key_right</span>(<span class="ident">screen</span>),
+                    } =&gt; <span class="self">self</span>.<span class="ident">key_right</span>(<span class="ident">screen</span>),
 
                     <span class="ident">KeyEvent</span> {
                         <span class="ident">main_key</span>: <span class="ident">Key::Enter</span>,
                         <span class="ident">ctrl</span>: <span class="bool-val">false</span>,
                         <span class="ident">alt</span>: <span class="bool-val">false</span>,
                         <span class="ident">shift</span>: <span class="bool-val">false</span>,
-                    } <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
+                    } =&gt; <span class="kw">break</span>,
 
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+                    <span class="kw">_</span> =&gt; (),
                 },
 
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">evt</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">resized</span>(<span class="ident">evt</span>, <span class="ident">screen</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">evt</span>)) =&gt; <span class="self">self</span>.<span class="ident">resized</span>(<span class="ident">evt</span>, <span class="ident">screen</span>),
 
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+                <span class="kw">_</span> =&gt; (),
             }
         }
 
@@ -733,7 +743,7 @@
     }
 
     <span class="doccomment">/// Initializes the run of this selector.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">init_run</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">init_run</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">term</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Terminal</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">session</span> <span class="op">=</span> <span class="ident">term</span>.<span class="ident">lock_now</span>().<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">screen</span> <span class="op">=</span> <span class="ident">session</span>.<span class="ident">screen</span>();
         <span class="self">self</span>.<span class="ident">render</span>(<span class="ident">screen</span>);
@@ -796,14 +806,14 @@
     }
 
     <span class="doccomment">/// Returns if the selection is currently selecting the cancel option.</span>
-    <span class="kw">fn</span> <span class="ident">is_cancelling</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">cancel</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="bool-val">true</span>)
+    <span class="kw">fn</span> <span class="ident">is_cancelling</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">cancel</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="bool-val">true</span>)
     }
 
     <span class="doccomment">/// Returns if the selection is currently not selecting the cancel option</span>
     <span class="doccomment">/// AND the cancel option is enabled.</span>
-    <span class="kw">fn</span> <span class="ident">is_not_cancelling</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">cancel</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)
+    <span class="kw">fn</span> <span class="ident">is_not_cancelling</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">cancel</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)
     }
 
     <span class="doccomment">/// Updates the last row field from the computed end of the screen.</span>
@@ -812,7 +822,7 @@
     }
 
     <span class="doccomment">/// Returns the index of the last visible option in the screen.</span>
-    <span class="kw">fn</span> <span class="ident">screen_end</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">fn</span> <span class="ident">screen_end</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) -&gt; <span class="ident">usize</span> {
         <span class="kw">let</span> <span class="ident">cancel</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">cancel</span>.<span class="ident">is_some</span>() { <span class="number">4</span> } <span class="kw">else</span> { <span class="number">0</span> };
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">available</span> <span class="op">=</span> <span class="ident">screen_size</span>.<span class="ident">y</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">menu</span>.<span class="ident">title_y</span>;
         <span class="ident">available</span> <span class="op">-</span><span class="op">=</span> <span class="number">2</span> <span class="op">*</span> (<span class="self">self</span>.<span class="ident">menu</span>.<span class="ident">pad_after_title</span> <span class="op">-</span> <span class="number">1</span>) <span class="op">+</span> <span class="ident">cancel</span>;
@@ -821,7 +831,7 @@
     }
 
     <span class="doccomment">/// Returns the range of the visible options in the screen.</span>
-    <span class="kw">fn</span> <span class="ident">range_of_screen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">range_of_screen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) -&gt; <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">first_row</span> .. <span class="self">self</span>.<span class="ident">screen_end</span>(<span class="ident">screen_size</span>)
     }
 
@@ -881,7 +891,7 @@
     <span class="kw">fn</span> <span class="ident">render_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Screen</span>, <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) {
         <span class="kw">for</span> (<span class="ident">i</span>, <span class="ident">option</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">menu</span>.<span class="ident">options</span>[<span class="ident">range</span>.<span class="ident">clone</span>()].<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
             <span class="kw">let</span> <span class="ident">is_selected</span> <span class="op">=</span>
-                <span class="ident">range</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">i</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">selected</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">is_cancelling</span>();
+                <span class="ident">range</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">i</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">selected</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">is_cancelling</span>();
             <span class="self">self</span>.<span class="ident">render_option</span>(
                 <span class="ident">screen</span>,
                 <span class="ident">option</span>,
@@ -946,7 +956,7 @@
     }
 
     <span class="doccomment">/// Gets the height of a given option (by index).</span>
-    <span class="kw">fn</span> <span class="ident">y_of_option</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">option</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord</span> {
+    <span class="kw">fn</span> <span class="ident">y_of_option</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">option</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Coord</span> {
         <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="ident">coord::from_index</span>(<span class="ident">option</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">first_row</span>);
         <span class="kw">let</span> <span class="ident">before</span> <span class="op">=</span> (<span class="ident">count</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">*</span> (<span class="self">self</span>.<span class="ident">menu</span>.<span class="ident">pad_after_option</span> <span class="op">+</span> <span class="number">1</span>);
         <span class="ident">before</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">menu</span>.<span class="ident">pad_after_title</span> <span class="op">+</span> <span class="number">1</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">menu</span>.<span class="ident">title_y</span>

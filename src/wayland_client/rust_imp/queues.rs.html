@@ -316,7 +316,7 @@
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type</span> <span class="ident">QueueBuffer</span> <span class="op">=</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">create_queue_buffer</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">QueueBuffer</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">create_queue_buffer</span>() -&gt; <span class="ident">QueueBuffer</span> {
     <span class="ident">Arc::new</span>(<span class="ident">Mutex::new</span>(<span class="ident">VecDeque::new</span>()))
 }
 
@@ -331,7 +331,7 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">connection</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">Connection</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">buffer</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueueBuffer</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">EventQueueInner</span> {
+    ) -&gt; <span class="ident">EventQueueInner</span> {
         <span class="kw">let</span> (<span class="ident">map</span>, <span class="ident">display_buffer</span>) <span class="op">=</span> {
             <span class="kw">let</span> <span class="ident">cx</span> <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
             (<span class="ident">cx</span>.<span class="ident">map</span>.<span class="ident">clone</span>(), <span class="ident">cx</span>.<span class="ident">display_buffer</span>.<span class="ident">clone</span>())
@@ -344,7 +344,7 @@
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">dispatch</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">data</span>: <span class="ident">DispatchData</span>, <span class="kw-2">mut</span> <span class="ident">fallback</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">dispatch</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">data</span>: <span class="ident">DispatchData</span>, <span class="kw-2">mut</span> <span class="ident">fallback</span>: <span class="ident">F</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="ident">RawEvent</span>, <span class="ident">Main</span><span class="op">&lt;</span><span class="ident">AnonymousObject</span><span class="op">&gt;</span>, <span class="ident">DispatchData</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>),
     {
@@ -361,20 +361,20 @@
             <span class="ident">socket_fd</span> <span class="op">=</span> <span class="ident">conn_lock</span>.<span class="ident">socket</span>.<span class="ident">get_socket</span>().<span class="ident">as_raw_fd</span>();
             <span class="kw">loop</span> {
                 <span class="kw">match</span> <span class="ident">conn_lock</span>.<span class="ident">flush</span>() {
-                    <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
-                    <span class="prelude-val">Err</span>(<span class="ident">::nix::Error::Sys</span>(<span class="ident">::nix::errno::Errno::EAGAIN</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="kw">break</span>,
+                    <span class="prelude-val">Err</span>(<span class="ident">::nix::Error::Sys</span>(<span class="ident">::nix::errno::Errno::EAGAIN</span>)) =&gt; {
                         <span class="comment">// EAGAIN, we need to wait before writing, so we poll the socket</span>
                         <span class="kw">let</span> <span class="ident">poll_ret</span> <span class="op">=</span> <span class="ident">poll</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">PollFd::new</span>(<span class="ident">socket_fd</span>, <span class="ident">PollFlags::POLLOUT</span>)], <span class="op">-</span><span class="number">1</span>);
                         <span class="kw">match</span> <span class="ident">poll_ret</span> {
-                            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
-                            <span class="prelude-val">Err</span>(<span class="ident">::nix::Error::Sys</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="kw">continue</span>,
+                            <span class="prelude-val">Err</span>(<span class="ident">::nix::Error::Sys</span>(<span class="ident">e</span>)) =&gt; {
                                 <span class="self">self</span>.<span class="ident">cancel_read</span>();
                                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into</span>());
                             }
-                            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(),
+                            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
                         }
                     }
-                    <span class="prelude-val">Err</span>(<span class="ident">::nix::Error::Sys</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Err</span>(<span class="ident">::nix::Error::Sys</span>(<span class="ident">e</span>)) =&gt; {
                         <span class="kw">if</span> <span class="ident">e</span> <span class="op">!</span><span class="op">=</span> <span class="ident">::nix::errno::Errno::EPIPE</span> {
                             <span class="comment">// don&#39;t abort on EPIPE, so we can continue reading</span>
                             <span class="comment">// to get the protocol error</span>
@@ -382,19 +382,19 @@
                             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into</span>());
                         }
                     }
-                    <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(),
+                    <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
                 }
             }
         }
 
         <span class="comment">// wait for incoming messages to arrive</span>
         <span class="kw">match</span> <span class="ident">poll</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">PollFd::new</span>(<span class="ident">socket_fd</span>, <span class="ident">PollFlags::POLLIN</span>)], <span class="op">-</span><span class="number">1</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-            <span class="prelude-val">Err</span>(<span class="ident">::nix::Error::Sys</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; (),
+            <span class="prelude-val">Err</span>(<span class="ident">::nix::Error::Sys</span>(<span class="ident">e</span>)) =&gt; {
                 <span class="self">self</span>.<span class="ident">cancel_read</span>();
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into</span>());
             }
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(),
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
         }
         <span class="kw">let</span> <span class="ident">read_ret</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">read_events</span>();
 
@@ -403,14 +403,14 @@
         <span class="kw">let</span> <span class="ident">dispatch_ret</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">dispatch_pending</span>(<span class="ident">data</span>.<span class="ident">reborrow</span>(), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fallback</span>);
 
         <span class="kw">match</span> <span class="ident">read_ret</span> {
-            <span class="prelude-val">Ok</span>(()) <span class="op">=</span><span class="op">&gt;</span> (),
-            <span class="prelude-val">Err</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">io::ErrorKind::WouldBlock</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(()) =&gt; (),
+            <span class="prelude-val">Err</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">==</span> <span class="ident">io::ErrorKind::WouldBlock</span> =&gt; {
                 <span class="comment">// we waited for read readiness be then received a WouldBlock error</span>
                 <span class="comment">// this means that an other thread was also reading events and read them</span>
                 <span class="comment">// under our nose</span>
                 <span class="comment">// this is alright, continue</span>
             }
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
         }
 
         <span class="ident">dispatch_ret</span>
@@ -421,7 +421,7 @@
         <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="kw-2">mut</span> <span class="ident">data</span>: <span class="ident">DispatchData</span>,
         <span class="kw-2">mut</span> <span class="ident">fallback</span>: <span class="ident">F</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>
+    ) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="ident">RawEvent</span>, <span class="ident">Main</span><span class="op">&lt;</span><span class="ident">AnonymousObject</span><span class="op">&gt;</span>, <span class="ident">DispatchData</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>),
     {
@@ -430,8 +430,8 @@
         <span class="kw">loop</span> {
             <span class="kw">let</span> <span class="ident">msg</span> <span class="op">=</span> { <span class="ident">buffer</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">pop_front</span>() };
             <span class="kw">let</span> <span class="ident">msg</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">msg</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">m</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">m</span>,
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">m</span>) =&gt; <span class="ident">m</span>,
+                <span class="prelude-val">None</span> =&gt; <span class="kw">break</span>,
             };
             <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">msg</span>.<span class="ident">sender_id</span>;
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">proxy</span>) <span class="op">=</span> <span class="ident">ProxyInner::from_id</span>(<span class="ident">id</span>, <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">clone</span>(), <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">clone</span>())
@@ -445,32 +445,32 @@
                     <span class="comment">// leaked) and discard the event.</span>
                     <span class="kw">for</span> <span class="ident">arg</span> <span class="kw">in</span> <span class="ident">msg</span>.<span class="ident">args</span> {
                         <span class="kw">match</span> <span class="ident">arg</span> {
-                            <span class="ident">Argument::Fd</span>(<span class="ident">fd</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="ident">Argument::Fd</span>(<span class="ident">fd</span>) =&gt; {
                                 <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">::nix::unistd::close</span>(<span class="ident">fd</span>);
                             }
-                            <span class="ident">Argument::NewId</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="ident">Argument::NewId</span>(<span class="ident">id</span>) =&gt; {
                                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
                                 <span class="ident">map</span>.<span class="ident">with</span>(<span class="ident">id</span>, <span class="op">|</span><span class="ident">obj</span><span class="op">|</span> {
                                     <span class="ident">obj</span>.<span class="ident">meta</span>.<span class="ident">client_destroyed</span> <span class="op">=</span> <span class="bool-val">true</span>;
                                 })
                                 .<span class="ident">unwrap</span>();
                             }
-                            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
+                            <span class="kw">_</span> =&gt; {}
                         }
                     }
                     <span class="kw">continue</span>;
                 }
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dispatcher</span> <span class="op">=</span> <span class="ident">object</span>.<span class="ident">meta</span>.<span class="ident">dispatcher</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
                 <span class="kw">match</span> <span class="ident">dispatcher</span>.<span class="ident">dispatch</span>(<span class="ident">msg</span>, <span class="ident">proxy</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">proxymap</span>, <span class="ident">data</span>.<span class="ident">reborrow</span>()) {
-                    <span class="ident">Dispatched::Yes</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">Dispatched::Yes</span> =&gt; {
                         <span class="ident">count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                     }
-                    <span class="ident">Dispatched::NoDispatch</span>(<span class="ident">msg</span>, <span class="ident">proxy</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">Dispatched::NoDispatch</span>(<span class="ident">msg</span>, <span class="ident">proxy</span>) =&gt; {
                         <span class="kw">let</span> <span class="ident">raw_event</span> <span class="op">=</span> <span class="ident">message_to_rawevent</span>(<span class="ident">msg</span>, <span class="kw-2">&amp;</span><span class="ident">proxy</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">proxymap</span>);
                         <span class="ident">fallback</span>(<span class="ident">raw_event</span>, <span class="ident">Main::wrap</span>(<span class="ident">proxy</span>), <span class="ident">data</span>.<span class="ident">reborrow</span>());
                         <span class="ident">count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                     }
-                    <span class="ident">Dispatched::BadMsg</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">Dispatched::BadMsg</span> =&gt; {
                         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">io::Error::new</span>(
                             <span class="ident">io::ErrorKind::Other</span>,
                             <span class="macro">format!</span>(<span class="string">&quot;Dispatch for object {}@{} errored.&quot;</span>, <span class="ident">object</span>.<span class="ident">interface</span>, <span class="ident">id</span>),
@@ -487,7 +487,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">count</span>)
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">dispatch_pending</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">data</span>: <span class="ident">DispatchData</span>, <span class="ident">fallback</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">dispatch_pending</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">data</span>: <span class="ident">DispatchData</span>, <span class="ident">fallback</span>: <span class="ident">F</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="ident">RawEvent</span>, <span class="ident">Main</span><span class="op">&lt;</span><span class="ident">AnonymousObject</span><span class="op">&gt;</span>, <span class="ident">DispatchData</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>),
     {
@@ -505,7 +505,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="kw-2">mut</span> <span class="ident">data</span>: <span class="ident">DispatchData</span>,
         <span class="kw-2">mut</span> <span class="ident">fallback</span>: <span class="ident">F</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>
+    ) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="ident">RawEvent</span>, <span class="ident">Main</span><span class="op">&lt;</span><span class="ident">AnonymousObject</span><span class="op">&gt;</span>, <span class="ident">DispatchData</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>),
     {
@@ -533,7 +533,7 @@
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">prepare_read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), ()<span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">prepare_read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), ()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">is_empty</span>() {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(());
         }
@@ -542,14 +542,14 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">read_events</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">read_events</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// TODO: integrate more properly with prepare read with a fence</span>
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">read_events</span>() {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(()),
-            <span class="prelude-val">Err</span>(<span class="ident">CError::Protocol</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">::nix::errno::Errno::EPROTO</span>.<span class="ident">into</span>()),
-            <span class="prelude-val">Err</span>(<span class="ident">CError::Parse</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">::nix::errno::Errno::EPROTO</span>.<span class="ident">into</span>()),
-            <span class="prelude-val">Err</span>(<span class="ident">CError::Nix</span>(<span class="ident">::nix::Error::Sys</span>(<span class="ident">errno</span>))) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">errno</span>.<span class="ident">into</span>()),
-            <span class="prelude-val">Err</span>(<span class="ident">CError::Nix</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(()),
+            <span class="prelude-val">Err</span>(<span class="ident">CError::Protocol</span>(<span class="kw">_</span>)) =&gt; <span class="prelude-val">Err</span>(<span class="ident">::nix::errno::Errno::EPROTO</span>.<span class="ident">into</span>()),
+            <span class="prelude-val">Err</span>(<span class="ident">CError::Parse</span>(<span class="kw">_</span>)) =&gt; <span class="prelude-val">Err</span>(<span class="ident">::nix::errno::Errno::EPROTO</span>.<span class="ident">into</span>()),
+            <span class="prelude-val">Err</span>(<span class="ident">CError::Nix</span>(<span class="ident">::nix::Error::Sys</span>(<span class="ident">errno</span>))) =&gt; <span class="prelude-val">Err</span>(<span class="ident">errno</span>.<span class="ident">into</span>()),
+            <span class="prelude-val">Err</span>(<span class="ident">CError::Nix</span>(<span class="kw">_</span>)) =&gt; <span class="macro">unreachable!</span>(),
         }
     }
 
@@ -558,20 +558,20 @@
     }
 }
 
-<span class="kw">fn</span> <span class="ident">message_to_rawevent</span>(<span class="ident">msg</span>: <span class="ident">Message</span>, <span class="ident">proxy</span>: <span class="kw-2">&amp;</span><span class="ident">ProxyInner</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident"><span class="kw">super</span>::ProxyMap</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RawEvent</span> {
+<span class="kw">fn</span> <span class="ident">message_to_rawevent</span>(<span class="ident">msg</span>: <span class="ident">Message</span>, <span class="ident">proxy</span>: <span class="kw-2">&amp;</span><span class="ident">ProxyInner</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident"><span class="kw">super</span>::ProxyMap</span>) -&gt; <span class="ident">RawEvent</span> {
     <span class="kw">let</span> <span class="ident">Message</span> { <span class="ident">opcode</span>, <span class="ident">args</span>, .. } <span class="op">=</span> <span class="ident">msg</span>;
 
     <span class="kw">let</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">args</span>
         .<span class="ident">into_iter</span>()
         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">a</span> {
-            <span class="ident">Argument::Int</span>(<span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident"><span class="kw">crate</span>::Argument::Int</span>(<span class="ident">i</span>),
-            <span class="ident">Argument::Uint</span>(<span class="ident">u</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident"><span class="kw">crate</span>::Argument::Uint</span>(<span class="ident">u</span>),
-            <span class="ident">Argument::Array</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Argument::Int</span>(<span class="ident">i</span>) =&gt; <span class="ident"><span class="kw">crate</span>::Argument::Int</span>(<span class="ident">i</span>),
+            <span class="ident">Argument::Uint</span>(<span class="ident">u</span>) =&gt; <span class="ident"><span class="kw">crate</span>::Argument::Uint</span>(<span class="ident">u</span>),
+            <span class="ident">Argument::Array</span>(<span class="ident">v</span>) =&gt; {
                 <span class="ident"><span class="kw">crate</span>::Argument::Array</span>(<span class="kw">if</span> <span class="ident">v</span>.<span class="ident">is_empty</span>() { <span class="prelude-val">None</span> } <span class="kw">else</span> { <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">v</span>) })
             }
-            <span class="ident">Argument::Fixed</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident"><span class="kw">crate</span>::Argument::Float</span>((<span class="ident">f</span> <span class="kw">as</span> <span class="ident">f32</span>) <span class="op">/</span> <span class="number">256.</span>),
-            <span class="ident">Argument::Fd</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident"><span class="kw">crate</span>::Argument::Fd</span>(<span class="ident">f</span>),
-            <span class="ident">Argument::Str</span>(<span class="ident">cs</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident"><span class="kw">crate</span>::Argument::Str</span>({
+            <span class="ident">Argument::Fixed</span>(<span class="ident">f</span>) =&gt; <span class="ident"><span class="kw">crate</span>::Argument::Float</span>((<span class="ident">f</span> <span class="kw">as</span> <span class="ident">f32</span>) <span class="op">/</span> <span class="number">256.</span>),
+            <span class="ident">Argument::Fd</span>(<span class="ident">f</span>) =&gt; <span class="ident"><span class="kw">crate</span>::Argument::Fd</span>(<span class="ident">f</span>),
+            <span class="ident">Argument::Str</span>(<span class="ident">cs</span>) =&gt; <span class="ident"><span class="kw">crate</span>::Argument::Str</span>({
                 <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">cs</span>.<span class="ident">into_bytes</span>();
                 <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">is_empty</span>() {
                     <span class="prelude-val">None</span>
@@ -582,8 +582,8 @@
                     )
                 }
             }),
-            <span class="ident">Argument::Object</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident"><span class="kw">crate</span>::Argument::Object</span>(<span class="ident">map</span>.<span class="ident">get</span>(<span class="ident">id</span>)),
-            <span class="ident">Argument::NewId</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident"><span class="kw">crate</span>::Argument::NewId</span>(<span class="ident">map</span>.<span class="ident">get_new</span>(<span class="ident">id</span>)),
+            <span class="ident">Argument::Object</span>(<span class="ident">id</span>) =&gt; <span class="ident"><span class="kw">crate</span>::Argument::Object</span>(<span class="ident">map</span>.<span class="ident">get</span>(<span class="ident">id</span>)),
+            <span class="ident">Argument::NewId</span>(<span class="ident">id</span>) =&gt; <span class="ident"><span class="kw">crate</span>::Argument::NewId</span>(<span class="ident">map</span>.<span class="ident">get_new</span>(<span class="ident">id</span>)),
         })
         .<span class="ident">collect</span>();
 

@@ -366,7 +366,7 @@
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">ClipboardType</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident">ClipboardType::Regular</span>
     }
 }
@@ -407,7 +407,7 @@
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Seat</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident">Seat::Unspecified</span>
     }
 }
@@ -449,13 +449,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">common::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">common::Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">common::Error</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">use</span> <span class="ident">common::Error</span>::<span class="kw-2">*</span>;
 
         <span class="kw">match</span> <span class="ident">x</span> {
-            <span class="ident">WaylandConnection</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error::WaylandConnection</span>(<span class="ident">err</span>),
-            <span class="ident">WaylandCommunication</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error::WaylandCommunication</span>(<span class="ident">err</span>),
-            <span class="ident">MissingProtocol</span> { <span class="ident">name</span>, <span class="ident">version</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error::MissingProtocol</span> { <span class="ident">name</span>, <span class="ident">version</span> },
+            <span class="ident">WaylandConnection</span>(<span class="ident">err</span>) =&gt; <span class="ident">Error::WaylandConnection</span>(<span class="ident">err</span>),
+            <span class="ident">WaylandCommunication</span>(<span class="ident">err</span>) =&gt; <span class="ident">Error::WaylandCommunication</span>(<span class="ident">err</span>),
+            <span class="ident">MissingProtocol</span> { <span class="ident">name</span>, <span class="ident">version</span> } =&gt; <span class="ident">Error::MissingProtocol</span> { <span class="ident">name</span>, <span class="ident">version</span> },
         }
     }
 }
@@ -463,7 +463,7 @@
 <span class="kw">fn</span> <span class="ident">get_offer</span>(<span class="ident">primary</span>: <span class="ident">bool</span>,
              <span class="ident">seat</span>: <span class="ident">Seat</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
              <span class="ident">socket_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span>)
-             <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">EventQueue</span>, <span class="ident">ZwlrDataControlOfferV1</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
+             -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">EventQueue</span>, <span class="ident">ZwlrDataControlOfferV1</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">CommonData</span> { <span class="kw-2">mut</span> <span class="ident">queue</span>,
                      <span class="ident">clipboard_manager</span>,
                      <span class="ident">seats</span>, } <span class="op">=</span> <span class="ident">initialize</span>(<span class="ident">primary</span>, <span class="ident">socket_name</span>)<span class="question-mark">?</span>;
@@ -500,10 +500,10 @@
                      .<span class="ident">find_map</span>(<span class="op">|</span><span class="ident">data</span><span class="op">|</span> {
                          <span class="kw">let</span> <span class="ident">SeatData</span> { <span class="ident">name</span>, <span class="ident">offer</span>, .. } <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">data</span>;
                          <span class="kw">match</span> <span class="ident">seat</span> {
-                             <span class="ident">Seat::Unspecified</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">offer</span>.<span class="ident">clone</span>()),
-                             <span class="ident">Seat::Specific</span>(<span class="ident">desired_name</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                             <span class="ident">Seat::Unspecified</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">offer</span>.<span class="ident">clone</span>()),
+                             <span class="ident">Seat::Specific</span>(<span class="ident">desired_name</span>) =&gt; {
                                  <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>) <span class="op">=</span> <span class="ident">name</span> {
-                                     <span class="kw">if</span> <span class="ident">name</span> <span class="op">=</span><span class="op">=</span> <span class="ident">desired_name</span> {
+                                     <span class="kw">if</span> <span class="ident">name</span> <span class="op">==</span> <span class="ident">desired_name</span> {
                                          <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">offer</span>.<span class="ident">clone</span>());
                                      }
                                  }
@@ -543,7 +543,7 @@
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_types</span>(<span class="ident">clipboard</span>: <span class="ident">ClipboardType</span>, <span class="ident">seat</span>: <span class="ident">Seat</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_types</span>(<span class="ident">clipboard</span>: <span class="ident">ClipboardType</span>, <span class="ident">seat</span>: <span class="ident">Seat</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="ident">get_mime_types_internal</span>(<span class="ident">clipboard</span>, <span class="ident">seat</span>, <span class="prelude-val">None</span>)
 }
 
@@ -551,8 +551,8 @@
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">get_mime_types_internal</span>(<span class="ident">clipboard</span>: <span class="ident">ClipboardType</span>,
                                       <span class="ident">seat</span>: <span class="ident">Seat</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
                                       <span class="ident">socket_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span>)
-                                      <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">primary</span> <span class="op">=</span> <span class="ident">clipboard</span> <span class="op">=</span><span class="op">=</span> <span class="ident">ClipboardType::Primary</span>;
+                                      -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">primary</span> <span class="op">=</span> <span class="ident">clipboard</span> <span class="op">==</span> <span class="ident">ClipboardType::Primary</span>;
     <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">offer</span>) <span class="op">=</span> <span class="ident">get_offer</span>(<span class="ident">primary</span>, <span class="ident">seat</span>, <span class="ident">socket_name</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mime_types</span> <span class="op">=</span> <span class="ident">offer</span>.<span class="ident">as_ref</span>()
@@ -607,7 +607,7 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_contents</span>(<span class="ident">clipboard</span>: <span class="ident">ClipboardType</span>,
                     <span class="ident">seat</span>: <span class="ident">Seat</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
                     <span class="ident">mime_type</span>: <span class="ident">MimeType</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>)
-                    <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">PipeReader</span>, <span class="ident">String</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
+                    -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">PipeReader</span>, <span class="ident">String</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="ident">get_contents_internal</span>(<span class="ident">clipboard</span>, <span class="ident">seat</span>, <span class="ident">mime_type</span>, <span class="prelude-val">None</span>)
 }
 
@@ -616,8 +616,8 @@
                                     <span class="ident">seat</span>: <span class="ident">Seat</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
                                     <span class="ident">mime_type</span>: <span class="ident">MimeType</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
                                     <span class="ident">socket_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span>)
-                                    <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">PipeReader</span>, <span class="ident">String</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">primary</span> <span class="op">=</span> <span class="ident">clipboard</span> <span class="op">=</span><span class="op">=</span> <span class="ident">ClipboardType::Primary</span>;
+                                    -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">PipeReader</span>, <span class="ident">String</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">primary</span> <span class="op">=</span> <span class="ident">clipboard</span> <span class="op">==</span> <span class="ident">ClipboardType::Primary</span>;
     <span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">queue</span>, <span class="ident">offer</span>) <span class="op">=</span> <span class="ident">get_offer</span>(<span class="ident">primary</span>, <span class="ident">seat</span>, <span class="ident">socket_name</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mime_types</span> <span class="op">=</span> <span class="ident">offer</span>.<span class="ident">as_ref</span>()
@@ -628,18 +628,18 @@
 
     <span class="comment">// Find the desired MIME type.</span>
     <span class="kw">let</span> <span class="ident">mime_type</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">mime_type</span> {
-        <span class="ident">MimeType::Any</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="string">&quot;text/plain;charset=utf-8&quot;</span>)
+        <span class="ident">MimeType::Any</span> =&gt; <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="string">&quot;text/plain;charset=utf-8&quot;</span>)
                                    .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="string">&quot;UTF8_STRING&quot;</span>))
                                    .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">mime_types</span>.<span class="ident">iter</span>().<span class="ident">find</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">is_text</span>(<span class="ident">x</span>)).<span class="ident">cloned</span>())
                                    .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">mime_types</span>.<span class="ident">drain</span>().<span class="ident">next</span>()),
-        <span class="ident">MimeType::Text</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="string">&quot;text/plain;charset=utf-8&quot;</span>)
+        <span class="ident">MimeType::Text</span> =&gt; <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="string">&quot;text/plain;charset=utf-8&quot;</span>)
                                     .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="string">&quot;UTF8_STRING&quot;</span>))
                                     .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">mime_types</span>.<span class="ident">drain</span>().<span class="ident">find</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">is_text</span>(<span class="ident">x</span>))),
-        <span class="ident">MimeType::TextWithPriority</span>(<span class="ident">priority</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="ident">priority</span>)
+        <span class="ident">MimeType::TextWithPriority</span>(<span class="ident">priority</span>) =&gt; <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="ident">priority</span>)
                                                           .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="string">&quot;text/plain;charset=utf-8&quot;</span>))
                                                           .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="string">&quot;UTF8_STRING&quot;</span>))
                                                           .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">mime_types</span>.<span class="ident">drain</span>().<span class="ident">find</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">is_text</span>(<span class="ident">x</span>))),
-        <span class="ident">MimeType::Specific</span>(<span class="ident">mime_type</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="ident">mime_type</span>),
+        <span class="ident">MimeType::Specific</span>(<span class="ident">mime_type</span>) =&gt; <span class="ident">mime_types</span>.<span class="ident">take</span>(<span class="ident">mime_type</span>),
     };
 
     <span class="comment">// Check if a suitable MIME type is copied.</span>

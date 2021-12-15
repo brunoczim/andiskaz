@@ -3,7 +3,7 @@
 (<a href="struct.Signals.html"><code>Signals</code></a>) able to iterate over the incoming signals.</p>
 <p>In case the <code>tokio-support</code> feature is turned on, the <a href="struct.Async.html"><code>Async</code></a> is also
 available, making it possible to integrate with the tokio runtime.</p>
-<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
+<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libc</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">signal_hook</span>;
 
@@ -11,7 +11,7 @@ available, making it possible to integrate with the tokio runtime.</p>
 
 <span class="kw">use</span> <span class="ident">signal_hook::iterator::Signals</span>;
 
-<span class="kw">fn</span> <span class="ident">main</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">signals</span> <span class="op">=</span> <span class="ident">Signals::new</span>(<span class="kw-2">&amp;</span>[
         <span class="ident">signal_hook::SIGHUP</span>,
         <span class="ident">signal_hook::SIGTERM</span>,
@@ -22,14 +22,14 @@ available, making it possible to integrate with the tokio runtime.</p>
         <span class="comment">// Pick up signals that arrived since last time</span>
         <span class="kw">for</span> <span class="ident">signal</span> <span class="kw">in</span> <span class="ident">signals</span>.<span class="ident">pending</span>() {
             <span class="kw">match</span> <span class="ident">signal</span> <span class="kw">as</span> <span class="ident">libc::c_int</span> {
-                <span class="ident">signal_hook::SIGHUP</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">signal_hook::SIGHUP</span> =&gt; {
                     <span class="comment">// Reload configuration</span>
                     <span class="comment">// Reopen the log file</span>
                 }
-                <span class="ident">signal_hook::SIGTERM</span> <span class="op">|</span> <span class="ident">signal_hook::SIGINT</span> <span class="op">|</span> <span class="ident">signal_hook::SIGQUIT</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">signal_hook::SIGTERM</span> <span class="op">|</span> <span class="ident">signal_hook::SIGINT</span> <span class="op">|</span> <span class="ident">signal_hook::SIGQUIT</span> =&gt; {
                     <span class="kw">break</span> <span class="lifetime">&#39;outer</span>;
                 },
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(),
+                <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(),
             }
         }
         <span class="comment">// Do some bit of work ‒ something with upper limit on waiting, so we don&#39;t block</span>
@@ -39,9 +39,9 @@ available, making it possible to integrate with the tokio runtime.</p>
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 </div></details><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
-<div class="item-table"><div class="item-left module-item"><a class="struct" href="struct.Forever.html" title="signal_hook::iterator::Forever struct">Forever</a></div><div class="item-right docblock-short"><p>The infinite iterator of signals.</p>
-</div><div class="item-left module-item"><a class="struct" href="struct.Pending.html" title="signal_hook::iterator::Pending struct">Pending</a></div><div class="item-right docblock-short"><p>The iterator of one batch of signals.</p>
-</div><div class="item-left module-item"><a class="struct" href="struct.Signals.html" title="signal_hook::iterator::Signals struct">Signals</a></div><div class="item-right docblock-short"><p>The main structure of the module, representing interest in some signals.</p>
-</div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="signal_hook" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Forever.html" title="signal_hook::iterator::Forever struct">Forever</a></div><div class="item-right docblock-short"><p>The infinite iterator of signals.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Pending.html" title="signal_hook::iterator::Pending struct">Pending</a></div><div class="item-right docblock-short"><p>The iterator of one batch of signals.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Signals.html" title="signal_hook::iterator::Signals struct">Signals</a></div><div class="item-right docblock-short"><p>The main structure of the module, representing interest in some signals.</p>
+</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="signal_hook" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
     <script src="../../main.js"></script>
 </body></html>

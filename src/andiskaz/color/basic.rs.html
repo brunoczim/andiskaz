@@ -207,24 +207,24 @@
 
 <span class="kw">impl</span> <span class="ident">BasicColor</span> {
     <span class="doccomment">/// Translates this color to a crossterm color.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">to_crossterm</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermColor</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">to_crossterm</span>(<span class="self">self</span>) -&gt; <span class="ident">CrosstermColor</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">BasicColor::Black</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::Black</span>,
-            <span class="ident">BasicColor::DarkRed</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::DarkRed</span>,
-            <span class="ident">BasicColor::DarkGreen</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::DarkGreen</span>,
-            <span class="ident">BasicColor::DarkYellow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::DarkYellow</span>,
-            <span class="ident">BasicColor::DarkBlue</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::DarkBlue</span>,
-            <span class="ident">BasicColor::DarkMagenta</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::DarkMagenta</span>,
-            <span class="ident">BasicColor::DarkCyan</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::DarkCyan</span>,
-            <span class="ident">BasicColor::LightGray</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::DarkGrey</span>,
-            <span class="ident">BasicColor::DarkGray</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::Grey</span>,
-            <span class="ident">BasicColor::LightRed</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::Red</span>,
-            <span class="ident">BasicColor::LightGreen</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::Green</span>,
-            <span class="ident">BasicColor::LightYellow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::Yellow</span>,
-            <span class="ident">BasicColor::LightBlue</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::Blue</span>,
-            <span class="ident">BasicColor::LightMagenta</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::Magenta</span>,
-            <span class="ident">BasicColor::LightCyan</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::Cyan</span>,
-            <span class="ident">BasicColor::White</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CrosstermColor::White</span>,
+            <span class="ident">BasicColor::Black</span> =&gt; <span class="ident">CrosstermColor::Black</span>,
+            <span class="ident">BasicColor::DarkRed</span> =&gt; <span class="ident">CrosstermColor::DarkRed</span>,
+            <span class="ident">BasicColor::DarkGreen</span> =&gt; <span class="ident">CrosstermColor::DarkGreen</span>,
+            <span class="ident">BasicColor::DarkYellow</span> =&gt; <span class="ident">CrosstermColor::DarkYellow</span>,
+            <span class="ident">BasicColor::DarkBlue</span> =&gt; <span class="ident">CrosstermColor::DarkBlue</span>,
+            <span class="ident">BasicColor::DarkMagenta</span> =&gt; <span class="ident">CrosstermColor::DarkMagenta</span>,
+            <span class="ident">BasicColor::DarkCyan</span> =&gt; <span class="ident">CrosstermColor::DarkCyan</span>,
+            <span class="ident">BasicColor::LightGray</span> =&gt; <span class="ident">CrosstermColor::DarkGrey</span>,
+            <span class="ident">BasicColor::DarkGray</span> =&gt; <span class="ident">CrosstermColor::Grey</span>,
+            <span class="ident">BasicColor::LightRed</span> =&gt; <span class="ident">CrosstermColor::Red</span>,
+            <span class="ident">BasicColor::LightGreen</span> =&gt; <span class="ident">CrosstermColor::Green</span>,
+            <span class="ident">BasicColor::LightYellow</span> =&gt; <span class="ident">CrosstermColor::Yellow</span>,
+            <span class="ident">BasicColor::LightBlue</span> =&gt; <span class="ident">CrosstermColor::Blue</span>,
+            <span class="ident">BasicColor::LightMagenta</span> =&gt; <span class="ident">CrosstermColor::Magenta</span>,
+            <span class="ident">BasicColor::LightCyan</span> =&gt; <span class="ident">CrosstermColor::Cyan</span>,
+            <span class="ident">BasicColor::White</span> =&gt; <span class="ident">CrosstermColor::White</span>,
         }
     }
 }
@@ -232,38 +232,38 @@
 <span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BasicColor</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">BadBasicColor</span>;
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">code</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::Black</span> <span class="kw">as</span> <span class="ident">u8</span> {
+    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">code</span>: <span class="ident">u8</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::Black</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::Black</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::DarkRed</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::DarkRed</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::DarkRed</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::DarkGreen</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::DarkGreen</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::DarkGreen</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::DarkYellow</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::DarkYellow</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::DarkYellow</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::DarkBlue</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::DarkBlue</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::DarkBlue</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::DarkMagenta</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::DarkMagenta</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::DarkMagenta</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::DarkCyan</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::DarkCyan</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::DarkCyan</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::LightGray</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::LightGray</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::LightGray</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::DarkGray</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::DarkGray</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::DarkGray</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::LightRed</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::LightRed</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::LightRed</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::LightGreen</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::LightGreen</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::LightGreen</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::LightYellow</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::LightYellow</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::LightYellow</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::LightBlue</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::LightBlue</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::LightBlue</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::LightMagenta</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::LightMagenta</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::LightMagenta</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::LightCyan</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::LightCyan</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::LightCyan</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BasicColor::White</span> <span class="kw">as</span> <span class="ident">u8</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">code</span> <span class="op">==</span> <span class="ident">BasicColor::White</span> <span class="kw">as</span> <span class="ident">u8</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">BasicColor::White</span>)
         } <span class="kw">else</span> {
             <span class="prelude-val">Err</span>(<span class="ident">BadBasicColor</span> { <span class="ident">code</span> })
@@ -272,26 +272,26 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">BasicColor</span> {
-    <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Brightness</span> {
+    <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Brightness</span> {
         <span class="kw">let</span> <span class="ident">min</span> <span class="op">=</span> <span class="ident">Brightness</span> { <span class="ident">level</span>: <span class="number">0</span> };
         <span class="kw">let</span> <span class="ident">max</span> <span class="op">=</span> <span class="ident">Brightness</span> { <span class="ident">level</span>: <span class="ident">u16::max_value</span>() };
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">BasicColor::Black</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">min</span>,
-            <span class="ident">BasicColor::White</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">max</span>,
-            <span class="ident">BasicColor::DarkGray</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">min</span>,
-            <span class="ident">BasicColor::LightGray</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">max</span>,
-            <span class="ident">BasicColor::DarkRed</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">min</span>,
-            <span class="ident">BasicColor::LightRed</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">max</span>,
-            <span class="ident">BasicColor::DarkGreen</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">min</span>,
-            <span class="ident">BasicColor::LightGreen</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">max</span>,
-            <span class="ident">BasicColor::DarkYellow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">min</span>,
-            <span class="ident">BasicColor::LightYellow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">max</span>,
-            <span class="ident">BasicColor::DarkBlue</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">min</span>,
-            <span class="ident">BasicColor::LightBlue</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">max</span>,
-            <span class="ident">BasicColor::DarkMagenta</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">min</span>,
-            <span class="ident">BasicColor::LightMagenta</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">max</span>,
-            <span class="ident">BasicColor::DarkCyan</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">min</span>,
-            <span class="ident">BasicColor::LightCyan</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">max</span>,
+            <span class="ident">BasicColor::Black</span> =&gt; <span class="ident">min</span>,
+            <span class="ident">BasicColor::White</span> =&gt; <span class="ident">max</span>,
+            <span class="ident">BasicColor::DarkGray</span> =&gt; <span class="ident">min</span>,
+            <span class="ident">BasicColor::LightGray</span> =&gt; <span class="ident">max</span>,
+            <span class="ident">BasicColor::DarkRed</span> =&gt; <span class="ident">min</span>,
+            <span class="ident">BasicColor::LightRed</span> =&gt; <span class="ident">max</span>,
+            <span class="ident">BasicColor::DarkGreen</span> =&gt; <span class="ident">min</span>,
+            <span class="ident">BasicColor::LightGreen</span> =&gt; <span class="ident">max</span>,
+            <span class="ident">BasicColor::DarkYellow</span> =&gt; <span class="ident">min</span>,
+            <span class="ident">BasicColor::LightYellow</span> =&gt; <span class="ident">max</span>,
+            <span class="ident">BasicColor::DarkBlue</span> =&gt; <span class="ident">min</span>,
+            <span class="ident">BasicColor::LightBlue</span> =&gt; <span class="ident">max</span>,
+            <span class="ident">BasicColor::DarkMagenta</span> =&gt; <span class="ident">min</span>,
+            <span class="ident">BasicColor::LightMagenta</span> =&gt; <span class="ident">max</span>,
+            <span class="ident">BasicColor::DarkCyan</span> =&gt; <span class="ident">min</span>,
+            <span class="ident">BasicColor::LightCyan</span> =&gt; <span class="ident">max</span>,
         }
     }
 
@@ -300,31 +300,31 @@
         <span class="kw">let</span> <span class="ident">self_white</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">approx_brightness</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">half</span>;
         <span class="kw">let</span> <span class="ident">other_white</span> <span class="op">=</span> <span class="ident">brightness</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">half</span>;
 
-        <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">self_white</span> <span class="op">=</span><span class="op">=</span> <span class="ident">other_white</span> { <span class="kw-2">*</span><span class="self">self</span> } <span class="kw">else</span> { <span class="op">!</span><span class="kw-2">*</span><span class="self">self</span> };
+        <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">self_white</span> <span class="op">==</span> <span class="ident">other_white</span> { <span class="kw-2">*</span><span class="self">self</span> } <span class="kw">else</span> { <span class="op">!</span><span class="kw-2">*</span><span class="self">self</span> };
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">BasicColor</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
 
-    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span> {
+    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Output</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">BasicColor::Black</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::White</span>,
-            <span class="ident">BasicColor::White</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::Black</span>,
-            <span class="ident">BasicColor::DarkGray</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::LightGray</span>,
-            <span class="ident">BasicColor::LightGray</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::DarkGray</span>,
-            <span class="ident">BasicColor::DarkRed</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::LightRed</span>,
-            <span class="ident">BasicColor::LightRed</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::DarkRed</span>,
-            <span class="ident">BasicColor::DarkGreen</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::LightGreen</span>,
-            <span class="ident">BasicColor::LightGreen</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::DarkGreen</span>,
-            <span class="ident">BasicColor::DarkYellow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::LightYellow</span>,
-            <span class="ident">BasicColor::LightYellow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::DarkYellow</span>,
-            <span class="ident">BasicColor::DarkBlue</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::LightBlue</span>,
-            <span class="ident">BasicColor::LightBlue</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::DarkBlue</span>,
-            <span class="ident">BasicColor::DarkMagenta</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::LightMagenta</span>,
-            <span class="ident">BasicColor::LightMagenta</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::DarkMagenta</span>,
-            <span class="ident">BasicColor::DarkCyan</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::LightCyan</span>,
-            <span class="ident">BasicColor::LightCyan</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BasicColor::DarkCyan</span>,
+            <span class="ident">BasicColor::Black</span> =&gt; <span class="ident">BasicColor::White</span>,
+            <span class="ident">BasicColor::White</span> =&gt; <span class="ident">BasicColor::Black</span>,
+            <span class="ident">BasicColor::DarkGray</span> =&gt; <span class="ident">BasicColor::LightGray</span>,
+            <span class="ident">BasicColor::LightGray</span> =&gt; <span class="ident">BasicColor::DarkGray</span>,
+            <span class="ident">BasicColor::DarkRed</span> =&gt; <span class="ident">BasicColor::LightRed</span>,
+            <span class="ident">BasicColor::LightRed</span> =&gt; <span class="ident">BasicColor::DarkRed</span>,
+            <span class="ident">BasicColor::DarkGreen</span> =&gt; <span class="ident">BasicColor::LightGreen</span>,
+            <span class="ident">BasicColor::LightGreen</span> =&gt; <span class="ident">BasicColor::DarkGreen</span>,
+            <span class="ident">BasicColor::DarkYellow</span> =&gt; <span class="ident">BasicColor::LightYellow</span>,
+            <span class="ident">BasicColor::LightYellow</span> =&gt; <span class="ident">BasicColor::DarkYellow</span>,
+            <span class="ident">BasicColor::DarkBlue</span> =&gt; <span class="ident">BasicColor::LightBlue</span>,
+            <span class="ident">BasicColor::LightBlue</span> =&gt; <span class="ident">BasicColor::DarkBlue</span>,
+            <span class="ident">BasicColor::DarkMagenta</span> =&gt; <span class="ident">BasicColor::LightMagenta</span>,
+            <span class="ident">BasicColor::LightMagenta</span> =&gt; <span class="ident">BasicColor::DarkMagenta</span>,
+            <span class="ident">BasicColor::DarkCyan</span> =&gt; <span class="ident">BasicColor::LightCyan</span>,
+            <span class="ident">BasicColor::LightCyan</span> =&gt; <span class="ident">BasicColor::DarkCyan</span>,
         }
     }
 }

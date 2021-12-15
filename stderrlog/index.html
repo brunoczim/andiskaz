@@ -3,7 +3,7 @@ of most UNIX utilities by logging to stderr and the higher the
 verbosity the higher the log level. It supports the
 ability to provide timestamps at different granularities. As
 well as colorizing the different log levels.</p>
-<h2 id="simple-use-case" class="section-header"><a href="#simple-use-case">Simple Use Case</a></h2>
+<h3 id="simple-use-case" class="section-header"><a href="#simple-use-case">Simple Use Case</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">log</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">stderrlog</span>;
@@ -15,7 +15,7 @@ well as colorizing the different log levels.</p>
 
     <span class="comment">// ...</span>
 }</code></pre></div>
-<h1 id="structopt-example" class="section-header"><a href="#structopt-example">StructOpt Example</a></h1>
+<h2 id="structopt-example" class="section-header"><a href="#structopt-example">StructOpt Example</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">log</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">stderrlog</span>;
@@ -55,7 +55,7 @@ well as colorizing the different log levels.</p>
     <span class="macro">warn!</span>(<span class="string">&quot;warn message&quot;</span>);
     <span class="macro">error!</span>(<span class="string">&quot;error message&quot;</span>);
 }</code></pre></div>
-<h2 id="docopt-example" class="section-header"><a href="#docopt-example">docopt Example</a></h2>
+<h3 id="docopt-example" class="section-header"><a href="#docopt-example">docopt Example</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">docopt</span>;
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">log</span>;
@@ -94,7 +94,7 @@ Usage: program [-q] [-v...]
 
     <span class="comment">// ...</span>
 }</code></pre></div>
-<h1 id="clap-example" class="section-header"><a href="#clap-example">clap Example</a></h1>
+<h2 id="clap-example" class="section-header"><a href="#clap-example">clap Example</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">clap</span>;
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
@@ -146,16 +146,16 @@ Usage: program [-q] [-v...]
     <span class="macro">warn!</span>(<span class="string">&quot;warn message&quot;</span>);
     <span class="macro">error!</span>(<span class="string">&quot;error message&quot;</span>);
 }</code></pre></div>
-<h3 id="log-compatibility" class="section-header"><a href="#log-compatibility"><code>log</code> Compatibility</a></h3>
+<h4 id="log-compatibility" class="section-header"><a href="#log-compatibility"><code>log</code> Compatibility</a></h4>
 <p>The 0.3.x versions of <code>stderrlog</code> aim to provide compatibility with
 applications using <code>log</code> 0.3.x</p>
-<h3 id="rust-compatibility" class="section-header"><a href="#rust-compatibility">Rust Compatibility</a></h3>
+<h4 id="rust-compatibility" class="section-header"><a href="#rust-compatibility">Rust Compatibility</a></h4>
 <p><code>stderrlog</code> is serious about backwards compat. <code>stderrlog</code>
 pins the minimum required version of Rust in the CI build.
 Bumping the minimum version of Rust is a minor breaking
 change and requires a minor version to be bumped.</p>
 <p>The minimum supported Rust version for this release is 1.16.0.</p>
-<h3 id="module-level-logging" class="section-header"><a href="#module-level-logging">Module Level Logging</a></h3>
+<h4 id="module-level-logging" class="section-header"><a href="#module-level-logging">Module Level Logging</a></h4>
 <p><code>stderrlog</code> has the ability to limit the components which can log.
 Many crates use <a href="https://docs.rs/log/*/log/">log</a> but you may not
 want their output in your application. For example
@@ -182,12 +182,12 @@ following binaries to see all the examples:</p>
 <li><code>cargo run --bin yet --</code></li>
 </ul>
 </div></details><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
-<div class="item-table"><div class="item-left module-item"><a class="struct" href="struct.StdErrLog.html" title="stderrlog::StdErrLog struct">StdErrLog</a></div><div class="item-right docblock-short"><p>Data specific to this logger</p>
-</div></div><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
-<div class="item-table"><div class="item-left module-item"><a class="enum" href="enum.ColorChoice.html" title="stderrlog::ColorChoice enum">ColorChoice</a></div><div class="item-right docblock-short"><p>ColorChoice represents the color preferences of an end user.</p>
-</div><div class="item-left module-item"><a class="enum" href="enum.Timestamp.html" title="stderrlog::Timestamp enum">Timestamp</a></div><div class="item-right docblock-short"><p>State of the timestampping in the logger.</p>
-</div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
-<div class="item-table"><div class="item-left module-item"><a class="fn" href="fn.new.html" title="stderrlog::new fn">new</a></div><div class="item-right docblock-short"><p>creates a new stderr logger</p>
-</div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="stderrlog" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.StdErrLog.html" title="stderrlog::StdErrLog struct">StdErrLog</a></div><div class="item-right docblock-short"><p>Data specific to this logger</p>
+</div></div></div><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.ColorChoice.html" title="stderrlog::ColorChoice enum">ColorChoice</a></div><div class="item-right docblock-short"><p>ColorChoice represents the color preferences of an end user.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Timestamp.html" title="stderrlog::Timestamp enum">Timestamp</a></div><div class="item-right docblock-short"><p>State of the timestampping in the logger.</p>
+</div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.new.html" title="stderrlog::new fn">new</a></div><div class="item-right docblock-short"><p>creates a new stderr logger</p>
+</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="stderrlog" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
     <script src="../main.js"></script>
 </body></html>

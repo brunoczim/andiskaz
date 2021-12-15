@@ -101,7 +101,7 @@
 
 <span class="kw">impl</span> <span class="ident">PollTimeout</span> {
     <span class="doccomment">/// Constructs a new `PollTimeout` with the given optional `Duration`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PollTimeout</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>) -&gt; <span class="ident">PollTimeout</span> {
         <span class="ident">PollTimeout</span> {
             <span class="ident">timeout</span>,
             <span class="ident">start</span>: <span class="ident">Instant::now</span>(),
@@ -111,14 +111,14 @@
     <span class="doccomment">/// Returns whether the timeout has elapsed.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// It always returns `false` if the initial timeout was set to `None`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">elapsed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">elapsed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">timeout</span>
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">timeout</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">start</span>.<span class="ident">elapsed</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">timeout</span>)
             .<span class="ident">unwrap_or</span>(<span class="bool-val">false</span>)
     }
 
     <span class="doccomment">/// Returns the timeout leftover (initial timeout duration - elapsed duration).</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">leftover</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">leftover</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">timeout</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">timeout</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">elapsed</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">start</span>.<span class="ident">elapsed</span>();
 

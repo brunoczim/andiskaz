@@ -422,10 +422,10 @@
 <span class="doccomment">/// # }</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">bits</span> (
-  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) <span class="op">=</span><span class="op">&gt;</span> (
+  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) =&gt; (
     <span class="macro">bits_impl!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>, <span class="macro-nonterminal">$</span><span class="macro">submac!</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>)<span class="kw-2">*</span>));
   );
-  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> (
+  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">expr</span>) =&gt; (
     <span class="macro">bits_impl!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>, <span class="macro">call!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>));
   );
 );
@@ -435,26 +435,26 @@
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">bits_impl</span> (
-  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) <span class="op">=</span><span class="op">&gt;</span> (
+  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) =&gt; (
     {
       <span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>, <span class="number">0usize</span>);
       <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro">submac!</span>(<span class="macro-nonterminal">input</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>)<span class="kw-2">*</span>) {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">e</span>) =&gt; {
           <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">e</span> {
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Code</span>(<span class="ident">k</span>) <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Node</span>(<span class="ident">k</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Code</span>(<span class="ident">k</span>),
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Position</span>(<span class="ident">k</span>, (<span class="ident">i</span>,<span class="ident">b</span>)) <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::NodePosition</span>(<span class="ident">k</span>, (<span class="ident">i</span>,<span class="ident">b</span>), <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Code</span>(<span class="ident">k</span>) <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Node</span>(<span class="ident">k</span>, <span class="kw">_</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Code</span>(<span class="ident">k</span>),
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Position</span>(<span class="ident">k</span>, (<span class="ident">i</span>,<span class="ident">b</span>)) <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::NodePosition</span>(<span class="ident">k</span>, (<span class="ident">i</span>,<span class="ident">b</span>), <span class="kw">_</span>) =&gt; {
               <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Position</span>(<span class="ident">k</span>, <span class="kw-2">&amp;</span><span class="ident">i</span>[<span class="ident">b</span><span class="op">/</span><span class="number">8</span>..])
             }
           };
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">err</span>)
         }
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>),
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>),
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span>)) =&gt; {
           <span class="comment">//println!(&quot;bits parser returned Needed::Size({})&quot;, i);</span>
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span> <span class="op">/</span> <span class="number">8</span> <span class="op">+</span> <span class="number">1</span>))
         },
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>((<span class="ident">i</span>, <span class="ident">bit_index</span>), <span class="ident">o</span>)             <span class="op">=</span><span class="op">&gt;</span> {
-          <span class="kw">let</span> <span class="ident">byte_index</span> <span class="op">=</span> <span class="ident">bit_index</span> <span class="op">/</span> <span class="number">8</span> <span class="op">+</span> <span class="kw">if</span> <span class="ident">bit_index</span> <span class="op">%</span> <span class="number">8</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> { <span class="number">0</span> } <span class="kw">else</span> { <span class="number">1</span> } ;
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>((<span class="ident">i</span>, <span class="ident">bit_index</span>), <span class="ident">o</span>)             =&gt; {
+          <span class="kw">let</span> <span class="ident">byte_index</span> <span class="op">=</span> <span class="ident">bit_index</span> <span class="op">/</span> <span class="number">8</span> <span class="op">+</span> <span class="kw">if</span> <span class="ident">bit_index</span> <span class="op">%</span> <span class="number">8</span> <span class="op">==</span> <span class="number">0</span> { <span class="number">0</span> } <span class="kw">else</span> { <span class="number">1</span> } ;
           <span class="comment">//println!(&quot;bit index=={} =&gt; byte index=={}&quot;, bit_index, byte_index);</span>
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>(<span class="kw-2">&amp;</span><span class="ident">i</span>[<span class="ident">byte_index</span>..], <span class="ident">o</span>)
         }
@@ -468,20 +468,20 @@
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">bits_impl</span> (
-  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) <span class="op">=</span><span class="op">&gt;</span> (
+  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) =&gt; (
     {
       <span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>, <span class="number">0usize</span>);
       <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro">submac!</span>(<span class="macro-nonterminal">input</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>)<span class="kw-2">*</span>) {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">e</span>) =&gt; {
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">e</span>)
         }
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>),
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>),
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span>)) =&gt; {
           <span class="comment">//println!(&quot;bits parser returned Needed::Size({})&quot;, i);</span>
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span> <span class="op">/</span> <span class="number">8</span> <span class="op">+</span> <span class="number">1</span>))
         },
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>((<span class="ident">i</span>, <span class="ident">bit_index</span>), <span class="ident">o</span>)             <span class="op">=</span><span class="op">&gt;</span> {
-          <span class="kw">let</span> <span class="ident">byte_index</span> <span class="op">=</span> <span class="ident">bit_index</span> <span class="op">/</span> <span class="number">8</span> <span class="op">+</span> <span class="kw">if</span> <span class="ident">bit_index</span> <span class="op">%</span> <span class="number">8</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> { <span class="number">0</span> } <span class="kw">else</span> { <span class="number">1</span> } ;
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>((<span class="ident">i</span>, <span class="ident">bit_index</span>), <span class="ident">o</span>)             =&gt; {
+          <span class="kw">let</span> <span class="ident">byte_index</span> <span class="op">=</span> <span class="ident">bit_index</span> <span class="op">/</span> <span class="number">8</span> <span class="op">+</span> <span class="kw">if</span> <span class="ident">bit_index</span> <span class="op">%</span> <span class="number">8</span> <span class="op">==</span> <span class="number">0</span> { <span class="number">0</span> } <span class="kw">else</span> { <span class="number">1</span> } ;
           <span class="comment">//println!(&quot;bit index=={} =&gt; byte index=={}&quot;, bit_index, byte_index);</span>
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>(<span class="kw-2">&amp;</span><span class="ident">i</span>[<span class="ident">byte_index</span>..], <span class="ident">o</span>)
         }
@@ -512,10 +512,10 @@
 <span class="doccomment">/// # }</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">bytes</span> (
-  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) <span class="op">=</span><span class="op">&gt;</span> (
+  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) =&gt; (
     <span class="macro">bytes_impl!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>, <span class="macro-nonterminal">$</span><span class="macro">submac!</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>)<span class="kw-2">*</span>));
   );
-  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> (
+  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>:<span class="ident">expr</span>) =&gt; (
     <span class="macro">bytes_impl!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>, <span class="macro">call!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>));
   );
 );
@@ -525,7 +525,7 @@
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">bytes_impl</span> (
-  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">macro_i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) <span class="op">=</span><span class="op">&gt;</span> (
+  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">macro_i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) =&gt; (
     {
       <span class="kw">let</span> <span class="ident">inp</span>;
       <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">macro_i</span>.<span class="number">1</span> <span class="op">%</span> <span class="number">8</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
@@ -536,20 +536,20 @@
       }
 
       <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro">submac!</span>(<span class="macro-nonterminal">inp</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>)<span class="kw-2">*</span>) {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">e</span>) =&gt; {
           <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">e</span> {
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Code</span>(<span class="ident">k</span>) <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Node</span>(<span class="ident">k</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Code</span>(<span class="ident">k</span>),
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Position</span>(<span class="ident">k</span>, <span class="ident">i</span>) <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::NodePosition</span>(<span class="ident">k</span>, <span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Code</span>(<span class="ident">k</span>) <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Node</span>(<span class="ident">k</span>, <span class="kw">_</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Code</span>(<span class="ident">k</span>),
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Position</span>(<span class="ident">k</span>, <span class="ident">i</span>) <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::NodePosition</span>(<span class="ident">k</span>, <span class="ident">i</span>, <span class="kw">_</span>) =&gt; {
               <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Err::Position</span>(<span class="ident">k</span>, (<span class="ident">i</span>, <span class="number">0</span>))
             }
           };
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">err</span>)
         }
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>),
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>),
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span>)) =&gt; {
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span> <span class="op">*</span> <span class="number">8</span>))
         },
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>(<span class="ident">i</span>, <span class="ident">o</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>(<span class="ident">i</span>, <span class="ident">o</span>) =&gt; {
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>((<span class="ident">i</span>, <span class="number">0</span>), <span class="ident">o</span>)
         }
       }
@@ -562,7 +562,7 @@
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">bytes_impl</span> (
-  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">macro_i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) <span class="op">=</span><span class="op">&gt;</span> (
+  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">macro_i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> )) =&gt; (
     {
       <span class="kw">let</span> <span class="ident">inp</span>;
       <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">macro_i</span>.<span class="number">1</span> <span class="op">%</span> <span class="number">8</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
@@ -573,14 +573,14 @@
       }
 
       <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro">submac!</span>(<span class="macro-nonterminal">inp</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>)<span class="kw-2">*</span>) {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">e</span>) =&gt; {
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="ident">e</span>)
         }
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>),
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Unknown</span>),
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span>)) =&gt; {
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Needed::Size</span>(<span class="ident">i</span> <span class="op">*</span> <span class="number">8</span>))
         },
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>(<span class="ident">i</span>, <span class="ident">o</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>(<span class="ident">i</span>, <span class="ident">o</span>) =&gt; {
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>((<span class="ident">i</span>, <span class="number">0</span>), <span class="ident">o</span>)
         }
       }
@@ -606,13 +606,13 @@
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">take_bits</span> (
-  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> (
+  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span>:<span class="ident">expr</span>) =&gt; (
     {
       <span class="kw">use</span> <span class="ident">std::ops::Div</span>;
       <span class="kw">use</span> <span class="ident">std::convert::Into</span>;
       <span class="comment">//println!(&quot;taking {} bits from {:?}&quot;, $count, $i);</span>
       <span class="kw">let</span> (<span class="ident">input</span>, <span class="ident">bit_offset</span>) <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>;
-      <span class="kw">let</span> <span class="ident">res</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>],<span class="ident">usize</span>), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span> <span class="op">=</span> <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+      <span class="kw">let</span> <span class="ident">res</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>],<span class="ident">usize</span>), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span> <span class="op">=</span> <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>( (<span class="ident">input</span>, <span class="ident">bit_offset</span>), (<span class="number">0</span> <span class="kw">as</span> <span class="ident">u8</span>).<span class="ident">into</span>())
       } <span class="kw">else</span> {
         <span class="kw">let</span> <span class="ident">cnt</span> <span class="op">=</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">+</span> <span class="ident">bit_offset</span>).<span class="ident">div</span>(<span class="number">8</span>);
@@ -626,10 +626,10 @@
           <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">end_offset</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0</span>;
 
           <span class="kw">for</span> <span class="ident">byte</span> <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">iter</span>().<span class="ident">take</span>(<span class="ident">cnt</span> <span class="op">+</span> <span class="number">1</span>) {
-            <span class="kw">if</span> <span class="ident">remaining</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> <span class="ident">remaining</span> <span class="op">==</span> <span class="number">0</span> {
               <span class="kw">break</span>;
             }
-            <span class="kw">let</span> <span class="ident">val</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">offset</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">let</span> <span class="ident">val</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">offset</span> <span class="op">==</span> <span class="number">0</span> {
               (<span class="kw-2">*</span><span class="ident">byte</span> <span class="kw">as</span> <span class="ident">u8</span>).<span class="ident">into</span>()
             } <span class="kw">else</span> {
               (((<span class="kw-2">*</span><span class="ident">byte</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">offset</span>) <span class="kw">as</span> <span class="ident">u8</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">offset</span>).<span class="ident">into</span>()
@@ -656,11 +656,11 @@
 <span class="doccomment">/// matches an integer pattern to a bitstream. The number of bits of the input to compare must be specified</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">tag_bits</span> (
-  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">p</span>: <span class="ident">pat</span>) <span class="op">=</span><span class="op">&gt;</span> (
+  (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">p</span>: <span class="ident">pat</span>) =&gt; (
     {
       <span class="kw">match</span> <span class="macro">take_bits!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span>) {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="ident">i</span>),
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>(<span class="ident">i</span>, <span class="ident">o</span>)    <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="ident">i</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Incomplete</span>(<span class="ident">i</span>),
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>(<span class="ident">i</span>, <span class="ident">o</span>)    =&gt; {
           <span class="kw">if</span> <span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">p</span> <span class="op">=</span> <span class="ident">o</span> {
             <span class="kw">let</span> <span class="ident">res</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>],<span class="ident">usize</span>),<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Done</span>(<span class="ident">i</span>, <span class="ident">o</span>);
             <span class="ident">res</span>
@@ -668,7 +668,7 @@
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="macro">error_position!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::ErrorKind::TagBits</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>))
           }
         },
-        <span class="kw">_</span>                              <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="kw">_</span>                              =&gt; {
           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::IResult::Error</span>(<span class="macro">error_position!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::ErrorKind::TagBits</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>))
         }
       }
@@ -754,7 +754,7 @@
   <span class="kw">impl</span> <span class="ident">Shr</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FakeUint</span> {
       <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="ident">FakeUint</span>;
 
-      <span class="kw">fn</span> <span class="ident">shr</span>(<span class="self">self</span>, <span class="ident">shift</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FakeUint</span> {
+      <span class="kw">fn</span> <span class="ident">shr</span>(<span class="self">self</span>, <span class="ident">shift</span>: <span class="ident">usize</span>) -&gt; <span class="ident">FakeUint</span> {
           <span class="ident">FakeUint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">shift</span>)
       }
 
@@ -763,7 +763,7 @@
   <span class="kw">impl</span> <span class="ident">Shl</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FakeUint</span> {
       <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="ident">FakeUint</span>;
 
-      <span class="kw">fn</span> <span class="ident">shl</span>(<span class="self">self</span>, <span class="ident">shift</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FakeUint</span> {
+      <span class="kw">fn</span> <span class="ident">shl</span>(<span class="self">self</span>, <span class="ident">shift</span>: <span class="ident">usize</span>) -&gt; <span class="ident">FakeUint</span> {
           <span class="ident">FakeUint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">shift</span>)
       }
 
@@ -771,7 +771,7 @@
 
   <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FakeUint</span> {
 
-      <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">i</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FakeUint</span> {
+      <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">i</span>: <span class="ident">u8</span>) -&gt; <span class="ident">FakeUint</span> {
           <span class="ident">FakeUint</span>(<span class="ident">u32::from</span>(<span class="ident">i</span>))
       }
   }

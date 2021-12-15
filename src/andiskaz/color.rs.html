@@ -170,29 +170,29 @@
 
 <span class="kw">impl</span> <span class="ident">Color</span> {
     <span class="doccomment">/// Translates this color to a crossterm color.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">to_crossterm</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermColor</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">to_crossterm</span>(<span class="self">self</span>) -&gt; <span class="ident">CrosstermColor</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Color::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">to_crossterm</span>(),
-            <span class="ident">Color::EightBit</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">to_crossterm</span>(),
-            <span class="ident">Color::Rgb</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">to_crossterm</span>(),
+            <span class="ident">Color::Basic</span>(<span class="ident">color</span>) =&gt; <span class="ident">color</span>.<span class="ident">to_crossterm</span>(),
+            <span class="ident">Color::EightBit</span>(<span class="ident">color</span>) =&gt; <span class="ident">color</span>.<span class="ident">to_crossterm</span>(),
+            <span class="ident">Color::Rgb</span>(<span class="ident">color</span>) =&gt; <span class="ident">color</span>.<span class="ident">to_crossterm</span>(),
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">ApproxBrightness</span> <span class="kw">for</span> <span class="ident">Color</span> {
-    <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Brightness</span> {
+    <span class="kw">fn</span> <span class="ident">approx_brightness</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Brightness</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Color::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
-            <span class="ident">Color::EightBit</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
-            <span class="ident">Color::Rgb</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
+            <span class="ident">Color::Basic</span>(<span class="ident">color</span>) =&gt; <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
+            <span class="ident">Color::EightBit</span>(<span class="ident">color</span>) =&gt; <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
+            <span class="ident">Color::Rgb</span>(<span class="ident">color</span>) =&gt; <span class="ident">color</span>.<span class="ident">approx_brightness</span>(),
         }
     }
 
     <span class="kw">fn</span> <span class="ident">set_approx_brightness</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">brightness</span>: <span class="ident">Brightness</span>) {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Color::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
-            <span class="ident">Color::EightBit</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
-            <span class="ident">Color::Rgb</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
+            <span class="ident">Color::Basic</span>(<span class="ident">color</span>) =&gt; <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
+            <span class="ident">Color::EightBit</span>(<span class="ident">color</span>) =&gt; <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
+            <span class="ident">Color::Rgb</span>(<span class="ident">color</span>) =&gt; <span class="ident">color</span>.<span class="ident">set_approx_brightness</span>(<span class="ident">brightness</span>),
         }
     }
 }
@@ -200,47 +200,47 @@
 <span class="kw">impl</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">Color</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
 
-    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Output</span> {
+    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Output</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Color::Basic</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color::Basic</span>(<span class="op">!</span><span class="ident">color</span>),
-            <span class="ident">Color::EightBit</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color::EightBit</span>(<span class="op">!</span><span class="ident">color</span>),
-            <span class="ident">Color::Rgb</span>(<span class="ident">color</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color::Rgb</span>(<span class="op">!</span><span class="ident">color</span>),
+            <span class="ident">Color::Basic</span>(<span class="ident">color</span>) =&gt; <span class="ident">Color::Basic</span>(<span class="op">!</span><span class="ident">color</span>),
+            <span class="ident">Color::EightBit</span>(<span class="ident">color</span>) =&gt; <span class="ident">Color::EightBit</span>(<span class="op">!</span><span class="ident">color</span>),
+            <span class="ident">Color::Rgb</span>(<span class="ident">color</span>) =&gt; <span class="ident">Color::Rgb</span>(<span class="op">!</span><span class="ident">color</span>),
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BasicColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">BasicColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">BasicColor</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Color::Basic</span>(<span class="ident">color</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Color8Bit</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">Color8Bit</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">Color8Bit</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Color::EightBit</span>(<span class="ident">color</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Color8BitKind</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">kind</span>: <span class="ident">Color8BitKind</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">kind</span>: <span class="ident">Color8BitKind</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Color::from</span>(<span class="ident">Color8Bit::from</span>(<span class="ident">kind</span>))
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">CmyColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">CmyColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">CmyColor</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Color::from</span>(<span class="ident">Color8Bit::from</span>(<span class="ident">color</span>))
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">GrayColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">GrayColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">GrayColor</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Color::from</span>(<span class="ident">Color8Bit::from</span>(<span class="ident">color</span>))
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">RgbColor</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">RgbColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">color</span>: <span class="ident">RgbColor</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Color::Rgb</span>(<span class="ident">color</span>)
     }
 }

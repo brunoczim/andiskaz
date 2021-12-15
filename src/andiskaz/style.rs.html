@@ -204,7 +204,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Style</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::with_colors</span>(<span class="ident">Color2::default</span>())
     }
 }
@@ -214,7 +214,7 @@
     <span class="ident">C</span>: <span class="ident">color::Updater</span>,
 {
     <span class="doccomment">/// Creates a style with the given colors.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_colors</span>(<span class="ident">colors</span>: <span class="ident">C</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_colors</span>(<span class="ident">colors</span>: <span class="ident">C</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">left_margin</span>: <span class="number">0</span>,
             <span class="ident">right_margin</span>: <span class="number">0</span>,
@@ -231,7 +231,7 @@
     }
 
     <span class="doccomment">/// Updates the style to the given color updater.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">colors</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">colors</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Style</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">colors</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">colors</span>: <span class="ident">D</span>) -&gt; <span class="ident">Style</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">D</span>: <span class="ident">color::Updater</span>,
     {
@@ -251,75 +251,75 @@
     }
 
     <span class="doccomment">/// Sets left margin.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">left_margin</span>(<span class="self">self</span>, <span class="ident">left_margin</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">left_margin</span>(<span class="self">self</span>, <span class="ident">left_margin</span>: <span class="ident">Coord</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">left_margin</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Sets right margin.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">right_margin</span>(<span class="self">self</span>, <span class="ident">right_margin</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">right_margin</span>(<span class="self">self</span>, <span class="ident">right_margin</span>: <span class="ident">Coord</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">right_margin</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Sets top margin.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">top_margin</span>(<span class="self">self</span>, <span class="ident">top_margin</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">top_margin</span>(<span class="self">self</span>, <span class="ident">top_margin</span>: <span class="ident">Coord</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">top_margin</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Sets bottom margin.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bottom_margin</span>(<span class="self">self</span>, <span class="ident">bottom_margin</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bottom_margin</span>(<span class="self">self</span>, <span class="ident">bottom_margin</span>: <span class="ident">Coord</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">bottom_margin</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Sets minimum width.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_width</span>(<span class="self">self</span>, <span class="ident">min_width</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_width</span>(<span class="self">self</span>, <span class="ident">min_width</span>: <span class="ident">Coord</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">min_width</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Sets maximum width.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_width</span>(<span class="self">self</span>, <span class="ident">max_width</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_width</span>(<span class="self">self</span>, <span class="ident">max_width</span>: <span class="ident">Coord</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">max_width</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Sets minimum height.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_height</span>(<span class="self">self</span>, <span class="ident">min_height</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">min_height</span>(<span class="self">self</span>, <span class="ident">min_height</span>: <span class="ident">Coord</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">min_height</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Sets maximum height.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_height</span>(<span class="self">self</span>, <span class="ident">max_height</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_height</span>(<span class="self">self</span>, <span class="ident">max_height</span>: <span class="ident">Coord</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">max_height</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Sets alignment. Numerator and align_denomominator are used such that</span>
     <span class="doccomment">/// `line\[index\] * align_numer / align_denom == screen\[index\]`</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">align</span>(<span class="self">self</span>, <span class="ident">align_numer</span>: <span class="ident">Coord</span>, <span class="ident">align_denom</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">align</span>(<span class="self">self</span>, <span class="ident">align_numer</span>: <span class="ident">Coord</span>, <span class="ident">align_denom</span>: <span class="ident">Coord</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">align_numer</span>, <span class="ident">align_denom</span>, ..<span class="self">self</span> }
     }
 
     <span class="doccomment">/// Makes a coordinate pair that contains the margin dimensions that are</span>
     <span class="doccomment">/// &quot;less&quot;.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_margin_below</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec2</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_margin_below</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec2</span> {
         <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="self">self</span>.<span class="ident">left_margin</span>, <span class="ident">y</span>: <span class="self">self</span>.<span class="ident">top_margin</span> }
     }
 
     <span class="doccomment">/// Makes a coordinate pair that contains the margin dimensions that are</span>
     <span class="doccomment">/// &quot;greater&quot;.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_margin_above</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec2</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_margin_above</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec2</span> {
         <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="self">self</span>.<span class="ident">right_margin</span>, <span class="ident">y</span>: <span class="self">self</span>.<span class="ident">bottom_margin</span> }
     }
 
     <span class="doccomment">/// Makes a coordinate pair that contains the minima sizes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_min_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec2</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_min_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec2</span> {
         <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="self">self</span>.<span class="ident">min_width</span>, <span class="ident">y</span>: <span class="self">self</span>.<span class="ident">min_height</span> }
     }
 
     <span class="doccomment">/// Makes a coordinate pair that contains the maxima sizes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_max_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec2</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_max_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec2</span> {
         <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="self">self</span>.<span class="ident">max_width</span>, <span class="ident">y</span>: <span class="self">self</span>.<span class="ident">max_height</span> }
     }
 
     <span class="doccomment">/// Makes a coordinate pair that contains the actual sizes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec2</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">screen_size</span>: <span class="ident">Vec2</span>) -&gt; <span class="ident">Vec2</span> {
         <span class="ident">Vec2</span> {
             <span class="ident">y</span>: <span class="ident">screen_size</span>
                 .<span class="ident">y</span>

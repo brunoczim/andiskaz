@@ -262,11 +262,11 @@
                            <span class="kw">_</span>: <span class="ident">DispatchData</span>) {
     <span class="kw">use</span> <span class="ident">zwlr_data_control_device_v1::Event</span>::<span class="kw-2">*</span>;
     <span class="kw">match</span> <span class="ident">event</span> {
-        <span class="ident">DataOffer</span> { <span class="ident">id</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">handler</span>.<span class="ident">data_offer</span>(<span class="ident">id</span>),
-        <span class="ident">Selection</span> { <span class="ident">id</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">handler</span>.<span class="ident">selection</span>(<span class="ident">id</span>),
-        <span class="ident">Finished</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">handler</span>.<span class="ident">finished</span>(),
-        <span class="ident">PrimarySelection</span> { <span class="ident">id</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">handler</span>.<span class="ident">primary_selection</span>(<span class="ident">id</span>),
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+        <span class="ident">DataOffer</span> { <span class="ident">id</span> } =&gt; <span class="ident">handler</span>.<span class="ident">data_offer</span>(<span class="ident">id</span>),
+        <span class="ident">Selection</span> { <span class="ident">id</span> } =&gt; <span class="ident">handler</span>.<span class="ident">selection</span>(<span class="ident">id</span>),
+        <span class="ident">Finished</span> =&gt; <span class="ident">handler</span>.<span class="ident">finished</span>(),
+        <span class="ident">PrimarySelection</span> { <span class="ident">id</span> } =&gt; <span class="ident">handler</span>.<span class="ident">primary_selection</span>(<span class="ident">id</span>),
+        <span class="kw">_</span> =&gt; (),
     }
 }
 
@@ -329,7 +329,7 @@
         <span class="kw">let</span> <span class="ident">done</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ServeRequests::Only</span>(<span class="ident">left</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">serve_requests</span>.<span class="ident">get</span>() {
             <span class="kw">let</span> <span class="ident">left</span> <span class="op">=</span> <span class="ident">left</span>.<span class="ident">checked_sub</span>(<span class="number">1</span>).<span class="ident">unwrap</span>();
             <span class="self">self</span>.<span class="ident">serve_requests</span>.<span class="ident">set</span>(<span class="ident">ServeRequests::Only</span>(<span class="ident">left</span>));
-            <span class="ident">left</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>
+            <span class="ident">left</span> <span class="op">==</span> <span class="number">0</span>
         } <span class="kw">else</span> {
             <span class="bool-val">false</span>
         };
@@ -351,9 +351,9 @@
                            <span class="kw">_</span>: <span class="ident">DispatchData</span>) {
     <span class="kw">use</span> <span class="ident">zwlr_data_control_source_v1::Event</span>::<span class="kw-2">*</span>;
     <span class="kw">match</span> <span class="ident">event</span> {
-        <span class="ident">Send</span> { <span class="ident">mime_type</span>, <span class="ident">fd</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">handler</span>.<span class="ident">send</span>(<span class="ident">source</span>, <span class="ident">mime_type</span>, <span class="ident">fd</span>),
-        <span class="ident">Cancelled</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">handler</span>.<span class="ident">cancelled</span>(<span class="ident">source</span>),
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+        <span class="ident">Send</span> { <span class="ident">mime_type</span>, <span class="ident">fd</span> } =&gt; <span class="ident">handler</span>.<span class="ident">send</span>(<span class="ident">source</span>, <span class="ident">mime_type</span>, <span class="ident">fd</span>),
+        <span class="ident">Cancelled</span> =&gt; <span class="ident">handler</span>.<span class="ident">cancelled</span>(<span class="ident">source</span>),
+        <span class="kw">_</span> =&gt; (),
     }
 }
 </code></pre></div>

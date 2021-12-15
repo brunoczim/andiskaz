@@ -542,31 +542,31 @@
 
 <span class="kw">impl</span> <span class="ident">Argument</span> {
     <span class="doccomment">/// Retrieve the type of a given argument instance</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ArgumentType</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ArgumentType</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">Argument::Int</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ArgumentType::Int</span>,
-            <span class="ident">Argument::Uint</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ArgumentType::Uint</span>,
-            <span class="ident">Argument::Fixed</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ArgumentType::Fixed</span>,
-            <span class="ident">Argument::Str</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ArgumentType::Str</span>,
-            <span class="ident">Argument::Object</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ArgumentType::Object</span>,
-            <span class="ident">Argument::NewId</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ArgumentType::NewId</span>,
-            <span class="ident">Argument::Array</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ArgumentType::Array</span>,
-            <span class="ident">Argument::Fd</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ArgumentType::Fd</span>,
+            <span class="ident">Argument::Int</span>(<span class="kw">_</span>) =&gt; <span class="ident">ArgumentType::Int</span>,
+            <span class="ident">Argument::Uint</span>(<span class="kw">_</span>) =&gt; <span class="ident">ArgumentType::Uint</span>,
+            <span class="ident">Argument::Fixed</span>(<span class="kw">_</span>) =&gt; <span class="ident">ArgumentType::Fixed</span>,
+            <span class="ident">Argument::Str</span>(<span class="kw">_</span>) =&gt; <span class="ident">ArgumentType::Str</span>,
+            <span class="ident">Argument::Object</span>(<span class="kw">_</span>) =&gt; <span class="ident">ArgumentType::Object</span>,
+            <span class="ident">Argument::NewId</span>(<span class="kw">_</span>) =&gt; <span class="ident">ArgumentType::NewId</span>,
+            <span class="ident">Argument::Array</span>(<span class="kw">_</span>) =&gt; <span class="ident">ArgumentType::Array</span>,
+            <span class="ident">Argument::Fd</span>(<span class="kw">_</span>) =&gt; <span class="ident">ArgumentType::Fd</span>,
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">Argument</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std::fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Argument::Int</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
-            <span class="ident">Argument::Uint</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
-            <span class="ident">Argument::Fixed</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
-            <span class="ident">Argument::Str</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">value</span>),
-            <span class="ident">Argument::Object</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
-            <span class="ident">Argument::NewId</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
-            <span class="ident">Argument::Array</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">value</span>),
-            <span class="ident">Argument::Fd</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
+            <span class="ident">Argument::Int</span>(<span class="ident">value</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
+            <span class="ident">Argument::Uint</span>(<span class="ident">value</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
+            <span class="ident">Argument::Fixed</span>(<span class="ident">value</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
+            <span class="ident">Argument::Str</span>(<span class="ident">value</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">value</span>),
+            <span class="ident">Argument::Object</span>(<span class="ident">value</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
+            <span class="ident">Argument::NewId</span>(<span class="ident">value</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
+            <span class="ident">Argument::Array</span>(<span class="ident">value</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">value</span>),
+            <span class="ident">Argument::Fd</span>(<span class="ident">value</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>),
         }
     }
 }
@@ -594,12 +594,12 @@
 <span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">MessageWriteError</span> {}
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">MessageWriteError</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">::std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">::std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">::std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">::std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">MessageWriteError::BufferTooSmall</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">MessageWriteError::BufferTooSmall</span> =&gt; {
                 <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;The provided buffer is too small to hold message content.&quot;</span>)
             }
-            <span class="ident">MessageWriteError::DupFdFailed</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">MessageWriteError::DupFdFailed</span>(<span class="kw">_</span>) =&gt; {
                 <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;The message contains a file descriptor that could not be dup()-ed.&quot;</span>)
             }
         }
@@ -620,15 +620,15 @@
 <span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">MessageParseError</span> {}
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">MessageParseError</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">::std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">::std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">::std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">::std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">MessageParseError::MissingFD</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">MessageParseError::MissingFD</span> =&gt; {
                 <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;The message references a FD but the buffer FD is empty.&quot;</span>)
             }
-            <span class="ident">MessageParseError::MissingData</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">MessageParseError::MissingData</span> =&gt; {
                 <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;More data is needed to deserialize the message&quot;</span>)
             }
-            <span class="ident">MessageParseError::Malformed</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">MessageParseError::Malformed</span> =&gt; {
                 <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;The message is malformed and cannot be parsed&quot;</span>)
             }
         }
@@ -645,11 +645,11 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u32</span>],
         <span class="kw-2">mut</span> <span class="ident">fds</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="kw-2">mut</span> [<span class="ident">RawFd</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>), <span class="ident">MessageWriteError</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>), <span class="ident">MessageWriteError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">orig_payload_len</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">len</span>();
         <span class="kw">let</span> <span class="ident">orig_fds_len</span> <span class="op">=</span> <span class="ident">fds</span>.<span class="ident">len</span>();
         <span class="comment">// Helper function to write a u32 or a RawFd to its buffer</span>
-        <span class="kw">fn</span> <span class="ident">write_buf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">u</span>: <span class="ident">T</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">T</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">T</span>], <span class="ident">MessageWriteError</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">write_buf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">u</span>: <span class="ident">T</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">T</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">T</span>], <span class="ident">MessageWriteError</span><span class="op">&gt;</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">head</span>, <span class="ident">tail</span>)) <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">split_first_mut</span>() {
                 <span class="kw-2">*</span><span class="ident">head</span> <span class="op">=</span> <span class="ident">u</span>;
                 <span class="prelude-val">Ok</span>(<span class="ident">tail</span>)
@@ -662,7 +662,7 @@
         <span class="kw">fn</span> <span class="ident">write_array_to_payload</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
             <span class="ident">array</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
             <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u32</span>],
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u32</span>], <span class="ident">MessageWriteError</span><span class="op">&gt;</span> {
+        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u32</span>], <span class="ident">MessageWriteError</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">array_len</span> <span class="op">=</span> <span class="ident">array</span>.<span class="ident">len</span>();
             <span class="kw">let</span> <span class="ident">word_len</span> <span class="op">=</span> <span class="ident">array_len</span> <span class="op">/</span> <span class="number">4</span> <span class="op">+</span> <span class="kw">if</span> <span class="ident">array_len</span> <span class="op">%</span> <span class="number">4</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="number">0</span> };
             <span class="comment">// need enough space to store the whole array with padding and a size header</span>
@@ -694,18 +694,18 @@
             <span class="comment">// Just to make the borrow checker happy</span>
             <span class="kw">let</span> <span class="ident">old_payload</span> <span class="op">=</span> <span class="ident">payload</span>;
             <span class="kw">match</span> <span class="kw-2">*</span><span class="ident">arg</span> {
-                <span class="ident">Argument::Int</span>(<span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_buf</span>(<span class="ident">i</span> <span class="kw">as</span> <span class="ident">u32</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>,
-                <span class="ident">Argument::Uint</span>(<span class="ident">u</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_buf</span>(<span class="ident">u</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>,
-                <span class="ident">Argument::Fixed</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_buf</span>(<span class="ident">f</span> <span class="kw">as</span> <span class="ident">u32</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>,
-                <span class="ident">Argument::Str</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">Argument::Int</span>(<span class="ident">i</span>) =&gt; <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_buf</span>(<span class="ident">i</span> <span class="kw">as</span> <span class="ident">u32</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>,
+                <span class="ident">Argument::Uint</span>(<span class="ident">u</span>) =&gt; <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_buf</span>(<span class="ident">u</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>,
+                <span class="ident">Argument::Fixed</span>(<span class="ident">f</span>) =&gt; <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_buf</span>(<span class="ident">f</span> <span class="kw">as</span> <span class="ident">u32</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>,
+                <span class="ident">Argument::Str</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) =&gt; {
                     <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_array_to_payload</span>(<span class="ident">s</span>.<span class="ident">as_bytes_with_nul</span>(), <span class="ident">old_payload</span>)<span class="question-mark">?</span>;
                 }
-                <span class="ident">Argument::Object</span>(<span class="ident">o</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_buf</span>(<span class="ident">o</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>,
-                <span class="ident">Argument::NewId</span>(<span class="ident">n</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_buf</span>(<span class="ident">n</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>,
-                <span class="ident">Argument::Array</span>(<span class="kw-2">ref</span> <span class="ident">a</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">Argument::Object</span>(<span class="ident">o</span>) =&gt; <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_buf</span>(<span class="ident">o</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>,
+                <span class="ident">Argument::NewId</span>(<span class="ident">n</span>) =&gt; <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_buf</span>(<span class="ident">n</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>,
+                <span class="ident">Argument::Array</span>(<span class="kw-2">ref</span> <span class="ident">a</span>) =&gt; {
                     <span class="ident">payload</span> <span class="op">=</span> <span class="ident">write_array_to_payload</span>(<span class="kw-2">&amp;</span><span class="ident">a</span>, <span class="ident">old_payload</span>)<span class="question-mark">?</span>;
                 }
-                <span class="ident">Argument::Fd</span>(<span class="ident">fd</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">Argument::Fd</span>(<span class="ident">fd</span>) =&gt; {
                     <span class="kw">let</span> <span class="ident">old_fds</span> <span class="op">=</span> <span class="ident">fds</span>;
                     <span class="kw">let</span> <span class="ident">dup_fd</span> <span class="op">=</span> <span class="ident">dup_fd_cloexec</span>(<span class="ident">fd</span>).<span class="ident">map_err</span>(<span class="ident">MessageWriteError::DupFdFailed</span>)<span class="question-mark">?</span>;
                     <span class="ident">pending_fds</span>.<span class="ident">push</span>(<span class="ident">dup_fd</span>);
@@ -736,12 +736,12 @@
         <span class="ident">raw</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u32</span>],
         <span class="ident">signature</span>: <span class="kw-2">&amp;</span>[<span class="ident">ArgumentType</span>],
         <span class="ident">fds</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> [<span class="ident">RawFd</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Message</span>, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u32</span>], <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> [<span class="ident">RawFd</span>]), <span class="ident">MessageParseError</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Message</span>, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u32</span>], <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> [<span class="ident">RawFd</span>]), <span class="ident">MessageParseError</span><span class="op">&gt;</span> {
         <span class="comment">// helper function to read arrays</span>
         <span class="kw">fn</span> <span class="ident">read_array_from_payload</span>(
             <span class="ident">array_len</span>: <span class="ident">usize</span>,
             <span class="ident">payload</span>: <span class="kw-2">&amp;</span>[<span class="ident">u32</span>],
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span>[<span class="ident">u32</span>]), <span class="ident">MessageParseError</span><span class="op">&gt;</span> {
+        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="kw-2">&amp;</span>[<span class="ident">u32</span>]), <span class="ident">MessageParseError</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">word_len</span> <span class="op">=</span> <span class="ident">array_len</span> <span class="op">/</span> <span class="number">4</span> <span class="op">+</span> <span class="kw">if</span> <span class="ident">array_len</span> <span class="op">%</span> <span class="number">4</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="number">0</span> };
             <span class="kw">if</span> <span class="ident">word_len</span> <span class="op">&gt;</span> <span class="ident">payload</span>.<span class="ident">len</span>() {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">MessageParseError::MissingData</span>);
@@ -783,26 +783,26 @@
                     }
                 } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="kw-2">&amp;</span><span class="ident">front</span>, <span class="kw-2">mut</span> <span class="ident">tail</span>)) <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">split_first</span>() {
                     <span class="kw">let</span> <span class="ident">arg</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">*</span><span class="ident">argtype</span> {
-                        <span class="ident">ArgumentType::Int</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Argument::Int</span>(<span class="ident">front</span> <span class="kw">as</span> <span class="ident">i32</span>)),
-                        <span class="ident">ArgumentType::Uint</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Argument::Uint</span>(<span class="ident">front</span>)),
-                        <span class="ident">ArgumentType::Fixed</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Argument::Fixed</span>(<span class="ident">front</span> <span class="kw">as</span> <span class="ident">i32</span>)),
-                        <span class="ident">ArgumentType::Str</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">read_array_from_payload</span>(<span class="ident">front</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">tail</span>)
+                        <span class="ident">ArgumentType::Int</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Argument::Int</span>(<span class="ident">front</span> <span class="kw">as</span> <span class="ident">i32</span>)),
+                        <span class="ident">ArgumentType::Uint</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Argument::Uint</span>(<span class="ident">front</span>)),
+                        <span class="ident">ArgumentType::Fixed</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Argument::Fixed</span>(<span class="ident">front</span> <span class="kw">as</span> <span class="ident">i32</span>)),
+                        <span class="ident">ArgumentType::Str</span> =&gt; <span class="ident">read_array_from_payload</span>(<span class="ident">front</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">tail</span>)
                             .<span class="ident">and_then</span>(<span class="op">|</span>(<span class="ident">v</span>, <span class="ident">rest</span>)<span class="op">|</span> {
                                 <span class="ident">tail</span> <span class="op">=</span> <span class="ident">rest</span>;
                                 <span class="kw">match</span> <span class="ident">CStr::from_bytes_with_nul</span>(<span class="ident">v</span>) {
-                                    <span class="prelude-val">Ok</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Argument::Str</span>(<span class="ident">Box::new</span>(<span class="ident">s</span>.<span class="ident">into</span>()))),
-                                    <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">MessageParseError::Malformed</span>),
+                                    <span class="prelude-val">Ok</span>(<span class="ident">s</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Argument::Str</span>(<span class="ident">Box::new</span>(<span class="ident">s</span>.<span class="ident">into</span>()))),
+                                    <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">MessageParseError::Malformed</span>),
                                 }
                             }),
-                        <span class="ident">ArgumentType::Object</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Argument::Object</span>(<span class="ident">front</span>)),
-                        <span class="ident">ArgumentType::NewId</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Argument::NewId</span>(<span class="ident">front</span>)),
-                        <span class="ident">ArgumentType::Array</span> <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="ident">ArgumentType::Object</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Argument::Object</span>(<span class="ident">front</span>)),
+                        <span class="ident">ArgumentType::NewId</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Argument::NewId</span>(<span class="ident">front</span>)),
+                        <span class="ident">ArgumentType::Array</span> =&gt; {
                             <span class="ident">read_array_from_payload</span>(<span class="ident">front</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">tail</span>).<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">v</span>, <span class="ident">rest</span>)<span class="op">|</span> {
                                 <span class="ident">tail</span> <span class="op">=</span> <span class="ident">rest</span>;
                                 <span class="ident">Argument::Array</span>(<span class="ident">Box::new</span>(<span class="ident">v</span>.<span class="ident">into</span>()))
                             })
                         }
-                        <span class="ident">ArgumentType::Fd</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(),
+                        <span class="ident">ArgumentType::Fd</span> =&gt; <span class="macro">unreachable!</span>(),
                     };
                     <span class="ident">payload</span> <span class="op">=</span> <span class="ident">tail</span>;
                     <span class="ident">arg</span>
@@ -818,11 +818,11 @@
 }
 
 <span class="doccomment">/// Duplicate a `RawFd` and set the CLOEXEC flag on the copy</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dup_fd_cloexec</span>(<span class="ident">fd</span>: <span class="ident">RawFd</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">NixResult</span><span class="op">&lt;</span><span class="ident">RawFd</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dup_fd_cloexec</span>(<span class="ident">fd</span>: <span class="ident">RawFd</span>) -&gt; <span class="ident">NixResult</span><span class="op">&lt;</span><span class="ident">RawFd</span><span class="op">&gt;</span> {
     <span class="kw">use</span> <span class="ident">nix::fcntl</span>;
     <span class="kw">match</span> <span class="ident">fcntl::fcntl</span>(<span class="ident">fd</span>, <span class="ident">fcntl::FcntlArg::F_DUPFD_CLOEXEC</span>(<span class="number">0</span>)) {
-        <span class="prelude-val">Ok</span>(<span class="ident">newfd</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">newfd</span>),
-        <span class="prelude-val">Err</span>(<span class="ident">NixError::Sys</span>(<span class="ident">Errno::EINVAL</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident">newfd</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">newfd</span>),
+        <span class="prelude-val">Err</span>(<span class="ident">NixError::Sys</span>(<span class="ident">Errno::EINVAL</span>)) =&gt; {
             <span class="comment">// F_DUPFD_CLOEXEC is not recognized, kernel too old, fallback</span>
             <span class="comment">// to setting CLOEXEC manually</span>
             <span class="kw">let</span> <span class="ident">newfd</span> <span class="op">=</span> <span class="ident">fcntl::fcntl</span>(<span class="ident">fd</span>, <span class="ident">fcntl::FcntlArg::F_DUPFD</span>(<span class="number">0</span>))<span class="question-mark">?</span>;
@@ -832,18 +832,18 @@
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="ident">fcntl::FdFlag::from_bits</span>(<span class="ident">f</span>).<span class="ident">unwrap</span>() <span class="op">|</span> <span class="ident">fcntl::FdFlag::FD_CLOEXEC</span>)
                 .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="ident">fcntl::fcntl</span>(<span class="ident">newfd</span>, <span class="ident">fcntl::FcntlArg::F_SETFD</span>(<span class="ident">f</span>)));
             <span class="kw">match</span> <span class="ident">result</span> {
-                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; {
                     <span class="comment">// setting the O_CLOEXEC worked</span>
                     <span class="prelude-val">Ok</span>(<span class="ident">newfd</span>)
                 }
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; {
                     <span class="comment">// something went wrong in F_GETFD or F_SETFD</span>
                     <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">::nix::unistd::close</span>(<span class="ident">newfd</span>);
                     <span class="prelude-val">Err</span>(<span class="ident">e</span>)
                 }
             }
         }
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+        <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">e</span>),
     }
 }
 
@@ -856,7 +856,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">FdStore</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FdStore</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">FdStore</span> {
         <span class="ident">FdStore</span> { <span class="ident">fds</span>: <span class="ident">Vec::new</span>() }
     }
     <span class="kw">fn</span> <span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">fd</span>: <span class="ident">RawFd</span>) {

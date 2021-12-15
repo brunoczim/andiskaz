@@ -245,7 +245,7 @@
 
 <span class="kw">impl</span> <span class="ident">KeyEvent</span> {
     <span class="doccomment">/// A dummy key event, with dummy data.</span>
-    <span class="kw">fn</span> <span class="ident">dummy</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">dummy</span>() -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">main_key</span>: <span class="ident">Key::Esc</span>, <span class="ident">ctrl</span>: <span class="bool-val">false</span>, <span class="ident">alt</span>: <span class="bool-val">false</span>, <span class="ident">shift</span>: <span class="bool-val">false</span> }
     }
 }
@@ -261,7 +261,7 @@
 
 <span class="kw">impl</span> <span class="ident">ResizeEvent</span> {
     <span class="doccomment">/// A dummy resize event, with dummy data.</span>
-    <span class="kw">fn</span> <span class="ident">dummy</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">dummy</span>() -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">size</span>: <span class="prelude-val">None</span> }
     }
 }
@@ -276,13 +276,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ResizeEvent</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Event</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">event</span>: <span class="ident">ResizeEvent</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">event</span>: <span class="ident">ResizeEvent</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Event::Resize</span>(<span class="ident">event</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">KeyEvent</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Event</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">event</span>: <span class="ident">KeyEvent</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">event</span>: <span class="ident">KeyEvent</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Event::Key</span>(<span class="ident">event</span>)
     }
 }
@@ -306,7 +306,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">ChannelData</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">key</span>: <span class="ident">Snapshot</span> { <span class="ident">event</span>: <span class="ident">KeyEvent::dummy</span>(), <span class="ident">epoch</span>: <span class="number">0</span> },
             <span class="ident">resize</span>: <span class="ident">Snapshot</span> { <span class="ident">event</span>: <span class="ident">ResizeEvent::dummy</span>(), <span class="ident">epoch</span>: <span class="number">0</span> },
@@ -316,13 +316,13 @@
 
 <span class="kw">impl</span> <span class="ident">ChannelData</span> {
     <span class="doccomment">/// Selects maximum last epoch.</span>
-    <span class="kw">fn</span> <span class="ident">epoch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Epoch</span> {
+    <span class="kw">fn</span> <span class="ident">epoch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Epoch</span> {
         <span class="self">self</span>.<span class="ident">key</span>.<span class="ident">epoch</span>.<span class="ident">max</span>(<span class="self">self</span>.<span class="ident">resize</span>.<span class="ident">epoch</span>)
     }
 
     <span class="doccomment">/// Reads the correct lastest event, given the epoch where the caller is.</span>
     <span class="doccomment">/// Uses the adequate event, i.e. resize event has precedence.</span>
-    <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">epoch</span>: <span class="ident">Epoch</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">Epoch</span>, <span class="ident">Event</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">epoch</span>: <span class="ident">Epoch</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">Epoch</span>, <span class="ident">Event</span>)<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">resize</span>.<span class="ident">epoch</span> <span class="op">&gt;</span> <span class="ident">epoch</span> {
             <span class="prelude-val">Some</span>((<span class="self">self</span>.<span class="ident">resize</span>.<span class="ident">epoch</span>, <span class="self">self</span>.<span class="ident">resize</span>.<span class="ident">event</span>.<span class="ident">into</span>()))
         } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">key</span>.<span class="ident">epoch</span> <span class="op">&gt;</span> <span class="ident">epoch</span> {
@@ -337,10 +337,10 @@
         <span class="kw">let</span> <span class="ident">epoch</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">epoch</span>();
 
         <span class="kw">match</span> <span class="ident">event</span> {
-            <span class="ident">Event::Key</span>(<span class="ident">event</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Event::Key</span>(<span class="ident">event</span>) =&gt; {
                 <span class="self">self</span>.<span class="ident">key</span> <span class="op">=</span> <span class="ident">Snapshot</span> { <span class="ident">epoch</span>: <span class="ident">epoch</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">event</span> }
             },
-            <span class="ident">Event::Resize</span>(<span class="ident">event</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Event::Resize</span>(<span class="ident">event</span>) =&gt; {
                 <span class="self">self</span>.<span class="ident">resize</span> <span class="op">=</span> <span class="ident">Snapshot</span> { <span class="ident">epoch</span>: <span class="ident">epoch</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">event</span> }
             },
         }
@@ -357,7 +357,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Channel</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident">Channel</span> {
             <span class="ident">data</span>: <span class="ident">Mutex::new</span>(<span class="ident">ChannelData::default</span>()),
             <span class="ident">notifier</span>: <span class="ident">Notify::new</span>(),
@@ -377,13 +377,13 @@
     }
 
     <span class="doccomment">/// Selects maximum last epoch.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">epoch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Epoch</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">epoch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Epoch</span> {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">epoch</span>()
     }
 
     <span class="doccomment">/// Reads the correct lastest event, given the epoch where the caller is.</span>
     <span class="doccomment">/// Uses the adequate event, i.e. resize event has precedence.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">epoch</span>: <span class="ident">Epoch</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">Epoch</span>, <span class="ident">Event</span>)<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">epoch</span>: <span class="ident">Epoch</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">Epoch</span>, <span class="ident">Event</span>)<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">read</span>(<span class="ident">epoch</span>)
     }
 
