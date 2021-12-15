@@ -225,8 +225,10 @@ where
                         alt: false,
                         shift: false,
                     } if self.has_cancel => {
-                        self.selected = InputDialogItem::Cancel;
-                        break;
+                        if self.has_cancel {
+                            self.selected = InputDialogItem::Cancel;
+                            break;
+                        }
                     },
 
                     KeyEvent {

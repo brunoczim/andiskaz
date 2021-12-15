@@ -206,7 +206,12 @@ where
                         ctrl: false,
                         alt: false,
                         shift: false,
-                    } => break,
+                    } => {
+                        if let Some(cancel) = self.cancel.as_mut() {
+                            *cancel = true;
+                            break;
+                        }
+                    },
 
                     KeyEvent {
                         main_key: Key::Up,
