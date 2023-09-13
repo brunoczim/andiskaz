@@ -23,7 +23,7 @@ pub enum Key {
 }
 
 /// An event fired by a key pressed by the user.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct KeyEvent {
     /// Key pressed by the user.
     pub main_key: Key,
@@ -35,27 +35,17 @@ pub struct KeyEvent {
     pub shift: bool,
 }
 
-impl KeyEvent {
-    /// A dummy key event, with dummy data.
-    fn dummy() -> Self {
-        Self { main_key: Key::Esc, ctrl: false, alt: false, shift: false }
+impl From<Key> for KeyEvent {
+    fn from(main_key: Key) -> Self {
+        Self { main_key, ctrl: false, alt: false, shift: false }
     }
 }
 
 /// An event fired by a resize of the screen.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ResizeEvent {
-    /// New dimensions of the screen. If set to `None`, then the screen was
-    /// resized to an invalid size, and andiskaz's event reactor is taking care
-    /// of this (or andiskis event reactor if you will).
-    pub size: Option<Vec2>,
-}
-
-impl ResizeEvent {
-    /// A dummy resize event, with dummy data.
-    fn dummy() -> Self {
-        Self { size: None }
-    }
+    /// New size of the screen.
+    pub size: Vec2,
 }
 
 /// A generic event type.
