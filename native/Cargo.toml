@@ -1,0 +1,21 @@
+[package]
+name = "andiskaz-native"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies.andiskaz-domain]
+path = "../domain"
+
+[dependencies.tokio]
+version = "^1.32"
+
+[dependencies.crossterm]
+version = "^0.27"
+
+[dependencies.cli-clipboard]
+version = "^0.2"
+optional = true
+
+[features]
+default = []
+clipboard = ["cli-clipboard"]

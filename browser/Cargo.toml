@@ -1,0 +1,10 @@
+[package]
+name = "andiskaz-browser"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies.andiskaz-domain]
+path = "../domain"
+
+[dependencies.webio]
+git = "https://github.com/brunoczim/webio"

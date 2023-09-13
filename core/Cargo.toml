@@ -3,6 +3,9 @@ name = "andiskaz-core"
 version = "0.1.0"
 edition = "2021"
 
+[dependencies.andiskaz-domain]
+path = "../domain"
+
 [dependencies.unicode-segmentation]
 version = "^1.10"
 
