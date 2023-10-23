@@ -111,6 +111,9 @@
 <a href="#111" id="111">111</a>
 <a href="#112" id="112">112</a>
 <a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! An INFO dialong: just shows a message.
 
 </span><span class="kw">use crate</span>::{
@@ -131,6 +134,8 @@
     </span><span class="kw">pub </span>title: TermString,
     <span class="doccomment">/// Long text message to be shown.
     </span><span class="kw">pub </span>message: TermString,
+    <span class="doccomment">/// Label showed by the &quot;OK&quot; button (default &quot;OK&quot;).
+    </span><span class="kw">pub </span>ok_label: TermString,
     <span class="doccomment">/// Settings such as margin and alignment.
     </span><span class="kw">pub </span>style: Style,
     <span class="doccomment">/// Colors shown with the title.
@@ -149,6 +154,7 @@
         <span class="self">Self </span>{
             title,
             message,
+            ok_label: <span class="macro">tstring!</span>[<span class="string">&quot;OK&quot;</span>],
             style: Style::default()
                 .align(<span class="number">1</span>, <span class="number">2</span>)
                 .colors(Color2::default())
@@ -216,12 +222,12 @@
 
     <span class="doccomment">/// Renders the OK button.
     </span><span class="kw">fn </span>render_ok(<span class="kw-2">&amp;</span><span class="self">self</span>, screen: <span class="kw-2">&amp;mut </span>Screen, pos: Coord) {
-        <span class="kw">let </span>ok_string = <span class="macro">tstring!</span>[<span class="string">&quot;&gt; OK &lt;&quot;</span>];
         <span class="kw">let </span>style = Style::default()
             .align(<span class="number">1</span>, <span class="number">2</span>)
             .colors(<span class="self">self</span>.selected_colors)
             .top_margin(pos + <span class="number">2</span>);
-        screen.styled_text(<span class="kw-2">&amp;</span>ok_string, style);
+        <span class="kw">let </span>label_string = <span class="macro">tstring!</span>[<span class="string">&quot;&gt; {} &lt;&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.ok_label];
+        screen.styled_text(<span class="kw-2">&amp;</span>label_string, style);
     }
 }
 </code></pre></div></section></main></body></html>

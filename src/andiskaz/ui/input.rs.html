@@ -490,6 +490,15 @@
 <a href="#490" id="490">490</a>
 <a href="#491" id="491">491</a>
 <a href="#492" id="492">492</a>
+<a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
+<a href="#495" id="495">495</a>
+<a href="#496" id="496">496</a>
+<a href="#497" id="497">497</a>
+<a href="#498" id="498">498</a>
+<a href="#499" id="499">499</a>
+<a href="#500" id="500">500</a>
+<a href="#501" id="501">501</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module exports a simple input dialog and related functionality.
 
 </span><span class="kw">use crate</span>::{
@@ -527,6 +536,10 @@
     </span><span class="kw">pub </span>filter: F,
     <span class="doccomment">/// The title of the input dialog.
     </span><span class="kw">pub </span>title: TermString,
+    <span class="doccomment">/// Label showed by the &quot;OK&quot; button (default &quot;OK&quot;).
+    </span><span class="kw">pub </span>ok_label: TermString,
+    <span class="doccomment">/// Label showed by the &quot;CANCEL&quot; button (default &quot;CANCEL&quot;).
+    </span><span class="kw">pub </span>cancel_label: TermString,
     <span class="doccomment">/// Initial buffer of the input dialog.
     </span><span class="kw">pub </span>buffer: TermString,
     <span class="doccomment">/// Maximum size of the input box.
@@ -567,6 +580,8 @@
     ) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             title,
+            ok_label: <span class="macro">tstring!</span>[<span class="string">&quot;OK&quot;</span>],
+            cancel_label: <span class="macro">tstring!</span>[<span class="string">&quot;CANCEL&quot;</span>],
             buffer,
             filter,
             max,
@@ -953,8 +968,10 @@
     <span class="doccomment">/// Renders an item/option of the input dialog.
     </span><span class="kw">fn </span>render_item(<span class="kw-2">&amp;</span><span class="self">self</span>, screen: <span class="kw-2">&amp;mut </span>Screen, item: InputDialogItem) {
         <span class="kw">let </span>(option, y) = <span class="kw">match </span>item {
-            InputDialogItem::Ok =&gt; (<span class="string">&quot;&gt; OK &lt;&quot;</span>, <span class="self">self</span>.y_of_ok()),
-            InputDialogItem::Cancel =&gt; (<span class="string">&quot;&gt; CANCEL &lt;&quot;</span>, <span class="self">self</span>.y_of_cancel()),
+            InputDialogItem::Ok =&gt; (<span class="kw-2">&amp;</span><span class="self">self</span>.dialog.ok_label, <span class="self">self</span>.y_of_ok()),
+            InputDialogItem::Cancel =&gt; {
+                (<span class="kw-2">&amp;</span><span class="self">self</span>.dialog.cancel_label, <span class="self">self</span>.y_of_cancel())
+            },
         };
         <span class="kw">let </span>colors = <span class="kw">if </span>item == <span class="self">self</span>.selected {
             <span class="self">self</span>.dialog.selected_colors
@@ -962,9 +979,10 @@
             <span class="self">self</span>.dialog.unselected_colors
         };
 
+        <span class="kw">let </span>label = <span class="macro">tstring!</span>[<span class="string">&quot;&gt; {} &lt;&quot;</span>, option];
+
         <span class="kw">let </span>style = Style::default().align(<span class="number">1</span>, <span class="number">2</span>).colors(colors).top_margin(y);
-        <span class="kw">let </span>string = <span class="macro">tstring!</span>[option];
-        screen.styled_text(<span class="kw-2">&amp;</span>string, style);
+        screen.styled_text(<span class="kw-2">&amp;</span>label, style);
     }
 
     <span class="doccomment">/// Computes the Y coordinate of the input box.
