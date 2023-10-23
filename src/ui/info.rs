@@ -18,6 +18,8 @@ pub struct InfoDialog {
     pub title: TermString,
     /// Long text message to be shown.
     pub message: TermString,
+    /// Label showed by the "OK" button (default "OK").
+    pub ok_label: TermString,
     /// Settings such as margin and alignment.
     pub style: Style,
     /// Colors shown with the title.
@@ -36,6 +38,7 @@ impl InfoDialog {
         Self {
             title,
             message,
+            ok_label: tstring!["OK"],
             style: Style::default()
                 .align(1, 2)
                 .colors(Color2::default())
@@ -103,11 +106,11 @@ impl InfoDialog {
 
     /// Renders the OK button.
     fn render_ok(&self, screen: &mut Screen, pos: Coord) {
-        let ok_string = tstring!["> OK <"];
         let style = Style::default()
             .align(1, 2)
             .colors(self.selected_colors)
             .top_margin(pos + 2);
-        screen.styled_text(&ok_string, style);
+        let label_string = tstring!["> {} <", &self.ok_label];
+        screen.styled_text(&label_string, style);
     }
 }

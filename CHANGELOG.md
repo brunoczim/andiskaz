@@ -1,3 +1,7 @@
+# 0.3.0 (unreleased)
+- Fix bug on basic Gray colors' rendering.
+- Allow customization of UI button labels.
+
 # 0.2.0
 - Optional depedency on `gardiz` for coordinates.
 - Better color brightness adpating/contrasting.

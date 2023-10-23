@@ -35,6 +35,10 @@ where
     pub filter: F,
     /// The title of the input dialog.
     pub title: TermString,
+    /// Label showed by the "OK" button (default "OK").
+    pub ok_label: TermString,
+    /// Label showed by the "CANCEL" button (default "CANCEL").
+    pub cancel_label: TermString,
     /// Initial buffer of the input dialog.
     pub buffer: TermString,
     /// Maximum size of the input box.
@@ -75,6 +79,8 @@ where
     ) -> Self {
         Self {
             title,
+            ok_label: tstring!["OK"],
+            cancel_label: tstring!["CANCEL"],
             buffer,
             filter,
             max,
@@ -461,8 +467,10 @@ where
     /// Renders an item/option of the input dialog.
     fn render_item(&self, screen: &mut Screen, item: InputDialogItem) {
         let (option, y) = match item {
-            InputDialogItem::Ok => ("> OK <", self.y_of_ok()),
-            InputDialogItem::Cancel => ("> CANCEL <", self.y_of_cancel()),
+            InputDialogItem::Ok => (&self.dialog.ok_label, self.y_of_ok()),
+            InputDialogItem::Cancel => {
+                (&self.dialog.cancel_label, self.y_of_cancel())
+            },
         };
         let colors = if item == self.selected {
             self.dialog.selected_colors
@@ -470,9 +478,10 @@ where
             self.dialog.unselected_colors
         };
 
+        let label = tstring!["> {} <", option];
+
         let style = Style::default().align(1, 2).colors(colors).top_margin(y);
-        let string = tstring![option];
-        screen.styled_text(&string, style);
+        screen.styled_text(&label, style);
     }
 
     /// Computes the Y coordinate of the input box.
