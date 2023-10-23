@@ -18,7 +18,7 @@ use unicode_segmentation::UnicodeSegmentation;
 use crate::clipboard;
 
 /// A selected item/option of the input dialog.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum InputDialogItem {
     /// Input text prompt is going to be successful.
     Ok,
@@ -27,6 +27,7 @@ pub enum InputDialogItem {
 }
 
 /// A dialog asking for user input, possibly filtered.
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct InputDialog<F>
 where
     F: FnMut(char) -> bool,

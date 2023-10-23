@@ -6,7 +6,7 @@ use crate::{
 };
 
 /// Alignment, margin and other settings for texts.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq,Hash)]
 pub struct Style<C = Color2>
 where
     C: color::Updater,
