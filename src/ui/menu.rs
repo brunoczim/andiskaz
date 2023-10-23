@@ -24,6 +24,8 @@ where
     pub title: TermString,
     /// A list of options.
     pub options: Vec<O>,
+    /// Label showed by the "CANCEL" button (default "CANCEL").
+    pub cancel_label: TermString,
     /// Colors for the title.
     pub title_colors: Color2,
     /// Colors for the arrows.
@@ -51,6 +53,7 @@ where
         Self {
             title,
             options,
+            cancel_label: tstring!["CANCEL"],
             title_colors: Color2::default(),
             arrow_colors: Color2::default(),
             selected_colors: !Color2::default(),
@@ -463,13 +466,13 @@ where
             } else {
                 self.menu.unselected_colors
             };
-            let string = tstring!["> Cancel <"];
 
             let style = Style::default()
                 .align(1, 3)
                 .colors(colors)
                 .top_margin(cancel_y - 2);
-            screen.styled_text(&string, style);
+            let label_string = tstring!["> {} <", &self.menu.cancel_label];
+            screen.styled_text(&label_string, style);
         }
     }
 
