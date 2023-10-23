@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["get_contents","Get the current clipboard contents"],["set_contents","Write a string to the clipboard"]],"mod":[["linux_clipboard",""],["wayland_clipboard",""],["x11_clipboard",""]],"trait":[["ClipboardProvider","Trait for clipboard access"]],"type":[["ClipboardContext",""]]});
+window.SIDEBAR_ITEMS = {"fn":["get_contents","set_contents"],"mod":["linux_clipboard","wayland_clipboard","x11_clipboard"],"trait":["ClipboardProvider"],"type":["ClipboardContext"]};

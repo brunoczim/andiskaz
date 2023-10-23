@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["InfoDialog","An info dialog, with just an Ok option."]]});
+window.SIDEBAR_ITEMS = {"struct":["InfoDialog"]};

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Style","Alignment, margin and other settings for texts."]]});
+window.SIDEBAR_ITEMS = {"struct":["Style"]};

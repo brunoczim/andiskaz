@@ -1,1 +1,1 @@
-initSidebarItems({"type":[["Err",""]]});
+window.SIDEBAR_ITEMS = {"type":["Err"]};

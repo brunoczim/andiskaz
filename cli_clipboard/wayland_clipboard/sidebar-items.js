@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["WaylandClipboardContext","Interface to the clipboard for Wayland windowing systems."]]});
+window.SIDEBAR_ITEMS = {"struct":["WaylandClipboardContext"]};

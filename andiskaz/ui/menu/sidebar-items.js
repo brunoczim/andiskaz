@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["DangerPromptOption","An item of a prompt about a dangerous action."]],"struct":[["Menu","A menu, with a list of options and potentially a cancel option."]],"trait":[["MenuOption","A trait representing a menu option."]]});
+window.SIDEBAR_ITEMS = {"enum":["DangerPromptOption"],"struct":["Menu"],"trait":["MenuOption"]};

@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["client","Client-side API of this protocol"]]});
+window.SIDEBAR_ITEMS = {"mod":["client"]};

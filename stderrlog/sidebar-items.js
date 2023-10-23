@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["ColorChoice","ColorChoice represents the color preferences of an end user."],["Timestamp","State of the timestampping in the logger."]],"fn":[["new","creates a new stderr logger"]],"struct":[["StdErrLog","Data specific to this logger"]]});
+window.SIDEBAR_ITEMS = {"enum":["ColorChoice","Timestamp"],"fn":["new"],"struct":["StdErrLog"]};

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Screen","A locked screen terminal with exclusive access to it. With this struct, a locked screen handle, one can execute many operations without locking and unlocking."]]});
+window.SIDEBAR_ITEMS = {"struct":["Screen"]};

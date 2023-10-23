@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A custom derive implementation for `#[derive(new)]`"><meta name="keywords" content="rust, rustlang, rust-lang, derive_new"><title>derive_new - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../derive_new/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate derive_new</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.5.9</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all derive_new's items</p></a><div id="sidebar-vars" data-name="derive_new" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">derive_new</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/derive_new/lib.rs.html#1-471" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="a-custom-derive-implementation-for-derivenew" class="section-header"><a href="#a-custom-derive-implementation-for-derivenew">A custom derive implementation for <code>#[derive(new)]</code></a></h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A custom derive implementation for `#[derive(new)]`"><title>derive_new - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="derive_new" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../derive_new/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../derive_new/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Crate derive_new</a></h2><div class="sidebar-elems"><ul class="block"><li class="version">Version 0.5.9</li><li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#derives">Derive Macros</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">derive_new</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/derive_new/lib.rs.html#1-471">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="a-custom-derive-implementation-for-derivenew"><a href="#a-custom-derive-implementation-for-derivenew">A custom derive implementation for <code>#[derive(new)]</code></a></h2>
 <p>A <code>derive(new)</code> attribute creates a <code>new</code> constructor function for the annotated
 type. That function takes an argument for each field in the type giving a
 trivial constructor. This is useful since as your type evolves you can make the
@@ -7,83 +7,81 @@ constructor non-trivial (and add or remove fields) without changing client code
 way to initialise a struct or an enum.</p>
 <p>Implementation uses macros 1.1 custom derive (which works in stable Rust from
 1.15 onwards).</p>
-<h3 id="examples" class="section-header"><a href="#examples">Examples</a></h3>
+<h3 id="examples"><a href="#examples">Examples</a></h3>
 <p>Cargo.toml:</p>
 <div class="example-wrap"><pre class="language-toml"><code>[dependencies]
-derive-new = &quot;0.5&quot;</code></pre></div>
+derive-new = &quot;0.5&quot;
+</code></pre></div>
 <p>Include the macro:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">derive_new</span>;
-<span class="kw">fn</span> <span class="ident">main</span>() {}</code></pre></div>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[macro_use]
+</span><span class="kw">extern crate </span>derive_new;
+<span class="kw">fn </span>main() {}</code></pre></div>
 <p>Generating constructor for a simple struct:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">derive_new</span>;
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">new</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Bar</span> {
-    <span class="ident">a</span>: <span class="ident">i32</span>,
-    <span class="ident">b</span>: <span class="ident">String</span>,
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[macro_use]
+</span><span class="kw">extern crate </span>derive_new;
+<span class="attr">#[derive(new)]
+</span><span class="kw">struct </span>Bar {
+    a: i32,
+    b: String,
 }
 
-<span class="kw">fn</span> <span class="ident">main</span>() {
-  <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Bar::new</span>(<span class="number">42</span>, <span class="string">&quot;Hello&quot;</span>.<span class="ident">to_owned</span>());
+<span class="kw">fn </span>main() {
+  <span class="kw">let _ </span>= Bar::new(<span class="number">42</span>, <span class="string">&quot;Hello&quot;</span>.to_owned());
 }</code></pre></div>
 <p>Default values can be specified either via <code>#[new(default)]</code> attribute which removes
 the argument from the constructor and populates the field with <code>Default::default()</code>,
 or via <code>#[new(value = &quot;..&quot;)]</code> which initializes the field with a given expression:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">derive_new</span>;
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">new</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Foo</span> {
-    <span class="ident">x</span>: <span class="ident">bool</span>,
-    <span class="attribute">#[<span class="ident">new</span>(<span class="ident">value</span> <span class="op">=</span> <span class="string">&quot;42&quot;</span>)]</span>
-    <span class="ident">y</span>: <span class="ident">i32</span>,
-    <span class="attribute">#[<span class="ident">new</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">z</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[macro_use]
+</span><span class="kw">extern crate </span>derive_new;
+<span class="attr">#[derive(new)]
+</span><span class="kw">struct </span>Foo {
+    x: bool,
+    <span class="attr">#[new(value = <span class="string">&quot;42&quot;</span>)]
+    </span>y: i32,
+    <span class="attr">#[new(default)]
+    </span>z: Vec&lt;String&gt;,
 }
 
-<span class="kw">fn</span> <span class="ident">main</span>() {
-  <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Foo::new</span>(<span class="bool-val">true</span>);
+<span class="kw">fn </span>main() {
+  <span class="kw">let _ </span>= Foo::new(<span class="bool-val">true</span>);
 }</code></pre></div>
 <p>Generic types are supported; in particular, <code>PhantomData&lt;T&gt;</code> fields will be not
 included in the argument list and will be intialized automatically:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">derive_new</span>;
-<span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[macro_use]
+</span><span class="kw">extern crate </span>derive_new;
+<span class="kw">use </span>std::marker::PhantomData;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">new</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Generic</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Default</span>, <span class="ident">P</span><span class="op">&gt;</span> {
-    <span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-    <span class="ident">y</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">new</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">z</span>: <span class="ident">T</span>,
+<span class="attr">#[derive(new)]
+</span><span class="kw">struct </span>Generic&lt;<span class="lifetime">&#39;a</span>, T: Default, P&gt; {
+    x: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str,
+    y: PhantomData&lt;P&gt;,
+    <span class="attr">#[new(default)]
+    </span>z: T,
 }
 
-<span class="kw">fn</span> <span class="ident">main</span>() {
-  <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Generic</span>::<span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">u8</span><span class="op">&gt;</span><span class="ident">::new</span>(<span class="string">&quot;Hello&quot;</span>);
+<span class="kw">fn </span>main() {
+  <span class="kw">let _ </span>= Generic::&lt;i32, u8&gt;::new(<span class="string">&quot;Hello&quot;</span>);
 }</code></pre></div>
 <p>For enums, one constructor method is generated for each variant, with the type
 name being converted to snake case; otherwise, all features supported for
 structs work for enum variants as well:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">derive_new</span>;
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">new</span>)]</span>
-<span class="kw">enum</span> <span class="ident">Enum</span> {
-    <span class="ident">FirstVariant</span>,
-    <span class="ident">SecondVariant</span>(<span class="ident">bool</span>, <span class="attribute">#[<span class="ident">new</span>(<span class="ident">default</span>)]</span> <span class="ident">u8</span>),
-    <span class="ident">ThirdVariant</span> { <span class="ident">x</span>: <span class="ident">i32</span>, <span class="attribute">#[<span class="ident">new</span>(<span class="ident">value</span> <span class="op">=</span> <span class="string">&quot;vec![1]&quot;</span>)]</span> <span class="ident">y</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> }
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[macro_use]
+</span><span class="kw">extern crate </span>derive_new;
+<span class="attr">#[derive(new)]
+</span><span class="kw">enum </span>Enum {
+    FirstVariant,
+    SecondVariant(bool, <span class="attr">#[new(default)] </span>u8),
+    ThirdVariant { x: i32, <span class="attr">#[new(value = <span class="string">&quot;vec![1]&quot;</span>)] </span>y: Vec&lt;u8&gt; }
 }
 
-<span class="kw">fn</span> <span class="ident">main</span>() {
-  <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Enum::new_first_variant</span>();
-  <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Enum::new_second_variant</span>(<span class="bool-val">true</span>);
-  <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Enum::new_third_variant</span>(<span class="number">42</span>);
+<span class="kw">fn </span>main() {
+  <span class="kw">let _ </span>= Enum::new_first_variant();
+  <span class="kw">let _ </span>= Enum::new_second_variant(<span class="bool-val">true</span>);
+  <span class="kw">let _ </span>= Enum::new_third_variant(<span class="number">42</span>);
 }</code></pre></div>
-</div></details><h2 id="derives" class="section-header"><a href="#derives">Derive Macros</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="derive" href="derive.new.html" title="derive_new::new derive">new</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="derive_new" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
-    <script src="../main.js"></script>
-</body></html>
+</div></details><h2 id="derives" class="small-section-header"><a href="#derives">Derive Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="derive" href="derive.new.html" title="derive derive_new::new">new</a></div></li></ul></section></div></main></body></html>

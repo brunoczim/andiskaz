@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Crossterm"><meta name="keywords" content="rust, rustlang, rust-lang, crossterm"><title>crossterm - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../crossterm/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate crossterm</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.18.2</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all crossterm's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#types">Type Definitions</a></li></ul></div><div id="sidebar-vars" data-name="crossterm" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">crossterm</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/crossterm/lib.rs.html#1-257" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="crossterm" class="section-header"><a href="#crossterm">Crossterm</a></h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Crossterm"><title>crossterm - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="crossterm" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../crossterm/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../crossterm/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Crate crossterm</a></h2><div class="sidebar-elems"><ul class="block"><li class="version">Version 0.18.2</li><li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#types">Type Definitions</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">crossterm</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/crossterm/lib.rs.html#1-257">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="crossterm"><a href="#crossterm">Crossterm</a></h2>
 <p>Have you ever been disappointed when a terminal library for rust was only written for UNIX systems?
 Crossterm provides clearing, event (input) handling, styling, cursor movement, and terminal actions for both
 Windows and UNIX systems.</p>
@@ -7,7 +7,7 @@ have to worry about the platform you are working with.</p>
 <p>This crate supports all UNIX and Windows terminals down to Windows 7 (not all terminals are tested
 see <a href="https://github.com/crossterm-rs/crossterm#tested-terminals">Tested Terminals</a>
 for more info).</p>
-<h3 id="command-api" class="section-header"><a href="#command-api">Command API</a></h3>
+<h3 id="command-api"><a href="#command-api">Command API</a></h3>
 <p>The command API makes the use of <code>crossterm</code> much easier and offers more control over when and how a
 command is executed. A command is just an action you can perform on the terminal e.g. cursor movement.</p>
 <p>The command API offers:</p>
@@ -27,7 +27,7 @@ not afraid of macros, this is a recommendation.</li>
 <p>Linux and Windows 10 systems support ANSI escape codes. Those ANSI escape codes are strings or rather a
 byte sequence. When we <code>write</code> and <code>flush</code> those to the terminal we can perform some action.
 For older windows systems a WinApi call is made.</p>
-<h4 id="supported-commands" class="section-header"><a href="#supported-commands">Supported Commands</a></h4>
+<h4 id="supported-commands"><a href="#supported-commands">Supported Commands</a></h4>
 <ul>
 <li>Module <a href="cursor/index.html"><code>cursor</code></a>
 <ul>
@@ -71,13 +71,13 @@ For older windows systems a WinApi call is made.</p>
 </ul>
 </li>
 </ul>
-<h4 id="command-execution" class="section-header"><a href="#command-execution">Command Execution</a></h4>
+<h4 id="command-execution"><a href="#command-execution">Command Execution</a></h4>
 <p>There are two different ways to execute commands:</p>
 <ul>
 <li><a href="#lazy-execution">Lazy Execution</a></li>
 <li><a href="#direct-execution">Direct Execution</a></li>
 </ul>
-<h5 id="lazy-execution" class="section-header"><a href="#lazy-execution">Lazy Execution</a></h5>
+<h5 id="lazy-execution"><a href="#lazy-execution">Lazy Execution</a></h5>
 <p>Flushing bytes to the terminal buffer is a heavy system call. If we perform a lot of actions with the terminal,
 we want to do this periodically - like with a TUI editor - so that we can flush more data to the terminal buffer
 at the same time.</p>
@@ -86,136 +86,117 @@ With <code>queue</code> you can queue commands, and when you call <a href="https
 <p>You can pass a custom buffer implementing <a href="https://doc.rust-lang.org/std/io/trait.Write.html">std::io::Write</a> to this <code>queue</code> operation.
 The commands will be executed on that buffer.
 The most common buffer is <a href="https://doc.rust-lang.org/std/io/fn.stdout.html">std::io::stdout</a> however, <a href="https://doc.rust-lang.org/std/io/fn.stderr.html">std::io::stderr</a> is used sometimes as well.</p>
-<h6 id="examples" class="section-header"><a href="#examples">Examples</a></h6>
+<h6 id="examples"><a href="#examples">Examples</a></h6>
 <p>A simple demonstration that shows the command API in action with cursor commands.</p>
 <p>Functions:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">Write</span>, <span class="ident">stdout</span>};
-<span class="kw">use</span> <span class="ident">crossterm</span>::{<span class="ident">QueueableCommand</span>, <span class="ident">cursor</span>};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io::{Write, stdout};
+<span class="kw">use </span>crossterm::{QueueableCommand, cursor};
 
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">stdout</span>();
-<span class="ident">stdout</span>.<span class="ident">queue</span>(<span class="ident">cursor::MoveTo</span>(<span class="number">5</span>,<span class="number">5</span>));
+<span class="kw">let </span><span class="kw-2">mut </span>stdout = stdout();
+stdout.queue(cursor::MoveTo(<span class="number">5</span>,<span class="number">5</span>));
 
-<span class="comment">// some other code ...</span>
+<span class="comment">// some other code ...
 
-<span class="ident">stdout</span>.<span class="ident">flush</span>();</code></pre></div>
+</span>stdout.flush();</code></pre></div>
 <p>The <a href="./trait.QueueableCommand.html">queue</a> function returns itself, therefore you can use this to queue another
 command. Like <code>stdout.queue(Goto(5,5)).queue(Clear(ClearType::All))</code>.</p>
 <p>Macros:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">Write</span>, <span class="ident">stdout</span>};
-<span class="kw">use</span> <span class="ident">crossterm</span>::{<span class="ident">queue</span>, <span class="ident">QueueableCommand</span>, <span class="ident">cursor</span>};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io::{Write, stdout};
+<span class="kw">use </span>crossterm::{queue, QueueableCommand, cursor};
 
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">stdout</span>();
-<span class="macro">queue!</span>(<span class="ident">stdout</span>,  <span class="ident">cursor::MoveTo</span>(<span class="number">5</span>, <span class="number">5</span>));
+<span class="kw">let </span><span class="kw-2">mut </span>stdout = stdout();
+<span class="macro">queue!</span>(stdout,  cursor::MoveTo(<span class="number">5</span>, <span class="number">5</span>));
 
-<span class="comment">// some other code ...</span>
+<span class="comment">// some other code ...
 
-<span class="comment">// move operation is performed only if we flush the buffer.</span>
-<span class="ident">stdout</span>.<span class="ident">flush</span>();</code></pre></div>
+// move operation is performed only if we flush the buffer.
+</span>stdout.flush();</code></pre></div>
 <p>You can pass more than one command into the <a href="./macro.queue.html">queue</a> macro like
 <code>queue!(stdout, MoveTo(5, 5), Clear(ClearType::All))</code> and
 they will be executed in the given order from left to right.</p>
-<h5 id="direct-execution" class="section-header"><a href="#direct-execution">Direct Execution</a></h5>
+<h5 id="direct-execution"><a href="#direct-execution">Direct Execution</a></h5>
 <p>For many applications it is not at all important to be efficient with ‘flush’ operations.
 For this use case there is the <code>execute</code> operation.
 This operation executes the command immediately, and calls the <code>flush</code> under water.</p>
 <p>You can pass a custom buffer implementing <a href="https://doc.rust-lang.org/std/io/trait.Write.html">std::io::Write</a> to this <code>execute</code> operation.
 The commands will be executed on that buffer.
 The most common buffer is <a href="https://doc.rust-lang.org/std/io/fn.stdout.html">std::io::stdout</a> however, <a href="https://doc.rust-lang.org/std/io/fn.stderr.html">std::io::stderr</a> is used sometimes as well.</p>
-<h6 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h6>
+<h6 id="examples-1"><a href="#examples-1">Examples</a></h6>
 <p>Functions:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">Write</span>, <span class="ident">stdout</span>};
-<span class="kw">use</span> <span class="ident">crossterm</span>::{<span class="ident">ExecutableCommand</span>, <span class="ident">cursor</span>};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io::{Write, stdout};
+<span class="kw">use </span>crossterm::{ExecutableCommand, cursor};
 
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">stdout</span>();
-<span class="ident">stdout</span>.<span class="ident">execute</span>(<span class="ident">cursor::MoveTo</span>(<span class="number">5</span>,<span class="number">5</span>));</code></pre></div>
+<span class="kw">let </span><span class="kw-2">mut </span>stdout = stdout();
+stdout.execute(cursor::MoveTo(<span class="number">5</span>,<span class="number">5</span>));</code></pre></div>
 <p>The <a href="./trait.ExecutableCommand.html">execute</a> function returns itself, therefore you can use this to queue
 another command. Like <code>stdout.queue(Goto(5,5)).queue(Clear(ClearType::All))</code>.</p>
 <p>Macros:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">Write</span>, <span class="ident">stdout</span>};
-<span class="kw">use</span> <span class="ident">crossterm</span>::{<span class="ident">execute</span>, <span class="ident">ExecutableCommand</span>, <span class="ident">cursor</span>};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io::{Write, stdout};
+<span class="kw">use </span>crossterm::{execute, ExecutableCommand, cursor};
 
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">stdout</span>();
-<span class="macro">execute!</span>(<span class="ident">stdout</span>, <span class="ident">cursor::MoveTo</span>(<span class="number">5</span>, <span class="number">5</span>));</code></pre></div>
+<span class="kw">let </span><span class="kw-2">mut </span>stdout = stdout();
+<span class="macro">execute!</span>(stdout, cursor::MoveTo(<span class="number">5</span>, <span class="number">5</span>));</code></pre></div>
 <p>You can pass more than one command into the <a href="./macro.execute.html">execute</a> macro like
 <code>execute!(stdout, MoveTo(5, 5), Clear(ClearType::All))</code> and they will be executed in the given order from
 left to right.</p>
-<h3 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h3>
+<h3 id="examples-2"><a href="#examples-2">Examples</a></h3>
 <p>Print a rectangle colored with magenta and use both direct execution and lazy execution.</p>
 <p>Functions:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>};
-<span class="kw">use</span> <span class="ident">crossterm</span>::{
-    <span class="ident">ExecutableCommand</span>, <span class="ident">QueueableCommand</span>,
-    <span class="ident">terminal</span>, <span class="ident">cursor</span>, <span class="ident">style</span>::{<span class="self">self</span>, <span class="ident">Colorize</span>}, <span class="prelude-ty">Result</span>
-};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io::{stdout, Write};
+<span class="kw">use </span>crossterm::{
+    ExecutableCommand, QueueableCommand,
+    terminal, cursor, style::{<span class="self">self</span>, Colorize}, <span class="prelude-ty">Result
+</span>};
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-  <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">stdout</span>();
+<span class="kw">fn </span>main() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+  <span class="kw">let </span><span class="kw-2">mut </span>stdout = stdout();
 
-  <span class="ident">stdout</span>.<span class="ident">execute</span>(<span class="ident">terminal::Clear</span>(<span class="ident">terminal::ClearType::All</span>))<span class="question-mark">?</span>;
+  stdout.execute(terminal::Clear(terminal::ClearType::All))<span class="question-mark">?</span>;
 
-  <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">40</span> {
-    <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">150</span> {
-      <span class="kw">if</span> (<span class="ident">y</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">y</span> <span class="op">==</span> <span class="number">40</span> <span class="op">-</span> <span class="number">1</span>) <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">150</span> <span class="op">-</span> <span class="number">1</span>) {
-        <span class="comment">// in this loop we are more efficient by not flushing the buffer.</span>
-        <span class="ident">stdout</span>
-          .<span class="ident">queue</span>(<span class="ident">cursor::MoveTo</span>(<span class="ident">x</span>,<span class="ident">y</span>))<span class="question-mark">?</span>
-          .<span class="ident">queue</span>(<span class="ident">style::PrintStyledContent</span>( <span class="string">&quot;█&quot;</span>.<span class="ident">magenta</span>()))<span class="question-mark">?</span>;
+  <span class="kw">for </span>y <span class="kw">in </span><span class="number">0</span>..<span class="number">40 </span>{
+    <span class="kw">for </span>x <span class="kw">in </span><span class="number">0</span>..<span class="number">150 </span>{
+      <span class="kw">if </span>(y == <span class="number">0 </span>|| y == <span class="number">40 </span>- <span class="number">1</span>) || (x == <span class="number">0 </span>|| x == <span class="number">150 </span>- <span class="number">1</span>) {
+        <span class="comment">// in this loop we are more efficient by not flushing the buffer.
+        </span>stdout
+          .queue(cursor::MoveTo(x,y))<span class="question-mark">?
+          </span>.queue(style::PrintStyledContent( <span class="string">&quot;█&quot;</span>.magenta()))<span class="question-mark">?</span>;
       }
     }
   }
-  <span class="ident">stdout</span>.<span class="ident">flush</span>()<span class="question-mark">?</span>;
+  stdout.flush()<span class="question-mark">?</span>;
   <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 <p>Macros:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>};
-<span class="kw">use</span> <span class="ident">crossterm</span>::{
-    <span class="ident">execute</span>, <span class="ident">queue</span>,
-    <span class="ident">style</span>::{<span class="self">self</span>, <span class="ident">Colorize</span>}, <span class="ident">cursor</span>, <span class="ident">terminal</span>, <span class="prelude-ty">Result</span>
-};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io::{stdout, Write};
+<span class="kw">use </span>crossterm::{
+    execute, queue,
+    style::{<span class="self">self</span>, Colorize}, cursor, terminal, <span class="prelude-ty">Result
+</span>};
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-  <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">stdout</span>();
+<span class="kw">fn </span>main() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+  <span class="kw">let </span><span class="kw-2">mut </span>stdout = stdout();
 
-  <span class="macro">execute!</span>(<span class="ident">stdout</span>, <span class="ident">terminal::Clear</span>(<span class="ident">terminal::ClearType::All</span>))<span class="question-mark">?</span>;
+  <span class="macro">execute!</span>(stdout, terminal::Clear(terminal::ClearType::All))<span class="question-mark">?</span>;
 
-  <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">40</span> {
-    <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">150</span> {
-      <span class="kw">if</span> (<span class="ident">y</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">y</span> <span class="op">==</span> <span class="number">40</span> <span class="op">-</span> <span class="number">1</span>) <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">150</span> <span class="op">-</span> <span class="number">1</span>) {
-        <span class="comment">// in this loop we are more efficient by not flushing the buffer.</span>
-        <span class="macro">queue!</span>(<span class="ident">stdout</span>, <span class="ident">cursor::MoveTo</span>(<span class="ident">x</span>,<span class="ident">y</span>), <span class="ident">style::PrintStyledContent</span>( <span class="string">&quot;█&quot;</span>.<span class="ident">magenta</span>()))<span class="question-mark">?</span>;
+  <span class="kw">for </span>y <span class="kw">in </span><span class="number">0</span>..<span class="number">40 </span>{
+    <span class="kw">for </span>x <span class="kw">in </span><span class="number">0</span>..<span class="number">150 </span>{
+      <span class="kw">if </span>(y == <span class="number">0 </span>|| y == <span class="number">40 </span>- <span class="number">1</span>) || (x == <span class="number">0 </span>|| x == <span class="number">150 </span>- <span class="number">1</span>) {
+        <span class="comment">// in this loop we are more efficient by not flushing the buffer.
+        </span><span class="macro">queue!</span>(stdout, cursor::MoveTo(x,y), style::PrintStyledContent( <span class="string">&quot;█&quot;</span>.magenta()))<span class="question-mark">?</span>;
       }
     }
   }
-  <span class="ident">stdout</span>.<span class="ident">flush</span>()<span class="question-mark">?</span>;
+  stdout.flush()<span class="question-mark">?</span>;
   <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
-</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="cursor/index.html" title="crossterm::cursor mod">cursor</a></div><div class="item-right docblock-short"><p>A module to work with the terminal cursor</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="event/index.html" title="crossterm::event mod">event</a></div><div class="item-right docblock-short"><p>A module to read events.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="style/index.html" title="crossterm::style mod">style</a></div><div class="item-right docblock-short"><p>A module to apply attributes and colors on your text.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="terminal/index.html" title="crossterm::terminal mod">terminal</a></div><div class="item-right docblock-short"><p>A module to work with the terminal.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="tty/index.html" title="crossterm::tty mod">tty</a></div><div class="item-right docblock-short"><p>A module to query if the current instance is a tty.
+</div></details><h2 id="reexports" class="small-section-header"><a href="#reexports">Re-exports</a></h2><ul class="item-table"><li><div class="item-name" id="reexport.Ansi"><code>pub use crate::ansi::Ansi;</code></div></li></ul><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="cursor/index.html" title="mod crossterm::cursor">cursor</a></div><div class="desc docblock-short">A module to work with the terminal cursor</div></li><li><div class="item-name"><a class="mod" href="event/index.html" title="mod crossterm::event">event</a></div><div class="desc docblock-short">A module to read events.</div></li><li><div class="item-name"><a class="mod" href="style/index.html" title="mod crossterm::style">style</a></div><div class="desc docblock-short">A module to apply attributes and colors on your text.</div></li><li><div class="item-name"><a class="mod" href="terminal/index.html" title="mod crossterm::terminal">terminal</a></div><div class="desc docblock-short">A module to work with the terminal.</div></li><li><div class="item-name"><a class="mod" href="tty/index.html" title="mod crossterm::tty">tty</a></div><div class="desc docblock-short">A module to query if the current instance is a tty.
 Making it a little more convenient and safe to query whether
 something is a terminal teletype or not.
 This module defines the IsTty trait and the is_tty method to
-return true if the item represents a terminal.</p>
-</div></div></div><h2 id="macros" class="section-header"><a href="#macros">Macros</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.execute.html" title="crossterm::execute macro">execute</a></div><div class="item-right docblock-short"><p>Executes one or more command(s).</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.queue.html" title="crossterm::queue macro">queue</a></div><div class="item-right docblock-short"><p>Queues one or more command(s) for further execution.</p>
-</div></div></div><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.ErrorKind.html" title="crossterm::ErrorKind enum">ErrorKind</a></div><div class="item-right docblock-short"><p>Wrapper for all errors that can occur in <code>crossterm</code>.</p>
-</div></div></div><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Command.html" title="crossterm::Command trait">Command</a></div><div class="item-right docblock-short"><p>An interface for a command that performs an action on the terminal.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ExecutableCommand.html" title="crossterm::ExecutableCommand trait">ExecutableCommand</a></div><div class="item-right docblock-short"><p>An interface for commands that are directly executed.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.QueueableCommand.html" title="crossterm::QueueableCommand trait">QueueableCommand</a></div><div class="item-right docblock-short"><p>An interface for commands that can be queued for further execution.</p>
-</div></div></div><h2 id="types" class="section-header"><a href="#types">Type Definitions</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Result.html" title="crossterm::Result type">Result</a></div><div class="item-right docblock-short"><p>The <code>crossterm</code> result type.</p>
-</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="crossterm" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
-    <script src="../main.js"></script>
-</body></html>
+return true if the item represents a terminal.</div></li></ul><h2 id="macros" class="small-section-header"><a href="#macros">Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="macro" href="macro.execute.html" title="macro crossterm::execute">execute</a></div><div class="desc docblock-short">Executes one or more command(s).</div></li><li><div class="item-name"><a class="macro" href="macro.queue.html" title="macro crossterm::queue">queue</a></div><div class="desc docblock-short">Queues one or more command(s) for further execution.</div></li></ul><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.ErrorKind.html" title="enum crossterm::ErrorKind">ErrorKind</a></div><div class="desc docblock-short">Wrapper for all errors that can occur in <code>crossterm</code>.</div></li></ul><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.Command.html" title="trait crossterm::Command">Command</a></div><div class="desc docblock-short">An interface for a command that performs an action on the terminal.</div></li><li><div class="item-name"><a class="trait" href="trait.ExecutableCommand.html" title="trait crossterm::ExecutableCommand">ExecutableCommand</a></div><div class="desc docblock-short">An interface for commands that are directly executed.</div></li><li><div class="item-name"><a class="trait" href="trait.QueueableCommand.html" title="trait crossterm::QueueableCommand">QueueableCommand</a></div><div class="desc docblock-short">An interface for commands that can be queued for further execution.</div></li></ul><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2><ul class="item-table"><li><div class="item-name"><a class="type" href="type.Result.html" title="type crossterm::Result">Result</a></div><div class="desc docblock-short">The <code>crossterm</code> result type.</div></li></ul></section></div></main></body></html>

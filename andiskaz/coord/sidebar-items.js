@@ -1,1 +1,1 @@
-initSidebarItems({"type":[["Coord","A single scalar coordinate used in the terminal."],["Vec2","A coordinate made of two components `x` and `y`. The `x` axis corresponds to its expected meaning. When the feature `plane` is enabled, this is simply an alias to [`::gardiz::coord::Vec2`], otherwise it is a dedicated struct."]]});
+window.SIDEBAR_ITEMS = {"type":["Coord","Vec2"]};

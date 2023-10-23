@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Library for 2D geometric spaces (AKA “the plane”). This library focuses on integer geometry, and is intended to be used in discrete 2D games."><meta name="keywords" content="rust, rustlang, rust-lang, gardiz"><title>gardiz - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../gardiz/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate gardiz</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.1.2</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all gardiz's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li></ul></div><div id="sidebar-vars" data-name="gardiz" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">gardiz</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/gardiz/lib.rs.html#1-142" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Library for 2D geometric spaces (AKA “the plane”). This library focuses on
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Library for 2D geometric spaces (AKA “the plane”). This library focuses on integer geometry, and is intended to be used in discrete 2D games."><title>gardiz - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="gardiz" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../gardiz/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../gardiz/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Crate gardiz</a></h2><div class="sidebar-elems"><ul class="block"><li class="version">Version 0.1.2</li><li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#modules">Modules</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">gardiz</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/gardiz/lib.rs.html#1-142">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Library for 2D geometric spaces (AKA “the plane”). This library focuses on
 integer geometry, and is intended to be used in discrete 2D games.</p>
 <p>This crate supports 2D generic vectors (for representing points, sizes,
 actual vectors, etc) with arithmetic operations on them (including dot
@@ -17,123 +17,112 @@ between two points, using only a given region (creating vertices if
 necessary).</p>
 <p>As an example, here is the execution of A*:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">gardiz</span>::{
-    <span class="ident">coord::Vec2</span>,
-    <span class="ident">graph::Graph</span>,
-    <span class="ident">direc</span>::{<span class="ident">Direction</span>, <span class="ident">DirecVector</span>},
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>gardiz::{
+    coord::Vec2,
+    graph::Graph,
+    direc::{Direction, DirecVector},
 };
-<span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
+<span class="kw">use </span>std::collections::HashSet;
 
-<span class="comment">// `i64` is the type of the coordinate of the points.</span>
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">graph</span> <span class="op">=</span> <span class="ident">Graph</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span><span class="ident">::new</span>();
-<span class="comment">// Initial and final points.</span>
-<span class="kw">let</span> <span class="ident">start</span> <span class="op">=</span> <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="op">-</span><span class="number">3</span>, <span class="ident">y</span>: <span class="op">-</span><span class="number">3</span> };
-<span class="kw">let</span> <span class="ident">goal</span> <span class="op">=</span> <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">2</span>, <span class="ident">y</span>: <span class="number">4</span> };
-<span class="ident">graph</span>.<span class="ident">create_vertex</span>(<span class="ident">start</span>);
-<span class="ident">graph</span>.<span class="ident">create_vertex</span>(<span class="ident">goal</span>);
+<span class="comment">// `i64` is the type of the coordinate of the points.
+</span><span class="kw">let </span><span class="kw-2">mut </span>graph = Graph::&lt;i64&gt;::new();
+<span class="comment">// Initial and final points.
+</span><span class="kw">let </span>start = Vec2 { x: -<span class="number">3</span>, y: -<span class="number">3 </span>};
+<span class="kw">let </span>goal = Vec2 { x: <span class="number">2</span>, y: <span class="number">4 </span>};
+graph.create_vertex(start);
+graph.create_vertex(goal);
 
-<span class="comment">// Penalty whenever the path takes a turn.</span>
-<span class="kw">let</span> <span class="ident">penalty</span> <span class="op">=</span> <span class="number">2</span>;
+<span class="comment">// Penalty whenever the path takes a turn.
+</span><span class="kw">let </span>penalty = <span class="number">2</span>;
 
-<span class="comment">// Valid points to be used in the path.</span>
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">valid_points</span> <span class="op">=</span> <span class="ident">HashSet::new</span>();
-<span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">3</span> .. <span class="number">1</span> {
-    <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="op">-</span><span class="number">3</span> .. <span class="number">0</span> {
-        <span class="ident">valid_points</span>.<span class="ident">insert</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>, <span class="ident">y</span> });
+<span class="comment">// Valid points to be used in the path.
+</span><span class="kw">let </span><span class="kw-2">mut </span>valid_points = HashSet::new();
+<span class="kw">for </span>x <span class="kw">in </span>-<span class="number">3 </span>.. <span class="number">1 </span>{
+    <span class="kw">for </span>y <span class="kw">in </span>-<span class="number">3 </span>.. <span class="number">0 </span>{
+        valid_points.insert(Vec2 { x, y });
     }
 }
-<span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">3</span> {
-    <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">2</span> {
-        <span class="ident">valid_points</span>.<span class="ident">insert</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>, <span class="ident">y</span> });
+<span class="kw">for </span>x <span class="kw">in </span><span class="number">0 </span>.. <span class="number">3 </span>{
+    <span class="kw">for </span>y <span class="kw">in </span><span class="number">0 </span>.. <span class="number">2 </span>{
+        valid_points.insert(Vec2 { x, y });
     }
 }
-<span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">1</span> .. <span class="number">2</span> {
-    <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">2</span> .. <span class="number">3</span> {
-        <span class="ident">valid_points</span>.<span class="ident">insert</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>, <span class="ident">y</span> });
+<span class="kw">for </span>x <span class="kw">in </span>-<span class="number">1 </span>.. <span class="number">2 </span>{
+    <span class="kw">for </span>y <span class="kw">in </span><span class="number">2 </span>.. <span class="number">3 </span>{
+        valid_points.insert(Vec2 { x, y });
     }
 }
-<span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">2</span> .. <span class="number">0</span> {
-    <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">3</span> .. <span class="number">5</span> {
-        <span class="ident">valid_points</span>.<span class="ident">insert</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>, <span class="ident">y</span> });
+<span class="kw">for </span>x <span class="kw">in </span>-<span class="number">2 </span>.. <span class="number">0 </span>{
+    <span class="kw">for </span>y <span class="kw">in </span><span class="number">3 </span>.. <span class="number">5 </span>{
+        valid_points.insert(Vec2 { x, y });
     }
 }
-<span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">3</span> .. <span class="number">7</span> {
-    <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">5</span> .. <span class="number">7</span> {
-        <span class="ident">valid_points</span>.<span class="ident">insert</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>, <span class="ident">y</span> });
+<span class="kw">for </span>x <span class="kw">in </span>-<span class="number">3 </span>.. <span class="number">7 </span>{
+    <span class="kw">for </span>y <span class="kw">in </span><span class="number">5 </span>.. <span class="number">7 </span>{
+        valid_points.insert(Vec2 { x, y });
     }
 }
-<span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="number">1</span> .. <span class="number">9</span> {
-    <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">4</span> .. <span class="number">9</span> {
-        <span class="ident">valid_points</span>.<span class="ident">insert</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>, <span class="ident">y</span> });
+<span class="kw">for </span>x <span class="kw">in </span><span class="number">1 </span>.. <span class="number">9 </span>{
+    <span class="kw">for </span>y <span class="kw">in </span><span class="number">4 </span>.. <span class="number">9 </span>{
+        valid_points.insert(Vec2 { x, y });
     }
 }
 
-<span class="comment">// Cloning the graph before making the path (which will modify it).</span>
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">expected</span> <span class="op">=</span> <span class="ident">graph</span>.<span class="ident">clone</span>();
+<span class="comment">// Cloning the graph before making the path (which will modify it).
+</span><span class="kw">let </span><span class="kw-2">mut </span>expected = graph.clone();
 
-<span class="comment">// Runs A*</span>
-<span class="kw">let</span> <span class="ident">directions</span> <span class="op">=</span> <span class="ident">graph</span>.<span class="ident">make_path</span>(
-    <span class="kw-2">&amp;</span><span class="ident">start</span>,
-    <span class="kw-2">&amp;</span><span class="ident">goal</span>,
-    <span class="kw-2">&amp;</span><span class="ident">penalty</span>,
-    <span class="op">|</span><span class="ident">point</span><span class="op">|</span> <span class="ident">valid_points</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">point</span>)
+<span class="comment">// Runs A*
+</span><span class="kw">let </span>directions = graph.make_path(
+    <span class="kw-2">&amp;</span>start,
+    <span class="kw-2">&amp;</span>goal,
+    <span class="kw-2">&amp;</span>penalty,
+    |point| valid_points.contains(<span class="kw-2">&amp;</span>point)
 );
 
-<span class="comment">// Checks whether the computed directions are correct.</span>
-<span class="macro">assert_eq!</span>(
-    <span class="ident">directions</span>,
+<span class="comment">// Checks whether the computed directions are correct.
+</span><span class="macro">assert_eq!</span>(
+    directions,
     <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[
-        <span class="comment">// x = -3, y = -3</span>
-        <span class="ident">DirecVector</span> { <span class="ident">direction</span>: <span class="ident">Direction::Right</span>, <span class="ident">magnitude</span>: <span class="number">3</span> },
-        <span class="comment">// x = 0, y = -3</span>
-        <span class="ident">DirecVector</span> { <span class="ident">direction</span>: <span class="ident">Direction::Down</span>, <span class="ident">magnitude</span>: <span class="number">5</span> },
-        <span class="comment">// x = 0, y = 2</span>
-        <span class="ident">DirecVector</span> { <span class="ident">direction</span>: <span class="ident">Direction::Left</span>, <span class="ident">magnitude</span>: <span class="number">1</span> },
-        <span class="comment">// x = -1, y = 2</span>
-        <span class="ident">DirecVector</span> { <span class="ident">direction</span>: <span class="ident">Direction::Down</span>, <span class="ident">magnitude</span>: <span class="number">3</span> },
-        <span class="comment">// x = -1, y = 5</span>
-        <span class="ident">DirecVector</span> { <span class="ident">direction</span>: <span class="ident">Direction::Right</span>, <span class="ident">magnitude</span>: <span class="number">3</span> },
-        <span class="comment">// x = 2, y = 5</span>
-        <span class="ident">DirecVector</span> { <span class="ident">direction</span>: <span class="ident">Direction::Up</span>, <span class="ident">magnitude</span>: <span class="number">1</span> },
-        <span class="comment">// x = 2, y = 4</span>
-    ])
+        <span class="comment">// x = -3, y = -3
+        </span>DirecVector { direction: Direction::Right, magnitude: <span class="number">3 </span>},
+        <span class="comment">// x = 0, y = -3
+        </span>DirecVector { direction: Direction::Down, magnitude: <span class="number">5 </span>},
+        <span class="comment">// x = 0, y = 2
+        </span>DirecVector { direction: Direction::Left, magnitude: <span class="number">1 </span>},
+        <span class="comment">// x = -1, y = 2
+        </span>DirecVector { direction: Direction::Down, magnitude: <span class="number">3 </span>},
+        <span class="comment">// x = -1, y = 5
+        </span>DirecVector { direction: Direction::Right, magnitude: <span class="number">3 </span>},
+        <span class="comment">// x = 2, y = 5
+        </span>DirecVector { direction: Direction::Up, magnitude: <span class="number">1 </span>},
+        <span class="comment">// x = 2, y = 4
+    </span>])
 );
 
-<span class="comment">// Insert the vertices created when making the path.</span>
-<span class="ident">expected</span>.<span class="ident">create_vertex</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="op">-</span><span class="number">3</span> });
-<span class="ident">expected</span>.<span class="ident">create_vertex</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="number">2</span> });
-<span class="ident">expected</span>.<span class="ident">create_vertex</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="op">-</span><span class="number">1</span>, <span class="ident">y</span>: <span class="number">2</span> });
-<span class="ident">expected</span>.<span class="ident">create_vertex</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="op">-</span><span class="number">1</span>, <span class="ident">y</span>: <span class="number">5</span> });
-<span class="ident">expected</span>.<span class="ident">create_vertex</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">2</span>, <span class="ident">y</span>: <span class="number">5</span> });
+<span class="comment">// Insert the vertices created when making the path.
+</span>expected.create_vertex(Vec2 { x: <span class="number">0</span>, y: -<span class="number">3 </span>});
+expected.create_vertex(Vec2 { x: <span class="number">0</span>, y: <span class="number">2 </span>});
+expected.create_vertex(Vec2 { x: -<span class="number">1</span>, y: <span class="number">2 </span>});
+expected.create_vertex(Vec2 { x: -<span class="number">1</span>, y: <span class="number">5 </span>});
+expected.create_vertex(Vec2 { x: <span class="number">2</span>, y: <span class="number">5 </span>});
 
-<span class="comment">// Connect the vertices in the path.</span>
-<span class="ident">expected</span>
-    .<span class="ident">connect</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="op">-</span><span class="number">3</span>, <span class="ident">y</span>: <span class="op">-</span><span class="number">3</span> }.<span class="ident">as_ref</span>(), <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="op">-</span><span class="number">3</span> }.<span class="ident">as_ref</span>());
-<span class="ident">expected</span>
-    .<span class="ident">connect</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="number">2</span> }.<span class="ident">as_ref</span>(), <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="op">-</span><span class="number">3</span> }.<span class="ident">as_ref</span>());
-<span class="ident">expected</span>
-    .<span class="ident">connect</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="number">2</span> }.<span class="ident">as_ref</span>(), <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="op">-</span><span class="number">1</span>, <span class="ident">y</span>: <span class="number">2</span> }.<span class="ident">as_ref</span>());
-<span class="ident">expected</span>
-    .<span class="ident">connect</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="op">-</span><span class="number">1</span>, <span class="ident">y</span>: <span class="number">5</span> }.<span class="ident">as_ref</span>(), <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="op">-</span><span class="number">1</span>, <span class="ident">y</span>: <span class="number">2</span> }.<span class="ident">as_ref</span>());
-<span class="ident">expected</span>
-    .<span class="ident">connect</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="op">-</span><span class="number">1</span>, <span class="ident">y</span>: <span class="number">5</span> }.<span class="ident">as_ref</span>(), <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">2</span>, <span class="ident">y</span>: <span class="number">5</span> }.<span class="ident">as_ref</span>());
-<span class="ident">expected</span>
-    .<span class="ident">connect</span>(<span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">2</span>, <span class="ident">y</span>: <span class="number">4</span> }.<span class="ident">as_ref</span>(), <span class="ident">Vec2</span> { <span class="ident">x</span>: <span class="number">2</span>, <span class="ident">y</span>: <span class="number">5</span> }.<span class="ident">as_ref</span>());
+<span class="comment">// Connect the vertices in the path.
+</span>expected
+    .connect(Vec2 { x: -<span class="number">3</span>, y: -<span class="number">3 </span>}.as_ref(), Vec2 { x: <span class="number">0</span>, y: -<span class="number">3 </span>}.as_ref());
+expected
+    .connect(Vec2 { x: <span class="number">0</span>, y: <span class="number">2 </span>}.as_ref(), Vec2 { x: <span class="number">0</span>, y: -<span class="number">3 </span>}.as_ref());
+expected
+    .connect(Vec2 { x: <span class="number">0</span>, y: <span class="number">2 </span>}.as_ref(), Vec2 { x: -<span class="number">1</span>, y: <span class="number">2 </span>}.as_ref());
+expected
+    .connect(Vec2 { x: -<span class="number">1</span>, y: <span class="number">5 </span>}.as_ref(), Vec2 { x: -<span class="number">1</span>, y: <span class="number">2 </span>}.as_ref());
+expected
+    .connect(Vec2 { x: -<span class="number">1</span>, y: <span class="number">5 </span>}.as_ref(), Vec2 { x: <span class="number">2</span>, y: <span class="number">5 </span>}.as_ref());
+expected
+    .connect(Vec2 { x: <span class="number">2</span>, y: <span class="number">4 </span>}.as_ref(), Vec2 { x: <span class="number">2</span>, y: <span class="number">5 </span>}.as_ref());
 
-<span class="comment">// Test if the graph produced by `make_path` is the expected one we built.</span>
-<span class="macro">assert_eq!</span>(<span class="ident">graph</span>, <span class="ident">expected</span>);</code></pre></div>
-</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="axis/index.html" title="gardiz::axis mod">axis</a></div><div class="item-right docblock-short"><p>Utilites related to the axes of a plane.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="bits/index.html" title="gardiz::bits mod">bits</a></div><div class="item-right docblock-short"><p>A collection of traits related to manipulating integer bits or similar
-operations, such as (absolute) distance.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="coord/index.html" title="gardiz::coord mod">coord</a></div><div class="item-right docblock-short"><p>Utilites related to coordinates.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="direc/index.html" title="gardiz::direc mod">direc</a></div><div class="item-right docblock-short"><p>Utilities related to directions in the plane.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="graph/index.html" title="gardiz::graph mod">graph</a></div><div class="item-right docblock-short"><p>A simple graph of points in a plane.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="map/index.html" title="gardiz::map mod">map</a></div><div class="item-right docblock-short"><p>A map from coordinates/vectors to arbitrary data, optimized for the plane
-(and related items).</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="rect/index.html" title="gardiz::rect mod">rect</a></div><div class="item-right docblock-short"><p>This module exports rectangle utilities.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="set/index.html" title="gardiz::set mod">set</a></div><div class="item-right docblock-short"><p>A set of coordinates/vectors in a plane optimized for the plane (and related
-utilites).</p>
-</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="gardiz" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
-    <script src="../main.js"></script>
-</body></html>
+<span class="comment">// Test if the graph produced by `make_path` is the expected one we built.
+</span><span class="macro">assert_eq!</span>(graph, expected);</code></pre></div>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="axis/index.html" title="mod gardiz::axis">axis</a></div><div class="desc docblock-short">Utilites related to the axes of a plane.</div></li><li><div class="item-name"><a class="mod" href="bits/index.html" title="mod gardiz::bits">bits</a></div><div class="desc docblock-short">A collection of traits related to manipulating integer bits or similar
+operations, such as (absolute) distance.</div></li><li><div class="item-name"><a class="mod" href="coord/index.html" title="mod gardiz::coord">coord</a></div><div class="desc docblock-short">Utilites related to coordinates.</div></li><li><div class="item-name"><a class="mod" href="direc/index.html" title="mod gardiz::direc">direc</a></div><div class="desc docblock-short">Utilities related to directions in the plane.</div></li><li><div class="item-name"><a class="mod" href="graph/index.html" title="mod gardiz::graph">graph</a></div><div class="desc docblock-short">A simple graph of points in a plane.</div></li><li><div class="item-name"><a class="mod" href="map/index.html" title="mod gardiz::map">map</a></div><div class="desc docblock-short">A map from coordinates/vectors to arbitrary data, optimized for the plane
+(and related items).</div></li><li><div class="item-name"><a class="mod" href="rect/index.html" title="mod gardiz::rect">rect</a></div><div class="desc docblock-short">This module exports rectangle utilities.</div></li><li><div class="item-name"><a class="mod" href="set/index.html" title="mod gardiz::set">set</a></div><div class="desc docblock-short">A set of coordinates/vectors in a plane optimized for the plane (and related
+utilites).</div></li></ul></section></div></main></body></html>

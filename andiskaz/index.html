@@ -1,99 +1,79 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="This crate provides basic utilities for writing applications with Terminal User Interface (TUI). It provides an event listener, and it provides a handle to a double buffered screen renderer."><meta name="keywords" content="rust, rustlang, rust-lang, andiskaz"><title>andiskaz - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../andiskaz/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate andiskaz</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.3.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all andiskaz's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="andiskaz" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">andiskaz</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/andiskaz/lib.rs.html#1-93" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>This crate provides basic utilities for writing applications with Terminal
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="This crate provides basic utilities for writing applications with Terminal User Interface (TUI). It provides an event listener, and it provides a handle to a double buffered screen renderer."><title>andiskaz - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="andiskaz" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../andiskaz/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../andiskaz/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Crate andiskaz</a></h2><div class="sidebar-elems"><ul class="block"><li class="version">Version 0.3.0</li><li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#functions">Functions</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">andiskaz</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/andiskaz/lib.rs.html#1-93">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>This crate provides basic utilities for writing applications with Terminal
 User Interface (TUI). It provides an event listener, and it provides a
 handle to a double buffered screen renderer.</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <p>This is an example for a simple Hello, World! application. For more
 examples, see examples folder.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">andiskaz</span>::{
-    <span class="ident">color::Color2</span>,
-    <span class="ident">emergency_restore</span>,
-    <span class="ident">error::Error</span>,
-    <span class="ident">event::Event</span>,
-    <span class="ident">style::Style</span>,
-    <span class="ident">terminal::Terminal</span>,
-    <span class="ident">tstring</span>,
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>andiskaz::{
+    color::Color2,
+    emergency_restore,
+    error::Error,
+    event::Event,
+    style::Style,
+    terminal::Terminal,
+    tstring,
 };
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">panic</span>, <span class="ident">process::exit</span>};
+<span class="kw">use </span>std::{panic, process::exit};
 
-<span class="doccomment">/// Asynchronous main of a tokio project.</span>
-<span class="attribute">#[<span class="ident">tokio::main</span>]</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
-    <span class="comment">// Sets panic hook so we can see the panic even if terminal was being used</span>
-    <span class="comment">// in raw mode.</span>
-    <span class="ident">panic::set_hook</span>(<span class="ident">Box::new</span>(<span class="op">|</span><span class="ident">info</span><span class="op">|</span> {
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">emergency_restore</span>();
-        <span class="macro">eprintln!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">info</span>);
+<span class="doccomment">/// Asynchronous main of a tokio project.
+</span><span class="attr">#[tokio::main]
+</span><span class="kw">async fn </span>main() {
+    <span class="comment">// Sets panic hook so we can see the panic even if terminal was being used
+    // in raw mode.
+    </span>panic::set_hook(Box::new(|info| {
+        <span class="kw">let _ </span>= emergency_restore();
+        <span class="macro">eprintln!</span>(<span class="string">&quot;{}&quot;</span>, info);
     }));
 
-<span class="comment">// Creates a terminal with default settings and runs it.</span>
-    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Terminal::run</span>(<span class="ident">term_main</span>).<span class="kw">await</span>;
-    <span class="comment">// If error, prints it out and exits with bad code.</span>
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(<span class="ident">error</span>)) <span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>) <span class="op">=</span> <span class="ident">result</span> {
-        <span class="macro">eprintln!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">error</span>);
-        <span class="ident">exit</span>(<span class="op">-</span><span class="number">1</span>);
+<span class="comment">// Creates a terminal with default settings and runs it.
+    </span><span class="kw">let </span>result = Terminal::run(term_main).<span class="kw">await</span>;
+    <span class="comment">// If error, prints it out and exits with bad code.
+    </span><span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(error)) | <span class="prelude-val">Err</span>(error) = result {
+        <span class="macro">eprintln!</span>(<span class="string">&quot;{}&quot;</span>, error);
+        exit(-<span class="number">1</span>);
     }
 }
 
-<span class="doccomment">/// The terminal main function.</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">term_main</span>(<span class="kw-2">mut</span> <span class="ident">term</span>: <span class="ident">Terminal</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="comment">// Allocates memory for a string which is safe to be printed.</span>
-    <span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="macro">tstring!</span>[<span class="string">&quot;Hello, World! Press any key...&quot;</span>];
-    <span class="comment">// Style for the string.</span>
-    <span class="kw">let</span> <span class="ident">style</span> <span class="op">=</span> <span class="ident">Style::with_colors</span>(<span class="ident">Color2::default</span>());
-    <span class="comment">// Initial rendering.</span>
-    <span class="ident">term</span>.<span class="ident">lock_now</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">screen</span>().<span class="ident">styled_text</span>(<span class="kw-2">&amp;</span><span class="ident">string</span>, <span class="ident">style</span>);
+<span class="doccomment">/// The terminal main function.
+</span><span class="kw">async fn </span>term_main(<span class="kw-2">mut </span>term: Terminal) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+    <span class="comment">// Allocates memory for a string which is safe to be printed.
+    </span><span class="kw">let </span>string = <span class="macro">tstring!</span>[<span class="string">&quot;Hello, World! Press any key...&quot;</span>];
+    <span class="comment">// Style for the string.
+    </span><span class="kw">let </span>style = Style::with_colors(Color2::default());
+    <span class="comment">// Initial rendering.
+    </span>term.lock_now().<span class="kw">await</span><span class="question-mark">?</span>.screen().styled_text(<span class="kw-2">&amp;</span>string, style);
 
-    <span class="kw">loop</span> {
-        <span class="comment">// Awaits for an event (key pressed, screen resized, etc).</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">session</span> <span class="op">=</span> <span class="ident">term</span>.<span class="ident">listen</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">loop </span>{
+        <span class="comment">// Awaits for an event (key pressed, screen resized, etc).
+        </span><span class="kw">let </span><span class="kw-2">mut </span>session = term.listen().<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="comment">// Gets the event for the current terminal session.</span>
-        <span class="kw">match</span> <span class="ident">session</span>.<span class="ident">event</span>() {
-            <span class="comment">// We expect a key to exit the example.</span>
-            <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="kw">_</span>)) =&gt; <span class="kw">break</span>,
-            <span class="comment">// User resized screen? Then the whole screen was thrown out,</span>
-            <span class="comment">// re-rendering is required.</span>
-            <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="kw">_</span>)) =&gt; {
-                <span class="ident">session</span>.<span class="ident">screen</span>().<span class="ident">styled_text</span>(<span class="kw-2">&amp;</span><span class="ident">string</span>, <span class="ident">style</span>);
+        <span class="comment">// Gets the event for the current terminal session.
+        </span><span class="kw">match </span>session.event() {
+            <span class="comment">// We expect a key to exit the example.
+            </span><span class="prelude-val">Some</span>(Event::Key(<span class="kw">_</span>)) =&gt; <span class="kw">break</span>,
+            <span class="comment">// User resized screen? Then the whole screen was thrown out,
+            // re-rendering is required.
+            </span><span class="prelude-val">Some</span>(Event::Resize(<span class="kw">_</span>)) =&gt; {
+                session.screen().styled_text(<span class="kw-2">&amp;</span>string, style);
             },
-            <span class="comment">// Won&#39;t really happen since we waited for an event.</span>
-            <span class="prelude-val">None</span> =&gt; (),
+            <span class="comment">// Won&#39;t really happen since we waited for an event.
+            </span><span class="prelude-val">None </span>=&gt; (),
         }
     }
 
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
-</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="clipboard/index.html" title="andiskaz::clipboard mod">clipboard</a></div><div class="item-right docblock-short"><p>Provides an interface to system clipboard. Supports Windows, MacOS, Linux
-(X11), Linux (Wayland).</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="color/index.html" title="andiskaz::color mod">color</a></div><div class="item-right docblock-short"><p>This module provides colors that are usable with the terminal handle
-implemented by this library.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="coord/index.html" title="andiskaz::coord mod">coord</a></div><div class="item-right docblock-short"><p>Provides types related to the coordinate system.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="error/index.html" title="andiskaz::error mod">error</a></div><div class="item-right docblock-short"><p>This module exports error types used by the terminal handles.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="event/index.html" title="andiskaz::event mod">event</a></div><div class="item-right docblock-short"><p>This module defines input events of a terminal.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="screen/index.html" title="andiskaz::screen mod">screen</a></div><div class="item-right docblock-short"><p>This module defines screen related utilities.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="string/index.html" title="andiskaz::string mod">string</a></div><div class="item-right docblock-short"><p>This module provides a string type used to be printed to the terminal. It is
-called “<a href="string/struct.TermString.html" title="TermString"><code>TermString</code></a>”. You can use the macro <a href="macro.tstring.html" title="tstring!"><code>tstring!</code></a> to build a
-<a href="string/struct.TermString.html" title="TermString"><code>TermString</code></a> as a shortcut for <a href="string/struct.TermString.html#method.new_lossy" title="TermString::new_lossy"><code>TermString::new_lossy</code></a>.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="style/index.html" title="andiskaz::style mod">style</a></div><div class="item-right docblock-short"><p>This module provides styles for terminal text.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="terminal/index.html" title="andiskaz::terminal mod">terminal</a></div><div class="item-right docblock-short"><p>This crate exports a terminal terminal and its utilites.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="tile/index.html" title="andiskaz::tile mod">tile</a></div><div class="item-right docblock-short"><p>This module exports items related to a “tile” in the screen, i.e. a
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="clipboard/index.html" title="mod andiskaz::clipboard">clipboard</a></div><div class="desc docblock-short">Provides an interface to system clipboard. Supports Windows, MacOS, Linux
+(X11), Linux (Wayland).</div></li><li><div class="item-name"><a class="mod" href="color/index.html" title="mod andiskaz::color">color</a></div><div class="desc docblock-short">This module provides colors that are usable with the terminal handle
+implemented by this library.</div></li><li><div class="item-name"><a class="mod" href="coord/index.html" title="mod andiskaz::coord">coord</a></div><div class="desc docblock-short">Provides types related to the coordinate system.</div></li><li><div class="item-name"><a class="mod" href="error/index.html" title="mod andiskaz::error">error</a></div><div class="desc docblock-short">This module exports error types used by the terminal handles.</div></li><li><div class="item-name"><a class="mod" href="event/index.html" title="mod andiskaz::event">event</a></div><div class="desc docblock-short">This module defines input events of a terminal.</div></li><li><div class="item-name"><a class="mod" href="screen/index.html" title="mod andiskaz::screen">screen</a></div><div class="desc docblock-short">This module defines screen related utilities.</div></li><li><div class="item-name"><a class="mod" href="string/index.html" title="mod andiskaz::string">string</a></div><div class="desc docblock-short">This module provides a string type used to be printed to the terminal. It is
+called “<a href="string/struct.TermString.html" title="struct andiskaz::string::TermString"><code>TermString</code></a>”. You can use the macro <a href="macro.tstring.html" title="macro andiskaz::tstring"><code>tstring!</code></a> to build a
+<a href="string/struct.TermString.html" title="struct andiskaz::string::TermString"><code>TermString</code></a> as a shortcut for <a href="string/struct.TermString.html#method.new_lossy" title="associated function andiskaz::string::TermString::new_lossy"><code>TermString::new_lossy</code></a>.</div></li><li><div class="item-name"><a class="mod" href="style/index.html" title="mod andiskaz::style">style</a></div><div class="desc docblock-short">This module provides styles for terminal text.</div></li><li><div class="item-name"><a class="mod" href="terminal/index.html" title="mod andiskaz::terminal">terminal</a></div><div class="desc docblock-short">This crate exports a terminal terminal and its utilites.</div></li><li><div class="item-name"><a class="mod" href="tile/index.html" title="mod andiskaz::tile">tile</a></div><div class="desc docblock-short">This module exports items related to a “tile” in the screen, i.e. a
 character with foreground and background colors, corresponding to a graphic
-unit.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="ui/index.html" title="andiskaz::ui mod">ui</a></div><div class="item-right docblock-short"><p>UI helpers.</p>
-</div></div></div><h2 id="macros" class="section-header"><a href="#macros">Macros</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.tdebug.html" title="andiskaz::tdebug macro">tdebug</a></div><div class="item-right docblock-short"><p>Writes the given formatting expression into the file <code>debug.txt</code>.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.tstring.html" title="andiskaz::tstring macro">tstring</a></div><div class="item-right docblock-short"><p>Creates a <a href="string/struct.TermString.html"><code>TermString</code></a> from string literal.
+unit.</div></li><li><div class="item-name"><a class="mod" href="ui/index.html" title="mod andiskaz::ui">ui</a></div><div class="desc docblock-short">UI helpers.</div></li></ul><h2 id="macros" class="small-section-header"><a href="#macros">Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="macro" href="macro.tdebug.html" title="macro andiskaz::tdebug">tdebug</a></div><div class="desc docblock-short">Writes the given formatting expression into the file <code>debug.txt</code>.</div></li><li><div class="item-name"><a class="macro" href="macro.tstring.html" title="macro andiskaz::tstring">tstring</a></div><div class="desc docblock-short">Creates a <a href="string/struct.TermString.html" title="struct andiskaz::string::TermString"><code>TermString</code></a> from string literal.
 Currently, invalid string get the unicode replacement character in their
 invalid characters. However, implementation may change to panic in those
-cases.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.tstring_concat.html" title="andiskaz::tstring_concat macro">tstring_concat</a></div><div class="item-right docblock-short"><p>Concatenates various <a href="string/struct.TermString.html"><code>TermString</code></a> or
-<a href="string/struct.TermString.html"><code>TermString</code></a>-like into a new
-<a href="string/struct.TermString.html"><code>TermString</code></a>. It takes everything by reference,
-and it is possible to mix types.</p>
-</div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.emergency_restore.html" title="andiskaz::emergency_restore fn">emergency_restore</a></div><div class="item-right docblock-short"><p>Best-effort function to restore the terminal in a panic.</p>
-</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="andiskaz" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
-    <script src="../main.js"></script>
-</body></html>
+cases.</div></li><li><div class="item-name"><a class="macro" href="macro.tstring_concat.html" title="macro andiskaz::tstring_concat">tstring_concat</a></div><div class="desc docblock-short">Concatenates various <a href="string/struct.TermString.html" title="struct andiskaz::string::TermString"><code>TermString</code></a> or
+<a href="string/struct.TermString.html" title="struct andiskaz::string::TermString"><code>TermString</code></a>-like into a new
+<a href="string/struct.TermString.html" title="struct andiskaz::string::TermString"><code>TermString</code></a>. It takes everything by reference,
+and it is possible to mix types.</div></li></ul><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.emergency_restore.html" title="fn andiskaz::emergency_restore">emergency_restore</a></div><div class="desc docblock-short">Best-effort function to restore the terminal in a panic.</div></li></ul></section></div></main></body></html>

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Clipboard",""],["Primary",""],["X11ClipboardContext",""]],"trait":[["Selection",""]]});
+window.SIDEBAR_ITEMS = {"struct":["Clipboard","Primary","X11ClipboardContext"],"trait":["Selection"]};

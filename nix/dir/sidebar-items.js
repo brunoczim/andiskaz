@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Type",""]],"struct":[["Dir","An open directory."],["Entry","A directory entry, similar to `std::fs::DirEntry`."],["Iter",""]]});
+window.SIDEBAR_ITEMS = {"enum":["Type"],"struct":["Dir","Entry","Iter"]};

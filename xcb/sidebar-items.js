@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["base",""],["big_requests",""],["ffi",""],["render",""],["shape",""],["xc_misc",""],["xfixes",""],["xproto",""]]});
+window.SIDEBAR_ITEMS = {"mod":["base","big_requests","ffi","render","shape","xc_misc","xfixes","xproto"]};

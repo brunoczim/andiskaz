@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["FromStrRadixErr","Error when parsing from string."]],"struct":[["Vec2","Generic 2D vector. It could be a coordinate, it could be size, anything like that."]]});
+window.SIDEBAR_ITEMS = {"enum":["FromStrRadixErr"],"struct":["Vec2"]};

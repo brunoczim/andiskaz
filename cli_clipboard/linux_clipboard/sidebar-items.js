@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["LinuxClipboardContext",""]]});
+window.SIDEBAR_ITEMS = {"struct":["LinuxClipboardContext"]};
