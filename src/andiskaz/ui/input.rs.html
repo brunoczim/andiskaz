@@ -499,6 +499,7 @@
 <a href="#499" id="499">499</a>
 <a href="#500" id="500">500</a>
 <a href="#501" id="501">501</a>
+<a href="#502" id="502">502</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module exports a simple input dialog and related functionality.
 
 </span><span class="kw">use crate</span>::{
@@ -519,7 +520,7 @@
 </span><span class="kw">use </span><span class="kw">crate</span>::clipboard;
 
 <span class="doccomment">/// A selected item/option of the input dialog.
-</span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 </span><span class="kw">pub enum </span>InputDialogItem {
     <span class="doccomment">/// Input text prompt is going to be successful.
     </span><span class="prelude-val">Ok</span>,
@@ -528,6 +529,7 @@
 }
 
 <span class="doccomment">/// A dialog asking for user input, possibly filtered.
+</span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 </span><span class="kw">pub struct </span>InputDialog&lt;F&gt;
 <span class="kw">where
     </span>F: FnMut(char) -&gt; bool,

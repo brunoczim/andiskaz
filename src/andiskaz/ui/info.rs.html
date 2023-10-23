@@ -128,7 +128,7 @@
 };
 
 <span class="doccomment">/// An info dialog, with just an Ok option.
-</span><span class="attr">#[derive(Debug, Clone)]
+</span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 </span><span class="kw">pub struct </span>InfoDialog {
     <span class="doccomment">/// Title to be shown.
     </span><span class="kw">pub </span>title: TermString,
