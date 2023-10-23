@@ -12,7 +12,7 @@ use crate::{
 };
 
 /// An info dialog, with just an Ok option.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct InfoDialog {
     /// Title to be shown.
     pub title: TermString,
