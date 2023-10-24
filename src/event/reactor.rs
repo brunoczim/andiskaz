@@ -36,10 +36,7 @@ impl<'shared> Reactor<'shared> {
 
     /// Executes the pre-"reactor loop" functions, handling the initial screen
     /// size and correctly dealing with the fact that it is invalid, if it is.
-    pub async fn pre_loop(
-        &mut self,
-        initial_size: Vec2,
-    ) -> Result<(), Error> {
+    pub async fn pre_loop(&mut self, initial_size: Vec2) -> Result<(), Error> {
         let mut screen = self.shared.screen().lock().await;
         let min_size = screen.min_size();
         if initial_size.x < min_size.x || initial_size.y < min_size.y {
@@ -125,7 +122,7 @@ impl<'shared> Reactor<'shared> {
             }
         });
 
-        result.map_err(Error::from_crossterm)
+        result.map_err(Into::into)
     }
 
     /// Sends an event through the channel, so that the listener receives it.

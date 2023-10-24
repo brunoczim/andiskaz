@@ -1,6 +1,5 @@
 //! This module exports error types used by the terminal handles.
 
-use crossterm::ErrorKind as CrosstermError;
 use std::{
     error::Error as ErrorTrait,
     fmt,
@@ -99,17 +98,6 @@ impl ErrorKind {
             ErrorKind::Custom(error) => &**error,
         }
     }
-
-    /// Converts a Crossterm error to Andiskaz error kind.
-    pub(crate) fn from_crossterm(error: CrosstermError) -> Self {
-        match error {
-            CrosstermError::IoError(error) => ErrorKind::IO(error),
-            CrosstermError::FmtError(error) => ErrorKind::Fmt(error),
-            CrosstermError::Utf8Error(error) => ErrorKind::Utf8(error),
-            CrosstermError::ParseIntError(error) => ErrorKind::ParseInt(error),
-            error => ErrorKind::Custom(Box::new(error)),
-        }
-    }
 }
 
 impl From<AlreadyRunning> for ErrorKind {
@@ -188,11 +176,6 @@ impl Error {
     /// Returns the kind of the error.
     pub fn kind(&self) -> &ErrorKind {
         &self.kind
-    }
-
-    /// Converts a Crossterm error to Andiskaz error.
-    pub(crate) fn from_crossterm(error: CrosstermError) -> Self {
-        Self::new(ErrorKind::from_crossterm(error))
     }
 }
 
