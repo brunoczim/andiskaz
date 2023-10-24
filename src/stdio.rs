@@ -4,7 +4,6 @@
 use crossterm::Command;
 use std::{
     fmt,
-    fmt::Write,
     pin::Pin,
     task::{Context, Poll},
 };
@@ -106,7 +105,7 @@ pub fn save_screen(buf: &mut String) -> fmt::Result {
 /// Saves the screen previous the application.
 #[cfg(unix)]
 pub fn save_screen(buf: &mut String) -> fmt::Result {
-    write!(buf, "{}", crossterm::terminal::EnterAlternateScreen.ansi_code())?;
+    crossterm::terminal::EnterAlternateScreen.write_ansi(buf)?;
     Ok(())
 }
 
@@ -114,11 +113,7 @@ pub fn save_screen(buf: &mut String) -> fmt::Result {
 #[cfg(windows)]
 pub fn restore_screen(buf: &mut String) -> fmt::Result {
     if crossterm::terminal::LeaveAlternateScreen.is_ansi_code_supported() {
-        write!(
-            buf,
-            "{}",
-            crossterm::terminal::LeaveAlternateScreen.ansi_code()
-        )?;
+        crossterm::terminal::LeaveAlternateScreen.write_ansi(buf)?;
     }
     Ok(())
 }
@@ -126,7 +121,7 @@ pub fn restore_screen(buf: &mut String) -> fmt::Result {
 /// Restores the screen previous the application.
 #[cfg(unix)]
 pub fn restore_screen(buf: &mut String) -> fmt::Result {
-    write!(buf, "{}", crossterm::terminal::LeaveAlternateScreen.ansi_code())?;
+    crossterm::terminal::LeaveAlternateScreen.write_ansi(buf)?;
     Ok(())
 }
 
@@ -162,5 +157,7 @@ pub fn emergency_restore() {
         "{}",
         crossterm::style::SetForegroundColor(crossterm::style::Color::Reset)
     );
-    println!("{}", crossterm::terminal::LeaveAlternateScreen.ansi_code());
+    let mut buf = String::new();
+    let _ = crossterm::terminal::LeaveAlternateScreen.write_ansi(&mut buf);
+    println!("{}", buf);
 }

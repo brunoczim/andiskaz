@@ -173,11 +173,10 @@ impl Builder {
 
     /// Finds the initial size of the terminal.
     fn initial_size(&self) -> Result<Vec2, Error> {
-        let size_res = task::block_in_place(|| {
+        let (width, height) = task::block_in_place(|| {
             crossterm::terminal::enable_raw_mode()?;
             crossterm::terminal::size()
-        });
-        let (width, height) = size_res.map_err(Error::from_crossterm)?;
+        })?;
         Ok(Vec2 {
             y: coord::from_crossterm(height),
             x: coord::from_crossterm(width),

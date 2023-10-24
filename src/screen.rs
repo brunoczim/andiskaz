@@ -102,8 +102,7 @@ impl ScreenData {
 
     /// Asynchronous cleanup. It is preferred to call this before dropping.
     pub async fn cleanup(&self) -> Result<(), Error> {
-        task::block_in_place(|| crossterm::terminal::disable_raw_mode())
-            .map_err(Error::from_crossterm)?;
+        task::block_in_place(|| crossterm::terminal::disable_raw_mode())?;
         let mut buf = String::new();
         write!(buf, "{}", crossterm::cursor::Show)?;
         restore_screen(&mut buf)?;
