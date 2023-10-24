@@ -42,8 +42,11 @@ pub struct ClipboardError {
 
 #[cfg(feature = "clipboard")]
 impl ClipboardError {
-    pub(crate) fn new(inner: anyhow::Error) -> Self {
-        Self { inner }
+    pub(crate) fn new<E>(inner: E) -> Self
+    where
+        E: fmt::Display,
+    {
+        Self { inner: anyhow::anyhow!("{}", inner) }
     }
 }
 
