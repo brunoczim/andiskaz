@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/petgraph-0.5.1/src/graph_impl/stable_graph/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="petgraph" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../../petgraph/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/petgraph-0.6.4/src/graph_impl/stable_graph/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="petgraph" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../../petgraph/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1815,6 +1815,292 @@
 <a href="#1815" id="1815">1815</a>
 <a href="#1816" id="1816">1816</a>
 <a href="#1817" id="1817">1817</a>
+<a href="#1818" id="1818">1818</a>
+<a href="#1819" id="1819">1819</a>
+<a href="#1820" id="1820">1820</a>
+<a href="#1821" id="1821">1821</a>
+<a href="#1822" id="1822">1822</a>
+<a href="#1823" id="1823">1823</a>
+<a href="#1824" id="1824">1824</a>
+<a href="#1825" id="1825">1825</a>
+<a href="#1826" id="1826">1826</a>
+<a href="#1827" id="1827">1827</a>
+<a href="#1828" id="1828">1828</a>
+<a href="#1829" id="1829">1829</a>
+<a href="#1830" id="1830">1830</a>
+<a href="#1831" id="1831">1831</a>
+<a href="#1832" id="1832">1832</a>
+<a href="#1833" id="1833">1833</a>
+<a href="#1834" id="1834">1834</a>
+<a href="#1835" id="1835">1835</a>
+<a href="#1836" id="1836">1836</a>
+<a href="#1837" id="1837">1837</a>
+<a href="#1838" id="1838">1838</a>
+<a href="#1839" id="1839">1839</a>
+<a href="#1840" id="1840">1840</a>
+<a href="#1841" id="1841">1841</a>
+<a href="#1842" id="1842">1842</a>
+<a href="#1843" id="1843">1843</a>
+<a href="#1844" id="1844">1844</a>
+<a href="#1845" id="1845">1845</a>
+<a href="#1846" id="1846">1846</a>
+<a href="#1847" id="1847">1847</a>
+<a href="#1848" id="1848">1848</a>
+<a href="#1849" id="1849">1849</a>
+<a href="#1850" id="1850">1850</a>
+<a href="#1851" id="1851">1851</a>
+<a href="#1852" id="1852">1852</a>
+<a href="#1853" id="1853">1853</a>
+<a href="#1854" id="1854">1854</a>
+<a href="#1855" id="1855">1855</a>
+<a href="#1856" id="1856">1856</a>
+<a href="#1857" id="1857">1857</a>
+<a href="#1858" id="1858">1858</a>
+<a href="#1859" id="1859">1859</a>
+<a href="#1860" id="1860">1860</a>
+<a href="#1861" id="1861">1861</a>
+<a href="#1862" id="1862">1862</a>
+<a href="#1863" id="1863">1863</a>
+<a href="#1864" id="1864">1864</a>
+<a href="#1865" id="1865">1865</a>
+<a href="#1866" id="1866">1866</a>
+<a href="#1867" id="1867">1867</a>
+<a href="#1868" id="1868">1868</a>
+<a href="#1869" id="1869">1869</a>
+<a href="#1870" id="1870">1870</a>
+<a href="#1871" id="1871">1871</a>
+<a href="#1872" id="1872">1872</a>
+<a href="#1873" id="1873">1873</a>
+<a href="#1874" id="1874">1874</a>
+<a href="#1875" id="1875">1875</a>
+<a href="#1876" id="1876">1876</a>
+<a href="#1877" id="1877">1877</a>
+<a href="#1878" id="1878">1878</a>
+<a href="#1879" id="1879">1879</a>
+<a href="#1880" id="1880">1880</a>
+<a href="#1881" id="1881">1881</a>
+<a href="#1882" id="1882">1882</a>
+<a href="#1883" id="1883">1883</a>
+<a href="#1884" id="1884">1884</a>
+<a href="#1885" id="1885">1885</a>
+<a href="#1886" id="1886">1886</a>
+<a href="#1887" id="1887">1887</a>
+<a href="#1888" id="1888">1888</a>
+<a href="#1889" id="1889">1889</a>
+<a href="#1890" id="1890">1890</a>
+<a href="#1891" id="1891">1891</a>
+<a href="#1892" id="1892">1892</a>
+<a href="#1893" id="1893">1893</a>
+<a href="#1894" id="1894">1894</a>
+<a href="#1895" id="1895">1895</a>
+<a href="#1896" id="1896">1896</a>
+<a href="#1897" id="1897">1897</a>
+<a href="#1898" id="1898">1898</a>
+<a href="#1899" id="1899">1899</a>
+<a href="#1900" id="1900">1900</a>
+<a href="#1901" id="1901">1901</a>
+<a href="#1902" id="1902">1902</a>
+<a href="#1903" id="1903">1903</a>
+<a href="#1904" id="1904">1904</a>
+<a href="#1905" id="1905">1905</a>
+<a href="#1906" id="1906">1906</a>
+<a href="#1907" id="1907">1907</a>
+<a href="#1908" id="1908">1908</a>
+<a href="#1909" id="1909">1909</a>
+<a href="#1910" id="1910">1910</a>
+<a href="#1911" id="1911">1911</a>
+<a href="#1912" id="1912">1912</a>
+<a href="#1913" id="1913">1913</a>
+<a href="#1914" id="1914">1914</a>
+<a href="#1915" id="1915">1915</a>
+<a href="#1916" id="1916">1916</a>
+<a href="#1917" id="1917">1917</a>
+<a href="#1918" id="1918">1918</a>
+<a href="#1919" id="1919">1919</a>
+<a href="#1920" id="1920">1920</a>
+<a href="#1921" id="1921">1921</a>
+<a href="#1922" id="1922">1922</a>
+<a href="#1923" id="1923">1923</a>
+<a href="#1924" id="1924">1924</a>
+<a href="#1925" id="1925">1925</a>
+<a href="#1926" id="1926">1926</a>
+<a href="#1927" id="1927">1927</a>
+<a href="#1928" id="1928">1928</a>
+<a href="#1929" id="1929">1929</a>
+<a href="#1930" id="1930">1930</a>
+<a href="#1931" id="1931">1931</a>
+<a href="#1932" id="1932">1932</a>
+<a href="#1933" id="1933">1933</a>
+<a href="#1934" id="1934">1934</a>
+<a href="#1935" id="1935">1935</a>
+<a href="#1936" id="1936">1936</a>
+<a href="#1937" id="1937">1937</a>
+<a href="#1938" id="1938">1938</a>
+<a href="#1939" id="1939">1939</a>
+<a href="#1940" id="1940">1940</a>
+<a href="#1941" id="1941">1941</a>
+<a href="#1942" id="1942">1942</a>
+<a href="#1943" id="1943">1943</a>
+<a href="#1944" id="1944">1944</a>
+<a href="#1945" id="1945">1945</a>
+<a href="#1946" id="1946">1946</a>
+<a href="#1947" id="1947">1947</a>
+<a href="#1948" id="1948">1948</a>
+<a href="#1949" id="1949">1949</a>
+<a href="#1950" id="1950">1950</a>
+<a href="#1951" id="1951">1951</a>
+<a href="#1952" id="1952">1952</a>
+<a href="#1953" id="1953">1953</a>
+<a href="#1954" id="1954">1954</a>
+<a href="#1955" id="1955">1955</a>
+<a href="#1956" id="1956">1956</a>
+<a href="#1957" id="1957">1957</a>
+<a href="#1958" id="1958">1958</a>
+<a href="#1959" id="1959">1959</a>
+<a href="#1960" id="1960">1960</a>
+<a href="#1961" id="1961">1961</a>
+<a href="#1962" id="1962">1962</a>
+<a href="#1963" id="1963">1963</a>
+<a href="#1964" id="1964">1964</a>
+<a href="#1965" id="1965">1965</a>
+<a href="#1966" id="1966">1966</a>
+<a href="#1967" id="1967">1967</a>
+<a href="#1968" id="1968">1968</a>
+<a href="#1969" id="1969">1969</a>
+<a href="#1970" id="1970">1970</a>
+<a href="#1971" id="1971">1971</a>
+<a href="#1972" id="1972">1972</a>
+<a href="#1973" id="1973">1973</a>
+<a href="#1974" id="1974">1974</a>
+<a href="#1975" id="1975">1975</a>
+<a href="#1976" id="1976">1976</a>
+<a href="#1977" id="1977">1977</a>
+<a href="#1978" id="1978">1978</a>
+<a href="#1979" id="1979">1979</a>
+<a href="#1980" id="1980">1980</a>
+<a href="#1981" id="1981">1981</a>
+<a href="#1982" id="1982">1982</a>
+<a href="#1983" id="1983">1983</a>
+<a href="#1984" id="1984">1984</a>
+<a href="#1985" id="1985">1985</a>
+<a href="#1986" id="1986">1986</a>
+<a href="#1987" id="1987">1987</a>
+<a href="#1988" id="1988">1988</a>
+<a href="#1989" id="1989">1989</a>
+<a href="#1990" id="1990">1990</a>
+<a href="#1991" id="1991">1991</a>
+<a href="#1992" id="1992">1992</a>
+<a href="#1993" id="1993">1993</a>
+<a href="#1994" id="1994">1994</a>
+<a href="#1995" id="1995">1995</a>
+<a href="#1996" id="1996">1996</a>
+<a href="#1997" id="1997">1997</a>
+<a href="#1998" id="1998">1998</a>
+<a href="#1999" id="1999">1999</a>
+<a href="#2000" id="2000">2000</a>
+<a href="#2001" id="2001">2001</a>
+<a href="#2002" id="2002">2002</a>
+<a href="#2003" id="2003">2003</a>
+<a href="#2004" id="2004">2004</a>
+<a href="#2005" id="2005">2005</a>
+<a href="#2006" id="2006">2006</a>
+<a href="#2007" id="2007">2007</a>
+<a href="#2008" id="2008">2008</a>
+<a href="#2009" id="2009">2009</a>
+<a href="#2010" id="2010">2010</a>
+<a href="#2011" id="2011">2011</a>
+<a href="#2012" id="2012">2012</a>
+<a href="#2013" id="2013">2013</a>
+<a href="#2014" id="2014">2014</a>
+<a href="#2015" id="2015">2015</a>
+<a href="#2016" id="2016">2016</a>
+<a href="#2017" id="2017">2017</a>
+<a href="#2018" id="2018">2018</a>
+<a href="#2019" id="2019">2019</a>
+<a href="#2020" id="2020">2020</a>
+<a href="#2021" id="2021">2021</a>
+<a href="#2022" id="2022">2022</a>
+<a href="#2023" id="2023">2023</a>
+<a href="#2024" id="2024">2024</a>
+<a href="#2025" id="2025">2025</a>
+<a href="#2026" id="2026">2026</a>
+<a href="#2027" id="2027">2027</a>
+<a href="#2028" id="2028">2028</a>
+<a href="#2029" id="2029">2029</a>
+<a href="#2030" id="2030">2030</a>
+<a href="#2031" id="2031">2031</a>
+<a href="#2032" id="2032">2032</a>
+<a href="#2033" id="2033">2033</a>
+<a href="#2034" id="2034">2034</a>
+<a href="#2035" id="2035">2035</a>
+<a href="#2036" id="2036">2036</a>
+<a href="#2037" id="2037">2037</a>
+<a href="#2038" id="2038">2038</a>
+<a href="#2039" id="2039">2039</a>
+<a href="#2040" id="2040">2040</a>
+<a href="#2041" id="2041">2041</a>
+<a href="#2042" id="2042">2042</a>
+<a href="#2043" id="2043">2043</a>
+<a href="#2044" id="2044">2044</a>
+<a href="#2045" id="2045">2045</a>
+<a href="#2046" id="2046">2046</a>
+<a href="#2047" id="2047">2047</a>
+<a href="#2048" id="2048">2048</a>
+<a href="#2049" id="2049">2049</a>
+<a href="#2050" id="2050">2050</a>
+<a href="#2051" id="2051">2051</a>
+<a href="#2052" id="2052">2052</a>
+<a href="#2053" id="2053">2053</a>
+<a href="#2054" id="2054">2054</a>
+<a href="#2055" id="2055">2055</a>
+<a href="#2056" id="2056">2056</a>
+<a href="#2057" id="2057">2057</a>
+<a href="#2058" id="2058">2058</a>
+<a href="#2059" id="2059">2059</a>
+<a href="#2060" id="2060">2060</a>
+<a href="#2061" id="2061">2061</a>
+<a href="#2062" id="2062">2062</a>
+<a href="#2063" id="2063">2063</a>
+<a href="#2064" id="2064">2064</a>
+<a href="#2065" id="2065">2065</a>
+<a href="#2066" id="2066">2066</a>
+<a href="#2067" id="2067">2067</a>
+<a href="#2068" id="2068">2068</a>
+<a href="#2069" id="2069">2069</a>
+<a href="#2070" id="2070">2070</a>
+<a href="#2071" id="2071">2071</a>
+<a href="#2072" id="2072">2072</a>
+<a href="#2073" id="2073">2073</a>
+<a href="#2074" id="2074">2074</a>
+<a href="#2075" id="2075">2075</a>
+<a href="#2076" id="2076">2076</a>
+<a href="#2077" id="2077">2077</a>
+<a href="#2078" id="2078">2078</a>
+<a href="#2079" id="2079">2079</a>
+<a href="#2080" id="2080">2080</a>
+<a href="#2081" id="2081">2081</a>
+<a href="#2082" id="2082">2082</a>
+<a href="#2083" id="2083">2083</a>
+<a href="#2084" id="2084">2084</a>
+<a href="#2085" id="2085">2085</a>
+<a href="#2086" id="2086">2086</a>
+<a href="#2087" id="2087">2087</a>
+<a href="#2088" id="2088">2088</a>
+<a href="#2089" id="2089">2089</a>
+<a href="#2090" id="2090">2090</a>
+<a href="#2091" id="2091">2091</a>
+<a href="#2092" id="2092">2092</a>
+<a href="#2093" id="2093">2093</a>
+<a href="#2094" id="2094">2094</a>
+<a href="#2095" id="2095">2095</a>
+<a href="#2096" id="2096">2096</a>
+<a href="#2097" id="2097">2097</a>
+<a href="#2098" id="2098">2098</a>
+<a href="#2099" id="2099">2099</a>
+<a href="#2100" id="2100">2100</a>
+<a href="#2101" id="2101">2101</a>
+<a href="#2102" id="2102">2102</a>
+<a href="#2103" id="2103">2103</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! `StableGraph` keeps indices stable across removals.
 //!
 //! Depends on `feature = &quot;stable_graph&quot;`.
@@ -1829,15 +2115,16 @@
 <span class="kw">use </span>std::ops::{Index, IndexMut};
 <span class="kw">use </span>std::slice;
 
+<span class="kw">use </span>fixedbitset::FixedBitSet;
+
 <span class="kw">use crate</span>::{Directed, Direction, EdgeType, Graph, Incoming, Outgoing, Undirected};
 
 <span class="kw">use </span><span class="kw">crate</span>::iter_format::{DebugMap, IterFormatExt, NoPretty};
 <span class="kw">use </span><span class="kw">crate</span>::iter_utils::IterUtilsExt;
 
 <span class="kw">use super</span>::{index_twice, Edge, Frozen, Node, Pair, DIRECTIONS};
-<span class="kw">use </span><span class="kw">crate</span>::visit::{
-    EdgeRef, IntoEdgeReferences, IntoEdges, IntoEdgesDirected, IntoNodeReferences, NodeIndexable,
-};
+<span class="kw">use </span><span class="kw">crate</span>::visit;
+<span class="kw">use </span><span class="kw">crate</span>::visit::{EdgeIndexable, EdgeRef, IntoEdgeReferences, NodeIndexable};
 <span class="kw">use </span><span class="kw">crate</span>::IntoWeightedEdge;
 
 <span class="comment">// reexport those things that are shared with Graph
@@ -1895,10 +2182,14 @@
     <span class="comment">// node and edge free lists (both work the same way)
     //
     // free_node, if not NodeIndex::end(), points to a node index
-    // that is vacant (after a deletion).  The next item in the list is kept in
-    // that Node&#39;s Node.next[0] field. For Node, it&#39;s a node index stored
-    // in an EdgeIndex location, and the _into_edge()/_into_node() methods
-    // convert.
+    // that is vacant (after a deletion).
+    // The free nodes form a doubly linked list using the fields Node.next[0]
+    // for forward references and Node.next[1] for backwards ones.
+    // The nodes are stored as EdgeIndex, and the _into_edge()/_into_node()
+    // methods convert.
+    // free_edge, if not EdgeIndex::end(), points to a free edge.
+    // The edges only form a singly linked list using Edge.next[0] to store
+    // the forward reference.
     </span>free_node: NodeIndex&lt;Ix&gt;,
     free_edge: EdgeIndex&lt;Ix&gt;,
 }
@@ -2009,6 +2300,20 @@
         <span class="self">self</span>.g.capacity()
     }
 
+    <span class="doccomment">/// Reverse the direction of all edges
+    </span><span class="kw">pub fn </span>reverse(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="comment">// swap edge endpoints,
+        // edge incoming / outgoing lists,
+        // node incoming / outgoing lists
+        </span><span class="kw">for </span>edge <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.g.edges {
+            edge.node.swap(<span class="number">0</span>, <span class="number">1</span>);
+            edge.next.swap(<span class="number">0</span>, <span class="number">1</span>);
+        }
+        <span class="kw">for </span>node <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.g.nodes {
+            node.next.swap(<span class="number">0</span>, <span class="number">1</span>);
+        }
+    }
+
     <span class="doccomment">/// Remove all nodes and edges
     </span><span class="kw">pub fn </span>clear(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.node_count = <span class="number">0</span>;
@@ -2060,19 +2365,14 @@
     /// **Panics** if the `StableGraph` is at the maximum number of nodes for
     /// its index type.
     </span><span class="kw">pub fn </span>add_node(<span class="kw-2">&amp;mut </span><span class="self">self</span>, weight: N) -&gt; NodeIndex&lt;Ix&gt; {
-        <span class="kw">let </span>index = <span class="kw">if </span><span class="self">self</span>.free_node != NodeIndex::end() {
+        <span class="kw">if </span><span class="self">self</span>.free_node != NodeIndex::end() {
             <span class="kw">let </span>node_idx = <span class="self">self</span>.free_node;
-            <span class="kw">let </span>node_slot = <span class="kw-2">&amp;mut </span><span class="self">self</span>.g.nodes[node_idx.index()];
-            <span class="kw">let </span>_old = replace(<span class="kw-2">&amp;mut </span>node_slot.weight, <span class="prelude-val">Some</span>(weight));
-            <span class="macro">debug_assert!</span>(_old.is_none());
-            <span class="self">self</span>.free_node = node_slot.next[<span class="number">0</span>]._into_node();
-            node_slot.next[<span class="number">0</span>] = EdgeIndex::end();
+            <span class="self">self</span>.occupy_vacant_node(node_idx, weight);
             node_idx
         } <span class="kw">else </span>{
+            <span class="self">self</span>.node_count += <span class="number">1</span>;
             <span class="self">self</span>.g.add_node(<span class="prelude-val">Some</span>(weight))
-        };
-        <span class="self">self</span>.node_count += <span class="number">1</span>;
-        index
+        }
     }
 
     <span class="doccomment">/// free_node: Which free list to update for the vacancy
@@ -2080,7 +2380,10 @@
         <span class="kw">let </span>node_idx = <span class="self">self</span>.g.add_node(<span class="prelude-val">None</span>);
         <span class="comment">// link the free list
         </span><span class="kw">let </span>node_slot = <span class="kw-2">&amp;mut </span><span class="self">self</span>.g.nodes[node_idx.index()];
-        node_slot.next[<span class="number">0</span>] = free_node._into_edge();
+        node_slot.next = [free_node._into_edge(), EdgeIndex::end()];
+        <span class="kw">if </span><span class="kw-2">*</span>free_node != NodeIndex::end() {
+            <span class="self">self</span>.g.nodes[free_node.index()].next[<span class="number">1</span>] = node_idx._into_edge();
+        }
         <span class="kw-2">*</span>free_node = node_idx;
     }
 
@@ -2115,6 +2418,9 @@
         <span class="comment">//let node_weight = replace(&amp;mut self.g.nodes[a.index()].weight, Entry::Empty(self.free_node));
         //self.g.nodes[a.index()].next = [EdgeIndex::end(), EdgeIndex::end()];
         </span>node_slot.next = [<span class="self">self</span>.free_node._into_edge(), EdgeIndex::end()];
+        <span class="kw">if </span><span class="self">self</span>.free_node != NodeIndex::end() {
+            <span class="self">self</span>.g.nodes[<span class="self">self</span>.free_node.index()].next[<span class="number">1</span>] = a._into_edge();
+        }
         <span class="self">self</span>.free_node = a;
         <span class="self">self</span>.node_count -= <span class="number">1</span>;
 
@@ -2291,6 +2597,15 @@
         }
     }
 
+    <span class="doccomment">/// Return an iterator yielding immutable access to all node weights.
+    ///
+    /// The order in which weights are yielded matches the order of their node
+    /// indices.
+    </span><span class="kw">pub fn </span>node_weights(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>N&gt; {
+        <span class="self">self</span>.g
+            .node_weights()
+            .filter_map(|maybe_node| maybe_node.as_ref())
+    }
     <span class="doccomment">/// Return an iterator yielding mutable access to all node weights.
     ///
     /// The order in which weights are yielded matches the order of their node
@@ -2298,7 +2613,7 @@
     </span><span class="kw">pub fn </span>node_weights_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;mut </span>N&gt; {
         <span class="self">self</span>.g
             .node_weights_mut()
-            .flat_map(|maybe_node| maybe_node.iter_mut())
+            .filter_map(|maybe_node| maybe_node.as_mut())
     }
 
     <span class="doccomment">/// Return an iterator over the node indices of the graph
@@ -2328,6 +2643,15 @@
         }
     }
 
+    <span class="doccomment">/// Return an iterator yielding immutable access to all edge weights.
+    ///
+    /// The order in which weights are yielded matches the order of their edge
+    /// indices.
+    </span><span class="kw">pub fn </span>edge_weights(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>E&gt; {
+        <span class="self">self</span>.g
+            .edge_weights()
+            .filter_map(|maybe_edge| maybe_edge.as_ref())
+    }
     <span class="doccomment">/// Return an iterator yielding mutable access to all edge weights.
     ///
     /// The order in which weights are yielded matches the order of their edge
@@ -2335,7 +2659,7 @@
     </span><span class="kw">pub fn </span>edge_weights_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;mut </span>E&gt; {
         <span class="self">self</span>.g
             .edge_weights_mut()
-            .flat_map(|maybe_edge| maybe_edge.iter_mut())
+            .filter_map(|maybe_edge| maybe_edge.as_mut())
     }
 
     <span class="doccomment">/// Access the source and target nodes for `e`.
@@ -2350,6 +2674,24 @@
     </span><span class="kw">pub fn </span>edge_indices(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; EdgeIndices&lt;E, Ix&gt; {
         EdgeIndices {
             iter: enumerate(<span class="self">self</span>.raw_edges()),
+        }
+    }
+
+    <span class="doccomment">/// Return an iterator over all the edges connecting `a` and `b`.
+    ///
+    /// - `Directed`: Outgoing edges from `a`.
+    /// - `Undirected`: All edges connected to `a`.
+    ///
+    /// Iterator element type is `EdgeReference&lt;E, Ix&gt;`.
+    </span><span class="kw">pub fn </span>edges_connecting(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        a: NodeIndex&lt;Ix&gt;,
+        b: NodeIndex&lt;Ix&gt;,
+    ) -&gt; EdgesConnecting&lt;E, Ty, Ix&gt; {
+        EdgesConnecting {
+            target_node: b,
+            edges: <span class="self">self</span>.edges_directed(a, Direction::Outgoing),
+            ty: PhantomData,
         }
     }
 
@@ -2734,10 +3076,8 @@
         <span class="kw">for </span>elt <span class="kw">in </span>iter {
             <span class="kw">let </span>(source, target, weight) = elt.into_weighted_edge();
             <span class="kw">let </span>(source, target) = (source.into(), target.into());
-            <span class="kw">let </span>nx = cmp::max(source, target);
-            <span class="kw">while </span>nx.index() &gt;= <span class="self">self</span>.node_count() {
-                <span class="self">self</span>.add_node(N::default());
-            }
+            <span class="self">self</span>.ensure_node_exists(source);
+            <span class="self">self</span>.ensure_node_exists(target);
             <span class="self">self</span>.add_edge(source, target, weight);
         }
     }
@@ -2753,10 +3093,42 @@
         <span class="self">self</span>.g.raw_edges()
     }
 
-    <span class="kw">fn </span>edge_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
-        <span class="self">self</span>.edge_references()
-            .next_back()
-            .map_or(<span class="number">0</span>, |edge| edge.id().index() + <span class="number">1</span>)
+    <span class="doccomment">/// Create a new node using a vacant position,
+    /// updating the free nodes doubly linked list.
+    </span><span class="kw">fn </span>occupy_vacant_node(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node_idx: NodeIndex&lt;Ix&gt;, weight: N) {
+        <span class="kw">let </span>node_slot = <span class="kw-2">&amp;mut </span><span class="self">self</span>.g.nodes[node_idx.index()];
+        <span class="kw">let </span>_old = replace(<span class="kw-2">&amp;mut </span>node_slot.weight, <span class="prelude-val">Some</span>(weight));
+        <span class="macro">debug_assert!</span>(_old.is_none());
+        <span class="kw">let </span>previous_node = node_slot.next[<span class="number">1</span>];
+        <span class="kw">let </span>next_node = node_slot.next[<span class="number">0</span>];
+        node_slot.next = [EdgeIndex::end(), EdgeIndex::end()];
+        <span class="kw">if </span>previous_node != EdgeIndex::end() {
+            <span class="self">self</span>.g.nodes[previous_node.index()].next[<span class="number">0</span>] = next_node;
+        }
+        <span class="kw">if </span>next_node != EdgeIndex::end() {
+            <span class="self">self</span>.g.nodes[next_node.index()].next[<span class="number">1</span>] = previous_node;
+        }
+        <span class="kw">if </span><span class="self">self</span>.free_node == node_idx {
+            <span class="self">self</span>.free_node = next_node._into_node();
+        }
+        <span class="self">self</span>.node_count += <span class="number">1</span>;
+    }
+
+    <span class="doccomment">/// Create the node if it does not exist,
+    /// adding vacant nodes for padding if needed.
+    </span><span class="kw">fn </span>ensure_node_exists(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node_ix: NodeIndex&lt;Ix&gt;)
+    <span class="kw">where
+        </span>N: Default,
+    {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="prelude-val">Some</span>(<span class="kw">_</span>)) = <span class="self">self</span>.g.node_weight(node_ix) {
+            <span class="kw">return</span>;
+        }
+        <span class="kw">while </span>node_ix.index() &gt;= <span class="self">self</span>.g.node_count() {
+            <span class="kw">let </span><span class="kw-2">mut </span>free_node = <span class="self">self</span>.free_node;
+            <span class="self">self</span>.add_vacant_node(<span class="kw-2">&amp;mut </span>free_node);
+            <span class="self">self</span>.free_node = free_node;
+        }
+        <span class="self">self</span>.occupy_vacant_node(node_ix, N::default());
     }
 
     <span class="attr">#[cfg(feature = <span class="string">&quot;serde-1&quot;</span>)]
@@ -2766,12 +3138,16 @@
         </span><span class="self">self</span>.node_count = <span class="number">0</span>;
         <span class="self">self</span>.edge_count = <span class="number">0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>free_node = NodeIndex::end();
-        <span class="kw">for </span>(node_index, node) <span class="kw">in </span>enumerate(<span class="kw-2">&amp;mut </span><span class="self">self</span>.g.nodes) {
+        <span class="kw">for </span>node_index <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.g.node_count() {
+            <span class="kw">let </span>node = <span class="kw-2">&amp;mut </span><span class="self">self</span>.g.nodes[node_index];
             <span class="kw">if </span>node.weight.is_some() {
                 <span class="self">self</span>.node_count += <span class="number">1</span>;
             } <span class="kw">else </span>{
                 <span class="comment">// free node
                 </span>node.next = [free_node._into_edge(), EdgeIndex::end()];
+                <span class="kw">if </span>free_node != NodeIndex::end() {
+                    <span class="self">self</span>.g.nodes[free_node.index()].next[<span class="number">1</span>] = EdgeIndex::new(node_index);
+                }
                 free_node = NodeIndex::new(node_index);
             }
         }
@@ -2812,12 +3188,16 @@
     </span><span class="kw">fn </span>check_free_lists(<span class="kw-2">&amp;</span><span class="self">self</span>) {}
     <span class="attr">#[cfg(debug_assertions)]
     </span><span class="comment">// internal method to debug check the free lists (linked lists)
+    // For the nodes, also check the backpointers of the doubly linked list.
     </span><span class="kw">fn </span>check_free_lists(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let </span><span class="kw-2">mut </span>free_node = <span class="self">self</span>.free_node;
+        <span class="kw">let </span><span class="kw-2">mut </span>prev_free_node = NodeIndex::end();
         <span class="kw">let </span><span class="kw-2">mut </span>free_node_len = <span class="number">0</span>;
         <span class="kw">while </span>free_node != NodeIndex::end() {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(n) = <span class="self">self</span>.g.nodes.get(free_node.index()) {
                 <span class="kw">if </span>n.weight.is_none() {
+                    <span class="macro">debug_assert_eq!</span>(n.next[<span class="number">1</span>]._into_node(), prev_free_node);
+                    prev_free_node = free_node;
                     free_node = n.next[<span class="number">0</span>]._into_node();
                     free_node_len += <span class="number">1</span>;
                     <span class="kw">continue</span>;
@@ -3018,21 +3398,8 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N, E, Ty, Ix&gt; IntoNodeReferences <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
-<span class="kw">where
-    </span>Ty: EdgeType,
-    Ix: IndexType,
-{
-    <span class="kw">type </span>NodeRef = (NodeIndex&lt;Ix&gt;, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>N);
-    <span class="kw">type </span>NodeReferences = NodeReferences&lt;<span class="lifetime">&#39;a</span>, N, Ix&gt;;
-    <span class="kw">fn </span>node_references(<span class="self">self</span>) -&gt; <span class="self">Self</span>::NodeReferences {
-        NodeReferences {
-            iter: enumerate(<span class="self">self</span>.raw_nodes()),
-        }
-    }
-}
-
 <span class="doccomment">/// Iterator over all nodes of a graph.
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>NodeReferences&lt;<span class="lifetime">&#39;a</span>, N: <span class="lifetime">&#39;a</span>, Ix: IndexType = DefaultIx&gt; {
     iter: iter::Enumerate&lt;slice::Iter&lt;<span class="lifetime">&#39;a</span>, Node&lt;<span class="prelude-ty">Option</span>&lt;N&gt;, Ix&gt;&gt;&gt;,
 }
@@ -3102,51 +3469,8 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, Ix, E&gt; EdgeRef <span class="kw">for </span>EdgeReference&lt;<span class="lifetime">&#39;a</span>, E, Ix&gt;
-<span class="kw">where
-    </span>Ix: IndexType,
-{
-    <span class="kw">type </span>NodeId = NodeIndex&lt;Ix&gt;;
-    <span class="kw">type </span>EdgeId = EdgeIndex&lt;Ix&gt;;
-    <span class="kw">type </span>Weight = E;
-
-    <span class="kw">fn </span>source(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::NodeId {
-        <span class="self">self</span>.node[<span class="number">0</span>]
-    }
-    <span class="kw">fn </span>target(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::NodeId {
-        <span class="self">self</span>.node[<span class="number">1</span>]
-    }
-    <span class="kw">fn </span>weight(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>E {
-        <span class="self">self</span>.weight
-    }
-    <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::EdgeId {
-        <span class="self">self</span>.index
-    }
-}
-
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N, E, Ty, Ix&gt; IntoEdges <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
-<span class="kw">where
-    </span>Ty: EdgeType,
-    Ix: IndexType,
-{
-    <span class="kw">type </span>Edges = Edges&lt;<span class="lifetime">&#39;a</span>, E, Ty, Ix&gt;;
-    <span class="kw">fn </span>edges(<span class="self">self</span>, a: <span class="self">Self</span>::NodeId) -&gt; <span class="self">Self</span>::Edges {
-        <span class="self">self</span>.edges(a)
-    }
-}
-
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N, E, Ty, Ix&gt; IntoEdgesDirected <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
-<span class="kw">where
-    </span>Ty: EdgeType,
-    Ix: IndexType,
-{
-    <span class="kw">type </span>EdgesDirected = Edges&lt;<span class="lifetime">&#39;a</span>, E, Ty, Ix&gt;;
-    <span class="kw">fn </span>edges_directed(<span class="self">self</span>, a: <span class="self">Self</span>::NodeId, dir: Direction) -&gt; <span class="self">Self</span>::EdgesDirected {
-        <span class="self">self</span>.edges_directed(a, dir)
-    }
-}
-
 <span class="doccomment">/// Iterator over the edges of from or to a node
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Edges&lt;<span class="lifetime">&#39;a</span>, E: <span class="lifetime">&#39;a</span>, Ty, Ix: <span class="lifetime">&#39;a </span>= DefaultIx&gt;
 <span class="kw">where
     </span>Ty: EdgeType,
@@ -3236,30 +3560,44 @@
     </span>}
 }
 
+<span class="doccomment">/// Iterator over the multiple directed edges connecting a source node to a target node
+</span><span class="attr">#[derive(Debug, Clone)]
+</span><span class="kw">pub struct </span>EdgesConnecting&lt;<span class="lifetime">&#39;a</span>, E: <span class="lifetime">&#39;a</span>, Ty, Ix: <span class="lifetime">&#39;a </span>= DefaultIx&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    target_node: NodeIndex&lt;Ix&gt;,
+    edges: Edges&lt;<span class="lifetime">&#39;a</span>, E, Ty, Ix&gt;,
+    ty: PhantomData&lt;Ty&gt;,
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, E, Ty, Ix&gt; Iterator <span class="kw">for </span>EdgesConnecting&lt;<span class="lifetime">&#39;a</span>, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>Item = EdgeReference&lt;<span class="lifetime">&#39;a</span>, E, Ix&gt;;
+
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;EdgeReference&lt;<span class="lifetime">&#39;a</span>, E, Ix&gt;&gt; {
+        <span class="kw">let </span>target_node = <span class="self">self</span>.target_node;
+        <span class="self">self</span>.edges
+            .by_ref()
+            .find(|<span class="kw-2">&amp;</span>edge| edge.node[<span class="number">1</span>] == target_node)
+    }
+    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
+        <span class="kw">let </span>(<span class="kw">_</span>, upper) = <span class="self">self</span>.edges.size_hint();
+        (<span class="number">0</span>, upper)
+    }
+}
+
 <span class="kw">fn </span>swap_pair&lt;T&gt;(<span class="kw-2">mut </span>x: [T; <span class="number">2</span>]) -&gt; [T; <span class="number">2</span>] {
     x.swap(<span class="number">0</span>, <span class="number">1</span>);
     x
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N: <span class="lifetime">&#39;a</span>, E: <span class="lifetime">&#39;a</span>, Ty, Ix&gt; IntoEdgeReferences <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
-<span class="kw">where
-    </span>Ty: EdgeType,
-    Ix: IndexType,
-{
-    <span class="kw">type </span>EdgeRef = EdgeReference&lt;<span class="lifetime">&#39;a</span>, E, Ix&gt;;
-    <span class="kw">type </span>EdgeReferences = EdgeReferences&lt;<span class="lifetime">&#39;a</span>, E, Ix&gt;;
-
-    <span class="doccomment">/// Create an iterator over all edges in the graph, in indexed order.
-    ///
-    /// Iterator element type is `EdgeReference&lt;E, Ix&gt;`.
-    </span><span class="kw">fn </span>edge_references(<span class="self">self</span>) -&gt; <span class="self">Self</span>::EdgeReferences {
-        EdgeReferences {
-            iter: <span class="self">self</span>.g.edges.iter().enumerate(),
-        }
-    }
-}
-
 <span class="doccomment">/// Iterator over all edges of a graph.
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>EdgeReferences&lt;<span class="lifetime">&#39;a</span>, E: <span class="lifetime">&#39;a</span>, Ix: <span class="lifetime">&#39;a </span>= DefaultIx&gt; {
     iter: iter::Enumerate&lt;slice::Iter&lt;<span class="lifetime">&#39;a</span>, Edge&lt;<span class="prelude-ty">Option</span>&lt;E&gt;, Ix&gt;&gt;&gt;,
 }
@@ -3297,6 +3635,7 @@
 }
 
 <span class="doccomment">/// An iterator over either the nodes without edges to them or from them.
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Externals&lt;<span class="lifetime">&#39;a</span>, N: <span class="lifetime">&#39;a</span>, Ty, Ix: IndexType = DefaultIx&gt; {
     iter: iter::Enumerate&lt;slice::Iter&lt;<span class="lifetime">&#39;a</span>, Node&lt;<span class="prelude-ty">Option</span>&lt;N&gt;, Ix&gt;&gt;&gt;,
     dir: Direction,
@@ -3327,11 +3666,16 @@
             }
         }
     }
+    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
+        <span class="kw">let </span>(<span class="kw">_</span>, upper) = <span class="self">self</span>.iter.size_hint();
+        (<span class="number">0</span>, upper)
+    }
 }
 
 <span class="doccomment">/// Iterator over the neighbors of a node.
 ///
 /// Iterator element type is `NodeIndex`.
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Neighbors&lt;<span class="lifetime">&#39;a</span>, E: <span class="lifetime">&#39;a</span>, Ix: <span class="lifetime">&#39;a </span>= DefaultIx&gt; {
     <span class="doccomment">/// starting node to skip over
     </span>skip_start: NodeIndex&lt;Ix&gt;,
@@ -3463,6 +3807,7 @@
 }
 
 <span class="doccomment">/// Iterator over the node indices of a graph.
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>NodeIndices&lt;<span class="lifetime">&#39;a</span>, N: <span class="lifetime">&#39;a</span>, Ix: <span class="lifetime">&#39;a </span>= DefaultIx&gt; {
     iter: iter::Enumerate&lt;slice::Iter&lt;<span class="lifetime">&#39;a</span>, Node&lt;<span class="prelude-ty">Option</span>&lt;N&gt;, Ix&gt;&gt;&gt;,
 }
@@ -3479,10 +3824,9 @@
             </span>}
         })
     }
-
     <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
-        <span class="kw">let </span>(<span class="kw">_</span>, hi) = <span class="self">self</span>.iter.size_hint();
-        (<span class="number">0</span>, hi)
+        <span class="kw">let </span>(<span class="kw">_</span>, upper) = <span class="self">self</span>.iter.size_hint();
+        (<span class="number">0</span>, upper)
     }
 }
 
@@ -3498,24 +3842,8 @@
     }
 }
 
-<span class="kw">impl</span>&lt;N, E, Ty, Ix&gt; NodeIndexable <span class="kw">for </span>StableGraph&lt;N, E, Ty, Ix&gt;
-<span class="kw">where
-    </span>Ty: EdgeType,
-    Ix: IndexType,
-{
-    <span class="doccomment">/// Return an upper bound of the node indices in the graph
-    </span><span class="kw">fn </span>node_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
-        <span class="self">self</span>.node_indices().next_back().map_or(<span class="number">0</span>, |i| i.index() + <span class="number">1</span>)
-    }
-    <span class="kw">fn </span>to_index(<span class="kw-2">&amp;</span><span class="self">self</span>, ix: NodeIndex&lt;Ix&gt;) -&gt; usize {
-        ix.index()
-    }
-    <span class="kw">fn </span>from_index(<span class="kw-2">&amp;</span><span class="self">self</span>, ix: usize) -&gt; <span class="self">Self</span>::NodeId {
-        NodeIndex::new(ix)
-    }
-}
-
 <span class="doccomment">/// Iterator over the edge indices of a graph.
+</span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>EdgeIndices&lt;<span class="lifetime">&#39;a</span>, E: <span class="lifetime">&#39;a</span>, Ix: <span class="lifetime">&#39;a </span>= DefaultIx&gt; {
     iter: iter::Enumerate&lt;slice::Iter&lt;<span class="lifetime">&#39;a</span>, Edge&lt;<span class="prelude-ty">Option</span>&lt;E&gt;, Ix&gt;&gt;&gt;,
 }
@@ -3532,10 +3860,9 @@
             </span>}
         })
     }
-
     <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
-        <span class="kw">let </span>(<span class="kw">_</span>, hi) = <span class="self">self</span>.iter.size_hint();
-        (<span class="number">0</span>, hi)
+        <span class="kw">let </span>(<span class="kw">_</span>, upper) = <span class="self">self</span>.iter.size_hint();
+        (<span class="number">0</span>, upper)
     }
 }
 
@@ -3548,6 +3875,213 @@
                 <span class="prelude-val">None
             </span>}
         })
+    }
+}
+
+<span class="kw">impl</span>&lt;N, E, Ty, Ix&gt; visit::GraphBase <span class="kw">for </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ix: IndexType,
+{
+    <span class="kw">type </span>NodeId = NodeIndex&lt;Ix&gt;;
+    <span class="kw">type </span>EdgeId = EdgeIndex&lt;Ix&gt;;
+}
+
+<span class="kw">impl</span>&lt;N, E, Ty, Ix&gt; visit::Visitable <span class="kw">for </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>Map = FixedBitSet;
+    <span class="kw">fn </span>visit_map(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; FixedBitSet {
+        FixedBitSet::with_capacity(<span class="self">self</span>.node_bound())
+    }
+    <span class="kw">fn </span>reset_map(<span class="kw-2">&amp;</span><span class="self">self</span>, map: <span class="kw-2">&amp;mut </span><span class="self">Self</span>::Map) {
+        map.clear();
+        map.grow(<span class="self">self</span>.node_bound());
+    }
+}
+
+<span class="kw">impl</span>&lt;N, E, Ty, Ix&gt; visit::Data <span class="kw">for </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>NodeWeight = N;
+    <span class="kw">type </span>EdgeWeight = E;
+}
+
+<span class="kw">impl</span>&lt;N, E, Ty, Ix&gt; visit::GraphProp <span class="kw">for </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>EdgeType = Ty;
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N, E: <span class="lifetime">&#39;a</span>, Ty, Ix&gt; visit::IntoNodeIdentifiers <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>NodeIdentifiers = NodeIndices&lt;<span class="lifetime">&#39;a</span>, N, Ix&gt;;
+    <span class="kw">fn </span>node_identifiers(<span class="self">self</span>) -&gt; <span class="self">Self</span>::NodeIdentifiers {
+        StableGraph::node_indices(<span class="self">self</span>)
+    }
+}
+
+<span class="kw">impl</span>&lt;N, E, Ty, Ix&gt; visit::NodeCount <span class="kw">for </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">fn </span>node_count(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="self">self</span>.node_count()
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N, E, Ty, Ix&gt; visit::IntoNodeReferences <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>NodeRef = (NodeIndex&lt;Ix&gt;, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>N);
+    <span class="kw">type </span>NodeReferences = NodeReferences&lt;<span class="lifetime">&#39;a</span>, N, Ix&gt;;
+    <span class="kw">fn </span>node_references(<span class="self">self</span>) -&gt; <span class="self">Self</span>::NodeReferences {
+        NodeReferences {
+            iter: enumerate(<span class="self">self</span>.raw_nodes()),
+        }
+    }
+}
+
+<span class="kw">impl</span>&lt;N, E, Ty, Ix&gt; visit::NodeIndexable <span class="kw">for </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="doccomment">/// Return an upper bound of the node indices in the graph
+    </span><span class="kw">fn </span>node_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="self">self</span>.node_indices().next_back().map_or(<span class="number">0</span>, |i| i.index() + <span class="number">1</span>)
+    }
+    <span class="kw">fn </span>to_index(<span class="kw-2">&amp;</span><span class="self">self</span>, ix: NodeIndex&lt;Ix&gt;) -&gt; usize {
+        ix.index()
+    }
+    <span class="kw">fn </span>from_index(<span class="kw-2">&amp;</span><span class="self">self</span>, ix: usize) -&gt; <span class="self">Self</span>::NodeId {
+        NodeIndex::new(ix)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N, E: <span class="lifetime">&#39;a</span>, Ty, Ix&gt; visit::IntoNeighbors <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>Neighbors = Neighbors&lt;<span class="lifetime">&#39;a</span>, E, Ix&gt;;
+    <span class="kw">fn </span>neighbors(<span class="self">self</span>, n: <span class="self">Self</span>::NodeId) -&gt; <span class="self">Self</span>::Neighbors {
+        (<span class="kw-2">*</span><span class="self">self</span>).neighbors(n)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N, E: <span class="lifetime">&#39;a</span>, Ty, Ix&gt; visit::IntoNeighborsDirected <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>NeighborsDirected = Neighbors&lt;<span class="lifetime">&#39;a</span>, E, Ix&gt;;
+    <span class="kw">fn </span>neighbors_directed(<span class="self">self</span>, n: NodeIndex&lt;Ix&gt;, d: Direction) -&gt; <span class="self">Self</span>::NeighborsDirected {
+        StableGraph::neighbors_directed(<span class="self">self</span>, n, d)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N, E, Ty, Ix&gt; visit::IntoEdges <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>Edges = Edges&lt;<span class="lifetime">&#39;a</span>, E, Ty, Ix&gt;;
+    <span class="kw">fn </span>edges(<span class="self">self</span>, a: <span class="self">Self</span>::NodeId) -&gt; <span class="self">Self</span>::Edges {
+        <span class="self">self</span>.edges(a)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, Ix, E&gt; visit::EdgeRef <span class="kw">for </span>EdgeReference&lt;<span class="lifetime">&#39;a</span>, E, Ix&gt;
+<span class="kw">where
+    </span>Ix: IndexType,
+{
+    <span class="kw">type </span>NodeId = NodeIndex&lt;Ix&gt;;
+    <span class="kw">type </span>EdgeId = EdgeIndex&lt;Ix&gt;;
+    <span class="kw">type </span>Weight = E;
+
+    <span class="kw">fn </span>source(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::NodeId {
+        <span class="self">self</span>.node[<span class="number">0</span>]
+    }
+    <span class="kw">fn </span>target(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::NodeId {
+        <span class="self">self</span>.node[<span class="number">1</span>]
+    }
+    <span class="kw">fn </span>weight(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>E {
+        <span class="self">self</span>.weight
+    }
+    <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::EdgeId {
+        <span class="self">self</span>.index
+    }
+}
+
+<span class="kw">impl</span>&lt;N, E, Ty, Ix&gt; visit::EdgeIndexable <span class="kw">for </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">fn </span>edge_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="self">self</span>.edge_references()
+            .next_back()
+            .map_or(<span class="number">0</span>, |edge| edge.id().index() + <span class="number">1</span>)
+    }
+
+    <span class="kw">fn </span>to_index(<span class="kw-2">&amp;</span><span class="self">self</span>, ix: EdgeIndex&lt;Ix&gt;) -&gt; usize {
+        ix.index()
+    }
+
+    <span class="kw">fn </span>from_index(<span class="kw-2">&amp;</span><span class="self">self</span>, ix: usize) -&gt; <span class="self">Self</span>::EdgeId {
+        EdgeIndex::new(ix)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N, E, Ty, Ix&gt; visit::IntoEdgesDirected <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>EdgesDirected = Edges&lt;<span class="lifetime">&#39;a</span>, E, Ty, Ix&gt;;
+    <span class="kw">fn </span>edges_directed(<span class="self">self</span>, a: <span class="self">Self</span>::NodeId, dir: Direction) -&gt; <span class="self">Self</span>::EdgesDirected {
+        <span class="self">self</span>.edges_directed(a, dir)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, N: <span class="lifetime">&#39;a</span>, E: <span class="lifetime">&#39;a</span>, Ty, Ix&gt; visit::IntoEdgeReferences <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="kw">type </span>EdgeRef = EdgeReference&lt;<span class="lifetime">&#39;a</span>, E, Ix&gt;;
+    <span class="kw">type </span>EdgeReferences = EdgeReferences&lt;<span class="lifetime">&#39;a</span>, E, Ix&gt;;
+
+    <span class="doccomment">/// Create an iterator over all edges in the graph, in indexed order.
+    ///
+    /// Iterator element type is `EdgeReference&lt;E, Ix&gt;`.
+    </span><span class="kw">fn </span>edge_references(<span class="self">self</span>) -&gt; <span class="self">Self</span>::EdgeReferences {
+        EdgeReferences {
+            iter: <span class="self">self</span>.g.edges.iter().enumerate(),
+        }
+    }
+}
+
+<span class="kw">impl</span>&lt;N, E, Ty, Ix&gt; visit::EdgeCount <span class="kw">for </span>StableGraph&lt;N, E, Ty, Ix&gt;
+<span class="kw">where
+    </span>Ty: EdgeType,
+    Ix: IndexType,
+{
+    <span class="attr">#[inline]
+    </span><span class="kw">fn </span>edge_count(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="self">self</span>.edge_count()
     }
 }
 
@@ -3631,5 +4165,43 @@
     <span class="macro">assert_eq!</span>(gr.edge_count(), <span class="number">2</span>);
 
     gr.check_free_lists();
+}
+
+<span class="attr">#[test]
+</span><span class="kw">fn </span>extend_with_edges() {
+    <span class="kw">let </span><span class="kw-2">mut </span>gr = StableGraph::&lt;<span class="kw">_</span>, <span class="kw">_</span>&gt;::default();
+    <span class="kw">let </span>a = gr.add_node(<span class="string">&quot;a&quot;</span>);
+    <span class="kw">let </span>b = gr.add_node(<span class="string">&quot;b&quot;</span>);
+    <span class="kw">let </span>c = gr.add_node(<span class="string">&quot;c&quot;</span>);
+    <span class="kw">let </span>_d = gr.add_node(<span class="string">&quot;d&quot;</span>);
+    gr.remove_node(a);
+    gr.remove_node(b);
+    gr.remove_node(c);
+
+    gr.extend_with_edges(<span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">1</span>, ())]);
+    <span class="macro">assert_eq!</span>(gr.node_count(), <span class="number">3</span>);
+    <span class="macro">assert_eq!</span>(gr.edge_count(), <span class="number">1</span>);
+    gr.check_free_lists();
+
+    gr.extend_with_edges(<span class="macro">vec!</span>[(<span class="number">5</span>, <span class="number">1</span>, ())]);
+    <span class="macro">assert_eq!</span>(gr.node_count(), <span class="number">4</span>);
+    <span class="macro">assert_eq!</span>(gr.edge_count(), <span class="number">2</span>);
+    gr.check_free_lists();
+}
+
+<span class="attr">#[test]
+</span><span class="kw">fn </span>test_reverse() {
+    <span class="kw">let </span><span class="kw-2">mut </span>gr = StableGraph::&lt;<span class="kw">_</span>, <span class="kw">_</span>&gt;::default();
+    <span class="kw">let </span>a = gr.add_node(<span class="string">&quot;a&quot;</span>);
+    <span class="kw">let </span>b = gr.add_node(<span class="string">&quot;b&quot;</span>);
+
+    gr.add_edge(a, b, <span class="number">0</span>);
+
+    <span class="kw">let </span><span class="kw-2">mut </span>reversed_gr = gr.clone();
+    reversed_gr.reverse();
+
+    <span class="kw">for </span>i <span class="kw">in </span>gr.node_indices() {
+        itertools::assert_equal(gr.edges_directed(i, Incoming), reversed_gr.edges(i));
+    }
 }
 </code></pre></div></section></main></body></html>

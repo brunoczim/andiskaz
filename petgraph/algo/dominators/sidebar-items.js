@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["simple_fast"],"struct":["Dominators","DominatorsIter"]};
+window.SIDEBAR_ITEMS = {"fn":["simple_fast"],"struct":["DominatedByIter","Dominators","DominatorsIter"]};

@@ -152,9 +152,6 @@
 <a href="#152" id="152">152</a>
 <a href="#153" id="153">153</a>
 <a href="#154" id="154">154</a>
-<a href="#155" id="155">155</a>
-<a href="#156" id="156">156</a>
-<a href="#157" id="157">157</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This file defines an event reactor.
 
 </span><span class="kw">use crate</span>::{
@@ -193,10 +190,7 @@
 
     <span class="doccomment">/// Executes the pre-&quot;reactor loop&quot; functions, handling the initial screen
     /// size and correctly dealing with the fact that it is invalid, if it is.
-    </span><span class="kw">pub async fn </span>pre_loop(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-        initial_size: Vec2,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+    </span><span class="kw">pub async fn </span>pre_loop(<span class="kw-2">&amp;mut </span><span class="self">self</span>, initial_size: Vec2) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>screen = <span class="self">self</span>.shared.screen().lock().<span class="kw">await</span>;
         <span class="kw">let </span>min_size = screen.min_size();
         <span class="kw">if </span>initial_size.x &lt; min_size.x || initial_size.y &lt; min_size.y {
@@ -282,7 +276,7 @@
             }
         });
 
-        result.map_err(Error::from_crossterm)
+        result.map_err(Into::into)
     }
 
     <span class="doccomment">/// Sends an event through the channel, so that the listener receives it.

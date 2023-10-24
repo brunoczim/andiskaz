@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["StrSimError"],"fn":["damerau_levenshtein","hamming","jaro","jaro_winkler","levenshtein","normalized_damerau_levenshtein","normalized_levenshtein","osa_distance"],"type":["HammingResult"]};

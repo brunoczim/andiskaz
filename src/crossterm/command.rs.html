@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossterm-0.18.2/src/command.rs`."><title>command.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="crossterm" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossterm-0.27.0/src/command.rs`."><title>command.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="crossterm" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -184,38 +184,144 @@
 <a href="#184" id="184">184</a>
 <a href="#185" id="185">185</a>
 <a href="#186" id="186">186</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt::Display, io::Write};
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
+<span class="kw">use </span>std::io::{<span class="self">self</span>, Write};
 
-<span class="kw">use crate</span>::{execute, queue};
-
-<span class="kw">use </span><span class="kw">super</span>::error::Result;
+<span class="kw">use </span><span class="kw">crate</span>::terminal::{BeginSynchronizedUpdate, EndSynchronizedUpdate};
 
 <span class="doccomment">/// An interface for a command that performs an action on the terminal.
 ///
 /// Crossterm provides a set of commands,
 /// and there is no immediate reason to implement a command yourself.
 /// In order to understand how to use and execute commands,
-/// it is recommended that you take a look at [Command Api](../#command-api) chapter.
+/// it is recommended that you take a look at [Command API](./index.html#command-api) chapter.
 </span><span class="kw">pub trait </span>Command {
-    <span class="kw">type </span>AnsiType: Display;
-
-    <span class="doccomment">/// Returns an ANSI code representation of this command.
+    <span class="doccomment">/// Write an ANSI representation of this command to the given writer.
     /// An ANSI code can manipulate the terminal by writing it to the terminal buffer.
     /// However, only Windows 10 and UNIX systems support this.
     ///
-    /// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command Api](../#command-api)
-    </span><span class="kw">fn </span>ansi_code(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::AnsiType;
+    /// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command API](./index.html#command-api)
+    </span><span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result;
 
     <span class="doccomment">/// Execute this command.
     ///
     /// Windows versions lower than windows 10 do not support ANSI escape codes,
     /// therefore a direct WinAPI call is made.
     ///
-    /// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command Api](../#command-api)
+    /// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command API](./index.html#command-api)
     </span><span class="attr">#[cfg(windows)]
-    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>, writer: <span class="kw">impl </span>FnMut() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;;
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; io::Result&lt;()&gt;;
 
-    <span class="doccomment">/// Returns whether the ansi code representation of this command is supported by windows.
+    <span class="doccomment">/// Returns whether the ANSI code representation of this command is supported by windows.
     ///
     /// A list of supported ANSI escape codes
     /// can be found [here](https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences).
@@ -225,18 +331,15 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T: Command&gt; Command <span class="kw">for </span><span class="kw-2">&amp;</span>T {
-    <span class="kw">type </span>AnsiType = T::AnsiType;
-
-    <span class="attr">#[inline]
-    </span><span class="kw">fn </span>ansi_code(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::AnsiType {
-        T::ansi_code(<span class="self">self</span>)
+<span class="kw">impl</span>&lt;T: Command + <span class="question-mark">?</span>Sized&gt; Command <span class="kw">for </span><span class="kw-2">&amp;</span>T {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        (<span class="kw-2">**</span><span class="self">self</span>).write_ansi(f)
     }
 
     <span class="attr">#[inline]
     #[cfg(windows)]
-    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>, _writer: <span class="kw">impl </span>FnMut() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-        T::execute_winapi(<span class="self">self</span>, _writer)
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+        T::execute_winapi(<span class="self">self</span>)
     }
 
     <span class="attr">#[cfg(windows)]
@@ -246,23 +349,19 @@
     }
 }
 
-<span class="doccomment">/// An interface for commands that can be queued for further execution.
-</span><span class="kw">pub trait </span>QueueableCommand&lt;T: Display&gt;: Sized {
+<span class="doccomment">/// An interface for types that can queue commands for further execution.
+</span><span class="kw">pub trait </span>QueueableCommand {
     <span class="doccomment">/// Queues the given command for further execution.
-    </span><span class="kw">fn </span>queue(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command&lt;AnsiType = T&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;;
+    </span><span class="kw">fn </span>queue(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command) -&gt; io::Result&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;;
 }
 
-<span class="doccomment">/// An interface for commands that are directly executed.
-</span><span class="kw">pub trait </span>ExecutableCommand&lt;T: Display&gt;: Sized {
+<span class="doccomment">/// An interface for types that can directly execute commands.
+</span><span class="kw">pub trait </span>ExecutableCommand {
     <span class="doccomment">/// Executes the given command directly.
-    </span><span class="kw">fn </span>execute(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command&lt;AnsiType = T&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;;
+    </span><span class="kw">fn </span>execute(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command) -&gt; io::Result&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;;
 }
 
-<span class="kw">impl</span>&lt;T, A&gt; QueueableCommand&lt;A&gt; <span class="kw">for </span>T
-<span class="kw">where
-    </span>A: Display,
-    T: Write,
-{
+<span class="kw">impl</span>&lt;T: Write + <span class="question-mark">?</span>Sized&gt; QueueableCommand <span class="kw">for </span>T {
     <span class="doccomment">/// Queues the given command for further execution.
     ///
     /// Queued commands will be executed in the following cases:
@@ -280,11 +379,11 @@
     /// # Examples
     ///
     /// ```rust
-    /// use std::io::{Write, stdout};
-    /// use crossterm::{Result, QueueableCommand, style::Print};
+    /// use std::io::{self, Write};
+    /// use crossterm::{QueueableCommand, style::Print};
     ///
-    ///  fn main() -&gt; Result&lt;()&gt; {
-    ///     let mut stdout = stdout();
+    ///  fn main() -&gt; io::Result&lt;()&gt; {
+    ///     let mut stdout = io::stdout();
     ///
     ///     // `Print` will executed executed when `flush` is called.
     ///     stdout
@@ -304,27 +403,33 @@
     /// }
     /// ```
     ///
-    /// Have a look over at the [Command API](./#command-api) for more details.
+    /// Have a look over at the [Command API](./index.html#command-api) for more details.
     ///
     /// # Notes
     ///
     /// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.
-    /// * In case of Windows versions lower than 10, a direct WinApi call will be made.
+    /// * In case of Windows versions lower than 10, a direct WinAPI call will be made.
     ///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,
     ///     and can therefore not be written to the given `writer`.
     ///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)
     ///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.
-    </span><span class="kw">fn </span>queue(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command&lt;AnsiType = A&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt; {
-        <span class="macro">queue!</span>(<span class="self">self</span>, command)<span class="question-mark">?</span>;
+    </span><span class="kw">fn </span>queue(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command) -&gt; io::Result&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt; {
+        <span class="attr">#[cfg(windows)]
+        </span><span class="kw">if </span>!command.is_ansi_code_supported() {
+            <span class="comment">// There may be queued commands in this writer, but `execute_winapi` will execute the
+            // command immediately. To prevent commands being executed out of order we flush the
+            // writer now.
+            </span><span class="self">self</span>.flush()<span class="question-mark">?</span>;
+            command.execute_winapi()<span class="question-mark">?</span>;
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="self">self</span>);
+        }
+
+        write_command_ansi(<span class="self">self</span>, command)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 }
 
-<span class="kw">impl</span>&lt;T, A&gt; ExecutableCommand&lt;A&gt; <span class="kw">for </span>T
-<span class="kw">where
-    </span>A: Display,
-    T: Write,
-{
+<span class="kw">impl</span>&lt;T: Write + <span class="question-mark">?</span>Sized&gt; ExecutableCommand <span class="kw">for </span>T {
     <span class="doccomment">/// Executes the given command directly.
     ///
     /// The given command its ANSI escape code will be written and flushed onto `Self`.
@@ -338,12 +443,12 @@
     /// # Example
     ///
     /// ```rust
-    /// use std::io::{Write, stdout};
-    /// use crossterm::{Result, ExecutableCommand, style::Print};
+    /// use std::io;
+    /// use crossterm::{ExecutableCommand, style::Print};
     ///
-    ///  fn main() -&gt; Result&lt;()&gt; {
+    /// fn main() -&gt; io::Result&lt;()&gt; {
     ///      // will be executed directly
-    ///       stdout()
+    ///       io::stdout()
     ///         .execute(Print(&quot;sum:\n&quot;.to_string()))?
     ///         .execute(Print(format!(&quot;1 + 1= {} &quot;, 1 + 1)))?;
     ///
@@ -352,22 +457,135 @@
     ///      // ==== Output ====
     ///      // sum:
     ///      // 1 + 1 = 2
-    ///  }
+    /// }
     /// ```
     ///
-    /// Have a look over at the [Command API](./#command-api) for more details.
+    /// Have a look over at the [Command API](./index.html#command-api) for more details.
     ///
     /// # Notes
     ///
     /// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.
-    /// * In case of Windows versions lower than 10, a direct WinApi call will be made.
+    /// * In case of Windows versions lower than 10, a direct WinAPI call will be made.
     ///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,
     ///     and can therefore not be written to the given `writer`.
     ///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)
     ///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.
-    </span><span class="kw">fn </span>execute(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command&lt;AnsiType = A&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt; {
-        <span class="macro">execute!</span>(<span class="self">self</span>, command)<span class="question-mark">?</span>;
+    </span><span class="kw">fn </span>execute(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command) -&gt; io::Result&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt; {
+        <span class="self">self</span>.queue(command)<span class="question-mark">?</span>;
+        <span class="self">self</span>.flush()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
+}
+
+<span class="doccomment">/// An interface for types that support synchronized updates.
+</span><span class="kw">pub trait </span>SynchronizedUpdate {
+    <span class="doccomment">/// Performs a set of actions against the given type.
+    </span><span class="kw">fn </span>sync_update&lt;T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, operations: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span><span class="self">Self</span>) -&gt; T) -&gt; io::Result&lt;T&gt;;
+}
+
+<span class="kw">impl</span>&lt;W: std::io::Write + <span class="question-mark">?</span>Sized&gt; SynchronizedUpdate <span class="kw">for </span>W {
+    <span class="doccomment">/// Performs a set of actions within a synchronous update.
+    ///
+    /// Updates will be suspended in the terminal, the function will be executed against self,
+    /// updates will be resumed, and a flush will be performed.
+    ///
+    /// # Arguments
+    ///
+    /// - Function
+    ///
+    ///     A function that performs the operations that must execute in a synchronized update.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use std::io;
+    /// use crossterm::{ExecutableCommand, SynchronizedUpdate, style::Print};
+    ///
+    /// fn main() -&gt; io::Result&lt;()&gt; {
+    ///     let mut stdout = io::stdout();
+    ///
+    ///     stdout.sync_update(|stdout| {
+    ///         stdout.execute(Print(&quot;foo 1\n&quot;.to_string()))?;
+    ///         stdout.execute(Print(&quot;foo 2&quot;.to_string()))?;
+    ///         // The effects of the print command will not be present in the terminal
+    ///         // buffer, but not visible in the terminal.
+    ///         std::io::Result::Ok(())
+    ///     })?;
+    ///
+    ///     // The effects of the commands will be visible.
+    ///
+    ///     Ok(())
+    ///
+    ///     // ==== Output ====
+    ///     // foo 1
+    ///     // foo 2
+    /// }
+    /// ```
+    ///
+    /// # Notes
+    ///
+    /// This command is performed only using ANSI codes, and will do nothing on terminals that do not support ANSI
+    /// codes, or this specific extension.
+    ///
+    /// When rendering the screen of the terminal, the Emulator usually iterates through each visible grid cell and
+    /// renders its current state. With applications updating the screen a at higher frequency this can cause tearing.
+    ///
+    /// This mode attempts to mitigate that.
+    ///
+    /// When the synchronization mode is enabled following render calls will keep rendering the last rendered state.
+    /// The terminal Emulator keeps processing incoming text and sequences. When the synchronized update mode is disabled
+    /// again the renderer may fetch the latest screen buffer state again, effectively avoiding the tearing effect
+    /// by unintentionally rendering in the middle a of an application screen update.
+    ///
+    </span><span class="kw">fn </span>sync_update&lt;T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, operations: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span><span class="self">Self</span>) -&gt; T) -&gt; io::Result&lt;T&gt; {
+        <span class="self">self</span>.queue(BeginSynchronizedUpdate)<span class="question-mark">?</span>;
+        <span class="kw">let </span>result = operations(<span class="self">self</span>);
+        <span class="self">self</span>.execute(EndSynchronizedUpdate)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(result)
+    }
+}
+<span class="doccomment">/// Writes the ANSI representation of a command to the given writer.
+</span><span class="kw">fn </span>write_command_ansi&lt;C: Command&gt;(
+    io: <span class="kw-2">&amp;mut </span>(<span class="kw">impl </span>io::Write + <span class="question-mark">?</span>Sized),
+    command: C,
+) -&gt; io::Result&lt;()&gt; {
+    <span class="kw">struct </span>Adapter&lt;T&gt; {
+        inner: T,
+        res: io::Result&lt;()&gt;,
+    }
+
+    <span class="kw">impl</span>&lt;T: Write&gt; fmt::Write <span class="kw">for </span>Adapter&lt;T&gt; {
+        <span class="kw">fn </span>write_str(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: <span class="kw-2">&amp;</span>str) -&gt; fmt::Result {
+            <span class="self">self</span>.inner.write_all(s.as_bytes()).map_err(|e| {
+                <span class="self">self</span>.res = <span class="prelude-val">Err</span>(e);
+                fmt::Error
+            })
+        }
+    }
+
+    <span class="kw">let </span><span class="kw-2">mut </span>adapter = Adapter {
+        inner: io,
+        res: <span class="prelude-val">Ok</span>(()),
+    };
+
+    command
+        .write_ansi(<span class="kw-2">&amp;mut </span>adapter)
+        .map_err(|fmt::Error| <span class="kw">match </span>adapter.res {
+            <span class="prelude-val">Ok</span>(()) =&gt; <span class="macro">panic!</span>(
+                <span class="string">&quot;&lt;{}&gt;::write_ansi incorrectly errored&quot;</span>,
+                std::any::type_name::&lt;C&gt;()
+            ),
+            <span class="prelude-val">Err</span>(e) =&gt; e,
+        })
+}
+
+<span class="doccomment">/// Executes the ANSI representation of a command, using the given `fmt::Write`.
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>execute_fmt(f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write, command: <span class="kw">impl </span>Command) -&gt; fmt::Result {
+    <span class="attr">#[cfg(windows)]
+    </span><span class="kw">if </span>!command.is_ansi_code_supported() {
+        <span class="kw">return </span>command.execute_winapi().map_err(|<span class="kw">_</span>| fmt::Error);
+    }
+
+    command.write_ansi(f)
 }
 </code></pre></div></section></main></body></html>

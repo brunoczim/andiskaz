@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["pthread_self"],"type":["Pthread"]};
+window.SIDEBAR_ITEMS = {"fn":["pthread_kill","pthread_self"],"type":["Pthread"]};

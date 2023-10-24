@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/nix-0.18.0/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="nix" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../nix/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/nix-0.24.3/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="nix" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../nix/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -279,22 +279,104 @@
 <a href="#279" id="279">279</a>
 <a href="#280" id="280">280</a>
 <a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Rust friendly bindings to the various *nix system functions.
 //!
 //! Modules are structured according to the C header file that they would be
 //! defined in.
+//!
+//! # Features
+//!
+//! Nix uses the following Cargo features to enable optional functionality.
+//! They may be enabled in any combination.
+//! * `acct` - Process accounting
+//! * `aio` - POSIX AIO
+//! * `dir` - Stuff relating to directory iteration
+//! * `env` - Manipulate environment variables
+//! * `event` - Event-driven APIs, like `kqueue` and `epoll`
+//! * `feature` - Query characteristics of the OS at runtime
+//! * `fs` - File system functionality
+//! * `hostname` - Get and set the system&#39;s hostname
+//! * `inotify` - Linux&#39;s `inotify` file system notification API
+//! * `ioctl` - The `ioctl` syscall, and wrappers for my specific instances
+//! * `kmod` - Load and unload kernel modules
+//! * `mman` - Stuff relating to memory management
+//! * `mount` - Mount and unmount file systems
+//! * `mqueue` - POSIX message queues
+//! * `net` - Networking-related functionality
+//! * `personality` - Set the process execution domain
+//! * `poll` - APIs like `poll` and `select`
+//! * `process` - Stuff relating to running processes
+//! * `pthread` - POSIX threads
+//! * `ptrace` - Process tracing and debugging
+//! * `quota` - File system quotas
+//! * `reboot` - Reboot the system
+//! * `resource` - Process resource limits
+//! * `sched` - Manipulate process&#39;s scheduling
+//! * `socket` - Sockets, whether for networking or local use
+//! * `signal` - Send and receive signals to processes
+//! * `term` - Terminal control APIs
+//! * `time` - Query the operating system&#39;s clocks
+//! * `ucontext` - User thread context
+//! * `uio` - Vectored I/O
+//! * `user` - Stuff relating to users and groups
+//! * `zerocopy` - APIs like `sendfile` and `copy_file_range`
 </span><span class="attr">#![crate_name = <span class="string">&quot;nix&quot;</span>]
 #![cfg(unix)]
+#![cfg_attr(docsrs, doc(cfg(all())))]
 #![allow(non_camel_case_types)]
-</span><span class="comment">// latest bitflags triggers a rustc bug with cross-crate macro expansions causing dead_code
-// warnings even though the macro expands into something with allow(dead_code)
-</span><span class="attr">#![allow(dead_code)]
 #![cfg_attr(test, deny(warnings))]
 #![recursion_limit = <span class="string">&quot;500&quot;</span>]
 #![deny(unused)]
+#![allow(unused_macros)]
+#![cfg_attr(not(feature = <span class="string">&quot;default&quot;</span>), allow(unused_imports))]
 #![deny(unstable_features)]
 #![deny(missing_copy_implementations)]
 #![deny(missing_debug_implementations)]
+#![warn(missing_docs)]
+
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 </span><span class="comment">// Re-exported external crates
 </span><span class="kw">pub use </span>libc;
@@ -304,151 +386,135 @@
 
 <span class="comment">// Public crates
 </span><span class="attr">#[cfg(not(target_os = <span class="string">&quot;redox&quot;</span>))]
-</span><span class="kw">pub mod </span>dir;
-<span class="kw">pub mod </span>env;
-<span class="kw">pub mod </span>errno;
-<span class="attr">#[deny(missing_docs)]
-</span><span class="kw">pub mod </span>features;
-<span class="kw">pub mod </span>fcntl;
-<span class="attr">#[deny(missing_docs)]
-#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>,
-          target_os = <span class="string">&quot;dragonfly&quot;</span>,
+</span><span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;dir&quot;</span>]
+    #[allow(missing_docs)]
+    </span><span class="kw">pub mod </span>dir;
+}
+<span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;env&quot;</span>]
+    </span><span class="kw">pub mod </span>env;
+}
+<span class="attr">#[allow(missing_docs)]
+</span><span class="kw">pub mod </span>errno;
+<span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;feature&quot;</span>]
+
+    #[deny(missing_docs)]
+    </span><span class="kw">pub mod </span>features;
+}
+<span class="attr">#[allow(missing_docs)]
+</span><span class="kw">pub mod </span>fcntl;
+<span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;net&quot;</span>]
+
+    #[cfg(any(target_os = <span class="string">&quot;android&quot;</span>,
+              target_os = <span class="string">&quot;dragonfly&quot;</span>,
+              target_os = <span class="string">&quot;freebsd&quot;</span>,
+              target_os = <span class="string">&quot;ios&quot;</span>,
+              target_os = <span class="string">&quot;linux&quot;</span>,
+              target_os = <span class="string">&quot;macos&quot;</span>,
+              target_os = <span class="string">&quot;netbsd&quot;</span>,
+              target_os = <span class="string">&quot;illumos&quot;</span>,
+              target_os = <span class="string">&quot;openbsd&quot;</span>))]
+    #[deny(missing_docs)]
+    </span><span class="kw">pub mod </span>ifaddrs;
+    <span class="attr">#[cfg(not(target_os = <span class="string">&quot;redox&quot;</span>))]
+    #[deny(missing_docs)]
+    </span><span class="kw">pub mod </span>net;
+}
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>,
+          target_os = <span class="string">&quot;linux&quot;</span>))]
+</span><span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;kmod&quot;</span>]
+    #[allow(missing_docs)]
+    </span><span class="kw">pub mod </span>kmod;
+}
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>,
           target_os = <span class="string">&quot;freebsd&quot;</span>,
-          target_os = <span class="string">&quot;ios&quot;</span>,
-          target_os = <span class="string">&quot;linux&quot;</span>,
-          target_os = <span class="string">&quot;macos&quot;</span>,
-          target_os = <span class="string">&quot;netbsd&quot;</span>,
-          target_os = <span class="string">&quot;openbsd&quot;</span>))]
-</span><span class="kw">pub mod </span>ifaddrs;
-<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>,
           target_os = <span class="string">&quot;linux&quot;</span>))]
-</span><span class="kw">pub mod </span>kmod;
-<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>,
-          target_os = <span class="string">&quot;linux&quot;</span>))]
-</span><span class="kw">pub mod </span>mount;
+</span><span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;mount&quot;</span>]
+    </span><span class="kw">pub mod </span>mount;
+}
 <span class="attr">#[cfg(any(target_os = <span class="string">&quot;dragonfly&quot;</span>,
           target_os = <span class="string">&quot;freebsd&quot;</span>,
           target_os = <span class="string">&quot;fushsia&quot;</span>,
           target_os = <span class="string">&quot;linux&quot;</span>,
           target_os = <span class="string">&quot;netbsd&quot;</span>))]
-</span><span class="kw">pub mod </span>mqueue;
-<span class="attr">#[deny(missing_docs)]
-#[cfg(not(target_os = <span class="string">&quot;redox&quot;</span>))]
-</span><span class="kw">pub mod </span>net;
-<span class="attr">#[deny(missing_docs)]
-</span><span class="kw">pub mod </span>poll;
-<span class="attr">#[deny(missing_docs)]
-#[cfg(not(target_os = <span class="string">&quot;redox&quot;</span>))]
-</span><span class="kw">pub mod </span>pty;
-<span class="kw">pub mod </span>sched;
+</span><span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;mqueue&quot;</span>]
+    #[allow(missing_docs)]
+    </span><span class="kw">pub mod </span>mqueue;
+}
+<span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;poll&quot;</span>]
+    </span><span class="kw">pub mod </span>poll;
+}
+<span class="attr">#[cfg(not(any(target_os = <span class="string">&quot;redox&quot;</span>, target_os = <span class="string">&quot;fuchsia&quot;</span>)))]
+</span><span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;term&quot;</span>]
+    #[deny(missing_docs)]
+    </span><span class="kw">pub mod </span>pty;
+}
+<span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;sched&quot;</span>]
+    </span><span class="kw">pub mod </span>sched;
+}
 <span class="kw">pub mod </span>sys;
+<span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;time&quot;</span>]
+    #[allow(missing_docs)]
+    </span><span class="kw">pub mod </span>time;
+}
 <span class="comment">// This can be implemented for other platforms as soon as libc
 // provides bindings for them.
 </span><span class="attr">#[cfg(all(target_os = <span class="string">&quot;linux&quot;</span>,
-          any(target_arch = <span class="string">&quot;x86&quot;</span>, target_arch = <span class="string">&quot;x86_64&quot;</span>)))]
-</span><span class="kw">pub mod </span>ucontext;
-<span class="kw">pub mod </span>unistd;
+          any(target_arch = <span class="string">&quot;s390x&quot;</span>, target_arch = <span class="string">&quot;x86&quot;</span>,
+              target_arch = <span class="string">&quot;x86_64&quot;</span>)))]
+</span><span class="macro">feature! </span>{
+    <span class="attr">#![feature = <span class="string">&quot;ucontext&quot;</span>]
+    #[allow(missing_docs)]
+    </span><span class="kw">pub mod </span>ucontext;
+}
+<span class="attr">#[allow(missing_docs)]
+</span><span class="kw">pub mod </span>unistd;
 
-<span class="comment">/*
- *
- * ===== Result / Error =====
- *
- */
-
-</span><span class="kw">use </span>libc::{c_char, PATH_MAX};
-
-<span class="kw">use </span>std::{error, fmt, ptr, result};
-<span class="kw">use </span>std::ffi::{CStr, OsStr};
+<span class="kw">use </span>std::ffi::{CStr, CString, OsStr};
+<span class="kw">use </span>std::mem::MaybeUninit;
 <span class="kw">use </span>std::os::unix::ffi::OsStrExt;
 <span class="kw">use </span>std::path::{Path, PathBuf};
+<span class="kw">use </span>std::{ptr, result, slice};
 
 <span class="kw">use </span>errno::Errno;
 
 <span class="doccomment">/// Nix Result Type
-</span><span class="kw">pub type </span><span class="prelude-ty">Result</span>&lt;T&gt; = result::Result&lt;T, Error&gt;;
+</span><span class="kw">pub type </span><span class="prelude-ty">Result</span>&lt;T&gt; = result::Result&lt;T, Errno&gt;;
 
-<span class="doccomment">/// Nix Error Type
+<span class="doccomment">/// Nix&#39;s main error type.
 ///
-/// The nix error type provides a common way of dealing with
-/// various system system/libc calls that might fail.  Each
-/// error has a corresponding errno (usually the one from the
-/// underlying OS) to which it can be mapped in addition to
-/// implementing other common traits.
-</span><span class="attr">#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-</span><span class="kw">pub enum </span>Error {
-    Sys(Errno),
-    InvalidPath,
-    <span class="doccomment">/// The operation involved a conversion to Rust&#39;s native String type, which failed because the
-    /// string did not contain all valid UTF-8.
-    </span>InvalidUtf8,
-    <span class="doccomment">/// The operation is not supported by Nix, in this instance either use the libc bindings or
-    /// consult the module documentation to see if there is a more appropriate interface available.
-    </span>UnsupportedOperation,
-}
+/// It&#39;s a wrapper around Errno.  As such, it&#39;s very interoperable with
+/// [`std::io::Error`], but it has the advantages of:
+/// * `Clone`
+/// * `Copy`
+/// * `Eq`
+/// * Small size
+/// * Represents all of the system&#39;s errnos, instead of just the most common
+/// ones.
+</span><span class="kw">pub type </span>Error = Errno;
 
-<span class="kw">impl </span>Error {
-    <span class="doccomment">/// Convert this `Error` to an [`Errno`](enum.Errno.html).
+<span class="doccomment">/// Common trait used to represent file system paths by many Nix functions.
+</span><span class="kw">pub trait </span>NixPath {
+    <span class="doccomment">/// Is the path empty?
+    </span><span class="kw">fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool;
+
+    <span class="doccomment">/// Length of the path in bytes
+    </span><span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
+
+    <span class="doccomment">/// Execute a function with this path as a `CStr`.
     ///
-    /// # Example
-    ///
-    /// ```
-    /// # use nix::Error;
-    /// # use nix::errno::Errno;
-    /// let e = Error::from(Errno::EPERM);
-    /// assert_eq!(Some(Errno::EPERM), e.as_errno());
-    /// ```
-    </span><span class="kw">pub fn </span>as_errno(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Errno&gt; {
-        <span class="kw">if let </span>Error::Sys(e) = <span class="self">self </span>{
-            <span class="prelude-val">Some</span>(e)
-        } <span class="kw">else </span>{
-            <span class="prelude-val">None
-        </span>}
-    }
-
-    <span class="doccomment">/// Create a nix Error from a given errno
-    </span><span class="kw">pub fn </span>from_errno(errno: Errno) -&gt; Error {
-        Error::Sys(errno)
-    }
-
-    <span class="doccomment">/// Get the current errno and convert it to a nix Error
-    </span><span class="kw">pub fn </span>last() -&gt; Error {
-        Error::Sys(Errno::last())
-    }
-
-    <span class="doccomment">/// Create a new invalid argument error (`EINVAL`)
-    </span><span class="kw">pub fn </span>invalid_argument() -&gt; Error {
-        Error::Sys(Errno::EINVAL)
-    }
-
-}
-
-<span class="kw">impl </span>From&lt;Errno&gt; <span class="kw">for </span>Error {
-    <span class="kw">fn </span>from(errno: Errno) -&gt; Error { Error::from_errno(errno) }
-}
-
-<span class="kw">impl </span>From&lt;std::string::FromUtf8Error&gt; <span class="kw">for </span>Error {
-    <span class="kw">fn </span>from(<span class="kw">_</span>: std::string::FromUtf8Error) -&gt; Error { Error::InvalidUtf8 }
-}
-
-<span class="kw">impl </span>error::Error <span class="kw">for </span>Error {}
-
-<span class="kw">impl </span>fmt::Display <span class="kw">for </span>Error {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter) -&gt; fmt::Result {
-        <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
-            Error::InvalidPath =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;Invalid path&quot;</span>),
-            Error::InvalidUtf8 =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;Invalid UTF-8 string&quot;</span>),
-            Error::UnsupportedOperation =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;Unsupported Operation&quot;</span>),
-            Error::Sys(errno) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;{:?}: {}&quot;</span>, errno, errno.desc()),
-        }
-    }
-}
-
-<span class="kw">pub trait </span>NixPath {
-    <span class="kw">fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool;
-
-    <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
-
-    <span class="kw">fn </span>with_nix_path&lt;T, F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, f: F) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;
+    /// Mostly used internally by Nix.
+    </span><span class="kw">fn </span>with_nix_path&lt;T, F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, f: F) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;
         <span class="kw">where </span>F: FnOnce(<span class="kw-2">&amp;</span>CStr) -&gt; T;
 }
 
@@ -492,12 +558,9 @@
     }
 
     <span class="kw">fn </span>with_nix_path&lt;T, F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, f: F) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;
-            <span class="kw">where </span>F: FnOnce(<span class="kw-2">&amp;</span>CStr) -&gt; T {
-        <span class="comment">// Equivalence with the [u8] impl.
-        </span><span class="kw">if </span><span class="self">self</span>.len() &gt;= PATH_MAX <span class="kw">as </span>usize {
-            <span class="kw">return </span><span class="prelude-val">Err</span>(Error::InvalidPath);
-        }
-
+    <span class="kw">where
+        </span>F: FnOnce(<span class="kw-2">&amp;</span>CStr) -&gt; T,
+    {
         <span class="prelude-val">Ok</span>(f(<span class="self">self</span>))
     }
 }
@@ -512,24 +575,45 @@
     }
 
     <span class="kw">fn </span>with_nix_path&lt;T, F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, f: F) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;
-            <span class="kw">where </span>F: FnOnce(<span class="kw-2">&amp;</span>CStr) -&gt; T {
-        <span class="kw">let </span><span class="kw-2">mut </span>buf = [<span class="number">0u8</span>; PATH_MAX <span class="kw">as </span>usize];
+    <span class="kw">where
+        </span>F: FnOnce(<span class="kw-2">&amp;</span>CStr) -&gt; T,
+    {
+        <span class="comment">// The real PATH_MAX is typically 4096, but it&#39;s statistically unlikely to have a path
+        // longer than ~300 bytes. See the the PR description to get stats for your own machine.
+        // https://github.com/nix-rust/nix/pull/1656
+        //
+        // By being smaller than a memory page, we also avoid the compiler inserting a probe frame:
+        // https://docs.rs/compiler_builtins/latest/compiler_builtins/probestack/index.html
+        </span><span class="kw">const </span>MAX_STACK_ALLOCATION: usize = <span class="number">1024</span>;
 
-        <span class="kw">if </span><span class="self">self</span>.len() &gt;= PATH_MAX <span class="kw">as </span>usize {
-            <span class="kw">return </span><span class="prelude-val">Err</span>(Error::InvalidPath);
+        <span class="kw">if </span><span class="self">self</span>.len() &gt;= MAX_STACK_ALLOCATION {
+            <span class="kw">return </span>with_nix_path_allocating(<span class="self">self</span>, f);
         }
 
-        <span class="kw">match </span><span class="self">self</span>.iter().position(|b| <span class="kw-2">*</span>b == <span class="number">0</span>) {
-            <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(Error::InvalidPath),
-            <span class="prelude-val">None </span>=&gt; {
-                <span class="kw">unsafe </span>{
-                    <span class="comment">// TODO: Replace with bytes::copy_memory. rust-lang/rust#24028
-                    </span>ptr::copy_nonoverlapping(<span class="self">self</span>.as_ptr(), buf.as_mut_ptr(), <span class="self">self</span>.len());
-                    <span class="prelude-val">Ok</span>(f(CStr::from_ptr(buf.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>c_char)))
-                }
+        <span class="kw">let </span><span class="kw-2">mut </span>buf = MaybeUninit::&lt;[u8; MAX_STACK_ALLOCATION]&gt;::uninit();
+        <span class="kw">let </span>buf_ptr = buf.as_mut_ptr() <span class="kw">as </span><span class="kw-2">*mut </span>u8;
 
-            }
+        <span class="kw">unsafe </span>{
+            ptr::copy_nonoverlapping(<span class="self">self</span>.as_ptr(), buf_ptr, <span class="self">self</span>.len());
+            buf_ptr.add(<span class="self">self</span>.len()).write(<span class="number">0</span>);
         }
+
+        <span class="kw">match </span>CStr::from_bytes_with_nul(<span class="kw">unsafe </span>{ slice::from_raw_parts(buf_ptr, <span class="self">self</span>.len() + <span class="number">1</span>) }) {
+            <span class="prelude-val">Ok</span>(s) =&gt; <span class="prelude-val">Ok</span>(f(s)),
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(Errno::EINVAL),
+        }
+    }
+}
+
+<span class="attr">#[cold]
+#[inline(never)]
+</span><span class="kw">fn </span>with_nix_path_allocating&lt;T, F&gt;(from: <span class="kw-2">&amp;</span>[u8], f: F) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;
+<span class="kw">where
+    </span>F: FnOnce(<span class="kw-2">&amp;</span>CStr) -&gt; T,
+{
+    <span class="kw">match </span>CString::new(from) {
+        <span class="prelude-val">Ok</span>(s) =&gt; <span class="prelude-val">Ok</span>(f(<span class="kw-2">&amp;</span>s)),
+        <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(Errno::EINVAL),
     }
 }
 

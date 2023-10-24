@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ErrorKind"],"macro":["execute","queue"],"mod":["cursor","event","style","terminal","tty"],"trait":["Command","ExecutableCommand","QueueableCommand"],"type":["Result"]};
+window.SIDEBAR_ITEMS = {"macro":["execute","queue"],"mod":["cursor","event","style","terminal","tty"],"trait":["Command","ExecutableCommand","QueueableCommand","SynchronizedUpdate"]};

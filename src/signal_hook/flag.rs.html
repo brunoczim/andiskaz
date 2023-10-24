@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/signal-hook-0.1.17/src/flag.rs`."><title>flag.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="signal_hook" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../signal_hook/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/signal-hook-0.3.17/src/flag.rs`."><title>flag.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="signal_hook" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../signal_hook/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -212,6 +212,75 @@
 <a href="#212" id="212">212</a>
 <a href="#213" id="213">213</a>
 <a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Module for actions setting flags.
 //!
 //! This contains helper functions to set flags whenever a signal happens. The flags are atomic
@@ -230,7 +299,7 @@
 //! didn&#39;t block at all, the checking for the signal would turn into a busy-loop.
 //!
 //! If what you need is blocking until a signal comes, you might find better tools in the
-//! [`pipe`](../pipe/) and [`iterator`](../iterator/) modules.
+//! [`pipe`][crate::low_level::pipe] and [`iterator`][crate::iterator] modules.
 //!
 //! # Examples
 //!
@@ -238,42 +307,41 @@
 //! multiple termination signals arrive before it is handled, it recognizes the last one.
 //!
 //! ```rust
-//! extern crate signal_hook;
-//!
 //! use std::io::Error;
 //! use std::sync::Arc;
 //! use std::sync::atomic::{AtomicUsize, Ordering};
 //!
+//! use signal_hook::consts::signal::*;
 //! use signal_hook::flag as signal_flag;
 //!
 //! fn main() -&gt; Result&lt;(), Error&gt; {
 //!     let term = Arc::new(AtomicUsize::new(0));
-//!     const SIGTERM: usize = signal_hook::SIGTERM as usize;
-//!     const SIGINT: usize = signal_hook::SIGINT as usize;
+//!     const SIGTERM_U: usize = SIGTERM as usize;
+//!     const SIGINT_U: usize = SIGINT as usize;
 //! #   #[cfg(not(windows))]
-//!     const SIGQUIT: usize = signal_hook::SIGQUIT as usize;
-//!     signal_flag::register_usize(signal_hook::SIGTERM, Arc::clone(&amp;term), SIGTERM)?;
-//!     signal_flag::register_usize(signal_hook::SIGINT, Arc::clone(&amp;term), SIGINT)?;
+//!     const SIGQUIT_U: usize = SIGQUIT as usize;
+//!     signal_flag::register_usize(SIGTERM, Arc::clone(&amp;term), SIGTERM_U)?;
+//!     signal_flag::register_usize(SIGINT, Arc::clone(&amp;term), SIGINT_U)?;
 //! #   #[cfg(not(windows))]
-//!     signal_flag::register_usize(signal_hook::SIGQUIT, Arc::clone(&amp;term), SIGQUIT)?;
+//!     signal_flag::register_usize(SIGQUIT, Arc::clone(&amp;term), SIGQUIT_U)?;
 //!
 //! #   // Hack to terminate the example when run as a doc-test.
-//! #   term.store(SIGTERM, Ordering::Relaxed);
+//! #   term.store(SIGTERM_U, Ordering::Relaxed);
 //!     loop {
 //!         match term.load(Ordering::Relaxed) {
 //!             0 =&gt; {
 //!                 // Do some useful stuff here
 //!             }
-//!             SIGTERM =&gt; {
+//!             SIGTERM_U =&gt; {
 //!                 eprintln!(&quot;Terminating on the TERM signal&quot;);
 //!                 break;
 //!             }
-//!             SIGINT =&gt; {
+//!             SIGINT_U =&gt; {
 //!                 eprintln!(&quot;Terminating on the INT signal&quot;);
 //!                 break;
 //!             }
 //! #           #[cfg(not(windows))]
-//!             SIGQUIT =&gt; {
+//!             SIGQUIT_U =&gt; {
 //!                 eprintln!(&quot;Terminating on the QUIT signal&quot;);
 //!                 break;
 //!             }
@@ -288,27 +356,25 @@
 //! Sending a signal to self and seeing it arrived (not of a practical usage on itself):
 //!
 //! ```rust
-//! extern crate libc;
-//! extern crate signal_hook;
-//!
 //! use std::io::Error;
 //! use std::sync::Arc;
 //! use std::sync::atomic::{AtomicBool, Ordering};
 //! use std::thread;
 //! use std::time::Duration;
 //!
+//! use signal_hook::consts::signal::*;
+//! use signal_hook::low_level::raise;
+//!
 //! fn main() -&gt; Result&lt;(), Error&gt; {
 //!     let got = Arc::new(AtomicBool::new(false));
 //! #   #[cfg(not(windows))]
-//!     signal_hook::flag::register(signal_hook::SIGUSR1, Arc::clone(&amp;got))?;
+//!     signal_hook::flag::register(SIGUSR1, Arc::clone(&amp;got))?;
 //! #   #[cfg(windows)]
-//! #   signal_hook::flag::register(signal_hook::SIGTERM, Arc::clone(&amp;got))?;
-//!     unsafe {
-//! #       #[cfg(not(windows))]
-//!         libc::raise(signal_hook::SIGUSR1);
-//! #       #[cfg(windows)]
-//! #       libc::raise(signal_hook::SIGTERM);
-//!     }
+//! #   signal_hook::flag::register(SIGTERM, Arc::clone(&amp;got))?;
+//! #   #[cfg(not(windows))]
+//!     raise(SIGUSR1).unwrap();
+//! #   #[cfg(windows)]
+//! #   raise(SIGTERM).unwrap();
 //!     // A sleep here, because it could run the signal handler in another thread and we may not
 //!     // see the flag right away. This is still a hack and not guaranteed to work, it is just an
 //!     // example!
@@ -322,12 +388,11 @@
 //! together with reopening the log file).
 //!
 //! ```rust
-//! extern crate signal_hook;
-//!
 //! use std::io::Error;
 //! use std::sync::Arc;
 //! use std::sync::atomic::{AtomicBool, Ordering};
 //!
+//! use signal_hook::consts::signal::*;
 //! use signal_hook::flag as signal_flag;
 //!
 //! fn main() -&gt; Result&lt;(), Error&gt; {
@@ -335,11 +400,11 @@
 //!     let reload = Arc::new(AtomicBool::new(true));
 //!     let term = Arc::new(AtomicBool::new(false));
 //! #   #[cfg(not(windows))]
-//!     signal_flag::register(signal_hook::SIGHUP, Arc::clone(&amp;reload))?;
-//!     signal_flag::register(signal_hook::SIGINT, Arc::clone(&amp;term))?;
-//!     signal_flag::register(signal_hook::SIGTERM, Arc::clone(&amp;term))?;
+//!     signal_flag::register(SIGHUP, Arc::clone(&amp;reload))?;
+//!     signal_flag::register(SIGINT, Arc::clone(&amp;term))?;
+//!     signal_flag::register(SIGTERM, Arc::clone(&amp;term))?;
 //! #   #[cfg(not(windows))]
-//!     signal_flag::register(signal_hook::SIGQUIT, Arc::clone(&amp;term))?;
+//!     signal_flag::register(SIGQUIT, Arc::clone(&amp;term))?;
 //!     while !term.load(Ordering::Relaxed) {
 //!         // Using swap here, not load, to reset it back to false once it is reloaded.
 //!         if reload.swap(false, Ordering::Relaxed) {
@@ -359,22 +424,91 @@
 <span class="kw">use </span>std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 <span class="kw">use </span>std::sync::Arc;
 
-<span class="kw">use </span>libc::c_int;
+<span class="kw">use </span>libc::{c_int, EINVAL};
 
-<span class="kw">use </span><span class="kw">crate</span>::SigId;
+<span class="kw">use crate</span>::{low_level, SigId};
 
 <span class="doccomment">/// Registers an action to set the flag to `true` whenever the given signal arrives.
+///
+/// # Panics
+///
+/// If the signal is one of the forbidden.
 </span><span class="kw">pub fn </span>register(signal: c_int, flag: Arc&lt;AtomicBool&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;SigId, Error&gt; {
     <span class="comment">// We use SeqCst for two reasons:
     // * Signals should not come very often, so the performance does not really matter.
     // * We promise the order of actions, but setting different atomics with Relaxed or similar
     //   would not guarantee the effective order.
-    </span><span class="kw">unsafe </span>{ <span class="kw">crate</span>::register(signal, <span class="kw">move </span>|| flag.store(<span class="bool-val">true</span>, Ordering::SeqCst)) }
+    </span><span class="kw">unsafe </span>{ low_level::register(signal, <span class="kw">move </span>|| flag.store(<span class="bool-val">true</span>, Ordering::SeqCst)) }
 }
 
 <span class="doccomment">/// Registers an action to set the flag to the given value whenever the signal arrives.
 </span><span class="kw">pub fn </span>register_usize(signal: c_int, flag: Arc&lt;AtomicUsize&gt;, value: usize) -&gt; <span class="prelude-ty">Result</span>&lt;SigId, Error&gt; {
-    <span class="kw">unsafe </span>{ <span class="kw">crate</span>::register(signal, <span class="kw">move </span>|| flag.store(value, Ordering::SeqCst)) }
+    <span class="kw">unsafe </span>{ low_level::register(signal, <span class="kw">move </span>|| flag.store(value, Ordering::SeqCst)) }
+}
+
+<span class="doccomment">/// Terminate the application on a signal if the given condition is true.
+///
+/// This can be used for different use cases. One of them (with the condition being always true) is
+/// just unconditionally terminate on the given signal.
+///
+/// Another is being able to turn on and off the behaviour by the shared flag.
+///
+/// The last one is handling double CTRL+C ‒ if the user presses CTRL+C, we would like to start a
+/// graceful shutdown. But if anything ever gets stuck in the shutdown, second CTRL+C (or other
+/// such termination signal) should terminate the application without further delay.
+///
+/// To do that, one can combine this with [`register`]. On the first run, the flag is `false` and
+/// this doesn&#39;t terminate. But then the flag is set to true during the first run and „arms“ the
+/// shutdown on the second run. Note that it matters in which order the actions are registered (the
+/// shutdown must go first). And yes, this also allows asking the user „Do you want to terminate“
+/// and disarming the abrupt shutdown if the user answers „No“.
+///
+/// # Panics
+///
+/// If the signal is one of the forbidden.
+</span><span class="kw">pub fn </span>register_conditional_shutdown(
+    signal: c_int,
+    status: c_int,
+    condition: Arc&lt;AtomicBool&gt;,
+) -&gt; <span class="prelude-ty">Result</span>&lt;SigId, Error&gt; {
+    <span class="kw">let </span>action = <span class="kw">move </span>|| {
+        <span class="kw">if </span>condition.load(Ordering::SeqCst) {
+            low_level::exit(status);
+        }
+    };
+    <span class="kw">unsafe </span>{ low_level::register(signal, action) }
+}
+
+<span class="doccomment">/// Conditionally runs an emulation of the default action on the given signal.
+///
+/// If the provided condition is true at the time of invoking the signal handler, the equivalent of
+/// the default action of the given signal is run. It is a bit similar to
+/// [`register_conditional_shutdown`], except that it doesn&#39;t terminate for non-termination
+/// signals, it runs their default handler.
+///
+/// # Panics
+///
+/// If the signal is one of the forbidden
+///
+/// # Errors
+///
+/// Similarly to the [`emulate_default_handler`][low_level::emulate_default_handler] function, this
+/// one looks the signal up in a table. If it is unknown, an error is returned.
+///
+/// Additionally to that, any errors that can be caused by a registration of a handler can happen
+/// too.
+</span><span class="kw">pub fn </span>register_conditional_default(
+    signal: c_int,
+    condition: Arc&lt;AtomicBool&gt;,
+) -&gt; <span class="prelude-ty">Result</span>&lt;SigId, Error&gt; {
+    <span class="comment">// Verify we know about this particular signal.
+    </span>low_level::signal_name(signal).ok_or_else(|| Error::from_raw_os_error(EINVAL))<span class="question-mark">?</span>;
+    <span class="kw">let </span>action = <span class="kw">move </span>|| {
+        <span class="kw">if </span>condition.load(Ordering::SeqCst) {
+            <span class="kw">let _ </span>= low_level::emulate_default_handler(signal);
+        }
+    };
+    <span class="kw">unsafe </span>{ low_level::register(signal, action) }
 }
 
 <span class="attr">#[cfg(test)]
@@ -383,20 +517,22 @@
     <span class="kw">use </span>std::time::{Duration, Instant};
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::consts::signal::<span class="kw-2">*</span>;
 
     <span class="kw">fn </span>self_signal() {
-        <span class="kw">unsafe </span>{
-            <span class="attr">#[cfg(not(windows))]
-            </span>libc::raise(<span class="kw">crate</span>::SIGUSR1);
-            <span class="attr">#[cfg(windows)]
-            </span>libc::raise(<span class="kw">crate</span>::SIGTERM);
-        }
+        <span class="attr">#[cfg(not(windows))]
+        </span><span class="kw">const </span>SIG: c_int = SIGUSR1;
+        <span class="attr">#[cfg(windows)]
+        </span><span class="kw">const </span>SIG: c_int = SIGTERM;
+        <span class="kw">crate</span>::low_level::raise(SIG).unwrap();
     }
 
     <span class="kw">fn </span>wait_flag(flag: <span class="kw-2">&amp;</span>AtomicBool) -&gt; bool {
         <span class="kw">let </span>start = Instant::now();
         <span class="kw">while </span>!flag.load(Ordering::Relaxed) {
-            atomic::spin_loop_hint();
+            <span class="comment">// Replaced by hint::spin_loop, but we want to support older compiler
+            </span><span class="attr">#[allow(deprecated)]
+            </span>atomic::spin_loop_hint();
             <span class="kw">if </span>Instant::now() - start &gt; Duration::from_secs(<span class="number">1</span>) {
                 <span class="comment">// We reached a timeout and nothing happened yet.
                 // In theory, using timeouts for thread-synchronization tests is wrong, but a
@@ -412,18 +548,20 @@
         <span class="comment">// When we register the action, it is active.
         </span><span class="kw">let </span>flag = Arc::new(AtomicBool::new(<span class="bool-val">false</span>));
         <span class="attr">#[cfg(not(windows))]
-        </span><span class="kw">let </span>signal = register(<span class="kw">crate</span>::SIGUSR1, Arc::clone(<span class="kw-2">&amp;</span>flag)).unwrap();
+        </span><span class="kw">let </span>signal = register(SIGUSR1, Arc::clone(<span class="kw-2">&amp;</span>flag)).unwrap();
         <span class="attr">#[cfg(windows)]
         </span><span class="kw">let </span>signal = register(<span class="kw">crate</span>::SIGTERM, Arc::clone(<span class="kw-2">&amp;</span>flag)).unwrap();
         self_signal();
         <span class="macro">assert!</span>(wait_flag(<span class="kw-2">&amp;</span>flag));
         <span class="comment">// But stops working after it is unregistered.
-        </span><span class="macro">assert!</span>(<span class="kw">crate</span>::unregister(signal));
+        </span><span class="macro">assert!</span>(<span class="kw">crate</span>::low_level::unregister(signal));
         flag.store(<span class="bool-val">false</span>, Ordering::Relaxed);
         self_signal();
         <span class="macro">assert!</span>(!wait_flag(<span class="kw-2">&amp;</span>flag));
         <span class="comment">// And the unregistration actually dropped its copy of the Arc
         </span><span class="macro">assert_eq!</span>(<span class="number">1</span>, Arc::strong_count(<span class="kw-2">&amp;</span>flag));
     }
-}
+
+    <span class="comment">// The shutdown is tested in tests/shutdown.rs
+</span>}
 </code></pre></div></section></main></body></html>

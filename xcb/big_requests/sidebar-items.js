@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["ENABLE","MAJOR_VERSION","MINOR_VERSION"],"fn":["enable","enable_unchecked","id"],"type":["EnableCookie","EnableReply"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["FORBIDDEN","SIGABRT","SIGALRM","SIGBUS","SIGCHLD","SIGCONT","SIGFPE","SIGHUP","SIGILL","SIGINT","SIGIO","SIGKILL","SIGPIPE","SIGPROF","SIGQUIT","SIGSEGV","SIGSTOP","SIGSYS","SIGTERM","SIGTRAP","SIGUSR1","SIGUSR2","SIGWINCH"],"fn":["register","unregister"],"mod":["cleanup","flag","iterator","pipe"],"struct":["SigId"]};
+window.SIDEBAR_ITEMS = {"mod":["consts","flag","iterator","low_level"],"struct":["SigId"]};

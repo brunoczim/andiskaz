@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/x11-clipboard-0.5.3/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="x11_clipboard" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../x11_clipboard/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/x11-clipboard-0.7.1/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="x11_clipboard" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../x11_clipboard/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -318,18 +318,71 @@
 <a href="#318" id="318">318</a>
 <a href="#319" id="319">319</a>
 <a href="#320" id="320">320</a>
-</pre></div><pre class="rust"><code><span class="kw">pub extern crate </span>xcb;
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+</pre></div><pre class="rust"><code><span class="kw">extern crate </span>x11rb;
 
 <span class="kw">pub mod </span>error;
 <span class="kw">mod </span>run;
+
+<span class="kw">pub use </span>x11rb::protocol::xproto::{Atom, Window};
+<span class="kw">pub use </span>x11rb::rust_connection::RustConnection;
 
 <span class="kw">use </span>std::thread;
 <span class="kw">use </span>std::time::{ Duration, Instant };
 <span class="kw">use </span>std::sync::{ Arc, RwLock };
 <span class="kw">use </span>std::sync::mpsc::{ Sender, channel };
 <span class="kw">use </span>std::collections::HashMap;
-<span class="kw">use </span>xcb::{ Connection, Window, Atom };
-<span class="kw">use </span>xcb::base::ConnError;
+<span class="kw">use </span>x11rb::connection::{Connection, RequestConnection};
+<span class="kw">use </span>x11rb::{COPY_DEPTH_FROM_PARENT, CURRENT_TIME};
+<span class="kw">use </span>x11rb::errors::ConnectError;
+<span class="kw">use </span>x11rb::protocol::{Event, xfixes};
+<span class="kw">use </span>x11rb::protocol::xproto::{AtomEnum, ConnectionExt, CreateWindowAux, EventMask, Property, WindowClass};
 <span class="kw">use </span>error::Error;
 
 <span class="kw">pub const </span>INCR_CHUNK_SIZE: usize = <span class="number">4000</span>;
@@ -344,7 +397,41 @@
     <span class="kw">pub </span>targets: Atom,
     <span class="kw">pub </span>string: Atom,
     <span class="kw">pub </span>utf8_string: Atom,
-    <span class="kw">pub </span>incr: Atom
+    <span class="kw">pub </span>incr: Atom,
+}
+
+<span class="kw">impl </span>Atoms {
+    <span class="kw">fn </span>intern_all(conn: <span class="kw-2">&amp;</span>RustConnection) -&gt; <span class="prelude-ty">Result</span>&lt;Atoms, Error&gt; {
+        <span class="kw">let </span>clipboard = conn.intern_atom(
+            <span class="bool-val">false</span>,
+            <span class="string">b&quot;CLIPBOARD&quot;</span>,
+        )<span class="question-mark">?</span>;
+        <span class="kw">let </span>property = conn.intern_atom(
+            <span class="bool-val">false</span>,
+            <span class="string">b&quot;THIS_CLIPBOARD_OUT&quot;</span>,
+        )<span class="question-mark">?</span>;
+        <span class="kw">let </span>targets = conn.intern_atom(
+            <span class="bool-val">false</span>,
+            <span class="string">b&quot;TARGETS&quot;</span>,
+        )<span class="question-mark">?</span>;
+        <span class="kw">let </span>utf8_string = conn.intern_atom(
+            <span class="bool-val">false</span>,
+            <span class="string">b&quot;UTF8_STRING&quot;</span>,
+        )<span class="question-mark">?</span>;
+        <span class="kw">let </span>incr = conn.intern_atom(
+            <span class="bool-val">false</span>,
+            <span class="string">b&quot;INCR&quot;</span>,
+        )<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(Atoms {
+            primary: Atom::from(AtomEnum::PRIMARY),
+            clipboard: clipboard.reply()<span class="question-mark">?</span>.atom,
+            property: property.reply()<span class="question-mark">?</span>.atom,
+            targets: targets.reply()<span class="question-mark">?</span>.atom,
+            string: Atom::from(AtomEnum::STRING),
+            utf8_string: utf8_string.reply()<span class="question-mark">?</span>.atom,
+            incr: incr.reply()<span class="question-mark">?</span>.atom,
+        })
+    }
 }
 
 <span class="doccomment">/// X11 Clipboard
@@ -356,59 +443,49 @@
 }
 
 <span class="kw">pub struct </span>Context {
-    <span class="kw">pub </span>connection: Connection,
-    <span class="kw">pub </span>screen: i32,
+    <span class="kw">pub </span>connection: RustConnection,
+    <span class="kw">pub </span>screen: usize,
     <span class="kw">pub </span>window: Window,
     <span class="kw">pub </span>atoms: Atoms
 }
 
 <span class="attr">#[inline]
-</span><span class="kw">fn </span>get_atom(connection: <span class="kw-2">&amp;</span>Connection, name: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;Atom, Error&gt; {
-    xcb::intern_atom(connection, <span class="bool-val">false</span>, name)
-        .get_reply()
-        .map(|reply| reply.atom())
-        .map_err(Into::into)
+</span><span class="kw">fn </span>get_atom(connection: <span class="kw-2">&amp;</span>RustConnection, name: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;Atom, Error&gt; {
+    <span class="kw">let </span>intern_atom = connection.intern_atom(
+        <span class="bool-val">false</span>,
+        name.as_bytes()
+    )<span class="question-mark">?</span>;
+    <span class="kw">let </span>reply = intern_atom.reply()
+        .map_err(Error::XcbReply)<span class="question-mark">?</span>;
+    <span class="prelude-val">Ok</span>(reply.atom)
 }
 
 <span class="kw">impl </span>Context {
     <span class="kw">pub fn </span>new(displayname: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
-        <span class="kw">let </span>(connection, screen) = Connection::connect(displayname)<span class="question-mark">?</span>;
-        <span class="kw">let </span>window = connection.generate_id();
+        <span class="kw">let </span>(connection, screen) = RustConnection::connect(displayname)<span class="question-mark">?</span>;
+        <span class="kw">let </span>window = connection.generate_id()<span class="question-mark">?</span>;
 
         {
-            <span class="kw">let </span>screen = connection.get_setup().roots().nth(screen <span class="kw">as </span>usize)
-                .ok_or(Error::XcbConn(ConnError::ClosedInvalidScreen))<span class="question-mark">?</span>;
-            xcb::create_window(
-                <span class="kw-2">&amp;</span>connection,
-                xcb::COPY_FROM_PARENT <span class="kw">as </span>u8,
-                window, screen.root(),
-                <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>,
+            <span class="kw">let </span>screen = connection.setup().roots.get(screen)
+                .ok_or(Error::XcbConnect(ConnectError::InvalidScreen))<span class="question-mark">?</span>;
+            connection.create_window(
+                COPY_DEPTH_FROM_PARENT,
+                window,
+                screen.root,
                 <span class="number">0</span>,
-                xcb::WINDOW_CLASS_INPUT_OUTPUT <span class="kw">as </span>u16,
-                screen.root_visual(),
-                <span class="kw-2">&amp;</span>[(
-                    xcb::CW_EVENT_MASK,
-                    xcb::EVENT_MASK_STRUCTURE_NOTIFY | xcb::EVENT_MASK_PROPERTY_CHANGE
-                )]
-            );
-            connection.flush();
+                <span class="number">0</span>,
+                <span class="number">1</span>,
+                <span class="number">1</span>,
+                <span class="number">0</span>,
+                WindowClass::INPUT_OUTPUT,
+                screen.root_visual,
+                <span class="kw-2">&amp;</span>CreateWindowAux::new()
+                    .event_mask(EventMask::STRUCTURE_NOTIFY | EventMask::PROPERTY_CHANGE)
+            )<span class="question-mark">?
+                </span>.check()<span class="question-mark">?</span>;
         }
 
-        <span class="macro">macro_rules! </span>intern_atom {
-            ( <span class="macro-nonterminal">$name</span>:expr ) =&gt; {
-                get_atom(<span class="kw-2">&amp;</span>connection, <span class="macro-nonterminal">$name</span>)<span class="question-mark">?
-            </span>}
-        }
-
-        <span class="kw">let </span>atoms = Atoms {
-            primary: xcb::ATOM_PRIMARY,
-            clipboard: <span class="macro">intern_atom!</span>(<span class="string">&quot;CLIPBOARD&quot;</span>),
-            property: <span class="macro">intern_atom!</span>(<span class="string">&quot;THIS_CLIPBOARD_OUT&quot;</span>),
-            targets: <span class="macro">intern_atom!</span>(<span class="string">&quot;TARGETS&quot;</span>),
-            string: xcb::ATOM_STRING,
-            utf8_string: <span class="macro">intern_atom!</span>(<span class="string">&quot;UTF8_STRING&quot;</span>),
-            incr: <span class="macro">intern_atom!</span>(<span class="string">&quot;INCR&quot;</span>)
-        };
+        <span class="kw">let </span>atoms = Atoms::intern_all(<span class="kw-2">&amp;</span>connection)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(Context { connection, screen, window, atoms })
     }
@@ -429,13 +506,13 @@
         <span class="kw">let </span>setmap2 = Arc::clone(<span class="kw-2">&amp;</span>setmap);
 
         <span class="kw">let </span>(sender, receiver) = channel();
-        <span class="kw">let </span>max_length = setter.connection.get_maximum_request_length() <span class="kw">as </span>usize * <span class="number">4</span>;
+        <span class="kw">let </span>max_length = setter.connection.maximum_request_bytes();
         thread::spawn(<span class="kw">move </span>|| run::run(<span class="kw-2">&amp;</span>setter2, <span class="kw-2">&amp;</span>setmap2, max_length, <span class="kw-2">&amp;</span>receiver));
 
         <span class="prelude-val">Ok</span>(Clipboard { getter, setter, setmap, send: sender })
     }
 
-    <span class="kw">fn </span>process_event&lt;T&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, buff: <span class="kw-2">&amp;mut </span>Vec&lt;u8&gt;, selection: Atom, target: Atom, property: Atom, timeout: T, use_xfixes: bool, xfixes_event_base: u8)
+    <span class="kw">fn </span>process_event&lt;T&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, buff: <span class="kw-2">&amp;mut </span>Vec&lt;u8&gt;, selection: Atom, target: Atom, property: Atom, timeout: T, use_xfixes: bool)
         -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt;
         <span class="kw">where </span>T: Into&lt;<span class="prelude-ty">Option</span>&lt;Duration&gt;&gt;
     {
@@ -456,16 +533,9 @@
             }
 
             <span class="kw">let </span>event = <span class="kw">match </span>use_xfixes {
-                <span class="bool-val">true </span>=&gt; {
-                    <span class="kw">match </span><span class="self">self</span>.getter.connection.wait_for_event() {
-                        <span class="prelude-val">Some</span>(event) =&gt; event,
-                        <span class="prelude-val">None </span>=&gt; {
-                            <span class="kw">continue
-                        </span>}
-                    }
-                },
+                <span class="bool-val">true </span>=&gt; <span class="self">self</span>.getter.connection.wait_for_event()<span class="question-mark">?</span>,
                 <span class="bool-val">false </span>=&gt; {
-                    <span class="kw">match </span><span class="self">self</span>.getter.connection.poll_for_event() {
+                    <span class="kw">match </span><span class="self">self</span>.getter.connection.poll_for_event()<span class="question-mark">? </span>{
                         <span class="prelude-val">Some</span>(event) =&gt; event,
                         <span class="prelude-val">None </span>=&gt; {
                             thread::park_timeout(Duration::from_millis(POLL_DURATION));
@@ -475,73 +545,83 @@
                 }
             };
 
-            <span class="kw">let </span>r = event.response_type();
-
-            <span class="kw">if </span>use_xfixes &amp;&amp; r == (xfixes_event_base + xcb::xfixes::SELECTION_NOTIFY) {
-                <span class="kw">let </span>event = <span class="kw">unsafe </span>{ xcb::cast_event::&lt;xcb::xfixes::SelectionNotifyEvent&gt;(<span class="kw-2">&amp;</span>event) };
-                xcb::convert_selection(<span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, <span class="self">self</span>.getter.window,
-                                       selection, target, property,
-                                       event.timestamp());
-                <span class="self">self</span>.getter.connection.flush();
-                <span class="kw">continue</span>;
-            }
-
-            <span class="kw">match </span>r &amp; !<span class="number">0x80 </span>{
-                xcb::SELECTION_NOTIFY =&gt; {
-                    <span class="kw">let </span>event = <span class="kw">unsafe </span>{ xcb::cast_event::&lt;xcb::SelectionNotifyEvent&gt;(<span class="kw-2">&amp;</span>event) };
-                    <span class="kw">if </span>event.selection() != selection { <span class="kw">continue </span>};
+            <span class="kw">match </span>event {
+                Event::XfixesSelectionNotify(event) <span class="kw">if </span>use_xfixes =&gt; {
+                    <span class="self">self</span>.getter.connection.convert_selection(
+                        <span class="self">self</span>.getter.window,
+                        selection,
+                        target,
+                        property,
+                        event.timestamp,
+                    )<span class="question-mark">?</span>.check()<span class="question-mark">?</span>;
+                }
+                Event::SelectionNotify(event) =&gt; {
+                    <span class="kw">if </span>event.selection != selection { <span class="kw">continue </span>};
 
                     <span class="comment">// Note that setting the property argument to None indicates that the
                     // conversion requested could not be made.
-                    </span><span class="kw">if </span>event.property() == xcb::ATOM_NONE {
+                    </span><span class="kw">if </span>event.property == Atom::from(AtomEnum::NONE) {
                         <span class="kw">break</span>;
                     }
 
-                    <span class="kw">let </span>reply =
-                        xcb::get_property(
-                            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, <span class="bool-val">false</span>, <span class="self">self</span>.getter.window,
-                            event.property(), xcb::ATOM_ANY, buff.len() <span class="kw">as </span>u32, ::std::u32::MAX <span class="comment">// FIXME reasonable buffer size
-                        </span>)
-                        .get_reply()<span class="question-mark">?</span>;
+                    <span class="kw">let </span>reply = <span class="self">self</span>.getter.connection.get_property(
+                        <span class="bool-val">false</span>,
+                        <span class="self">self</span>.getter.window,
+                        event.property,
+                        AtomEnum::NONE,
+                        buff.len() <span class="kw">as </span>u32,
+                        u32::MAX
+                    )<span class="question-mark">?</span>.reply()<span class="question-mark">?</span>;
 
-                    <span class="kw">if </span>reply.type_() == <span class="self">self</span>.getter.atoms.incr {
-                        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>size) = reply.value::&lt;i32&gt;().get(<span class="number">0</span>) {
-                            buff.reserve(size <span class="kw">as </span>usize);
+                    <span class="kw">if </span>reply.type_ == <span class="self">self</span>.getter.atoms.incr {
+                        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>value) = reply.value32() {
+                            <span class="kw">if let </span><span class="prelude-val">Some</span>(size) = value.next() {
+                                buff.reserve(size <span class="kw">as </span>usize);
+                            }
                         }
-                        xcb::delete_property(<span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, <span class="self">self</span>.getter.window, property);
-                        <span class="self">self</span>.getter.connection.flush();
+                        <span class="self">self</span>.getter.connection.delete_property(
+                            <span class="self">self</span>.getter.window,
+                            property
+                        )<span class="question-mark">?</span>.check()<span class="question-mark">?</span>;
                         is_incr = <span class="bool-val">true</span>;
                         <span class="kw">continue
-                    </span>} <span class="kw">else if </span>reply.type_() != target {
-                        <span class="kw">return </span><span class="prelude-val">Err</span>(Error::UnexpectedType(reply.type_()));
+                    </span>} <span class="kw">else if </span>reply.type_ != target {
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(Error::UnexpectedType(reply.type_));
                     }
 
-                    buff.extend_from_slice(reply.value());
+                    buff.extend_from_slice(<span class="kw-2">&amp;</span>reply.value);
                     <span class="kw">break
-                </span>},
-                xcb::PROPERTY_NOTIFY <span class="kw">if </span>is_incr =&gt; {
-                    <span class="kw">let </span>event = <span class="kw">unsafe </span>{ xcb::cast_event::&lt;xcb::PropertyNotifyEvent&gt;(<span class="kw-2">&amp;</span>event) };
-                    <span class="kw">if </span>event.state() != xcb::PROPERTY_NEW_VALUE <span class="kw">as </span>u8 { <span class="kw">continue </span>};
+                </span>}
 
-                    <span class="kw">let </span>length =
-                        xcb::get_property(
-                            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, <span class="bool-val">false</span>, <span class="self">self</span>.getter.window,
-                            property, xcb::ATOM_ANY, <span class="number">0</span>, <span class="number">0
-                        </span>)
-                        .get_reply()
-                        .map(|reply| reply.bytes_after())<span class="question-mark">?</span>;
+                Event::PropertyNotify(event) <span class="kw">if </span>is_incr =&gt; {
+                    <span class="kw">if </span>event.state != Property::NEW_VALUE { <span class="kw">continue </span>};
 
-                    <span class="kw">let </span>reply =
-                        xcb::get_property(
-                            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, <span class="bool-val">true</span>, <span class="self">self</span>.getter.window,
-                            property, xcb::ATOM_ANY, <span class="number">0</span>, length
-                        )
-                        .get_reply()<span class="question-mark">?</span>;
 
-                    <span class="kw">if </span>reply.type_() != target { <span class="kw">continue </span>};
+                    <span class="kw">let </span>cookie = <span class="self">self</span>.getter.connection.get_property(
+                        <span class="bool-val">false</span>,
+                        <span class="self">self</span>.getter.window,
+                        property,
+                        AtomEnum::NONE,
+                        <span class="number">0</span>,
+                        <span class="number">0
+                    </span>)<span class="question-mark">?</span>;
 
-                    <span class="kw">if </span>reply.value_len() != <span class="number">0 </span>{
-                        buff.extend_from_slice(reply.value());
+                    <span class="kw">let </span>length = cookie.reply()<span class="question-mark">?</span>.bytes_after;
+
+                    <span class="kw">let </span>cookie = <span class="self">self</span>.getter.connection.get_property(
+                        <span class="bool-val">true</span>,
+                        <span class="self">self</span>.getter.window,
+                        property,
+                        AtomEnum::NONE,
+                        <span class="number">0</span>, length
+                    )<span class="question-mark">?</span>;
+                    <span class="kw">let </span>reply = cookie.reply()<span class="question-mark">?</span>;
+                    <span class="kw">if </span>reply.type_ != target { <span class="kw">continue </span>};
+
+                    <span class="kw">let </span>value = reply.value;
+
+                    <span class="kw">if </span>!value.is_empty() {
+                        buff.extend_from_slice(<span class="kw-2">&amp;</span>value);
                     } <span class="kw">else </span>{
                         <span class="kw">break
                     </span>}
@@ -560,19 +640,24 @@
         <span class="kw">let </span><span class="kw-2">mut </span>buff = Vec::new();
         <span class="kw">let </span>timeout = timeout.into();
 
-        xcb::convert_selection(
-            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, <span class="self">self</span>.getter.window,
-            selection, target, property,
-            xcb::CURRENT_TIME
-                <span class="comment">// FIXME ^
-                // Clients should not use CurrentTime for the time argument of a ConvertSelection request.
-                // Instead, they should use the timestamp of the event that caused the request to be made.
-        </span>);
-        <span class="self">self</span>.getter.connection.flush();
+        <span class="self">self</span>.getter.connection.convert_selection(
+            <span class="self">self</span>.getter.window,
+            selection,
+            target,
+            property,
+            CURRENT_TIME,
+            <span class="comment">// FIXME ^
+            // Clients should not use CurrentTime for the time argument of a ConvertSelection request.
+            // Instead, they should use the timestamp of the event that caused the request to be made.
+        </span>)<span class="question-mark">?</span>.check()<span class="question-mark">?</span>;
 
-        <span class="self">self</span>.process_event(<span class="kw-2">&amp;mut </span>buff, selection, target, property, timeout, <span class="bool-val">false</span>, <span class="number">0</span>)<span class="question-mark">?</span>;
-        xcb::delete_property(<span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, <span class="self">self</span>.getter.window, property);
-        <span class="self">self</span>.getter.connection.flush();
+        <span class="self">self</span>.process_event(<span class="kw-2">&amp;mut </span>buff, selection, target, property, timeout, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
+
+        <span class="self">self</span>.getter.connection.delete_property(
+            <span class="self">self</span>.getter.window,
+            property
+        )<span class="question-mark">?</span>.check()<span class="question-mark">?</span>;
+
         <span class="prelude-val">Ok</span>(buff)
     }
 
@@ -582,30 +667,41 @@
     {
         <span class="kw">let </span><span class="kw-2">mut </span>buff = Vec::new();
 
-        <span class="kw">let </span>screen = <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection.get_setup().roots()
-            .nth(<span class="self">self</span>.getter.screen <span class="kw">as </span>usize)
-            .ok_or(Error::XcbConn(ConnError::ClosedInvalidScreen))<span class="question-mark">?</span>;
+        <span class="kw">let </span>screen = <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection.setup().roots.get(<span class="self">self</span>.getter.screen)
+            .ok_or(Error::XcbConnect(ConnectError::InvalidScreen))<span class="question-mark">?</span>;
 
-        <span class="kw">let </span>xfixes = xcb::query_extension(
-            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, <span class="string">&quot;XFIXES&quot;</span>).get_reply()<span class="question-mark">?</span>;
-        <span class="macro">assert!</span>(xfixes.present());
-        xcb::xfixes::query_version(<span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, <span class="number">5</span>, <span class="number">0</span>);
+        xfixes::query_version(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection,
+            <span class="number">5</span>,
+            <span class="number">0</span>,
+        )<span class="question-mark">?</span>;
         <span class="comment">// Clear selection sources...
-        </span>xcb::xfixes::select_selection_input(
-            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, screen.root(), <span class="self">self</span>.getter.atoms.primary, <span class="number">0</span>);
-        xcb::xfixes::select_selection_input(
-            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, screen.root(), <span class="self">self</span>.getter.atoms.clipboard, <span class="number">0</span>);
+        </span>xfixes::select_selection_input(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection,
+            screen.root,
+            <span class="self">self</span>.getter.atoms.primary,
+            xfixes::SelectionEventMask::default()
+        )<span class="question-mark">?</span>;
+        xfixes::select_selection_input(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection,
+            screen.root,
+            <span class="self">self</span>.getter.atoms.clipboard,
+            xfixes::SelectionEventMask::default()
+        )<span class="question-mark">?</span>;
         <span class="comment">// ...and set the one requested now
-        </span>xcb::xfixes::select_selection_input(
-            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, screen.root(), selection,
-            xcb::xfixes::SELECTION_EVENT_MASK_SET_SELECTION_OWNER |
-            xcb::xfixes::SELECTION_EVENT_MASK_SELECTION_CLIENT_CLOSE |
-            xcb::xfixes::SELECTION_EVENT_MASK_SELECTION_WINDOW_DESTROY);
-        <span class="self">self</span>.getter.connection.flush();
+        </span>xfixes::select_selection_input(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection,
+            screen.root,
+            selection,
+            xfixes::SelectionEventMask::SET_SELECTION_OWNER |
+                xfixes::SelectionEventMask::SELECTION_CLIENT_CLOSE |
+                xfixes::SelectionEventMask::SELECTION_WINDOW_DESTROY
+        )<span class="question-mark">?</span>.check()<span class="question-mark">?</span>;
 
-        <span class="self">self</span>.process_event(<span class="kw-2">&amp;mut </span>buff, selection, target, property, <span class="prelude-val">None</span>, <span class="bool-val">true</span>, xfixes.first_event())<span class="question-mark">?</span>;
-        xcb::delete_property(<span class="kw-2">&amp;</span><span class="self">self</span>.getter.connection, <span class="self">self</span>.getter.window, property);
-        <span class="self">self</span>.getter.connection.flush();
+        <span class="self">self</span>.process_event(<span class="kw-2">&amp;mut </span>buff, selection, target, property, <span class="prelude-val">None</span>, <span class="bool-val">true</span>)<span class="question-mark">?</span>;
+
+        <span class="self">self</span>.getter.connection.delete_property(<span class="self">self</span>.getter.window, property)<span class="question-mark">?</span>.check()<span class="question-mark">?</span>;
+
         <span class="prelude-val">Ok</span>(buff)
     }
 
@@ -619,19 +715,17 @@
             .map_err(|<span class="kw">_</span>| Error::Lock)<span class="question-mark">?
             </span>.insert(selection, (target, value.into()));
 
-        xcb::set_selection_owner(
-            <span class="kw-2">&amp;</span><span class="self">self</span>.setter.connection,
-            <span class="self">self</span>.setter.window, selection,
-            xcb::CURRENT_TIME
-        );
+        <span class="self">self</span>.setter.connection.set_selection_owner(
+            <span class="self">self</span>.setter.window,
+            selection,
+            CURRENT_TIME
+        )<span class="question-mark">?</span>.check()<span class="question-mark">?</span>;
 
-        <span class="self">self</span>.setter.connection.flush();
-
-        <span class="kw">if </span>xcb::get_selection_owner(<span class="kw-2">&amp;</span><span class="self">self</span>.setter.connection, selection)
-            .get_reply()
-            .map(|reply| reply.owner() == <span class="self">self</span>.setter.window)
-            .unwrap_or(<span class="bool-val">false</span>)
-        {
+        <span class="kw">if </span><span class="self">self</span>.setter.connection.get_selection_owner(
+            selection
+        )<span class="question-mark">?</span>.reply()
+            .map(|reply| reply.owner == <span class="self">self</span>.setter.window)
+            .unwrap_or(<span class="bool-val">false</span>) {
             <span class="prelude-val">Ok</span>(())
         } <span class="kw">else </span>{
             <span class="prelude-val">Err</span>(Error::Owner)

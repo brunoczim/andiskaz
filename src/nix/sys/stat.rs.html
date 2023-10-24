@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/nix-0.18.0/src/sys/stat.rs`."><title>stat.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="nix" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../nix/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/nix-0.24.3/src/sys/stat.rs`."><title>stat.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="nix" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../nix/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -295,6 +295,33 @@
 <a href="#295" id="295">295</a>
 <a href="#296" id="296">296</a>
 <a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
 </pre></div><pre class="rust"><code><span class="kw">pub use </span>libc::{dev_t, mode_t};
 <span class="kw">pub use </span>libc::stat <span class="kw">as </span>FileStat;
 
@@ -306,7 +333,8 @@
 <span class="kw">use </span><span class="kw">crate</span>::sys::time::{TimeSpec, TimeVal};
 
 <span class="macro">libc_bitflags!</span>(
-    <span class="kw">pub struct </span>SFlag: mode_t {
+    <span class="doccomment">/// &quot;File type&quot; flags for `mknod` and related functions.
+    </span><span class="kw">pub struct </span>SFlag: mode_t {
         S_IFIFO;
         S_IFCHR;
         S_IFDIR;
@@ -319,7 +347,8 @@
 );
 
 <span class="macro">libc_bitflags! </span>{
-    <span class="kw">pub struct </span>Mode: mode_t {
+    <span class="doccomment">/// &quot;File mode / permissions&quot; flags.
+    </span><span class="kw">pub struct </span>Mode: mode_t {
         S_IRWXU;
         S_IRUSR;
         S_IWUSR;
@@ -338,30 +367,49 @@
     }
 }
 
-<span class="kw">pub fn </span>mknod&lt;P: <span class="question-mark">?</span>Sized + NixPath&gt;(path: <span class="kw-2">&amp;</span>P, kind: SFlag, perm: Mode, dev: dev_t) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-    <span class="kw">let </span>res = path.with_nix_path(|cstr| {
-        <span class="kw">unsafe </span>{
-            libc::mknod(cstr.as_ptr(), kind.bits | perm.bits() <span class="kw">as </span>mode_t, dev)
-        }
+<span class="doccomment">/// Create a special or ordinary file, by pathname.
+</span><span class="kw">pub fn </span>mknod&lt;P: <span class="question-mark">?</span>Sized + NixPath&gt;(path: <span class="kw-2">&amp;</span>P, kind: SFlag, perm: Mode, dev: dev_t) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">let </span>res = path.with_nix_path(|cstr| <span class="kw">unsafe </span>{
+        libc::mknod(cstr.as_ptr(), kind.bits | perm.bits() <span class="kw">as </span>mode_t, dev)
+    })<span class="question-mark">?</span>;
+
+    Errno::result(res).map(drop)
+}
+
+<span class="doccomment">/// Create a special or ordinary file, relative to a given directory.
+</span><span class="attr">#[cfg(not(any(target_os = <span class="string">&quot;ios&quot;</span>, target_os = <span class="string">&quot;macos&quot;</span>, target_os = <span class="string">&quot;redox&quot;</span>)))]
+#[cfg_attr(docsrs, doc(cfg(all())))]
+</span><span class="kw">pub fn </span>mknodat&lt;P: <span class="question-mark">?</span>Sized + NixPath&gt;(
+    dirfd: RawFd,
+    path: <span class="kw-2">&amp;</span>P,
+    kind: SFlag,
+    perm: Mode,
+    dev: dev_t,
+) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">let </span>res = path.with_nix_path(|cstr| <span class="kw">unsafe </span>{
+        libc::mknodat(dirfd, cstr.as_ptr(), kind.bits | perm.bits() <span class="kw">as </span>mode_t, dev)
     })<span class="question-mark">?</span>;
 
     Errno::result(res).map(drop)
 }
 
 <span class="attr">#[cfg(target_os = <span class="string">&quot;linux&quot;</span>)]
-</span><span class="kw">pub fn </span>major(dev: dev_t) -&gt; u64 {
+#[cfg_attr(docsrs, doc(cfg(all())))]
+</span><span class="kw">pub const fn </span>major(dev: dev_t) -&gt; u64 {
     ((dev &gt;&gt; <span class="number">32</span>) &amp; <span class="number">0xffff_f000</span>) |
     ((dev &gt;&gt;  <span class="number">8</span>) &amp; <span class="number">0x0000_0fff</span>)
 }
 
 <span class="attr">#[cfg(target_os = <span class="string">&quot;linux&quot;</span>)]
-</span><span class="kw">pub fn </span>minor(dev: dev_t) -&gt; u64 {
+#[cfg_attr(docsrs, doc(cfg(all())))]
+</span><span class="kw">pub const fn </span>minor(dev: dev_t) -&gt; u64 {
     ((dev &gt;&gt; <span class="number">12</span>) &amp; <span class="number">0xffff_ff00</span>) |
     ((dev      ) &amp; <span class="number">0x0000_00ff</span>)
 }
 
 <span class="attr">#[cfg(target_os = <span class="string">&quot;linux&quot;</span>)]
-</span><span class="kw">pub fn </span>makedev(major: u64, minor: u64) -&gt; dev_t {
+#[cfg_attr(docsrs, doc(cfg(all())))]
+</span><span class="kw">pub const fn </span>makedev(major: u64, minor: u64) -&gt; dev_t {
     ((major &amp; <span class="number">0xffff_f000</span>) &lt;&lt; <span class="number">32</span>) |
     ((major &amp; <span class="number">0x0000_0fff</span>) &lt;&lt;  <span class="number">8</span>) |
     ((minor &amp; <span class="number">0xffff_ff00</span>) &lt;&lt; <span class="number">12</span>) |
@@ -409,6 +457,7 @@
 }
 
 <span class="attr">#[cfg(not(target_os = <span class="string">&quot;redox&quot;</span>))]
+#[cfg_attr(docsrs, doc(cfg(all())))]
 </span><span class="kw">pub fn </span>fstatat&lt;P: <span class="question-mark">?</span>Sized + NixPath&gt;(dirfd: RawFd, pathname: <span class="kw-2">&amp;</span>P, f: AtFlags) -&gt; <span class="prelude-ty">Result</span>&lt;FileStat&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>dst = mem::MaybeUninit::uninit();
     <span class="kw">let </span>res = pathname.with_nix_path(|cstr| {
@@ -424,7 +473,7 @@
 ///
 /// # References
 ///
-/// [fchmod(2)](http://pubs.opengroup.org/onlinepubs/9699919799/functions/fchmod.html).
+/// [fchmod(2)](https://pubs.opengroup.org/onlinepubs/9699919799/functions/fchmod.html).
 </span><span class="kw">pub fn </span>fchmod(fd: RawFd, mode: Mode) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let </span>res = <span class="kw">unsafe </span>{ libc::fchmod(fd, mode.bits() <span class="kw">as </span>mode_t) };
 
@@ -447,14 +496,15 @@
 /// If `flag` is `FchmodatFlags::NoFollowSymlink` and `path` names a symbolic link,
 /// then the mode of the symbolic link is changed.
 ///
-/// `fchmod(None, path, mode, FchmodatFlags::FollowSymlink)` is identical to
+/// `fchmodat(None, path, mode, FchmodatFlags::FollowSymlink)` is identical to
 /// a call `libc::chmod(path, mode)`. That&#39;s why `chmod` is unimplemented
 /// in the `nix` crate.
 ///
 /// # References
 ///
-/// [fchmodat(2)](http://pubs.opengroup.org/onlinepubs/9699919799/functions/fchmodat.html).
+/// [fchmodat(2)](https://pubs.opengroup.org/onlinepubs/9699919799/functions/fchmodat.html).
 </span><span class="attr">#[cfg(not(target_os = <span class="string">&quot;redox&quot;</span>))]
+#[cfg_attr(docsrs, doc(cfg(all())))]
 </span><span class="kw">pub fn </span>fchmodat&lt;P: <span class="question-mark">?</span>Sized + NixPath&gt;(
     dirfd: <span class="prelude-ty">Option</span>&lt;RawFd&gt;,
     path: <span class="kw-2">&amp;</span>P,
@@ -487,7 +537,7 @@
 ///
 /// # References
 ///
-/// [utimes(2)](http://pubs.opengroup.org/onlinepubs/9699919799/functions/utimes.html).
+/// [utimes(2)](https://pubs.opengroup.org/onlinepubs/9699919799/functions/utimes.html).
 </span><span class="kw">pub fn </span>utimes&lt;P: <span class="question-mark">?</span>Sized + NixPath&gt;(path: <span class="kw-2">&amp;</span>P, atime: <span class="kw-2">&amp;</span>TimeVal, mtime: <span class="kw-2">&amp;</span>TimeVal) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let </span>times: [libc::timeval; <span class="number">2</span>] = [<span class="kw-2">*</span>atime.as_ref(), <span class="kw-2">*</span>mtime.as_ref()];
     <span class="kw">let </span>res = path.with_nix_path(|cstr| <span class="kw">unsafe </span>{
@@ -506,13 +556,14 @@
 ///
 /// # References
 ///
-/// [lutimes(2)](http://pubs.opengroup.org/onlinepubs/9699919799/functions/lutimes.html).
+/// [lutimes(2)](https://pubs.opengroup.org/onlinepubs/9699919799/functions/lutimes.html).
 </span><span class="attr">#[cfg(any(target_os = <span class="string">&quot;linux&quot;</span>,
           target_os = <span class="string">&quot;haiku&quot;</span>,
           target_os = <span class="string">&quot;ios&quot;</span>,
           target_os = <span class="string">&quot;macos&quot;</span>,
           target_os = <span class="string">&quot;freebsd&quot;</span>,
           target_os = <span class="string">&quot;netbsd&quot;</span>))]
+#[cfg_attr(docsrs, doc(cfg(all())))]
 </span><span class="kw">pub fn </span>lutimes&lt;P: <span class="question-mark">?</span>Sized + NixPath&gt;(path: <span class="kw-2">&amp;</span>P, atime: <span class="kw-2">&amp;</span>TimeVal, mtime: <span class="kw-2">&amp;</span>TimeVal) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let </span>times: [libc::timeval; <span class="number">2</span>] = [<span class="kw-2">*</span>atime.as_ref(), <span class="kw-2">*</span>mtime.as_ref()];
     <span class="kw">let </span>res = path.with_nix_path(|cstr| <span class="kw">unsafe </span>{
@@ -526,7 +577,7 @@
 ///
 /// # References
 ///
-/// [futimens(2)](http://pubs.opengroup.org/onlinepubs/9699919799/functions/futimens.html).
+/// [futimens(2)](https://pubs.opengroup.org/onlinepubs/9699919799/functions/futimens.html).
 </span><span class="attr">#[inline]
 </span><span class="kw">pub fn </span>futimens(fd: RawFd, atime: <span class="kw-2">&amp;</span>TimeSpec, mtime: <span class="kw-2">&amp;</span>TimeSpec) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let </span>times: [libc::timespec; <span class="number">2</span>] = [<span class="kw-2">*</span>atime.as_ref(), <span class="kw-2">*</span>mtime.as_ref()];
@@ -536,6 +587,7 @@
 }
 
 <span class="doccomment">/// Flags for `utimensat` function.
+</span><span class="comment">// TODO: replace with fcntl::AtFlags
 </span><span class="attr">#[derive(Clone, Copy, Debug)]
 </span><span class="kw">pub enum </span>UtimensatFlags {
     FollowSymlink,
@@ -557,8 +609,9 @@
 ///
 /// # References
 ///
-/// [utimensat(2)](http://pubs.opengroup.org/onlinepubs/9699919799/functions/utimens.html).
+/// [utimensat(2)](https://pubs.opengroup.org/onlinepubs/9699919799/functions/utimens.html).
 </span><span class="attr">#[cfg(not(target_os = <span class="string">&quot;redox&quot;</span>))]
+#[cfg_attr(docsrs, doc(cfg(all())))]
 </span><span class="kw">pub fn </span>utimensat&lt;P: <span class="question-mark">?</span>Sized + NixPath&gt;(
     dirfd: <span class="prelude-ty">Option</span>&lt;RawFd&gt;,
     path: <span class="kw-2">&amp;</span>P,
@@ -585,6 +638,7 @@
 }
 
 <span class="attr">#[cfg(not(target_os = <span class="string">&quot;redox&quot;</span>))]
+#[cfg_attr(docsrs, doc(cfg(all())))]
 </span><span class="kw">pub fn </span>mkdirat&lt;P: <span class="question-mark">?</span>Sized + NixPath&gt;(fd: RawFd, path: <span class="kw-2">&amp;</span>P, mode: Mode) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let </span>res = path.with_nix_path(|cstr| {
         <span class="kw">unsafe </span>{ libc::mkdirat(fd, cstr.as_ptr(), mode.bits() <span class="kw">as </span>mode_t) }

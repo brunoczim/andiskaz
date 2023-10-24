@@ -6,7 +6,7 @@
 <p>Using <code>Token</code> to track which socket generated the event. In this example,
 <code>HashMap</code> is used, but usually something like <a href="https://crates.io/crates/slab"><code>slab</code></a> is better.</p>
 
-<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>mio::{Events, Interest, Poll, Token};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>mio::{Events, Interest, Poll, Token};
 <span class="kw">use </span>mio::net::TcpListener;
 
 <span class="kw">use </span>std::thread;

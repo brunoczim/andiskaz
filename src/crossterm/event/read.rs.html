@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossterm-0.18.2/src/event/read.rs`."><title>read.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="crossterm" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../crossterm/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/crossterm-0.27.0/src/event/read.rs`."><title>read.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="crossterm" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../crossterm/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -428,48 +428,15 @@
 <a href="#428" id="428">428</a>
 <a href="#429" id="429">429</a>
 <a href="#430" id="430">430</a>
-<a href="#431" id="431">431</a>
-<a href="#432" id="432">432</a>
-<a href="#433" id="433">433</a>
-<a href="#434" id="434">434</a>
-<a href="#435" id="435">435</a>
-<a href="#436" id="436">436</a>
-<a href="#437" id="437">437</a>
-<a href="#438" id="438">438</a>
-<a href="#439" id="439">439</a>
-<a href="#440" id="440">440</a>
-<a href="#441" id="441">441</a>
-<a href="#442" id="442">442</a>
-<a href="#443" id="443">443</a>
-<a href="#444" id="444">444</a>
-<a href="#445" id="445">445</a>
-<a href="#446" id="446">446</a>
-<a href="#447" id="447">447</a>
-<a href="#448" id="448">448</a>
-<a href="#449" id="449">449</a>
-<a href="#450" id="450">450</a>
-<a href="#451" id="451">451</a>
-<a href="#452" id="452">452</a>
-<a href="#453" id="453">453</a>
-<a href="#454" id="454">454</a>
-<a href="#455" id="455">455</a>
-<a href="#456" id="456">456</a>
-<a href="#457" id="457">457</a>
-<a href="#458" id="458">458</a>
-<a href="#459" id="459">459</a>
-<a href="#460" id="460">460</a>
-<a href="#461" id="461">461</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::vec_deque::VecDeque, io, time::Duration};
 
-<span class="kw">use </span><span class="kw">crate</span>::ErrorKind;
-
 <span class="attr">#[cfg(unix)]
-</span><span class="kw">use </span><span class="kw">super</span>::source::unix::UnixInternalEventSource;
+</span><span class="kw">use </span><span class="kw">crate</span>::event::source::unix::UnixInternalEventSource;
 <span class="attr">#[cfg(windows)]
-</span><span class="kw">use </span><span class="kw">super</span>::source::windows::WindowsEventSource;
+</span><span class="kw">use </span><span class="kw">crate</span>::event::source::windows::WindowsEventSource;
 <span class="attr">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]
-</span><span class="kw">use </span><span class="kw">super</span>::sys::Waker;
-<span class="kw">use super</span>::{filter::Filter, source::EventSource, timeout::PollTimeout, InternalEvent, <span class="prelude-ty">Result</span>};
+</span><span class="kw">use </span><span class="kw">crate</span>::event::sys::Waker;
+<span class="kw">use </span><span class="kw">crate</span>::event::{filter::Filter, source::EventSource, timeout::PollTimeout, InternalEvent};
 
 <span class="doccomment">/// Can be used to read `InternalEvent`s.
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>InternalEventReader {
@@ -502,12 +469,12 @@
         <span class="self">self</span>.source.as_ref().expect(<span class="string">&quot;reader source not set&quot;</span>).waker()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>poll&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Duration&gt;, filter: <span class="kw-2">&amp;</span>F) -&gt; <span class="prelude-ty">Result</span>&lt;bool&gt;
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>poll&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Duration&gt;, filter: <span class="kw-2">&amp;</span>F) -&gt; io::Result&lt;bool&gt;
     <span class="kw">where
         </span>F: Filter,
     {
         <span class="kw">for </span>event <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.events {
-            <span class="kw">if </span>filter.eval(<span class="kw-2">&amp;</span>event) {
+            <span class="kw">if </span>filter.eval(event) {
                 <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
             }
         }
@@ -518,15 +485,14 @@
                 <span class="kw">return </span><span class="prelude-val">Err</span>(std::io::Error::new(
                     std::io::ErrorKind::Other,
                     <span class="string">&quot;Failed to initialize input reader&quot;</span>,
-                )
-                .into())
+                ))
             }
         };
 
         <span class="kw">let </span>poll_timeout = PollTimeout::new(timeout);
 
         <span class="kw">loop </span>{
-            <span class="kw">let </span>maybe_event = <span class="kw">match </span>event_source.try_read(timeout) {
+            <span class="kw">let </span>maybe_event = <span class="kw">match </span>event_source.try_read(poll_timeout.leftover()) {
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) =&gt; <span class="prelude-val">None</span>,
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(event)) =&gt; {
                     <span class="kw">if </span>filter.eval(<span class="kw-2">&amp;</span>event) {
@@ -536,14 +502,13 @@
                         <span class="prelude-val">None
                     </span>}
                 }
-                <span class="prelude-val">Err</span>(ErrorKind::IoError(e)) =&gt; {
+                <span class="prelude-val">Err</span>(e) =&gt; {
                     <span class="kw">if </span>e.kind() == io::ErrorKind::Interrupted {
                         <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">false</span>);
                     }
 
-                    <span class="kw">return </span><span class="prelude-val">Err</span>(ErrorKind::IoError(e));
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(e);
                 }
-                <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(e),
             };
 
             <span class="kw">if </span>poll_timeout.elapsed() || maybe_event.is_some() {
@@ -559,7 +524,7 @@
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>read&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, filter: <span class="kw-2">&amp;</span>F) -&gt; <span class="prelude-ty">Result</span>&lt;InternalEvent&gt;
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>read&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, filter: <span class="kw-2">&amp;</span>F) -&gt; io::Result&lt;InternalEvent&gt;
     <span class="kw">where
         </span>F: Filter,
     {
@@ -592,9 +557,8 @@
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
+    <span class="kw">use </span>std::io;
     <span class="kw">use </span>std::{collections::VecDeque, time::Duration};
-
-    <span class="kw">use </span><span class="kw">crate</span>::ErrorKind;
 
     <span class="attr">#[cfg(unix)]
     </span><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::filter::CursorPositionFilter;
@@ -775,11 +739,9 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_poll_propagates_error() {
-        <span class="kw">let </span>source = FakeSource::with_error(ErrorKind::ResizingTerminalFailure(<span class="string">&quot;Foo&quot;</span>.to_string()));
-
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
             events: VecDeque::new(),
-            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            source: <span class="prelude-val">Some</span>(Box::new(FakeSource::new(<span class="kw-2">&amp;</span>[]))),
             skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
@@ -787,21 +749,16 @@
             reader
                 .poll(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">0</span>)), <span class="kw-2">&amp;</span>InternalEventFilter)
                 .err()
-                .map(|e| <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">&amp;</span>e)),
-            <span class="prelude-val">Some</span>(<span class="macro">format!</span>(
-                <span class="string">&quot;{:?}&quot;</span>,
-                ErrorKind::ResizingTerminalFailure(<span class="string">&quot;Foo&quot;</span>.to_string())
-            ))
+                .map(|e| <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">&amp;</span>e.kind())),
+            <span class="prelude-val">Some</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, io::ErrorKind::Other))
         );
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_read_propagates_error() {
-        <span class="kw">let </span>source = FakeSource::with_error(ErrorKind::ResizingTerminalFailure(<span class="string">&quot;Foo&quot;</span>.to_string()));
-
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
             events: VecDeque::new(),
-            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            source: <span class="prelude-val">Some</span>(Box::new(FakeSource::new(<span class="kw-2">&amp;</span>[]))),
             skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
@@ -809,11 +766,8 @@
             reader
                 .read(<span class="kw-2">&amp;</span>InternalEventFilter)
                 .err()
-                .map(|e| <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">&amp;</span>e)),
-            <span class="prelude-val">Some</span>(<span class="macro">format!</span>(
-                <span class="string">&quot;{:?}&quot;</span>,
-                ErrorKind::ResizingTerminalFailure(<span class="string">&quot;Foo&quot;</span>.to_string())
-            ))
+                .map(|e| <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">&amp;</span>e.kind())),
+            <span class="prelude-val">Some</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, io::ErrorKind::Other))
         );
     }
 
@@ -821,10 +775,7 @@
     </span><span class="kw">fn </span>test_poll_continues_after_error() {
         <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
-        <span class="kw">let </span>source = FakeSource::new(
-            <span class="kw-2">&amp;</span>[EVENT, EVENT],
-            ErrorKind::ResizingTerminalFailure(<span class="string">&quot;Foo&quot;</span>.to_string()),
-        );
+        <span class="kw">let </span>source = FakeSource::new(<span class="kw-2">&amp;</span>[EVENT, EVENT]);
 
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
             events: VecDeque::new(),
@@ -843,10 +794,7 @@
     </span><span class="kw">fn </span>test_read_continues_after_error() {
         <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
-        <span class="kw">let </span>source = FakeSource::new(
-            <span class="kw-2">&amp;</span>[EVENT, EVENT],
-            ErrorKind::ResizingTerminalFailure(<span class="string">&quot;Foo&quot;</span>.to_string()),
-        );
+        <span class="kw">let </span>source = FakeSource::new(<span class="kw-2">&amp;</span>[EVENT, EVENT]);
 
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
             events: VecDeque::new(),
@@ -862,14 +810,14 @@
     <span class="attr">#[derive(Default)]
     </span><span class="kw">struct </span>FakeSource {
         events: VecDeque&lt;InternalEvent&gt;,
-        error: <span class="prelude-ty">Option</span>&lt;ErrorKind&gt;,
+        error: <span class="prelude-ty">Option</span>&lt;io::Error&gt;,
     }
 
     <span class="kw">impl </span>FakeSource {
-        <span class="kw">fn </span>new(events: <span class="kw-2">&amp;</span>[InternalEvent], error: ErrorKind) -&gt; FakeSource {
+        <span class="kw">fn </span>new(events: <span class="kw-2">&amp;</span>[InternalEvent]) -&gt; FakeSource {
             FakeSource {
                 events: events.to_vec().into(),
-                error: <span class="prelude-val">Some</span>(error),
+                error: <span class="prelude-val">Some</span>(io::Error::new(io::ErrorKind::Other, <span class="string">&quot;&quot;</span>)),
             }
         }
 
@@ -879,20 +827,10 @@
                 error: <span class="prelude-val">None</span>,
             }
         }
-
-        <span class="kw">fn </span>with_error(error: ErrorKind) -&gt; FakeSource {
-            FakeSource {
-                events: VecDeque::new(),
-                error: <span class="prelude-val">Some</span>(error),
-            }
-        }
     }
 
     <span class="kw">impl </span>EventSource <span class="kw">for </span>FakeSource {
-        <span class="kw">fn </span>try_read(
-            <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-            _timeout: <span class="prelude-ty">Option</span>&lt;Duration&gt;,
-        ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;InternalEvent&gt;, ErrorKind&gt; {
+        <span class="kw">fn </span>try_read(<span class="kw-2">&amp;mut </span><span class="self">self</span>, _timeout: <span class="prelude-ty">Option</span>&lt;Duration&gt;) -&gt; io::Result&lt;<span class="prelude-ty">Option</span>&lt;InternalEvent&gt;&gt; {
             <span class="comment">// Return error if set in case there&#39;s just one remaining event
             </span><span class="kw">if </span><span class="self">self</span>.events.len() == <span class="number">1 </span>{
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(error) = <span class="self">self</span>.error.take() {

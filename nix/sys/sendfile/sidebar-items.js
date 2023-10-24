@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["sendfile"]};
+window.SIDEBAR_ITEMS = {"fn":["sendfile","sendfile64"]};

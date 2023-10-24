@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["dimensions","dimensions_stderr","dimensions_stdin","dimensions_stdout"]};

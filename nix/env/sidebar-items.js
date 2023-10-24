@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["clearenv"]};
+window.SIDEBAR_ITEMS = {"fn":["clearenv"],"struct":["ClearEnvError"]};

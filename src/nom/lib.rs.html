@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/nom-3.2.1/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="nom" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../nom/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/nom-7.1.3/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="nom" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../nom/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -462,522 +462,468 @@
 <a href="#462" id="462">462</a>
 <a href="#463" id="463">463</a>
 <a href="#464" id="464">464</a>
-<a href="#465" id="465">465</a>
-<a href="#466" id="466">466</a>
-<a href="#467" id="467">467</a>
-<a href="#468" id="468">468</a>
-<a href="#469" id="469">469</a>
-<a href="#470" id="470">470</a>
-<a href="#471" id="471">471</a>
-<a href="#472" id="472">472</a>
-<a href="#473" id="473">473</a>
-<a href="#474" id="474">474</a>
-<a href="#475" id="475">475</a>
-<a href="#476" id="476">476</a>
-<a href="#477" id="477">477</a>
-<a href="#478" id="478">478</a>
-<a href="#479" id="479">479</a>
-<a href="#480" id="480">480</a>
-<a href="#481" id="481">481</a>
-<a href="#482" id="482">482</a>
-<a href="#483" id="483">483</a>
-<a href="#484" id="484">484</a>
-<a href="#485" id="485">485</a>
-<a href="#486" id="486">486</a>
-<a href="#487" id="487">487</a>
-<a href="#488" id="488">488</a>
-<a href="#489" id="489">489</a>
-<a href="#490" id="490">490</a>
-<a href="#491" id="491">491</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! nom, eating data byte by byte
+</pre></div><pre class="rust"><code><span class="doccomment">//! # nom, eating data byte by byte
 //!
 //! nom is a parser combinator library with a focus on safe parsing,
 //! streaming patterns, and as much as possible zero copy.
 //!
-//! The code is available on [Github](https://github.com/Geal/nom)
+//! ## Example
 //!
-//! There are a few [guides](http://rust.unhandledexpression.com/nom/home.html) with more details
-//! about [the design of nom](http://rust.unhandledexpression.com/nom/how_nom_macros_work.html),
-//! [how to write parsers](http://rust.unhandledexpression.com/nom/making_a_new_parser_from_scratch.html),
-//! or the [error management system](http://rust.unhandledexpression.com/nom/error_management.html).
+//! ```rust
+//! use nom::{
+//!   IResult,
+//!   bytes::complete::{tag, take_while_m_n},
+//!   combinator::map_res,
+//!   sequence::tuple};
 //!
-//! If you are upgrading to nom 2.0, please read the
-//! [migration document](http://rust.unhandledexpression.com/nom/upgrading_to_nom_2.html).
-//!
-//! See also the [FAQ](http://rust.unhandledexpression.com/nom/FAQ.html).
-//!
-//! # What are parser combinators?
-//!
-//! Parser combinators are a way to build parsers out of small functions. instead of
-//! writing a huge grammar file then generaing code, like you would do with lex and yacc,
-//! you write small functions, to parse small things like a character, or a number,
-//! and then you assemble them in larger and larger functions, that can parse larger
-//! parts of your formats.
-//!
-//! You end up with a list of small functions that you can reuse everywhere you need. Each
-//! of them can be unit tested anf fuzzed separately.
-//!
-//! # nom parser design
-//!
-//! All nom parsers follow the same convention. They are all functions with the following signature:
-//!
-//! ```ignore
-//!  fn parser(input: I) -&gt; IResult&lt;I,O&gt; { ... }
-//! ```
-//!
-//! Here is the definition of that `IResult` type:
-//!
-//! ```
-//! # #[macro_use] extern crate nom;
-//! # use nom::{Err,Needed};
-//! # fn main() {}
-//! pub enum IResult&lt;I,O,E=u32&gt; {
-//!   Done(I,O),
-//!   Error(Err&lt;E&gt;), // indicates the parser encountered an error. E is a custom error type you can redefine
-//!   /// Incomplete contains a Needed, an enum than can represent a known quantity of input data, or unknown
-//!   Incomplete(Needed) // if the parser did not have enough data to decide
+//! #[derive(Debug,PartialEq)]
+//! pub struct Color {
+//!   pub red:     u8,
+//!   pub green:   u8,
+//!   pub blue:    u8,
 //! }
-//! ```
 //!
-//! What it means:
-//!
-//! * `Done(i,o)` means the parser was successful. `i` is the remaining part of the input, `o` is the correctly parsed value
-//! The remaining part can then be used as input for other parsers called in a sequence
-//! * `Error(e)` indicates the parser encountered an error. The `Err&lt;E&gt;` type is an enum of possible parser errors,
-//! that can also contain a custom error that you&#39;d specify, by redefining the `E` error type
-//! * `Incomplete(i)` means the parser did not have enough information to decide, and tells you, if possible,
-//! how much data it needs
-//!
-//! That way, you could write your own parser that recognizes the letter &#39;a&#39; like this:
-//!
-//! ```
-//! #[macro_use] extern crate nom;
-//! use nom::{IResult,Needed,Err,ErrorKind};
-//! # fn main() {}
-//!
-//! fn a(input: &amp;[u8]) -&gt; IResult&lt;&amp;[u8], char&gt; {
-//!  // if there is not enough data, we return Ìncomplete
-//!  if input.len() == 0 {
-//!    IResult::Incomplete(Needed::Size(1))
-//!  } else {
-//!    if input[0] == &#39;a&#39; as u8 {
-//!      // the first part of the returned value is the remaining slice
-//!      IResult::Done(&amp;input[1..], &#39;a&#39;)
-//!    } else {
-//!      IResult::Error(error_code!(ErrorKind::Custom(42)))
-//!    }
-//!  }
+//! fn from_hex(input: &amp;str) -&gt; Result&lt;u8, std::num::ParseIntError&gt; {
+//!   u8::from_str_radix(input, 16)
 //! }
-//! ```
 //!
-//! Writing all the parsers manually, like this, is dangerous, despite Rust&#39;s safety features. There
-//! are still a lot of mistakes one can make. That&#39;s why nom provides a list of macros to help in
-//! developing parsers. As an example, here is a parser that would recognize the phrase
-//! &quot;Hello &lt;someone&gt;&quot; and return the name of the person we hail:
-//!
-//! ```
-//! #[macro_use] extern crate nom;
-//! use nom::alpha;
-//!
-//! named!(hello, preceded!(tag!(&quot;Hello &quot;), alpha));
-//! # use nom::IResult;
-//! # fn main() {
-//! #  assert_eq!(hello(b&quot;Hello nom.&quot;), IResult::Done(&amp;b&quot;.&quot;[..], &amp;b&quot;nom&quot;[..]));
-//! # }
-//! ```
-//!
-//! Let&#39;s deconstruct it:
-//!
-//! * `named!` generates a function with the correct type. Without `named` here, we could write the parser
-//! as follows:
-//!
-//! ```
-//! #[macro_use] extern crate nom;
-//! use nom::{alpha,IResult};
-//!
-//! fn hello(input: &amp;[u8]) -&gt; IResult&lt;&amp;[u8], &amp;[u8]&gt; {
-//!   preceded!(input,
-//!     tag!(&quot;Hello &quot;), alpha)
+//! fn is_hex_digit(c: char) -&gt; bool {
+//!   c.is_digit(16)
 //! }
-//! # fn main() {
-//! #  assert_eq!(hello(b&quot;Hello nom.&quot;), IResult::Done(&amp;b&quot;.&quot;[..], &amp;b&quot;nom&quot;[..]));
-//! # }
-//! ```
 //!
-//! By default, `named` makes a function that takes `&amp;[u8]` as input type, and returns `&amp;[u8]` as output type.
-//! You can override it like this:
+//! fn hex_primary(input: &amp;str) -&gt; IResult&lt;&amp;str, u8&gt; {
+//!   map_res(
+//!     take_while_m_n(2, 2, is_hex_digit),
+//!     from_hex
+//!   )(input)
+//! }
 //!
-//! * `named!(hello&lt;&amp;str&gt;, ...):` would take `&amp;[u8]` as input type, and return `&amp;str` as output type.
-//! * `named!(hello&lt;&amp;str, &amp;str&gt;, ...):` would take `&amp;str` as input type, and return `&amp;str` as output type.
+//! fn hex_color(input: &amp;str) -&gt; IResult&lt;&amp;str, Color&gt; {
+//!   let (input, _) = tag(&quot;#&quot;)(input)?;
+//!   let (input, (red, green, blue)) = tuple((hex_primary, hex_primary, hex_primary))(input)?;
 //!
-//! *Note* : when we don&#39;t use `named!`, we must pass the input as first argument of the top
-//! level combinator (see the line `preceded!(input,` in the preceding code example). This is a macro trick
-//! in nom to pass input from one combinator to the next by rewriting the call.
-//!
-//! Next part of the parser: `preceded!(tag!(&quot;Hello &quot;), alpha))`. Here, `tag!` is a combinator that recognizes
-//! a specific serie of bytes or characters. `alpha` is a function that recognizes alphabetical characters.
-//! The `preceded!` combinator assembles them in a more complex parser: if both parsers are successful,
-//! it returns the result of the second one (`alpha` is preceded by `tag!`).
-//!
-//! *Note* : combinators can assemble other combinators (macros), or parser functions, as long as they follow
-//! the same interface. Here, `alpha` is a parser function already implemented in nom.
-//!
-//! # List of parsers and combinators
-//!
-//! ## Basic elements
-//!
-//! Those are used to recognize the lowest level elements of your grammar, like, &quot;here is a dot&quot;, or
-//! &quot;here is an big endian integer&quot;.
-//!
-//! * **char!**: matches one character: `char!(&#39;a&#39;)` will make a parser that recognizes the letter &#39;a&#39; (works with non ASCII chars too)
-//! * **eof!**: `eof!()` returns its input if it is at the end of input data
-//! * **is_a!, is_a_s!**: matches a sequence of any of the characters passed as arguments. `is_a!(&quot;ab1&quot;)` could recognize `ababa` or `1bb`. `is_a_s!` is a legacy combinator, it does exactly the same thing as `is_a`
-//! * **is_not!, is_not_s!**: matches a sequence of none of the characters passed as arguments
-//! * **one_of!**: matches one of the provided characters. `one_of!(&quot;abc&quot;)` could recognize &#39;a&#39;, &#39;b&#39;, or &#39;c&#39;. It also works with non ASCII characters
-//! * **none_of!**: matches anything but the provided characters
-//! * **tag!, tag_s!**: recognizes a specific suite of characters or bytes. `tag!(&quot;hello&quot;)` matches &quot;hello&quot;
-//! * **tag_no_case!**: recognizes a suite of ASCII characters, case insensitive. `tag_no_case!(&quot;hello&quot;)` could match &quot;hello&quot;, &quot;Hello&quot; or even &quot;HeLlO&quot;
-//! * **tag_no_case_s!** works like `tag_no_case` but on UTF-8 characters too (uses `&amp;str` as input). Note that case insensitive comparison is not well defined for unicode, and that you might have bad surprises. Also, this combinator allocates a new string for the comparison. Ponder for a bit before using this combinator
-//! * **take!, take_s!**: takes a specific number of bytes or characters. `take!(5)` would return &quot;hello&quot; from the string &quot;hello world&quot;
-//! * **take_str!**: same as `take!` but returning a `&amp;str`
-//! * **take_till!, take_till_s!**: returns the longest list of bytes until the provided function succeeds. `take_till!(is_alphabetic)` with input &quot;123abc&quot; would return &quot;123&quot;
-//! * **take_till1!, take_till1_s!**: same as `take_till!`, but the result must not be empty: `take_till1!(is_alphabetic)` would fail on &quot;abc&quot;
-//! * **take_until!, take_until_s!**: returns the longest list of bytes until the provided tag is found. `take_until!(&quot;world&quot;)` with input &quot;Hello world!&quot; would return &quot;Hello &quot; and leave &quot;world!&quot; as remaining input
-//! * **take_until1!**: same as `take_until!`, but cannot return an empty result
-//! * **take_until_and_consume!, take_until_and_consume_s!**: same as `take_until!` but consumes the tag. `take_until_and_consume!(&quot;world&quot;)` with input &quot;Hello world!&quot; would return &quot;Hello &quot; and leave &quot;!&quot; as remaining input
-//! * **take_until_and_consume1!**: same as `take_until_and_consume!`, but cannot return an empty result
-//! * **take_until_either!**: returns the longest list of bytes until any of the provided characters are found
-//! * **take_until_either_and_consume!**: same as `take_until_either!`, but consumes the terminating character
-//! * **take_while!, take_while_s!**: returns the longest list of bytes for which the function is true. `take_while!(is_alphabetic)` with input &quot;abc123&quot; would return &quot;abc&quot;
-//! * **take_while1!, take_while1_s!**: same as `take_while!`, but cannot return an empty result
-//! * **value!**: you can use `value!` to always return the same result value without consuming input, like this: `value!(42)`. Or you can replace the result of a child parser with a predefined value, like this: `value!(42, tag!(&quot;abcd&quot;))` which would replace, if successful, the return value from &quot;abcd&quot;, to 42
-//!
-//! Parsing integers from binary formats can be done in two ways: with parser functions, or combinators with configurable endianness:
-//!
-//! * configurable endianness: **i16!, i32!, i64!, u16!, u32!, u64!** are combinators that take as argument a `nom::Endianness`,
-//! like this: `i16!(endianness)`. If the parameter is nom::Endianness::Big, parse a big endian i16 integer, otherwise a little endian i16 integer
-//! * fixed endianness: the functions are prefixed by &quot;be_&quot; for big endian numbers, and by &quot;le_&quot; for little endian numbers, and the suffix is the type they parse to. As an example, &quot;be_u32&quot; parses a big endian unsigned integer stored in 32 bits.
-//!   * **be_f32, be_f64, le_f32, le_f64**: recognize floating point numbers
-//!   * **be_i8, be_i16, be_i32, be_i24, be_i32, be_i64**: big endian signed integers
-//!   * **be_u8, be_u16, be_u32, be_u24, be_u32, be_u64**: big endian unsigned integers
-//!   * **le_i8, le_i16, le_i32, le_i24, le_i32, le_i64**: little endian signed integers
-//!   * **le_u8, le_u16, le_u32, le_u24, le_u32, le_u64**: little endian unsigned integers
-//!
-//! ## Modifiers
-//!
-//! * **complete!**: replaces a Incomplete returned by the child parser with an Error
-//! * **cond!**: conditional combinator
-//! * **cond_reduce!**: Conditional combinator with error
-//! * **cond_with_error!**: Conditional combinator
-//! * **expr_opt!**: evaluates an expression that returns a Option and returns a IResult::Done(I,T) if Some
-//! * **expr_res!**: evaluates an expression that returns a Result and returns a IResult::Done(I,T) if Ok
-//! * **flat_map!**:
-//! * **map!**: maps a function on the result of a parser
-//! * **map_opt!**: maps a function returning an Option on the output of a parser
-//! * **map_res!**: maps a function returning a Result on the output of a parser
-//! * **not!**: returns a result only if the embedded parser returns Error or Incomplete does not consume the input
-//! * **opt!**: make the underlying parser optional
-//! * **opt_res!**: make the underlying parser optional
-//! * **parse_to!**: uses the parse method from std::str::FromStr to convert the current input to the specified type
-//! * **peek!**: returns a result without consuming the input
-//! * **recognize!**: if the child parser was successful, return the consumed input as produced value
-//! * **return_error!**: prevents backtracking if the child parser fails
-//! * **tap!**: allows access to the parser&#39;s result without affecting it
-//! * **verify!**: returns the result of the child parser if it satisfies a verification function
-//!
-//! ## Error management and debugging
-//!
-//! * **add_return_error!**: Add an error if the child parser fails
-//! * **dbg!**: Prints a message if the parser fails
-//! * **dbg_dmp!**: Prints a message and the input if the parser fails
-//! * **error_code!**: creates a parse error from a nom::ErrorKind
-//! * **error_node!**: creates a parse error from a nom::ErrorKind and the next error in the parsing tree. if &quot;verbose-errors&quot; is not activated, it default to only the error code
-//! * **error_node_position!**: creates a parse error from a nom::ErrorKind, the position in the input and the next error in the parsing tree. if &quot;verbose-errors&quot; is not activated, it default to only the error code
-//! * **error_position!**: creates a parse error from a nom::ErrorKind and the position in the input if &quot;verbose-errors&quot; is not activated, it default to only the error code
-//! * **fix_error!**: translate parser result from IResult to IResult with a custom type
-//!
-//! ## Choice combinators
-//!
-//! * **alt!**: try a list of parsers and return the result of the first successful one
-//! * **alt_complete!**: is equivalent to the alt! combinator, except that it will not return Incomplete when one of the constituting parsers returns Incomplete. Instead, it will try the next alternative in the chain.
-//! * **switch!**: choose the next parser depending on the result of the first one, if successful, and returns the result of the second parser
-//!
-//! # Sequence combinators
-//!
-//! * **delimited!**: delimited(opening, X, closing) returns X
-//! * **do_parse!**: do_parse applies sub parsers in a sequence. it can store intermediary results and make them available for later parsers
-//! * **pair!**: pair(X,Y), returns (x,y)
-//! * **permutation!**: applies its sub parsers in a sequence, but independent from their order this parser will only succeed if all of its sub parsers succeed
-//! * **preceded!**: preceded(opening, X) returns X
-//! * **separated_pair!**: separated_pair(X,sep,Y) returns (x,y)
-//! * **terminated!**: terminated(X, closing) returns X
-//! * **tuple!**: chains parsers and assemble the sub results in a tuple.
-//!
-//! ## Applying a parser multiple times
-//!
-//! * **count!**: Applies the child parser a specified number of times
-//! * **count_fixed!**: Applies the child parser a fixed number of times and returns a fixed size array The type must be specified and it must be Copy
-//! * **fold_many0!**: Applies the parser 0 or more times and folds the list of return values
-//! * **fold_many1!**: Applies the parser 1 or more times and folds the list of return values
-//! * **fold_many_m_n!**: Applies the parser between m and n times (n included) and folds the list of return value
-//! * **length_count!**: gets a number from the first parser, then applies the second parser that many times
-//! * **many0!**: Applies the parser 0 or more times and returns the list of results in a Vec
-//! * **many1!**: Applies the parser 1 or more times and returns the list of results in a Vec
-//! * **many_m_n!**: Applies the parser between m and n times (n included) and returns the list of results in a Vec
-//! * **many_till!**: Applies the first parser until the second applies. Returns a tuple containing the list of results from the first in a Vec and the result of the second.
-//! * **separated_list!**: separated_list(sep, X) returns Vec will return Incomplete if there may be more elements
-//! * **separated_list_complete!**: This is equivalent to the separated_list! combinator, except that it will return Error when either the separator or element subparser returns Incomplete.
-//! * **separated_nonempty_list!**: separated_nonempty_list(sep, X) returns Vec will return Incomplete if there may be more elements
-//! * **separated_nonempty_list_complete!**: This is equivalent to the separated_nonempty_list! combinator, except that it will return Error when either the separator or element subparser returns Incomplete.
-//!
-//! ## Text parsing
-//!
-//! * **escaped!**: matches a byte string with escaped characters.
-//! * **escaped_transform!**: matches a byte string with escaped characters, and returns a new string with the escaped characters replaced
-//!
-//! ## Binary format parsing
-//!
-//! * **length_data!**: gets a number from the first parser, than takes a subslice of the input of that size, and returns that subslice
-//! * **length_bytes!**: alias for `length_data`
-//! * **length_value!**: gets a number from the first parser, takes a subslice of the input of that size, then applies the second parser on that subslice. If the second parser returns Incomplete, length_value will return an error
-//!
-//! ## Bit stream parsing
-//!
-//! * **bits!**: transforms the current input type (byte slice `&amp;[u8]`) to a bit stream on which bit specific parsers and more general combinators can be applied
-//! * **bytes!**: transforms its bits stream input back into a byte slice for the underlying parsers.
-//! * **tag_bits!**: matches an integer pattern to a bitstream. The number of bits of the input to compare must be specified
-//! * **take_bits!**: generates a parser consuming the specified number of bits
-//!
-//! ## Whitespace delimited formats parsing
-//!
-//! * **eat_separator!**: helper macros to build a separator parser
-//! * **sep!**: sep is the parser rewriting macro for whitespace separated formats
-//! * **wrap_sep!**:
-//! * **ws!**:
-//!
-//! ## Remaining combinators
-//!
-//! * **apply!**: emulate function currying: apply!(my_function, arg1, arg2, ...) becomes my_function(input, arg1, arg2, ...)
-//! * **apply_m!**: emulate function currying for method calls on structs apply_m!(self.my_function, arg1, arg2, ...) becomes self.my_function(input, arg1, arg2, ...)
-//! * **call!**: Used to wrap common expressions and function as macros
-//! * **call_m!**: Used to called methods then move self back into self
-//! * **closure!**: Wraps a parser in a closure
-//! * **method!**: Makes a method from a parser combination
-//! * **named!**: Makes a function from a parser combination
-//! * **named_args!**: Makes a function from a parser combination with arguments.
-//! * **named_attr!**: Makes a function from a parser combination, with attributes
-//! * **try_parse!**: A bit like std::try!, this macro will return the remaining input and parsed value if the child parser returned Done, and will do an early return for Error and Incomplete this can provide more flexibility than do_parse! if needed
-//!
-//! ## Character test functions
-//!
-//! use those functions with a combinator like `take_while!`:
-//!
-//! * **is_alphabetic**: Tests if byte is ASCII alphabetic: A-Z, a-z
-//! * **is_alphanumeric**: Tests if byte is ASCII alphanumeric: A-Z, a-z, 0-9
-//! * **is_digit**: Tests if byte is ASCII digit: 0-9
-//! * **is_hex_digit**: Tests if byte is ASCII hex digit: 0-9, A-F, a-f
-//! * **is_oct_digit**: Tests if byte is ASCII octal digit: 0-7
-//! * **is_space**: Tests if byte is ASCII space or tab
-//!
-//! ## Remaining functions (sort those out in the other categories)
-//!
-//! * **alpha**: Recognizes one or more lowercase and uppercase alphabetic characters: a-zA-Z
-//! * **alphanumeric**: Recognizes one or more numerical and alphabetic characters: 0-9a-zA-Z
-//! * **anychar**: 
-//! * **begin**: 
-//! * **crlf**: 
-//! * **digit**: Recognizes one or more numerical characters: 0-9
-//! * **double**: Recognizes floating point number in a byte string and returns a f64
-//! * **double_s**: Recognizes floating point number in a string and returns a f64
-//! * **eol**: 
-//! * **float**: Recognizes floating point number in a byte string and returns a f32
-//! * **float_s**: Recognizes floating point number in a string and returns a f32
-//! * **hex_digit**: Recognizes one or more hexadecimal numerical characters: 0-9, A-F, a-f
-//! * **hex_u32**: Recognizes a hex-encoded integer
-//! * **line_ending**: Recognizes an end of line (both &#39;\n&#39; and &quot;\r\n&quot;)
-//! * **multispace**: Recognizes one or more spaces, tabs, carriage returns and line feeds
-//! * **newline**: Matches a newline character &#39;\n&#39;
-//! * **non_empty**: Recognizes non empty buffers
-//! * **not_line_ending**: 
-//! * **oct_digit**: Recognizes one or more octal characters: 0-7
-//! * **rest**: Return the remaining input.
-//! * **rest_s**: Return the remaining input, for strings.
-//! * **shift**: 
-//! * **sized_buffer**: 
-//! * **space**: Recognizes one or more spaces and tabs
-//! * **tab**: Matches a tab character &#39;\t&#39;
-//! * **tag_cl**: 
-//!
-//! # Example
-//!
-//! ```
-//! #[macro_use]
-//! extern crate nom;
-//!
-//! use nom::{IResult,digit};
-//!
-//! // Parser definition
-//!
-//! use std::str;
-//! use std::str::FromStr;
-//!
-//! // We parse any expr surrounded by parens, ignoring all whitespaces around those
-//! named!(parens&lt;i64&gt;, ws!(delimited!( tag!(&quot;(&quot;), expr, tag!(&quot;)&quot;) )) );
-//!
-//! // We transform an integer string into a i64, ignoring surrounding whitespaces
-//! // We look for a digit suite, and try to convert it.
-//! // If either str::from_utf8 or FromStr::from_str fail,
-//! // we fallback to the parens parser defined above
-//! named!(factor&lt;i64&gt;, alt!(
-//!     map_res!(
-//!       map_res!(
-//!         ws!(digit),
-//!         str::from_utf8
-//!       ),
-//!       FromStr::from_str
-//!     )
-//!   | parens
-//!   )
-//! );
-//!
-//! // We read an initial factor and for each time we find
-//! // a * or / operator followed by another factor, we do
-//! // the math by folding everything
-//! named!(term &lt;i64&gt;, do_parse!(
-//!     init: factor &gt;&gt;
-//!     res:  fold_many0!(
-//!         pair!(alt!(tag!(&quot;*&quot;) | tag!(&quot;/&quot;)), factor),
-//!         init,
-//!         |acc, (op, val): (&amp;[u8], i64)| {
-//!             if (op[0] as char) == &#39;*&#39; { acc * val } else { acc / val }
-//!         }
-//!     ) &gt;&gt;
-//!     (res)
-//!   )
-//! );
-//!
-//! named!(expr &lt;i64&gt;, do_parse!(
-//!     init: term &gt;&gt;
-//!     res:  fold_many0!(
-//!         pair!(alt!(tag!(&quot;+&quot;) | tag!(&quot;-&quot;)), term),
-//!         init,
-//!         |acc, (op, val): (&amp;[u8], i64)| {
-//!             if (op[0] as char) == &#39;+&#39; { acc + val } else { acc - val }
-//!         }
-//!     ) &gt;&gt;
-//!     (res)
-//!   )
-//! );
+//!   Ok((input, Color { red, green, blue }))
+//! }
 //!
 //! fn main() {
-//!   assert_eq!(expr(b&quot;1+2&quot;),         IResult::Done(&amp;b&quot;&quot;[..], 3));
-//!   assert_eq!(expr(b&quot;12+6-4+3&quot;),    IResult::Done(&amp;b&quot;&quot;[..], 17));
-//!   assert_eq!(expr(b&quot;1+2*3+4&quot;),     IResult::Done(&amp;b&quot;&quot;[..], 11));
-//!
-//!   assert_eq!(expr(b&quot;(2)&quot;),         IResult::Done(&amp;b&quot;&quot;[..], 2));
-//!   assert_eq!(expr(b&quot;2*(3+4)&quot;),     IResult::Done(&amp;b&quot;&quot;[..], 14));
-//!   assert_eq!(expr(b&quot;2*2/(5-1)+3&quot;), IResult::Done(&amp;b&quot;&quot;[..], 4));
+//!   assert_eq!(hex_color(&quot;#2F14DF&quot;), Ok((&quot;&quot;, Color {
+//!     red: 47,
+//!     green: 20,
+//!     blue: 223,
+//!   })));
 //! }
 //! ```
-</span><span class="attr">#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), feature(no_std))]
-#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), feature(collections))]
-#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), no_std)]
-#![cfg_attr(feature = <span class="string">&quot;nightly&quot;</span>, feature(test))]
-#![cfg_attr(feature = <span class="string">&quot;nightly&quot;</span>, feature(const_fn))]
-#![cfg_attr(feature = <span class="string">&quot;nightly&quot;</span>, feature(plugin))]
-#![cfg_attr(feature = <span class="string">&quot;nightly&quot;</span>, plugin(compiler_error))]
-</span><span class="comment">//#![warn(missing_docs)]
+//!
+//! The code is available on [Github](https://github.com/Geal/nom)
+//!
+//! There are a few [guides](https://github.com/Geal/nom/tree/main/doc) with more details
+//! about [how to write parsers](https://github.com/Geal/nom/blob/main/doc/making_a_new_parser_from_scratch.md),
+//! or the [error management system](https://github.com/Geal/nom/blob/main/doc/error_management.md).
+//! You can also check out the [recipes] module that contains examples of common patterns.
+//!
+//! **Looking for a specific combinator? Read the
+//! [&quot;choose a combinator&quot; guide](https://github.com/Geal/nom/blob/main/doc/choosing_a_combinator.md)**
+//!
+//! If you are upgrading to nom 5.0, please read the
+//! [migration document](https://github.com/Geal/nom/blob/main/doc/upgrading_to_nom_5.md).
+//!
+//! ## Parser combinators
+//!
+//! Parser combinators are an approach to parsers that is very different from
+//! software like [lex](https://en.wikipedia.org/wiki/Lex_(software)) and
+//! [yacc](https://en.wikipedia.org/wiki/Yacc). Instead of writing the grammar
+//! in a separate syntax and generating the corresponding code, you use very small
+//! functions with very specific purposes, like &quot;take 5 bytes&quot;, or &quot;recognize the
+//! word &#39;HTTP&#39;&quot;, and assemble them in meaningful patterns like &quot;recognize
+//! &#39;HTTP&#39;, then a space, then a version&quot;.
+//! The resulting code is small, and looks like the grammar you would have
+//! written with other parser approaches.
+//!
+//! This gives us a few advantages:
+//!
+//! - The parsers are small and easy to write
+//! - The parsers components are easy to reuse (if they&#39;re general enough, please add them to nom!)
+//! - The parsers components are easy to test separately (unit tests and property-based tests)
+//! - The parser combination code looks close to the grammar you would have written
+//! - You can build partial parsers, specific to the data you need at the moment, and ignore the rest
+//!
+//! Here is an example of one such parser, to recognize text between parentheses:
+//!
+//! ```rust
+//! use nom::{
+//!   IResult,
+//!   sequence::delimited,
+//!   // see the &quot;streaming/complete&quot; paragraph lower for an explanation of these submodules
+//!   character::complete::char,
+//!   bytes::complete::is_not
+//! };
+//!
+//! fn parens(input: &amp;str) -&gt; IResult&lt;&amp;str, &amp;str&gt; {
+//!   delimited(char(&#39;(&#39;), is_not(&quot;)&quot;), char(&#39;)&#39;))(input)
+//! }
+//! ```
+//!
+//! It defines a function named `parens` which will recognize a sequence of the
+//! character `(`, the longest byte array not containing `)`, then the character
+//! `)`, and will return the byte array in the middle.
+//!
+//! Here is another parser, written without using nom&#39;s combinators this time:
+//!
+//! ```rust
+//! use nom::{IResult, Err, Needed};
+//!
+//! # fn main() {
+//! fn take4(i: &amp;[u8]) -&gt; IResult&lt;&amp;[u8], &amp;[u8]&gt;{
+//!   if i.len() &lt; 4 {
+//!     Err(Err::Incomplete(Needed::new(4)))
+//!   } else {
+//!     Ok((&amp;i[4..], &amp;i[0..4]))
+//!   }
+//! }
+//! # }
+//! ```
+//!
+//! This function takes a byte array as input, and tries to consume 4 bytes.
+//! Writing all the parsers manually, like this, is dangerous, despite Rust&#39;s
+//! safety features. There are still a lot of mistakes one can make. That&#39;s why
+//! nom provides a list of functions to help in developing parsers.
+//!
+//! With functions, you would write it like this:
+//!
+//! ```rust
+//! use nom::{IResult, bytes::streaming::take};
+//! fn take4(input: &amp;str) -&gt; IResult&lt;&amp;str, &amp;str&gt; {
+//!   take(4u8)(input)
+//! }
+//! ```
+//!
+//! A parser in nom is a function which, for an input type `I`, an output type `O`
+//! and an optional error type `E`, will have the following signature:
+//!
+//! ```rust,compile_fail
+//! fn parser(input: I) -&gt; IResult&lt;I, O, E&gt;;
+//! ```
+//!
+//! Or like this, if you don&#39;t want to specify a custom error type (it will be `(I, ErrorKind)` by default):
+//!
+//! ```rust,compile_fail
+//! fn parser(input: I) -&gt; IResult&lt;I, O&gt;;
+//! ```
+//!
+//! `IResult` is an alias for the `Result` type:
+//!
+//! ```rust
+//! use nom::{Needed, error::Error};
+//!
+//! type IResult&lt;I, O, E = Error&lt;I&gt;&gt; = Result&lt;(I, O), Err&lt;E&gt;&gt;;
+//!
+//! enum Err&lt;E&gt; {
+//!   Incomplete(Needed),
+//!   Error(E),
+//!   Failure(E),
+//! }
+//! ```
+//!
+//! It can have the following values:
+//!
+//! - A correct result `Ok((I,O))` with the first element being the remaining of the input (not parsed yet), and the second the output value;
+//! - An error `Err(Err::Error(c))` with `c` an error that can be built from the input position and a parser specific error
+//! - An error `Err(Err::Incomplete(Needed))` indicating that more input is necessary. `Needed` can indicate how much data is needed
+//! - An error `Err(Err::Failure(c))`. It works like the `Error` case, except it indicates an unrecoverable error: We cannot backtrack and test another parser
+//!
+//! Please refer to the [&quot;choose a combinator&quot; guide](https://github.com/Geal/nom/blob/main/doc/choosing_a_combinator.md) for an exhaustive list of parsers.
+//! See also the rest of the documentation [here](https://github.com/Geal/nom/blob/main/doc).
+//!
+//! ## Making new parsers with function combinators
+//!
+//! nom is based on functions that generate parsers, with a signature like
+//! this: `(arguments) -&gt; impl Fn(Input) -&gt; IResult&lt;Input, Output, Error&gt;`.
+//! The arguments of a combinator can be direct values (like `take` which uses
+//! a number of bytes or character as argument) or even other parsers (like
+//! `delimited` which takes as argument 3 parsers, and returns the result of
+//! the second one if all are successful).
+//!
+//! Here are some examples:
+//!
+//! ```rust
+//! use nom::IResult;
+//! use nom::bytes::complete::{tag, take};
+//! fn abcd_parser(i: &amp;str) -&gt; IResult&lt;&amp;str, &amp;str&gt; {
+//!   tag(&quot;abcd&quot;)(i) // will consume bytes if the input begins with &quot;abcd&quot;
+//! }
+//!
+//! fn take_10(i: &amp;[u8]) -&gt; IResult&lt;&amp;[u8], &amp;[u8]&gt; {
+//!   take(10u8)(i) // will consume and return 10 bytes of input
+//! }
+//! ```
+//!
+//! ## Combining parsers
+//!
+//! There are higher level patterns, like the **`alt`** combinator, which
+//! provides a choice between multiple parsers. If one branch fails, it tries
+//! the next, and returns the result of the first parser that succeeds:
+//!
+//! ```rust
+//! use nom::IResult;
+//! use nom::branch::alt;
+//! use nom::bytes::complete::tag;
+//!
+//! let mut alt_tags = alt((tag(&quot;abcd&quot;), tag(&quot;efgh&quot;)));
+//!
+//! assert_eq!(alt_tags(&amp;b&quot;abcdxxx&quot;[..]), Ok((&amp;b&quot;xxx&quot;[..], &amp;b&quot;abcd&quot;[..])));
+//! assert_eq!(alt_tags(&amp;b&quot;efghxxx&quot;[..]), Ok((&amp;b&quot;xxx&quot;[..], &amp;b&quot;efgh&quot;[..])));
+//! assert_eq!(alt_tags(&amp;b&quot;ijklxxx&quot;[..]), Err(nom::Err::Error((&amp;b&quot;ijklxxx&quot;[..], nom::error::ErrorKind::Tag))));
+//! ```
+//!
+//! The **`opt`** combinator makes a parser optional. If the child parser returns
+//! an error, **`opt`** will still succeed and return None:
+//!
+//! ```rust
+//! use nom::{IResult, combinator::opt, bytes::complete::tag};
+//! fn abcd_opt(i: &amp;[u8]) -&gt; IResult&lt;&amp;[u8], Option&lt;&amp;[u8]&gt;&gt; {
+//!   opt(tag(&quot;abcd&quot;))(i)
+//! }
+//!
+//! assert_eq!(abcd_opt(&amp;b&quot;abcdxxx&quot;[..]), Ok((&amp;b&quot;xxx&quot;[..], Some(&amp;b&quot;abcd&quot;[..]))));
+//! assert_eq!(abcd_opt(&amp;b&quot;efghxxx&quot;[..]), Ok((&amp;b&quot;efghxxx&quot;[..], None)));
+//! ```
+//!
+//! **`many0`** applies a parser 0 or more times, and returns a vector of the aggregated results:
+//!
+//! ```rust
+//! # #[cfg(feature = &quot;alloc&quot;)]
+//! # fn main() {
+//! use nom::{IResult, multi::many0, bytes::complete::tag};
+//! use std::str;
+//!
+//! fn multi(i: &amp;str) -&gt; IResult&lt;&amp;str, Vec&lt;&amp;str&gt;&gt; {
+//!   many0(tag(&quot;abcd&quot;))(i)
+//! }
+//!
+//! let a = &quot;abcdef&quot;;
+//! let b = &quot;abcdabcdef&quot;;
+//! let c = &quot;azerty&quot;;
+//! assert_eq!(multi(a), Ok((&quot;ef&quot;,     vec![&quot;abcd&quot;])));
+//! assert_eq!(multi(b), Ok((&quot;ef&quot;,     vec![&quot;abcd&quot;, &quot;abcd&quot;])));
+//! assert_eq!(multi(c), Ok((&quot;azerty&quot;, Vec::new())));
+//! # }
+//! # #[cfg(not(feature = &quot;alloc&quot;))]
+//! # fn main() {}
+//! ```
+//!
+//! Here are some basic combinators available:
+//!
+//! - **`opt`**: Will make the parser optional (if it returns the `O` type, the new parser returns `Option&lt;O&gt;`)
+//! - **`many0`**: Will apply the parser 0 or more times (if it returns the `O` type, the new parser returns `Vec&lt;O&gt;`)
+//! - **`many1`**: Will apply the parser 1 or more times
+//!
+//! There are more complex (and more useful) parsers like `tuple`, which is
+//! used to apply a series of parsers then assemble their results.
+//!
+//! Example with `tuple`:
+//!
+//! ```rust
+//! # fn main() {
+//! use nom::{error::ErrorKind, Needed,
+//! number::streaming::be_u16,
+//! bytes::streaming::{tag, take},
+//! sequence::tuple};
+//!
+//! let mut tpl = tuple((be_u16, take(3u8), tag(&quot;fg&quot;)));
+//!
+//! assert_eq!(
+//!   tpl(&amp;b&quot;abcdefgh&quot;[..]),
+//!   Ok((
+//!     &amp;b&quot;h&quot;[..],
+//!     (0x6162u16, &amp;b&quot;cde&quot;[..], &amp;b&quot;fg&quot;[..])
+//!   ))
+//! );
+//! assert_eq!(tpl(&amp;b&quot;abcde&quot;[..]), Err(nom::Err::Incomplete(Needed::new(2))));
+//! let input = &amp;b&quot;abcdejk&quot;[..];
+//! assert_eq!(tpl(input), Err(nom::Err::Error((&amp;input[5..], ErrorKind::Tag))));
+//! # }
+//! ```
+//!
+//! But you can also use a sequence of combinators written in imperative style,
+//! thanks to the `?` operator:
+//!
+//! ```rust
+//! # fn main() {
+//! use nom::{IResult, bytes::complete::tag};
+//!
+//! #[derive(Debug, PartialEq)]
+//! struct A {
+//!   a: u8,
+//!   b: u8
+//! }
+//!
+//! fn ret_int1(i:&amp;[u8]) -&gt; IResult&lt;&amp;[u8], u8&gt; { Ok((i,1)) }
+//! fn ret_int2(i:&amp;[u8]) -&gt; IResult&lt;&amp;[u8], u8&gt; { Ok((i,2)) }
+//!
+//! fn f(i: &amp;[u8]) -&gt; IResult&lt;&amp;[u8], A&gt; {
+//!   // if successful, the parser returns `Ok((remaining_input, output_value))` that we can destructure
+//!   let (i, _) = tag(&quot;abcd&quot;)(i)?;
+//!   let (i, a) = ret_int1(i)?;
+//!   let (i, _) = tag(&quot;efgh&quot;)(i)?;
+//!   let (i, b) = ret_int2(i)?;
+//!
+//!   Ok((i, A { a, b }))
+//! }
+//!
+//! let r = f(b&quot;abcdefghX&quot;);
+//! assert_eq!(r, Ok((&amp;b&quot;X&quot;[..], A{a: 1, b: 2})));
+//! # }
+//! ```
+//!
+//! ## Streaming / Complete
+//!
+//! Some of nom&#39;s modules have `streaming` or `complete` submodules. They hold
+//! different variants of the same combinators.
+//!
+//! A streaming parser assumes that we might not have all of the input data.
+//! This can happen with some network protocol or large file parsers, where the
+//! input buffer can be full and need to be resized or refilled.
+//!
+//! A complete parser assumes that we already have all of the input data.
+//! This will be the common case with small files that can be read entirely to
+//! memory.
+//!
+//! Here is how it works in practice:
+//!
+//! ```rust
+//! use nom::{IResult, Err, Needed, error::{Error, ErrorKind}, bytes, character};
+//!
+//! fn take_streaming(i: &amp;[u8]) -&gt; IResult&lt;&amp;[u8], &amp;[u8]&gt; {
+//!   bytes::streaming::take(4u8)(i)
+//! }
+//!
+//! fn take_complete(i: &amp;[u8]) -&gt; IResult&lt;&amp;[u8], &amp;[u8]&gt; {
+//!   bytes::complete::take(4u8)(i)
+//! }
+//!
+//! // both parsers will take 4 bytes as expected
+//! assert_eq!(take_streaming(&amp;b&quot;abcde&quot;[..]), Ok((&amp;b&quot;e&quot;[..], &amp;b&quot;abcd&quot;[..])));
+//! assert_eq!(take_complete(&amp;b&quot;abcde&quot;[..]), Ok((&amp;b&quot;e&quot;[..], &amp;b&quot;abcd&quot;[..])));
+//!
+//! // if the input is smaller than 4 bytes, the streaming parser
+//! // will return `Incomplete` to indicate that we need more data
+//! assert_eq!(take_streaming(&amp;b&quot;abc&quot;[..]), Err(Err::Incomplete(Needed::new(1))));
+//!
+//! // but the complete parser will return an error
+//! assert_eq!(take_complete(&amp;b&quot;abc&quot;[..]), Err(Err::Error(Error::new(&amp;b&quot;abc&quot;[..], ErrorKind::Eof))));
+//!
+//! // the alpha0 function recognizes 0 or more alphabetic characters
+//! fn alpha0_streaming(i: &amp;str) -&gt; IResult&lt;&amp;str, &amp;str&gt; {
+//!   character::streaming::alpha0(i)
+//! }
+//!
+//! fn alpha0_complete(i: &amp;str) -&gt; IResult&lt;&amp;str, &amp;str&gt; {
+//!   character::complete::alpha0(i)
+//! }
+//!
+//! // if there&#39;s a clear limit to the recognized characters, both parsers work the same way
+//! assert_eq!(alpha0_streaming(&quot;abcd;&quot;), Ok((&quot;;&quot;, &quot;abcd&quot;)));
+//! assert_eq!(alpha0_complete(&quot;abcd;&quot;), Ok((&quot;;&quot;, &quot;abcd&quot;)));
+//!
+//! // but when there&#39;s no limit, the streaming version returns `Incomplete`, because it cannot
+//! // know if more input data should be recognized. The whole input could be &quot;abcd;&quot;, or
+//! // &quot;abcde;&quot;
+//! assert_eq!(alpha0_streaming(&quot;abcd&quot;), Err(Err::Incomplete(Needed::new(1))));
+//!
+//! // while the complete version knows that all of the data is there
+//! assert_eq!(alpha0_complete(&quot;abcd&quot;), Ok((&quot;&quot;, &quot;abcd&quot;)));
+//! ```
+//! **Going further:** Read the [guides](https://github.com/Geal/nom/tree/main/doc),
+//! check out the [recipes]!
+</span><span class="attr">#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), no_std)]
+#![cfg_attr(feature = <span class="string">&quot;cargo-clippy&quot;</span>, allow(clippy::doc_markdown))]
+#![cfg_attr(feature = <span class="string">&quot;docsrs&quot;</span>, feature(doc_cfg))]
+#![cfg_attr(feature = <span class="string">&quot;docsrs&quot;</span>, feature(extended_key_value_attributes))]
+#![deny(missing_docs)]
+#[cfg_attr(nightly, warn(rustdoc::missing_doc_code_examples))]
+#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+#[macro_use]
+</span><span class="kw">extern crate </span>alloc;
+<span class="attr">#[cfg(doctest)]
+</span><span class="kw">extern crate </span>doc_comment;
 
-</span><span class="attr">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
-</span><span class="kw">extern crate </span>collections;
-<span class="attr">#[cfg(feature = <span class="string">&quot;regexp&quot;</span>)]
-</span><span class="kw">extern crate </span>regex;
-<span class="attr">#[cfg(feature = <span class="string">&quot;regexp_macros&quot;</span>)]
-#[macro_use] </span><span class="kw">extern crate </span>lazy_static;
-<span class="kw">extern crate </span>memchr;
-<span class="attr">#[cfg(feature = <span class="string">&quot;nightly&quot;</span>)]
-</span><span class="kw">extern crate </span>test;
+<span class="attr">#[cfg(doctest)]
+</span><span class="macro">doc_comment::doctest!</span>(<span class="string">&quot;../README.md&quot;</span>);
 
-<span class="attr">#[cfg(not(feature = <span class="string">&quot;nightly&quot;</span>))]
-#[allow(unused_macros)]
-#[macro_export]
-</span><span class="macro">macro_rules! </span>compiler_error {
-    (<span class="macro-nonterminal">$e</span>:expr) =&gt; {
-      INVALID_NOM_SYNTAX_PLEASE_SEE_FAQ <span class="comment">//https://github.com/Geal/nom/blob/master/doc/FAQ.md#using-nightly-to-get-better-error-messages
-    </span>}
-}
+<span class="doccomment">/// Lib module to re-export everything needed from `std` or `core`/`alloc`. This is how `serde` does
+/// it, albeit there it is not public.
+</span><span class="attr">#[cfg_attr(nightly, allow(rustdoc::missing_doc_code_examples))]
+</span><span class="kw">pub mod </span>lib {
+  <span class="doccomment">/// `std` facade allowing `std`/`core` to be interchangeable. Reexports `alloc` crate optionally,
+  /// as well as `core` or `std`
+  </span><span class="attr">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+  #[cfg_attr(nightly, allow(rustdoc::missing_doc_code_examples))]
+  </span><span class="doccomment">/// internal std exports for no_std compatibility
+  </span><span class="kw">pub mod </span>std {
+    <span class="attr">#[doc(hidden)]
+    #[cfg(not(feature = <span class="string">&quot;alloc&quot;</span>))]
+    </span><span class="kw">pub use </span>core::borrow;
 
-<span class="attr">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
-</span><span class="kw">mod </span>std {
-<span class="attr">#[macro_use]
-  </span><span class="kw">pub use </span>core::{fmt, cmp, iter, option, result, ops, slice, str, mem, convert};
-  <span class="kw">pub use </span>collections::{boxed, vec, string};
-  <span class="kw">pub mod </span>prelude {
-    <span class="kw">pub use </span>core::prelude <span class="kw">as </span>v1;
+    <span class="attr">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+    #[doc(hidden)]
+    </span><span class="kw">pub use </span>alloc::{borrow, boxed, string, vec};
+
+    <span class="attr">#[doc(hidden)]
+    </span><span class="kw">pub use </span>core::{cmp, convert, fmt, iter, mem, ops, option, result, slice, str};
+
+    <span class="doccomment">/// internal reproduction of std prelude
+    </span><span class="attr">#[doc(hidden)]
+    </span><span class="kw">pub mod </span>prelude {
+      <span class="kw">pub use </span>core::prelude <span class="kw">as </span>v1;
+    }
+  }
+
+  <span class="attr">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+  #[cfg_attr(nightly, allow(rustdoc::missing_doc_code_examples))]
+  </span><span class="doccomment">/// internal std exports for no_std compatibility
+  </span><span class="kw">pub mod </span>std {
+    <span class="attr">#[doc(hidden)]
+    </span><span class="kw">pub use </span>std::{
+      alloc, borrow, boxed, cmp, collections, convert, fmt, hash, iter, mem, ops, option, result,
+      slice, str, string, vec,
+    };
+
+    <span class="doccomment">/// internal reproduction of std prelude
+    </span><span class="attr">#[doc(hidden)]
+    </span><span class="kw">pub mod </span>prelude {
+      <span class="kw">pub use </span>std::prelude <span class="kw">as </span>v1;
+    }
   }
 }
 
-<span class="kw">pub use </span><span class="self">self</span>::util::<span class="kw-2">*</span>;
-<span class="kw">pub use </span><span class="self">self</span>::traits::<span class="kw-2">*</span>;
-
-<span class="attr">#[cfg(feature = <span class="string">&quot;verbose-errors&quot;</span>)]
-</span><span class="kw">pub use </span><span class="self">self</span>::verbose_errors::<span class="kw-2">*</span>;
-
-<span class="attr">#[cfg(not(feature = <span class="string">&quot;verbose-errors&quot;</span>))]
-</span><span class="kw">pub use </span><span class="self">self</span>::simple_errors::<span class="kw-2">*</span>;
-
-<span class="kw">pub use </span><span class="self">self</span>::internal::<span class="kw-2">*</span>;
-<span class="kw">pub use </span><span class="self">self</span>::macros::<span class="kw-2">*</span>;
-<span class="kw">pub use </span><span class="self">self</span>::branch::<span class="kw-2">*</span>;
-<span class="kw">pub use </span><span class="self">self</span>::sequence::<span class="kw-2">*</span>;
-<span class="kw">pub use </span><span class="self">self</span>::multi::<span class="kw-2">*</span>;
-<span class="kw">pub use </span><span class="self">self</span>::methods::<span class="kw-2">*</span>;
-<span class="kw">pub use </span><span class="self">self</span>::bytes::<span class="kw-2">*</span>;
 <span class="kw">pub use </span><span class="self">self</span>::bits::<span class="kw-2">*</span>;
-
-<span class="kw">pub use </span><span class="self">self</span>::nom::<span class="kw-2">*</span>;
-<span class="kw">pub use </span><span class="self">self</span>::character::<span class="kw-2">*</span>;
-
-<span class="kw">pub use </span><span class="self">self</span>::whitespace::<span class="kw-2">*</span>;
-
-<span class="attr">#[cfg(feature = <span class="string">&quot;regexp&quot;</span>)]
-</span><span class="kw">pub use </span><span class="self">self</span>::regexp::<span class="kw-2">*</span>;
-
-<span class="attr">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
-#[cfg(feature = <span class="string">&quot;stream&quot;</span>)]
-</span><span class="kw">pub use </span><span class="self">self</span>::stream::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="self">self</span>::internal::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="self">self</span>::traits::<span class="kw-2">*</span>;
 
 <span class="kw">pub use </span><span class="self">self</span>::str::<span class="kw-2">*</span>;
 
-<span class="attr">#[macro_use] </span><span class="kw">mod </span>util;
+<span class="attr">#[macro_use]
+</span><span class="kw">mod </span>macros;
+<span class="attr">#[macro_use]
+</span><span class="kw">pub mod </span>error;
+
+<span class="kw">pub mod </span>branch;
+<span class="kw">pub mod </span>combinator;
+<span class="kw">mod </span>internal;
+<span class="kw">pub mod </span>multi;
+<span class="kw">pub mod </span>sequence;
 <span class="kw">mod </span>traits;
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;verbose-errors&quot;</span>)] #[macro_use] </span><span class="kw">pub mod </span>verbose_errors;
+<span class="kw">pub mod </span>bits;
+<span class="kw">pub mod </span>bytes;
 
-<span class="attr">#[cfg(not(feature = <span class="string">&quot;verbose-errors&quot;</span>))] #[macro_use] </span><span class="kw">pub mod </span>simple_errors;
-
-<span class="attr">#[macro_use] </span><span class="kw">mod </span>internal;
-<span class="attr">#[macro_use] </span><span class="kw">mod </span>macros;
-<span class="attr">#[macro_use] </span><span class="kw">mod </span>branch;
-<span class="attr">#[macro_use] </span><span class="kw">mod </span>sequence;
-<span class="attr">#[macro_use] </span><span class="kw">mod </span>multi;
-<span class="attr">#[macro_use] </span><span class="kw">pub mod </span>methods;
-<span class="attr">#[macro_use] </span><span class="kw">mod </span>bytes;
-<span class="attr">#[macro_use] </span><span class="kw">pub mod </span>bits;
-
-<span class="attr">#[macro_use] </span><span class="kw">mod </span>nom;
-<span class="attr">#[macro_use] </span><span class="kw">mod </span>character;
-
-<span class="attr">#[macro_use]
-</span><span class="kw">pub mod </span>whitespace;
-
-<span class="attr">#[cfg(feature = <span class="string">&quot;regexp&quot;</span>)]
-#[macro_use] </span><span class="kw">mod </span>regexp;
-
-<span class="attr">#[macro_use]
-#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
-#[cfg(feature = <span class="string">&quot;stream&quot;</span>)]
-</span><span class="kw">mod </span>stream;
+<span class="kw">pub mod </span>character;
 
 <span class="kw">mod </span>str;
+
+<span class="kw">pub mod </span>number;
+
+<span class="attr">#[cfg(feature = <span class="string">&quot;docsrs&quot;</span>)]
+#[cfg_attr(feature = <span class="string">&quot;docsrs&quot;</span>, cfg_attr(feature = <span class="string">&quot;docsrs&quot;</span>, doc = <span class="macro">include_str!</span>(<span class="string">&quot;../doc/nom_recipes.md&quot;</span>)))]
+</span><span class="kw">pub mod </span>recipes {}
 </code></pre></div></section></main></body></html>

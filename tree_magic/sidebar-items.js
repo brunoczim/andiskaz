@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Cache"],"fn":["from_filepath","from_filepath_node","from_u8","from_u8_node","is_alias","match_filepath","match_u8"],"struct":["TYPE","TypeStruct"]};

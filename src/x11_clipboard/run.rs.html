@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/x11-clipboard-0.5.3/src/run.rs`."><title>run.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="x11_clipboard" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../x11_clipboard/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/x11-clipboard-0.7.1/src/run.rs`."><title>run.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="x11_clipboard" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../x11_clipboard/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -129,11 +129,29 @@
 <a href="#129" id="129">129</a>
 <a href="#130" id="130">130</a>
 <a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cmp;
 <span class="kw">use </span>std::sync::Arc;
 <span class="kw">use </span>std::sync::mpsc::{ Receiver, TryRecvError };
 <span class="kw">use </span>std::collections::HashMap;
-<span class="kw">use </span>xcb::{ <span class="self">self</span>, Atom };
+<span class="kw">use </span>::{AtomEnum, EventMask};
+<span class="kw">use </span>x11rb::connection::Connection;
+<span class="kw">use </span>x11rb::protocol::Event;
+<span class="kw">use </span>x11rb::protocol::xproto::{Atom, ChangeWindowAttributesAux, ConnectionExt, Property, PropMode, SELECTION_NOTIFY_EVENT, SelectionNotifyEvent, Window};
 <span class="kw">use </span>::{ INCR_CHUNK_SIZE, Context, SetMap };
 
 <span class="macro">macro_rules! </span>try_continue {
@@ -147,115 +165,127 @@
 
 <span class="kw">struct </span>IncrState {
     selection: Atom,
-    requestor: Atom,
+    requestor: Window,
     property: Atom,
     pos: usize
 }
 
 <span class="kw">pub fn </span>run(context: <span class="kw-2">&amp;</span>Arc&lt;Context&gt;, setmap: <span class="kw-2">&amp;</span>SetMap, max_length: usize, receiver: <span class="kw-2">&amp;</span>Receiver&lt;Atom&gt;) {
-    <span class="kw">let </span><span class="kw-2">mut </span>incr_map = HashMap::new();
-    <span class="kw">let </span><span class="kw-2">mut </span>state_map = HashMap::new();
+    <span class="kw">let </span><span class="kw-2">mut </span>incr_map = HashMap::&lt;Atom, Atom&gt;::new();
+    <span class="kw">let </span><span class="kw-2">mut </span>state_map = HashMap::&lt;Atom, IncrState&gt;::new();
 
-    <span class="kw">while let </span><span class="prelude-val">Some</span>(event) = context.connection.wait_for_event() {
+
+    <span class="kw">while let </span><span class="prelude-val">Ok</span>(event) = context.connection.wait_for_event() {
         <span class="kw">loop </span>{
             <span class="kw">match </span>receiver.try_recv() {
                 <span class="prelude-val">Ok</span>(selection) =&gt; <span class="kw">if let </span><span class="prelude-val">Some</span>(property) = incr_map.remove(<span class="kw-2">&amp;</span>selection) {
                     state_map.remove(<span class="kw-2">&amp;</span>property);
                 },
-                <span class="prelude-val">Err</span>(TryRecvError::Empty) =&gt; <span class="kw">break</span>(),
+                <span class="prelude-val">Err</span>(TryRecvError::Empty) =&gt; <span class="kw">break</span>,
                 <span class="prelude-val">Err</span>(TryRecvError::Disconnected) =&gt; <span class="kw">if </span>state_map.is_empty() {
                     <span class="kw">return
                 </span>}
             }
         }
 
-        <span class="kw">match </span>event.response_type() &amp; !<span class="number">0x80 </span>{
-            xcb::SELECTION_REQUEST =&gt; {
-                <span class="kw">let </span>event = <span class="kw">unsafe </span>{ xcb::cast_event::&lt;xcb::SelectionRequestEvent&gt;(<span class="kw-2">&amp;</span>event) };
+        <span class="kw">match </span>event {
+            Event::SelectionRequest(event) =&gt; {
                 <span class="kw">let </span>read_map = <span class="macro">try_continue!</span>(setmap.read().ok());
-                <span class="kw">let </span><span class="kw-2">&amp;</span>(target, <span class="kw-2">ref </span>value) = <span class="macro">try_continue!</span>(read_map.get(<span class="kw-2">&amp;</span>event.selection()));
+                <span class="kw">let </span><span class="kw-2">&amp;</span>(target, <span class="kw-2">ref </span>value) = <span class="macro">try_continue!</span>(read_map.get(<span class="kw-2">&amp;</span>event.selection));
 
-                <span class="kw">if </span>event.target() == context.atoms.targets {
-                    xcb::change_property(
-                        <span class="kw-2">&amp;</span>context.connection, xcb::PROP_MODE_REPLACE <span class="kw">as </span>u8,
-                        event.requestor(), event.property(), xcb::ATOM_ATOM, <span class="number">32</span>,
+                <span class="kw">if </span>event.target == context.atoms.targets {
+                    <span class="kw">let _ </span>= x11rb::wrapper::ConnectionExt::change_property32(
+                        <span class="kw-2">&amp;</span>context.connection,
+                        PropMode::REPLACE,
+                        event.requestor,
+                        event.property,
+                        Atom::from(AtomEnum::ATOM),
                         <span class="kw-2">&amp;</span>[context.atoms.targets, target]
                     );
                 } <span class="kw">else if </span>value.len() &lt; max_length - <span class="number">24 </span>{
-                    xcb::change_property(
-                        <span class="kw-2">&amp;</span>context.connection, xcb::PROP_MODE_REPLACE <span class="kw">as </span>u8,
-                        event.requestor(), event.property(), target, <span class="number">8</span>,
+                    <span class="kw">let _ </span>= x11rb::wrapper::ConnectionExt::change_property8(
+                        <span class="kw-2">&amp;</span>context.connection,
+                        PropMode::REPLACE,
+                        event.requestor,
+                        event.property,
+                        target,
                         value
                     );
                 } <span class="kw">else </span>{
-                    xcb::change_window_attributes(
-                        <span class="kw-2">&amp;</span>context.connection, event.requestor(),
-                        <span class="kw-2">&amp;</span>[(xcb::CW_EVENT_MASK, xcb::EVENT_MASK_PROPERTY_CHANGE)]
+                    <span class="kw">let _ </span>= context.connection.change_window_attributes(
+                        event.requestor,
+                        <span class="kw-2">&amp;</span>ChangeWindowAttributesAux::new()
+                            .event_mask(EventMask::PROPERTY_CHANGE)
                     );
-                    xcb::change_property(
-                        <span class="kw-2">&amp;</span>context.connection, xcb::PROP_MODE_REPLACE <span class="kw">as </span>u8,
-                        event.requestor(), event.property(), context.atoms.incr, <span class="number">32</span>,
-                        <span class="kw-2">&amp;</span>[<span class="number">0u8</span>; <span class="number">0</span>]
+                    <span class="kw">let _ </span>= x11rb::wrapper::ConnectionExt::change_property32(
+                        <span class="kw-2">&amp;</span>context.connection,
+                        PropMode::REPLACE,
+                        event.requestor,
+                        event.property,
+                        context.atoms.incr,
+                        <span class="kw-2">&amp;</span>[<span class="number">0u32</span>; <span class="number">0</span>],
                     );
-
-                    incr_map.insert(event.selection(), event.property());
+                    incr_map.insert(event.selection, event.property);
                     state_map.insert(
-                        event.property(),
+                        event.property,
                         IncrState {
-                            selection: event.selection(),
-                            requestor: event.requestor(),
-                            property: event.property(),
+                            selection: event.selection,
+                            requestor: event.requestor,
+                            property: event.property,
                             pos: <span class="number">0
                         </span>}
                     );
                 }
-
-                xcb::send_event(
-                    <span class="kw-2">&amp;</span>context.connection, <span class="bool-val">false</span>, event.requestor(), <span class="number">0</span>,
-                    <span class="kw-2">&amp;</span>xcb::SelectionNotifyEvent::new(
-                        event.time(),
-                        event.requestor(),
-                        event.selection(),
-                        event.target(),
-                        event.property()
-                    )
+                <span class="kw">let _ </span>= context.connection.send_event(
+                    <span class="bool-val">false</span>,
+                    event.requestor,
+                    EventMask::default(),
+                    SelectionNotifyEvent {
+                        response_type: SELECTION_NOTIFY_EVENT,
+                        sequence: <span class="number">0</span>,
+                        time: event.time,
+                        requestor: event.requestor,
+                        selection: event.selection,
+                        target: event.target,
+                        property: event.property
+                    }
                 );
-                context.connection.flush();
+                <span class="kw">let _ </span>= context.connection.flush();
             },
-            xcb::PROPERTY_NOTIFY =&gt; {
-                <span class="kw">let </span>event = <span class="kw">unsafe </span>{ xcb::cast_event::&lt;xcb::PropertyNotifyEvent&gt;(<span class="kw-2">&amp;</span>event) };
-                <span class="kw">if </span>event.state() != xcb::PROPERTY_DELETE <span class="kw">as </span>u8 { <span class="kw">continue </span>};
+            Event::PropertyNotify(event) =&gt; {
+                <span class="kw">if </span>event.state != Property::DELETE { <span class="kw">continue </span>};
 
                 <span class="kw">let </span>is_end = {
-                    <span class="kw">let </span>state = <span class="macro">try_continue!</span>(state_map.get_mut(<span class="kw-2">&amp;</span>event.atom()));
+                    <span class="kw">let </span>state = <span class="macro">try_continue!</span>(state_map.get_mut(<span class="kw-2">&amp;</span>event.atom));
                     <span class="kw">let </span>read_setmap = <span class="macro">try_continue!</span>(setmap.read().ok());
                     <span class="kw">let </span><span class="kw-2">&amp;</span>(target, <span class="kw-2">ref </span>value) = <span class="macro">try_continue!</span>(read_setmap.get(<span class="kw-2">&amp;</span>state.selection));
 
                     <span class="kw">let </span>len = cmp::min(INCR_CHUNK_SIZE, value.len() - state.pos);
-                    xcb::change_property(
-                        <span class="kw-2">&amp;</span>context.connection, xcb::PROP_MODE_REPLACE <span class="kw">as </span>u8,
-                        state.requestor, state.property, target, <span class="number">8</span>,
+                    <span class="kw">let _ </span>= x11rb::wrapper::ConnectionExt::change_property8(
+                        <span class="kw-2">&amp;</span>context.connection,
+                        PropMode::REPLACE,
+                        state.requestor,
+                        state.property,
+                        target,
                         <span class="kw-2">&amp;</span>value[state.pos..][..len]
                     );
-
                     state.pos += len;
                     len == <span class="number">0
                 </span>};
 
                 <span class="kw">if </span>is_end {
-                    state_map.remove(<span class="kw-2">&amp;</span>event.atom());
+                    state_map.remove(<span class="kw-2">&amp;</span>event.atom);
                 }
-                context.connection.flush();
+                <span class="kw">let _ </span>= context.connection.flush();
             },
-            xcb::SELECTION_CLEAR =&gt; {
-                <span class="kw">let </span>event = <span class="kw">unsafe </span>{ xcb::cast_event::&lt;xcb::SelectionClearEvent&gt;(<span class="kw-2">&amp;</span>event) };
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(property) = incr_map.remove(<span class="kw-2">&amp;</span>event.selection()) {
+            Event::SelectionClear(event) =&gt; {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(property) = incr_map.remove(<span class="kw-2">&amp;</span>event.selection) {
                     state_map.remove(<span class="kw-2">&amp;</span>property);
                 }
                 <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>write_setmap) = setmap.write() {
-                    write_setmap.remove(<span class="kw-2">&amp;</span>event.selection());
+                    write_setmap.remove(<span class="kw-2">&amp;</span>event.selection);
                 }
-            },
+            }
             <span class="kw">_ </span>=&gt; ()
         }
     }

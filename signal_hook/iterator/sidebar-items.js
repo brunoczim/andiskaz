@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Forever","Pending","Signals"]};
+window.SIDEBAR_ITEMS = {"mod":["backend","exfiltrator"],"struct":["Forever","SignalsInfo"],"type":["Signals"]};

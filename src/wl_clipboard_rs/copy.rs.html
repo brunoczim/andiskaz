@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wl-clipboard-rs-0.4.1/src/copy.rs`."><title>copy.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="wl_clipboard_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../wl_clipboard_rs/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wl-clipboard-rs-0.7.0/src/copy.rs`."><title>copy.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="wl_clipboard_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../wl_clipboard_rs/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -906,6 +906,10 @@
 <a href="#906" id="906">906</a>
 <a href="#907" id="907">907</a>
 <a href="#908" id="908">908</a>
+<a href="#909" id="909">909</a>
+<a href="#910" id="910">910</a>
+<a href="#911" id="911">911</a>
+<a href="#912" id="912">912</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Copying and clearing clipboard contents.
 
 </span><span class="kw">use </span>std::{
@@ -922,8 +926,7 @@
     thread,
 };
 
-<span class="kw">use </span>failure::Fail;
-<span class="kw">use </span>log::info;
+<span class="kw">use </span>log::trace;
 <span class="kw">use </span>wayland_client::{ConnectError, EventQueue, Main, Proxy};
 <span class="kw">use </span>wayland_protocols::wlr::unstable::data_control::v1::client::{
     zwlr_data_control_device_v1::ZwlrDataControlDeviceV1, zwlr_data_control_manager_v1::ZwlrDataControlManagerV1,
@@ -1063,69 +1066,70 @@
 }
 
 <span class="doccomment">/// Errors that can occur for copying the source data to a temporary file.
-</span><span class="attr">#[derive(Fail, Debug)]
+</span><span class="attr">#[derive(thiserror::Error, Debug)]
 </span><span class="kw">pub enum </span>SourceCreationError {
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t create a temporary directory&quot;</span>)]
-    </span>TempDirCreate(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t create a temporary directory&quot;</span>)]
+    </span>TempDirCreate(<span class="attr">#[source] </span>io::Error),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t create a temporary file&quot;</span>)]
-    </span>TempFileCreate(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t create a temporary file&quot;</span>)]
+    </span>TempFileCreate(<span class="attr">#[source] </span>io::Error),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t copy data to the temporary file&quot;</span>)]
-    </span>DataCopy(<span class="attr">#[cause] </span>utils::CopyDataError),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t copy data to the temporary file&quot;</span>)]
+    </span>DataCopy(<span class="attr">#[source] </span>utils::CopyDataError),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t write to the temporary file&quot;</span>)]
-    </span>TempFileWrite(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t write to the temporary file&quot;</span>)]
+    </span>TempFileWrite(<span class="attr">#[source] </span>io::Error),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t open the temporary file for newline trimming&quot;</span>)]
-    </span>TempFileOpen(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t open the temporary file for newline trimming&quot;</span>)]
+    </span>TempFileOpen(<span class="attr">#[source] </span>io::Error),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t get the temporary file metadata for newline trimming&quot;</span>)]
-    </span>TempFileMetadata(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t get the temporary file metadata for newline trimming&quot;</span>)]
+    </span>TempFileMetadata(<span class="attr">#[source] </span>io::Error),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t seek the temporary file for newline trimming&quot;</span>)]
-    </span>TempFileSeek(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t seek the temporary file for newline trimming&quot;</span>)]
+    </span>TempFileSeek(<span class="attr">#[source] </span>io::Error),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t read the last byte of the temporary file for newline trimming&quot;</span>)]
-    </span>TempFileRead(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t read the last byte of the temporary file for newline trimming&quot;</span>)]
+    </span>TempFileRead(<span class="attr">#[source] </span>io::Error),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t truncate the temporary file for newline trimming&quot;</span>)]
-    </span>TempFileTruncate(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t truncate the temporary file for newline trimming&quot;</span>)]
+    </span>TempFileTruncate(<span class="attr">#[source] </span>io::Error),
 }
 
 <span class="doccomment">/// Errors that can occur for copying and clearing the clipboard.
-</span><span class="attr">#[derive(Fail, Debug)]
+</span><span class="attr">#[derive(thiserror::Error, Debug)]
 </span><span class="kw">pub enum </span>Error {
-    <span class="attr">#[fail(display = <span class="string">&quot;There are no seats&quot;</span>)]
+    <span class="attr">#[error(<span class="string">&quot;There are no seats&quot;</span>)]
     </span>NoSeats,
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t connect to the Wayland compositor&quot;</span>)]
-    </span>WaylandConnection(<span class="attr">#[cause] </span>ConnectError),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t connect to the Wayland compositor&quot;</span>)]
+    </span>WaylandConnection(<span class="attr">#[source] </span>ConnectError),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Wayland compositor communication error&quot;</span>)]
-    </span>WaylandCommunication(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Wayland compositor communication error&quot;</span>)]
+    </span>WaylandCommunication(<span class="attr">#[source] </span>io::Error),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;A required Wayland protocol ({} version {}) is not supported by the compositor&quot;</span>,
-           name, version)]
+    <span class="attr">#[error(<span class="string">&quot;A required Wayland protocol ({} version {}) is not supported by the compositor&quot;</span>,
+            name,
+            version)]
     </span>MissingProtocol { name: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str, version: u32 },
 
-    <span class="attr">#[fail(display = <span class="string">&quot;The compositor does not support primary selection&quot;</span>)]
+    <span class="attr">#[error(<span class="string">&quot;The compositor does not support primary selection&quot;</span>)]
     </span>PrimarySelectionUnsupported,
 
-    <span class="attr">#[fail(display = <span class="string">&quot;The requested seat was not found&quot;</span>)]
+    <span class="attr">#[error(<span class="string">&quot;The requested seat was not found&quot;</span>)]
     </span>SeatNotFound,
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Error copying the source into a temporary file&quot;</span>)]
-    </span>TempCopy(<span class="attr">#[cause] </span>SourceCreationError),
+    <span class="attr">#[error(<span class="string">&quot;Error copying the source into a temporary file&quot;</span>)]
+    </span>TempCopy(<span class="attr">#[source] </span>SourceCreationError),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t remove the temporary file&quot;</span>)]
-    </span>TempFileRemove(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t remove the temporary file&quot;</span>)]
+    </span>TempFileRemove(<span class="attr">#[source] </span>io::Error),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Couldn&#39;t remove the temporary directory&quot;</span>)]
-    </span>TempDirRemove(<span class="attr">#[cause] </span>io::Error),
+    <span class="attr">#[error(<span class="string">&quot;Couldn&#39;t remove the temporary directory&quot;</span>)]
+    </span>TempDirRemove(<span class="attr">#[source] </span>io::Error),
 
-    <span class="attr">#[fail(display = <span class="string">&quot;Error satisfying a paste request&quot;</span>)]
-    </span>Paste(<span class="attr">#[cause] </span>DataSourceError),
+    <span class="attr">#[error(<span class="string">&quot;Error satisfying a paste request&quot;</span>)]
+    </span>Paste(<span class="attr">#[source] </span>DataSourceError),
 }
 
 <span class="kw">impl </span>From&lt;common::Error&gt; <span class="kw">for </span>Error {
@@ -1358,7 +1362,7 @@
     <span class="kw">let </span>temp_dir = tempfile::tempdir().map_err(SourceCreationError::TempDirCreate)<span class="question-mark">?</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>temp_filename = temp_dir.into_path();
     temp_filename.push(<span class="string">&quot;stdin&quot;</span>);
-    <span class="macro">info!</span>(<span class="string">&quot;Temp filename: {}&quot;</span>, temp_filename.to_string_lossy());
+    <span class="macro">trace!</span>(<span class="string">&quot;Temp filename: {}&quot;</span>, temp_filename.to_string_lossy());
     <span class="kw">let </span><span class="kw-2">mut </span>temp_file = File::create(<span class="kw-2">&amp;</span>temp_filename).map_err(SourceCreationError::TempFileCreate)<span class="question-mark">?</span>;
 
     <span class="kw">if let </span>Source::Bytes(data) = source {
@@ -1369,12 +1373,18 @@
     }
 
     <span class="kw">let </span>mime_type = <span class="kw">match </span>mime_type {
-        MimeType::Autodetect =&gt; tree_magic::from_filepath(<span class="kw-2">&amp;</span>temp_filename),
+        MimeType::Autodetect =&gt; {
+            <span class="kw">match </span>tree_magic_mini::from_filepath(<span class="kw-2">&amp;</span>temp_filename) {
+                <span class="prelude-val">Some</span>(magic) =&gt; <span class="prelude-val">Ok</span>(magic),
+                <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Err</span>(SourceCreationError::TempFileOpen(std::io::Error::new(std::io::ErrorKind::Other,
+                                                                                  <span class="string">&quot;problem with temp file&quot;</span>))),
+            }<span class="question-mark">?</span>.to_string()
+        }
         MimeType::Text =&gt; <span class="string">&quot;text/plain&quot;</span>.to_string(),
         MimeType::Specific(mime_type) =&gt; mime_type,
     };
 
-    <span class="macro">info!</span>(<span class="string">&quot;Base MIME type: {}&quot;</span>, mime_type);
+    <span class="macro">trace!</span>(<span class="string">&quot;Base MIME type: {}&quot;</span>, mime_type);
 
     <span class="comment">// Trim the trailing newline if needed.
     </span><span class="kw">if </span>trim_newline &amp;&amp; is_text(<span class="kw-2">&amp;</span>mime_type) {
@@ -1552,10 +1562,9 @@
 /// ```
 </span><span class="attr">#[inline]
 </span><span class="kw">pub fn </span>prepare_copy(options: Options, source: Source, mime_type: MimeType) -&gt; <span class="prelude-ty">Result</span>&lt;PreparedCopy, Error&gt; {
-    <span class="macro">assert_eq!</span>(options.foreground, <span class="bool-val">true</span>);
+    <span class="macro">assert!</span>(options.foreground);
 
-    <span class="kw">let </span>sources = <span class="macro">vec!</span>[MimeSource { source: source,
-                                    mime_type: mime_type }];
+    <span class="kw">let </span>sources = <span class="macro">vec!</span>[MimeSource { source, mime_type }];
 
     prepare_copy_internal(options, sources, <span class="prelude-val">None</span>)
 }
@@ -1600,7 +1609,7 @@
 /// ```
 </span><span class="attr">#[inline]
 </span><span class="kw">pub fn </span>prepare_copy_multi(options: Options, sources: Vec&lt;MimeSource&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;PreparedCopy, Error&gt; {
-    <span class="macro">assert_eq!</span>(options.foreground, <span class="bool-val">true</span>);
+    <span class="macro">assert!</span>(options.foreground);
 
     prepare_copy_internal(options, sources, <span class="prelude-val">None</span>)
 }
@@ -1689,7 +1698,7 @@
                                              iter::once(<span class="prelude-val">None</span>)
                                          };
 
-                                         first.chain(second.filter_map(|x| x))
+                                         first.chain(second.flatten())
                                      });
 
     <span class="comment">// Create the data sources and set them as selections.
@@ -1750,8 +1759,7 @@
 /// ```
 </span><span class="attr">#[inline]
 </span><span class="kw">pub fn </span>copy(options: Options, source: Source, mime_type: MimeType) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
-    <span class="kw">let </span>sources = <span class="macro">vec!</span>[MimeSource { source: source,
-                                    mime_type: mime_type }];
+    <span class="kw">let </span>sources = <span class="macro">vec!</span>[MimeSource { source, mime_type }];
     copy_internal(options, sources, <span class="prelude-val">None</span>)
 }
 

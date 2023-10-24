@@ -474,7 +474,6 @@
 <a href="#474" id="474">474</a>
 <a href="#475" id="475">475</a>
 <a href="#476" id="476">476</a>
-<a href="#477" id="477">477</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This crate exports a terminal terminal and its utilites.
 
 </span><span class="kw">use crate</span>::{
@@ -650,11 +649,10 @@
 
     <span class="doccomment">/// Finds the initial size of the terminal.
     </span><span class="kw">fn </span>initial_size(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec2, Error&gt; {
-        <span class="kw">let </span>size_res = task::block_in_place(|| {
+        <span class="kw">let </span>(width, height) = task::block_in_place(|| {
             crossterm::terminal::enable_raw_mode()<span class="question-mark">?</span>;
             crossterm::terminal::size()
-        });
-        <span class="kw">let </span>(width, height) = size_res.map_err(Error::from_crossterm)<span class="question-mark">?</span>;
+        })<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(Vec2 {
             y: coord::from_crossterm(height),
             x: coord::from_crossterm(width),

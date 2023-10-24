@@ -254,24 +254,9 @@
 <a href="#254" id="254">254</a>
 <a href="#255" id="255">255</a>
 <a href="#256" id="256">256</a>
-<a href="#257" id="257">257</a>
-<a href="#258" id="258">258</a>
-<a href="#259" id="259">259</a>
-<a href="#260" id="260">260</a>
-<a href="#261" id="261">261</a>
-<a href="#262" id="262">262</a>
-<a href="#263" id="263">263</a>
-<a href="#264" id="264">264</a>
-<a href="#265" id="265">265</a>
-<a href="#266" id="266">266</a>
-<a href="#267" id="267">267</a>
-<a href="#268" id="268">268</a>
-<a href="#269" id="269">269</a>
-<a href="#270" id="270">270</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module exports error types used by the terminal handles.
 
-</span><span class="kw">use </span>crossterm::ErrorKind <span class="kw">as </span>CrosstermError;
-<span class="kw">use </span>std::{
+</span><span class="kw">use </span>std::{
     error::Error <span class="kw">as </span>ErrorTrait,
     fmt,
     num::ParseIntError,
@@ -313,8 +298,11 @@
 
 <span class="attr">#[cfg(feature = <span class="string">&quot;clipboard&quot;</span>)]
 </span><span class="kw">impl </span>ClipboardError {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(inner: anyhow::Error) -&gt; <span class="self">Self </span>{
-        <span class="self">Self </span>{ inner }
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new&lt;E&gt;(inner: E) -&gt; <span class="self">Self
+    </span><span class="kw">where
+        </span>E: fmt::Display,
+    {
+        <span class="self">Self </span>{ inner: <span class="macro">anyhow::anyhow!</span>(<span class="string">&quot;{}&quot;</span>, inner) }
     }
 }
 
@@ -367,17 +355,6 @@
             <span class="attr">#[cfg(feature = <span class="string">&quot;clipboard&quot;</span>)]
             </span>ErrorKind::Clipboard(error) =&gt; error,
             ErrorKind::Custom(error) =&gt; <span class="kw-2">&amp;**</span>error,
-        }
-    }
-
-    <span class="doccomment">/// Converts a Crossterm error to Andiskaz error kind.
-    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>from_crossterm(error: CrosstermError) -&gt; <span class="self">Self </span>{
-        <span class="kw">match </span>error {
-            CrosstermError::IoError(error) =&gt; ErrorKind::IO(error),
-            CrosstermError::FmtError(error) =&gt; ErrorKind::Fmt(error),
-            CrosstermError::Utf8Error(error) =&gt; ErrorKind::Utf8(error),
-            CrosstermError::ParseIntError(error) =&gt; ErrorKind::ParseInt(error),
-            error =&gt; ErrorKind::Custom(Box::new(error)),
         }
     }
 }
@@ -458,11 +435,6 @@
     <span class="doccomment">/// Returns the kind of the error.
     </span><span class="kw">pub fn </span>kind(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>ErrorKind {
         <span class="kw-2">&amp;</span><span class="self">self</span>.kind
-    }
-
-    <span class="doccomment">/// Converts a Crossterm error to Andiskaz error.
-    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>from_crossterm(error: CrosstermError) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>::new(ErrorKind::from_crossterm(error))
     }
 }
 

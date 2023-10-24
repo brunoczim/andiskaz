@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/nix-0.18.0/src/sys/socket/sockopt.rs`."><title>sockopt.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="nix" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../../nix/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/nix-0.24.3/src/sys/socket/sockopt.rs`."><title>sockopt.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="nix" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../../nix/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -689,12 +689,338 @@
 <a href="#689" id="689">689</a>
 <a href="#690" id="690">690</a>
 <a href="#691" id="691">691</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>cfg_if::cfg_if;
+<a href="#692" id="692">692</a>
+<a href="#693" id="693">693</a>
+<a href="#694" id="694">694</a>
+<a href="#695" id="695">695</a>
+<a href="#696" id="696">696</a>
+<a href="#697" id="697">697</a>
+<a href="#698" id="698">698</a>
+<a href="#699" id="699">699</a>
+<a href="#700" id="700">700</a>
+<a href="#701" id="701">701</a>
+<a href="#702" id="702">702</a>
+<a href="#703" id="703">703</a>
+<a href="#704" id="704">704</a>
+<a href="#705" id="705">705</a>
+<a href="#706" id="706">706</a>
+<a href="#707" id="707">707</a>
+<a href="#708" id="708">708</a>
+<a href="#709" id="709">709</a>
+<a href="#710" id="710">710</a>
+<a href="#711" id="711">711</a>
+<a href="#712" id="712">712</a>
+<a href="#713" id="713">713</a>
+<a href="#714" id="714">714</a>
+<a href="#715" id="715">715</a>
+<a href="#716" id="716">716</a>
+<a href="#717" id="717">717</a>
+<a href="#718" id="718">718</a>
+<a href="#719" id="719">719</a>
+<a href="#720" id="720">720</a>
+<a href="#721" id="721">721</a>
+<a href="#722" id="722">722</a>
+<a href="#723" id="723">723</a>
+<a href="#724" id="724">724</a>
+<a href="#725" id="725">725</a>
+<a href="#726" id="726">726</a>
+<a href="#727" id="727">727</a>
+<a href="#728" id="728">728</a>
+<a href="#729" id="729">729</a>
+<a href="#730" id="730">730</a>
+<a href="#731" id="731">731</a>
+<a href="#732" id="732">732</a>
+<a href="#733" id="733">733</a>
+<a href="#734" id="734">734</a>
+<a href="#735" id="735">735</a>
+<a href="#736" id="736">736</a>
+<a href="#737" id="737">737</a>
+<a href="#738" id="738">738</a>
+<a href="#739" id="739">739</a>
+<a href="#740" id="740">740</a>
+<a href="#741" id="741">741</a>
+<a href="#742" id="742">742</a>
+<a href="#743" id="743">743</a>
+<a href="#744" id="744">744</a>
+<a href="#745" id="745">745</a>
+<a href="#746" id="746">746</a>
+<a href="#747" id="747">747</a>
+<a href="#748" id="748">748</a>
+<a href="#749" id="749">749</a>
+<a href="#750" id="750">750</a>
+<a href="#751" id="751">751</a>
+<a href="#752" id="752">752</a>
+<a href="#753" id="753">753</a>
+<a href="#754" id="754">754</a>
+<a href="#755" id="755">755</a>
+<a href="#756" id="756">756</a>
+<a href="#757" id="757">757</a>
+<a href="#758" id="758">758</a>
+<a href="#759" id="759">759</a>
+<a href="#760" id="760">760</a>
+<a href="#761" id="761">761</a>
+<a href="#762" id="762">762</a>
+<a href="#763" id="763">763</a>
+<a href="#764" id="764">764</a>
+<a href="#765" id="765">765</a>
+<a href="#766" id="766">766</a>
+<a href="#767" id="767">767</a>
+<a href="#768" id="768">768</a>
+<a href="#769" id="769">769</a>
+<a href="#770" id="770">770</a>
+<a href="#771" id="771">771</a>
+<a href="#772" id="772">772</a>
+<a href="#773" id="773">773</a>
+<a href="#774" id="774">774</a>
+<a href="#775" id="775">775</a>
+<a href="#776" id="776">776</a>
+<a href="#777" id="777">777</a>
+<a href="#778" id="778">778</a>
+<a href="#779" id="779">779</a>
+<a href="#780" id="780">780</a>
+<a href="#781" id="781">781</a>
+<a href="#782" id="782">782</a>
+<a href="#783" id="783">783</a>
+<a href="#784" id="784">784</a>
+<a href="#785" id="785">785</a>
+<a href="#786" id="786">786</a>
+<a href="#787" id="787">787</a>
+<a href="#788" id="788">788</a>
+<a href="#789" id="789">789</a>
+<a href="#790" id="790">790</a>
+<a href="#791" id="791">791</a>
+<a href="#792" id="792">792</a>
+<a href="#793" id="793">793</a>
+<a href="#794" id="794">794</a>
+<a href="#795" id="795">795</a>
+<a href="#796" id="796">796</a>
+<a href="#797" id="797">797</a>
+<a href="#798" id="798">798</a>
+<a href="#799" id="799">799</a>
+<a href="#800" id="800">800</a>
+<a href="#801" id="801">801</a>
+<a href="#802" id="802">802</a>
+<a href="#803" id="803">803</a>
+<a href="#804" id="804">804</a>
+<a href="#805" id="805">805</a>
+<a href="#806" id="806">806</a>
+<a href="#807" id="807">807</a>
+<a href="#808" id="808">808</a>
+<a href="#809" id="809">809</a>
+<a href="#810" id="810">810</a>
+<a href="#811" id="811">811</a>
+<a href="#812" id="812">812</a>
+<a href="#813" id="813">813</a>
+<a href="#814" id="814">814</a>
+<a href="#815" id="815">815</a>
+<a href="#816" id="816">816</a>
+<a href="#817" id="817">817</a>
+<a href="#818" id="818">818</a>
+<a href="#819" id="819">819</a>
+<a href="#820" id="820">820</a>
+<a href="#821" id="821">821</a>
+<a href="#822" id="822">822</a>
+<a href="#823" id="823">823</a>
+<a href="#824" id="824">824</a>
+<a href="#825" id="825">825</a>
+<a href="#826" id="826">826</a>
+<a href="#827" id="827">827</a>
+<a href="#828" id="828">828</a>
+<a href="#829" id="829">829</a>
+<a href="#830" id="830">830</a>
+<a href="#831" id="831">831</a>
+<a href="#832" id="832">832</a>
+<a href="#833" id="833">833</a>
+<a href="#834" id="834">834</a>
+<a href="#835" id="835">835</a>
+<a href="#836" id="836">836</a>
+<a href="#837" id="837">837</a>
+<a href="#838" id="838">838</a>
+<a href="#839" id="839">839</a>
+<a href="#840" id="840">840</a>
+<a href="#841" id="841">841</a>
+<a href="#842" id="842">842</a>
+<a href="#843" id="843">843</a>
+<a href="#844" id="844">844</a>
+<a href="#845" id="845">845</a>
+<a href="#846" id="846">846</a>
+<a href="#847" id="847">847</a>
+<a href="#848" id="848">848</a>
+<a href="#849" id="849">849</a>
+<a href="#850" id="850">850</a>
+<a href="#851" id="851">851</a>
+<a href="#852" id="852">852</a>
+<a href="#853" id="853">853</a>
+<a href="#854" id="854">854</a>
+<a href="#855" id="855">855</a>
+<a href="#856" id="856">856</a>
+<a href="#857" id="857">857</a>
+<a href="#858" id="858">858</a>
+<a href="#859" id="859">859</a>
+<a href="#860" id="860">860</a>
+<a href="#861" id="861">861</a>
+<a href="#862" id="862">862</a>
+<a href="#863" id="863">863</a>
+<a href="#864" id="864">864</a>
+<a href="#865" id="865">865</a>
+<a href="#866" id="866">866</a>
+<a href="#867" id="867">867</a>
+<a href="#868" id="868">868</a>
+<a href="#869" id="869">869</a>
+<a href="#870" id="870">870</a>
+<a href="#871" id="871">871</a>
+<a href="#872" id="872">872</a>
+<a href="#873" id="873">873</a>
+<a href="#874" id="874">874</a>
+<a href="#875" id="875">875</a>
+<a href="#876" id="876">876</a>
+<a href="#877" id="877">877</a>
+<a href="#878" id="878">878</a>
+<a href="#879" id="879">879</a>
+<a href="#880" id="880">880</a>
+<a href="#881" id="881">881</a>
+<a href="#882" id="882">882</a>
+<a href="#883" id="883">883</a>
+<a href="#884" id="884">884</a>
+<a href="#885" id="885">885</a>
+<a href="#886" id="886">886</a>
+<a href="#887" id="887">887</a>
+<a href="#888" id="888">888</a>
+<a href="#889" id="889">889</a>
+<a href="#890" id="890">890</a>
+<a href="#891" id="891">891</a>
+<a href="#892" id="892">892</a>
+<a href="#893" id="893">893</a>
+<a href="#894" id="894">894</a>
+<a href="#895" id="895">895</a>
+<a href="#896" id="896">896</a>
+<a href="#897" id="897">897</a>
+<a href="#898" id="898">898</a>
+<a href="#899" id="899">899</a>
+<a href="#900" id="900">900</a>
+<a href="#901" id="901">901</a>
+<a href="#902" id="902">902</a>
+<a href="#903" id="903">903</a>
+<a href="#904" id="904">904</a>
+<a href="#905" id="905">905</a>
+<a href="#906" id="906">906</a>
+<a href="#907" id="907">907</a>
+<a href="#908" id="908">908</a>
+<a href="#909" id="909">909</a>
+<a href="#910" id="910">910</a>
+<a href="#911" id="911">911</a>
+<a href="#912" id="912">912</a>
+<a href="#913" id="913">913</a>
+<a href="#914" id="914">914</a>
+<a href="#915" id="915">915</a>
+<a href="#916" id="916">916</a>
+<a href="#917" id="917">917</a>
+<a href="#918" id="918">918</a>
+<a href="#919" id="919">919</a>
+<a href="#920" id="920">920</a>
+<a href="#921" id="921">921</a>
+<a href="#922" id="922">922</a>
+<a href="#923" id="923">923</a>
+<a href="#924" id="924">924</a>
+<a href="#925" id="925">925</a>
+<a href="#926" id="926">926</a>
+<a href="#927" id="927">927</a>
+<a href="#928" id="928">928</a>
+<a href="#929" id="929">929</a>
+<a href="#930" id="930">930</a>
+<a href="#931" id="931">931</a>
+<a href="#932" id="932">932</a>
+<a href="#933" id="933">933</a>
+<a href="#934" id="934">934</a>
+<a href="#935" id="935">935</a>
+<a href="#936" id="936">936</a>
+<a href="#937" id="937">937</a>
+<a href="#938" id="938">938</a>
+<a href="#939" id="939">939</a>
+<a href="#940" id="940">940</a>
+<a href="#941" id="941">941</a>
+<a href="#942" id="942">942</a>
+<a href="#943" id="943">943</a>
+<a href="#944" id="944">944</a>
+<a href="#945" id="945">945</a>
+<a href="#946" id="946">946</a>
+<a href="#947" id="947">947</a>
+<a href="#948" id="948">948</a>
+<a href="#949" id="949">949</a>
+<a href="#950" id="950">950</a>
+<a href="#951" id="951">951</a>
+<a href="#952" id="952">952</a>
+<a href="#953" id="953">953</a>
+<a href="#954" id="954">954</a>
+<a href="#955" id="955">955</a>
+<a href="#956" id="956">956</a>
+<a href="#957" id="957">957</a>
+<a href="#958" id="958">958</a>
+<a href="#959" id="959">959</a>
+<a href="#960" id="960">960</a>
+<a href="#961" id="961">961</a>
+<a href="#962" id="962">962</a>
+<a href="#963" id="963">963</a>
+<a href="#964" id="964">964</a>
+<a href="#965" id="965">965</a>
+<a href="#966" id="966">966</a>
+<a href="#967" id="967">967</a>
+<a href="#968" id="968">968</a>
+<a href="#969" id="969">969</a>
+<a href="#970" id="970">970</a>
+<a href="#971" id="971">971</a>
+<a href="#972" id="972">972</a>
+<a href="#973" id="973">973</a>
+<a href="#974" id="974">974</a>
+<a href="#975" id="975">975</a>
+<a href="#976" id="976">976</a>
+<a href="#977" id="977">977</a>
+<a href="#978" id="978">978</a>
+<a href="#979" id="979">979</a>
+<a href="#980" id="980">980</a>
+<a href="#981" id="981">981</a>
+<a href="#982" id="982">982</a>
+<a href="#983" id="983">983</a>
+<a href="#984" id="984">984</a>
+<a href="#985" id="985">985</a>
+<a href="#986" id="986">986</a>
+<a href="#987" id="987">987</a>
+<a href="#988" id="988">988</a>
+<a href="#989" id="989">989</a>
+<a href="#990" id="990">990</a>
+<a href="#991" id="991">991</a>
+<a href="#992" id="992">992</a>
+<a href="#993" id="993">993</a>
+<a href="#994" id="994">994</a>
+<a href="#995" id="995">995</a>
+<a href="#996" id="996">996</a>
+<a href="#997" id="997">997</a>
+<a href="#998" id="998">998</a>
+<a href="#999" id="999">999</a>
+<a href="#1000" id="1000">1000</a>
+<a href="#1001" id="1001">1001</a>
+<a href="#1002" id="1002">1002</a>
+<a href="#1003" id="1003">1003</a>
+<a href="#1004" id="1004">1004</a>
+<a href="#1005" id="1005">1005</a>
+<a href="#1006" id="1006">1006</a>
+<a href="#1007" id="1007">1007</a>
+<a href="#1008" id="1008">1008</a>
+<a href="#1009" id="1009">1009</a>
+<a href="#1010" id="1010">1010</a>
+<a href="#1011" id="1011">1011</a>
+<a href="#1012" id="1012">1012</a>
+<a href="#1013" id="1013">1013</a>
+<a href="#1014" id="1014">1014</a>
+<a href="#1015" id="1015">1015</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Socket options as used by `setsockopt` and `getsockopt`.
+</span><span class="kw">use </span>cfg_if::cfg_if;
 <span class="kw">use super</span>::{GetSockOpt, SetSockOpt};
 <span class="kw">use </span><span class="kw">crate</span>::Result;
 <span class="kw">use </span><span class="kw">crate</span>::errno::Errno;
 <span class="kw">use </span><span class="kw">crate</span>::sys::time::TimeVal;
 <span class="kw">use </span>libc::{<span class="self">self</span>, c_int, c_void, socklen_t};
+<span class="kw">use </span>std::convert::TryFrom;
 <span class="kw">use </span>std::mem::{
     <span class="self">self</span>,
     MaybeUninit
@@ -706,7 +1032,8 @@
 
 <span class="comment">// Constants
 // TCP_CA_NAME_MAX isn&#39;t defined in user space include files
-</span><span class="attr">#[cfg(any(target_os = <span class="string">&quot;freebsd&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))] 
+</span><span class="attr">#[cfg(any(target_os = <span class="string">&quot;freebsd&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
 </span><span class="kw">const </span>TCP_CA_NAME_MAX: usize = <span class="number">16</span>;
 
 <span class="doccomment">/// Helper for implementing `SetSockOpt` for a given socket option. See
@@ -721,7 +1048,7 @@
 /// # Arguments
 ///
 /// * `$name:ident`: name of the type you want to implement `SetSockOpt` for.
-/// * `$level:path` : socket layer, or a `protocol level`: could be *raw sockets*
+/// * `$level:expr` : socket layer, or a `protocol level`: could be *raw sockets*
 ///    (`libc::SOL_SOCKET`), *ip protocol* (libc::IPPROTO_IP), *tcp protocol* (`libc::IPPROTO_TCP`),
 ///    and more. Please refer to your system manual for more options. Will be passed as the second
 ///    argument (`level`) to the `setsockopt` call.
@@ -732,7 +1059,7 @@
 /// * Type that implements the `Set` trait for the type from the previous item (like `SetBool` for
 ///    `bool`, `SetUsize` for `usize`, etc.).
 </span><span class="macro">macro_rules! </span>setsockopt_impl {
-    (<span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty, <span class="macro-nonterminal">$setter</span>:ty) =&gt; {
+    (<span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty, <span class="macro-nonterminal">$setter</span>:ty) =&gt; {
         <span class="kw">impl </span>SetSockOpt <span class="kw">for </span><span class="macro-nonterminal">$name </span>{
             <span class="kw">type </span>Val = <span class="macro-nonterminal">$ty</span>;
 
@@ -773,7 +1100,7 @@
 /// * Type that implements the `Get` trait for the type from the previous item (`GetBool` for
 ///    `bool`, `GetUsize` for `usize`, etc.).
 </span><span class="macro">macro_rules! </span>getsockopt_impl {
-    (<span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty, <span class="macro-nonterminal">$getter</span>:ty) =&gt; {
+    (<span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty, <span class="macro-nonterminal">$getter</span>:ty) =&gt; {
         <span class="kw">impl </span>GetSockOpt <span class="kw">for </span><span class="macro-nonterminal">$name </span>{
             <span class="kw">type </span>Val = <span class="macro-nonterminal">$ty</span>;
 
@@ -786,7 +1113,10 @@
                                                getter.ffi_len());
                     Errno::result(res)<span class="question-mark">?</span>;
 
-                    <span class="prelude-val">Ok</span>(getter.assume_init())
+                    <span class="kw">match </span>&lt;<span class="macro-nonterminal">$ty</span>&gt;::try_from(getter.assume_init()) {
+                        <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(Errno::EINVAL),
+                        <span class="prelude-val">Ok</span>(r) =&gt; <span class="prelude-val">Ok</span>(r)
+                    }
                 }
             }
         }
@@ -808,7 +1138,7 @@
 /// * `GetOnly`, `SetOnly` or `Both`: whether you want to implement only getter, only setter or
 ///    both of them.
 /// * `$name:ident`: name of type `GetSockOpt`/`SetSockOpt` will be implemented for.
-/// * `$level:path` : socket layer, or a `protocol level`: could be *raw sockets*
+/// * `$level:expr` : socket layer, or a `protocol level`: could be *raw sockets*
 ///    (`lic::SOL_SOCKET`), *ip protocol* (libc::IPPROTO_IP), *tcp protocol* (`libc::IPPROTO_TCP`),
 ///    and more. Please refer to your system manual for more options. Will be passed as the second
 ///    argument (`level`) to the `getsockopt`/`setsockopt` call.
@@ -818,74 +1148,103 @@
 /// * `$ty:ty`: type of the value that will be get/set.
 /// * `$getter:ty`: `Get` implementation; optional; only for `GetOnly` and `Both`.
 /// * `$setter:ty`: `Set` implementation; optional; only for `SetOnly` and `Both`.
+</span><span class="comment">// Some targets don&#39;t use all rules.
+</span><span class="attr">#[allow(unknown_lints)]
+#[allow(unused_macro_rules)]
 </span><span class="macro">macro_rules! </span>sockopt_impl {
-    (GetOnly, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, bool) =&gt; {
-        <span class="macro">sockopt_impl!</span>(GetOnly, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, bool, GetBool);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, GetOnly, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, bool) =&gt; {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, GetOnly, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, bool, GetBool);
     };
 
-    (GetOnly, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, u8) =&gt; {
-        <span class="macro">sockopt_impl!</span>(GetOnly, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, u8, GetU8);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, GetOnly, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, u8) =&gt; {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)* <span class="macro-nonterminal">$name</span>, GetOnly, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, u8, GetU8);
     };
 
-    (GetOnly, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, usize) =&gt; {
-        <span class="macro">sockopt_impl!</span>(GetOnly, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, usize, GetUsize);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, GetOnly, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, usize) =&gt;
+    {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, GetOnly, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, usize, GetUsize);
     };
 
-    (SetOnly, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, bool) =&gt; {
-        <span class="macro">sockopt_impl!</span>(SetOnly, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, bool, SetBool);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, SetOnly, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, bool) =&gt; {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, SetOnly, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, bool, SetBool);
     };
 
-    (SetOnly, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, u8) =&gt; {
-        <span class="macro">sockopt_impl!</span>(SetOnly, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, u8, SetU8);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, SetOnly, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, u8) =&gt; {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)* <span class="macro-nonterminal">$name</span>, SetOnly, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, u8, SetU8);
     };
 
-    (SetOnly, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, usize) =&gt; {
-        <span class="macro">sockopt_impl!</span>(SetOnly, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, usize, SetUsize);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, SetOnly, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, usize) =&gt;
+    {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, SetOnly, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, usize, SetUsize);
     };
 
-    (Both, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, bool) =&gt; {
-        <span class="macro">sockopt_impl!</span>(Both, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, bool, GetBool, SetBool);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, Both, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, bool) =&gt; {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, Both, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, bool, GetBool, SetBool);
     };
 
-    (Both, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, u8) =&gt; {
-        <span class="macro">sockopt_impl!</span>(Both, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, u8, GetU8, SetU8);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, Both, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, u8) =&gt; {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, Both, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, u8, GetU8, SetU8);
     };
 
-    (Both, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, usize) =&gt; {
-        <span class="macro">sockopt_impl!</span>(Both, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, usize, GetUsize, SetUsize);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, Both, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, usize) =&gt; {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, Both, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, usize, GetUsize, SetUsize);
     };
 
-    (Both, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, OsString&lt;<span class="macro-nonterminal">$array</span>:ty&gt;) =&gt; {
-        <span class="macro">sockopt_impl!</span>(Both, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, OsString, GetOsString&lt;<span class="macro-nonterminal">$array</span>&gt;, SetOsString);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, Both, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path,
+     OsString&lt;<span class="macro-nonterminal">$array</span>:ty&gt;) =&gt;
+    {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, Both, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, OsString, GetOsString&lt;<span class="macro-nonterminal">$array</span>&gt;,
+                      SetOsString);
     };
 
     <span class="comment">/*
      * Matchers with generic getter types must be placed at the end, so
      * they&#39;ll only match _after_ specialized matchers fail
      */
-    </span>(GetOnly, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty) =&gt; {
-        <span class="macro">sockopt_impl!</span>(GetOnly, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, <span class="macro-nonterminal">$ty</span>, GetStruct&lt;<span class="macro-nonterminal">$ty</span>&gt;);
+    </span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, GetOnly, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty) =&gt;
+    {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, GetOnly, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, <span class="macro-nonterminal">$ty</span>, GetStruct&lt;<span class="macro-nonterminal">$ty</span>&gt;);
     };
 
-    (GetOnly, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty, <span class="macro-nonterminal">$getter</span>:ty) =&gt; {
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, GetOnly, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty,
+     <span class="macro-nonterminal">$getter</span>:ty) =&gt;
+    {
+        $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
         <span class="attr">#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
         </span><span class="kw">pub struct </span><span class="macro-nonterminal">$name</span>;
 
         <span class="macro">getsockopt_impl!</span>(<span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, <span class="macro-nonterminal">$ty</span>, <span class="macro-nonterminal">$getter</span>);
     };
 
-    (SetOnly, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty) =&gt; {
-        <span class="macro">sockopt_impl!</span>(SetOnly, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, <span class="macro-nonterminal">$ty</span>, SetStruct&lt;<span class="macro-nonterminal">$ty</span>&gt;);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, SetOnly, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty) =&gt;
+    {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, SetOnly, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, <span class="macro-nonterminal">$ty</span>, SetStruct&lt;<span class="macro-nonterminal">$ty</span>&gt;);
     };
 
-    (SetOnly, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty, <span class="macro-nonterminal">$setter</span>:ty) =&gt; {
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, SetOnly, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty,
+     <span class="macro-nonterminal">$setter</span>:ty) =&gt;
+    {
+        $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
         <span class="attr">#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
         </span><span class="kw">pub struct </span><span class="macro-nonterminal">$name</span>;
 
         <span class="macro">setsockopt_impl!</span>(<span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, <span class="macro-nonterminal">$ty</span>, <span class="macro-nonterminal">$setter</span>);
     };
 
-    (Both, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty, <span class="macro-nonterminal">$getter</span>:ty, <span class="macro-nonterminal">$setter</span>:ty) =&gt; {
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, Both, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty,
+     <span class="macro-nonterminal">$getter</span>:ty, <span class="macro-nonterminal">$setter</span>:ty) =&gt;
+    {
+        $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
         <span class="attr">#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
         </span><span class="kw">pub struct </span><span class="macro-nonterminal">$name</span>;
 
@@ -893,8 +1252,10 @@
         <span class="macro">getsockopt_impl!</span>(<span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, <span class="macro-nonterminal">$ty</span>, <span class="macro-nonterminal">$getter</span>);
     };
 
-    (Both, <span class="macro-nonterminal">$name</span>:ident, <span class="macro-nonterminal">$level</span>:path, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty) =&gt; {
-        <span class="macro">sockopt_impl!</span>(Both, <span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, <span class="macro-nonterminal">$ty</span>, GetStruct&lt;<span class="macro-nonterminal">$ty</span>&gt;, SetStruct&lt;<span class="macro-nonterminal">$ty</span>&gt;);
+    ($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident, Both, <span class="macro-nonterminal">$level</span>:expr, <span class="macro-nonterminal">$flag</span>:path, <span class="macro-nonterminal">$ty</span>:ty) =&gt; {
+        <span class="macro">sockopt_impl!</span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                      <span class="macro-nonterminal">$name</span>, Both, <span class="macro-nonterminal">$level</span>, <span class="macro-nonterminal">$flag</span>, <span class="macro-nonterminal">$ty</span>, GetStruct&lt;<span class="macro-nonterminal">$ty</span>&gt;,
+                      SetStruct&lt;<span class="macro-nonterminal">$ty</span>&gt;);
     };
 }
 
@@ -904,70 +1265,277 @@
  *
  */
 
-</span><span class="macro">sockopt_impl!</span>(Both, ReuseAddr, libc::SOL_SOCKET, libc::SO_REUSEADDR, bool);
-<span class="macro">sockopt_impl!</span>(Both, ReusePort, libc::SOL_SOCKET, libc::SO_REUSEPORT, bool);
-<span class="macro">sockopt_impl!</span>(Both, TcpNoDelay, libc::IPPROTO_TCP, libc::TCP_NODELAY, bool);
-<span class="macro">sockopt_impl!</span>(Both, Linger, libc::SOL_SOCKET, libc::SO_LINGER, libc::linger);
-<span class="macro">sockopt_impl!</span>(SetOnly, IpAddMembership, libc::IPPROTO_IP, libc::IP_ADD_MEMBERSHIP, <span class="kw">super</span>::IpMembershipRequest);
-<span class="macro">sockopt_impl!</span>(SetOnly, IpDropMembership, libc::IPPROTO_IP, libc::IP_DROP_MEMBERSHIP, <span class="kw">super</span>::IpMembershipRequest);
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Enables local address reuse
+    </span>ReuseAddr, Both, libc::SOL_SOCKET, libc::SO_REUSEADDR, bool
+);
+<span class="attr">#[cfg(not(any(target_os = <span class="string">&quot;illumos&quot;</span>, target_os = <span class="string">&quot;solaris&quot;</span>)))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Permits multiple AF_INET or AF_INET6 sockets to be bound to an
+    /// identical socket address.
+    </span>ReusePort, Both, libc::SOL_SOCKET, libc::SO_REUSEPORT, bool);
+<span class="attr">#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Under most circumstances, TCP sends data when it is presented; when
+    /// outstanding data has not yet been acknowledged, it gathers small amounts
+    /// of output to be sent in a single packet once an acknowledgement is
+    /// received.  For a small number of clients, such as window systems that
+    /// send a stream of mouse events which receive no replies, this
+    /// packetization may cause significant delays.  The boolean option
+    /// TCP_NODELAY defeats this algorithm.
+    </span>TcpNoDelay, Both, libc::IPPROTO_TCP, libc::TCP_NODELAY, bool);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// When enabled,  a close(2) or shutdown(2) will not return until all
+    /// queued messages for the socket have been successfully sent or the
+    /// linger timeout has been reached.
+    </span>Linger, Both, libc::SOL_SOCKET, libc::SO_LINGER, libc::linger);
+<span class="attr">#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Join a multicast group
+    </span>IpAddMembership, SetOnly, libc::IPPROTO_IP, libc::IP_ADD_MEMBERSHIP,
+    <span class="kw">super</span>::IpMembershipRequest);
+<span class="attr">#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Leave a multicast group.
+    </span>IpDropMembership, SetOnly, libc::IPPROTO_IP, libc::IP_DROP_MEMBERSHIP,
+    <span class="kw">super</span>::IpMembershipRequest);
 <span class="macro">cfg_if! </span>{
     <span class="kw">if </span><span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))] </span>{
-        <span class="macro">sockopt_impl!</span>(SetOnly, Ipv6AddMembership, libc::IPPROTO_IPV6, libc::IPV6_ADD_MEMBERSHIP, <span class="kw">super</span>::Ipv6MembershipRequest);
-        <span class="macro">sockopt_impl!</span>(SetOnly, Ipv6DropMembership, libc::IPPROTO_IPV6, libc::IPV6_DROP_MEMBERSHIP, <span class="kw">super</span>::Ipv6MembershipRequest);
+        <span class="attr">#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+        </span><span class="macro">sockopt_impl!</span>(
+            <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+            </span><span class="doccomment">/// Join an IPv6 multicast group.
+            </span>Ipv6AddMembership, SetOnly, libc::IPPROTO_IPV6, libc::IPV6_ADD_MEMBERSHIP, <span class="kw">super</span>::Ipv6MembershipRequest);
+        <span class="attr">#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+        </span><span class="macro">sockopt_impl!</span>(
+            <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+            </span><span class="doccomment">/// Leave an IPv6 multicast group.
+            </span>Ipv6DropMembership, SetOnly, libc::IPPROTO_IPV6, libc::IPV6_DROP_MEMBERSHIP, <span class="kw">super</span>::Ipv6MembershipRequest);
     } <span class="kw">else if </span><span class="attr">#[cfg(any(target_os = <span class="string">&quot;dragonfly&quot;</span>,
                         target_os = <span class="string">&quot;freebsd&quot;</span>,
+                        target_os = <span class="string">&quot;illumos&quot;</span>,
                         target_os = <span class="string">&quot;ios&quot;</span>,
                         target_os = <span class="string">&quot;macos&quot;</span>,
                         target_os = <span class="string">&quot;netbsd&quot;</span>,
-                        target_os = <span class="string">&quot;openbsd&quot;</span>))] </span>{
-        <span class="macro">sockopt_impl!</span>(SetOnly, Ipv6AddMembership, libc::IPPROTO_IPV6, libc::IPV6_JOIN_GROUP, <span class="kw">super</span>::Ipv6MembershipRequest);
-        <span class="macro">sockopt_impl!</span>(SetOnly, Ipv6DropMembership, libc::IPPROTO_IPV6, libc::IPV6_LEAVE_GROUP, <span class="kw">super</span>::Ipv6MembershipRequest);
+                        target_os = <span class="string">&quot;openbsd&quot;</span>,
+                        target_os = <span class="string">&quot;solaris&quot;</span>))] </span>{
+        <span class="attr">#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+        </span><span class="macro">sockopt_impl!</span>(
+            <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+            </span><span class="doccomment">/// Join an IPv6 multicast group.
+            </span>Ipv6AddMembership, SetOnly, libc::IPPROTO_IPV6,
+            libc::IPV6_JOIN_GROUP, <span class="kw">super</span>::Ipv6MembershipRequest);
+        <span class="attr">#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+        </span><span class="macro">sockopt_impl!</span>(
+            <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+            </span><span class="doccomment">/// Leave an IPv6 multicast group.
+            </span>Ipv6DropMembership, SetOnly, libc::IPPROTO_IPV6,
+            libc::IPV6_LEAVE_GROUP, <span class="kw">super</span>::Ipv6MembershipRequest);
     }
 }
-<span class="macro">sockopt_impl!</span>(Both, IpMulticastTtl, libc::IPPROTO_IP, libc::IP_MULTICAST_TTL, u8);
-<span class="macro">sockopt_impl!</span>(Both, IpMulticastLoop, libc::IPPROTO_IP, libc::IP_MULTICAST_LOOP, bool);
-<span class="macro">sockopt_impl!</span>(Both, ReceiveTimeout, libc::SOL_SOCKET, libc::SO_RCVTIMEO, TimeVal);
-<span class="macro">sockopt_impl!</span>(Both, SendTimeout, libc::SOL_SOCKET, libc::SO_SNDTIMEO, TimeVal);
-<span class="macro">sockopt_impl!</span>(Both, Broadcast, libc::SOL_SOCKET, libc::SO_BROADCAST, bool);
-<span class="macro">sockopt_impl!</span>(Both, OobInline, libc::SOL_SOCKET, libc::SO_OOBINLINE, bool);
-<span class="macro">sockopt_impl!</span>(GetOnly, SocketError, libc::SOL_SOCKET, libc::SO_ERROR, i32);
-<span class="macro">sockopt_impl!</span>(Both, KeepAlive, libc::SOL_SOCKET, libc::SO_KEEPALIVE, bool);
+<span class="attr">#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Set or read the time-to-live value of outgoing multicast packets for
+    /// this socket.
+    </span>IpMulticastTtl, Both, libc::IPPROTO_IP, libc::IP_MULTICAST_TTL, u8);
+<span class="attr">#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Set or read a boolean integer argument that determines whether sent
+    /// multicast packets should be looped back to the local sockets.
+    </span>IpMulticastLoop, Both, libc::IPPROTO_IP, libc::IP_MULTICAST_LOOP, bool);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;fuchsia&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// If enabled, this boolean option allows binding to an IP address that
+    /// is nonlocal or does not (yet) exist.
+    </span>IpFreebind, Both, libc::IPPROTO_IP, libc::IP_FREEBIND, bool);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Specify the receiving timeout until reporting an error.
+    </span>ReceiveTimeout, Both, libc::SOL_SOCKET, libc::SO_RCVTIMEO, TimeVal);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Specify the sending timeout until reporting an error.
+    </span>SendTimeout, Both, libc::SOL_SOCKET, libc::SO_SNDTIMEO, TimeVal);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Set or get the broadcast flag.
+    </span>Broadcast, Both, libc::SOL_SOCKET, libc::SO_BROADCAST, bool);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// If this option is enabled, out-of-band data is directly placed into
+    /// the receive data stream.
+    </span>OobInline, Both, libc::SOL_SOCKET, libc::SO_OOBINLINE, bool);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Get and clear the pending socket error.
+    </span>SocketError, GetOnly, libc::SOL_SOCKET, libc::SO_ERROR, i32);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Enable sending of keep-alive messages on connection-oriented sockets.
+    </span>KeepAlive, Both, libc::SOL_SOCKET, libc::SO_KEEPALIVE, bool);
+<span class="attr">#[cfg(any(
+        target_os = <span class="string">&quot;dragonfly&quot;</span>,
+        target_os = <span class="string">&quot;freebsd&quot;</span>,
+        target_os = <span class="string">&quot;macos&quot;</span>,
+        target_os = <span class="string">&quot;ios&quot;
+</span>))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Get the credentials of the peer process of a connected unix domain
+    /// socket.
+    </span>LocalPeerCred, GetOnly, <span class="number">0</span>, libc::LOCAL_PEERCRED, <span class="kw">super</span>::XuCred);
 <span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
-</span><span class="macro">sockopt_impl!</span>(GetOnly, PeerCredentials, libc::SOL_SOCKET, libc::SO_PEERCRED, <span class="kw">super</span>::UnixCredentials);
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Return the credentials of the foreign process connected to this socket.
+    </span>PeerCredentials, GetOnly, libc::SOL_SOCKET, libc::SO_PEERCRED, <span class="kw">super</span>::UnixCredentials);
 <span class="attr">#[cfg(any(target_os = <span class="string">&quot;ios&quot;</span>,
           target_os = <span class="string">&quot;macos&quot;</span>))]
-</span><span class="macro">sockopt_impl!</span>(Both, TcpKeepAlive, libc::IPPROTO_TCP, libc::TCP_KEEPALIVE, u32);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Specify the amount of time, in seconds, that the connection must be idle
+    /// before keepalive probes (if enabled) are sent.
+    </span>TcpKeepAlive, Both, libc::IPPROTO_TCP, libc::TCP_KEEPALIVE, u32);
 <span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>,
           target_os = <span class="string">&quot;dragonfly&quot;</span>,
           target_os = <span class="string">&quot;freebsd&quot;</span>,
           target_os = <span class="string">&quot;linux&quot;</span>,
           target_os = <span class="string">&quot;nacl&quot;</span>))]
-</span><span class="macro">sockopt_impl!</span>(Both, TcpKeepIdle, libc::IPPROTO_TCP, libc::TCP_KEEPIDLE, u32);
-<span class="macro">sockopt_impl!</span>(Both, RcvBuf, libc::SOL_SOCKET, libc::SO_RCVBUF, usize);
-<span class="macro">sockopt_impl!</span>(Both, SndBuf, libc::SOL_SOCKET, libc::SO_SNDBUF, usize);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// The time (in seconds) the connection needs to remain idle before TCP
+    /// starts sending keepalive probes
+    </span>TcpKeepIdle, Both, libc::IPPROTO_TCP, libc::TCP_KEEPIDLE, u32);
+<span class="macro">cfg_if! </span>{
+    <span class="kw">if </span><span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))] </span>{
+        <span class="macro">sockopt_impl!</span>(
+            <span class="doccomment">/// The maximum segment size for outgoing TCP packets.
+            </span>TcpMaxSeg, Both, libc::IPPROTO_TCP, libc::TCP_MAXSEG, u32);
+    } <span class="kw">else </span>{
+        <span class="macro">sockopt_impl!</span>(
+            <span class="doccomment">/// The maximum segment size for outgoing TCP packets.
+            </span>TcpMaxSeg, GetOnly, libc::IPPROTO_TCP, libc::TCP_MAXSEG, u32);
+    }
+}
+<span class="attr">#[cfg(not(target_os = <span class="string">&quot;openbsd&quot;</span>))]
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// The maximum number of keepalive probes TCP should send before
+    /// dropping the connection.
+    </span>TcpKeepCount, Both, libc::IPPROTO_TCP, libc::TCP_KEEPCNT, u32);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>,
+          target_os = <span class="string">&quot;fuchsia&quot;</span>,
+          target_os = <span class="string">&quot;linux&quot;</span>))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[allow(missing_docs)]
+    </span><span class="comment">// Not documented by Linux!
+    </span>TcpRepair, Both, libc::IPPROTO_TCP, libc::TCP_REPAIR, u32);
+<span class="attr">#[cfg(not(target_os = <span class="string">&quot;openbsd&quot;</span>))]
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// The time (in seconds) between individual keepalive probes.
+    </span>TcpKeepInterval, Both, libc::IPPROTO_TCP, libc::TCP_KEEPINTVL, u32);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;fuchsia&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Specifies the maximum amount of time in milliseconds that transmitted
+    /// data may remain unacknowledged before TCP will forcibly close the
+    /// corresponding connection
+    </span>TcpUserTimeout, Both, libc::IPPROTO_TCP, libc::TCP_USER_TIMEOUT, u32);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Sets or gets the maximum socket receive buffer in bytes.
+    </span>RcvBuf, Both, libc::SOL_SOCKET, libc::SO_RCVBUF, usize);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Sets or gets the maximum socket send buffer in bytes.
+    </span>SndBuf, Both, libc::SOL_SOCKET, libc::SO_SNDBUF, usize);
 <span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
-</span><span class="macro">sockopt_impl!</span>(SetOnly, RcvBufForce, libc::SOL_SOCKET, libc::SO_RCVBUFFORCE, usize);
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Using this socket option, a privileged (`CAP_NET_ADMIN`) process can
+    /// perform the same task as `SO_RCVBUF`, but the `rmem_max limit` can be
+    /// overridden.
+    </span>RcvBufForce, SetOnly, libc::SOL_SOCKET, libc::SO_RCVBUFFORCE, usize);
 <span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
-</span><span class="macro">sockopt_impl!</span>(SetOnly, SndBufForce, libc::SOL_SOCKET, libc::SO_SNDBUFFORCE, usize);
-<span class="macro">sockopt_impl!</span>(GetOnly, SockType, libc::SOL_SOCKET, libc::SO_TYPE, <span class="kw">super</span>::SockType);
-<span class="macro">sockopt_impl!</span>(GetOnly, AcceptConn, libc::SOL_SOCKET, libc::SO_ACCEPTCONN, bool);
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Using this socket option, a privileged (`CAP_NET_ADMIN`)  process can
+    /// perform the same task as `SO_SNDBUF`, but the `wmem_max` limit can be
+    /// overridden.
+    </span>SndBufForce, SetOnly, libc::SOL_SOCKET, libc::SO_SNDBUFFORCE, usize);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Gets the socket type as an integer.
+    </span>SockType, GetOnly, libc::SOL_SOCKET, libc::SO_TYPE, <span class="kw">super</span>::SockType, GetStruct&lt;i32&gt;);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Returns a value indicating whether or not this socket has been marked to
+    /// accept connections with `listen(2)`.
+    </span>AcceptConn, GetOnly, libc::SOL_SOCKET, libc::SO_ACCEPTCONN, bool);
 <span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
-</span><span class="macro">sockopt_impl!</span>(Both, BindToDevice, libc::SOL_SOCKET, libc::SO_BINDTODEVICE, OsString&lt;[u8; libc::IFNAMSIZ]&gt;);
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Bind this socket to a particular device like “eth0”.
+    </span>BindToDevice, Both, libc::SOL_SOCKET, libc::SO_BINDTODEVICE, OsString&lt;[u8; libc::IFNAMSIZ]&gt;);
 <span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
-</span><span class="macro">sockopt_impl!</span>(GetOnly, OriginalDst, libc::SOL_IP, libc::SO_ORIGINAL_DST, libc::sockaddr_in);
-<span class="macro">sockopt_impl!</span>(Both, ReceiveTimestamp, libc::SOL_SOCKET, libc::SO_TIMESTAMP, bool);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    #[allow(missing_docs)]
+    </span><span class="comment">// Not documented by Linux!
+    </span>OriginalDst, GetOnly, libc::SOL_IP, libc::SO_ORIGINAL_DST, libc::sockaddr_in);
 <span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
-</span><span class="macro">sockopt_impl!</span>(Both, IpTransparent, libc::SOL_IP, libc::IP_TRANSPARENT, bool);
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[allow(missing_docs)]
+    </span><span class="comment">// Not documented by Linux!
+    </span>Ip6tOriginalDst, GetOnly, libc::SOL_IPV6, libc::IP6T_SO_ORIGINAL_DST, libc::sockaddr_in6);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;linux&quot;</span>))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Specifies exact type of timestamping information collected by the kernel
+    /// [Further reading](https://www.kernel.org/doc/html/latest/networking/timestamping.html)
+    </span>Timestamping, Both, libc::SOL_SOCKET, libc::SO_TIMESTAMPING, <span class="kw">super</span>::TimestampingFlag);
+<span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Enable or disable the receiving of the `SO_TIMESTAMP` control message.
+    </span>ReceiveTimestamp, Both, libc::SOL_SOCKET, libc::SO_TIMESTAMP, bool);
+<span class="attr">#[cfg(all(target_os = <span class="string">&quot;linux&quot;</span>))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Enable or disable the receiving of the `SO_TIMESTAMPNS` control message.
+    </span>ReceiveTimestampns, Both, libc::SOL_SOCKET, libc::SO_TIMESTAMPNS, bool);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Setting this boolean option enables transparent proxying on this socket.
+    </span>IpTransparent, Both, libc::SOL_IP, libc::IP_TRANSPARENT, bool);
 <span class="attr">#[cfg(target_os = <span class="string">&quot;openbsd&quot;</span>)]
-</span><span class="macro">sockopt_impl!</span>(Both, BindAny, libc::SOL_SOCKET, libc::SO_BINDANY, bool);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Allows the socket to be bound to addresses which are not local to the
+    /// machine, so it can be used to make a transparent proxy.
+    </span>BindAny, Both, libc::SOL_SOCKET, libc::SO_BINDANY, bool);
 <span class="attr">#[cfg(target_os = <span class="string">&quot;freebsd&quot;</span>)]
-</span><span class="macro">sockopt_impl!</span>(Both, BindAny, libc::IPPROTO_IP, libc::IP_BINDANY, bool);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Can `bind(2)` to any address, even one not bound to any available
+    /// network interface in the system.
+    </span>BindAny, Both, libc::IPPROTO_IP, libc::IP_BINDANY, bool);
 <span class="attr">#[cfg(target_os = <span class="string">&quot;linux&quot;</span>)]
-</span><span class="macro">sockopt_impl!</span>(Both, Mark, libc::SOL_SOCKET, libc::SO_MARK, u32);
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Set the mark for each packet sent through this socket (similar to the
+    /// netfilter MARK target but socket-based).
+    </span>Mark, Both, libc::SOL_SOCKET, libc::SO_MARK, u32);
 <span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
-</span><span class="macro">sockopt_impl!</span>(Both, PassCred, libc::SOL_SOCKET, libc::SO_PASSCRED, bool);
-<span class="attr">#[cfg(any(target_os = <span class="string">&quot;freebsd&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))] 
-</span><span class="macro">sockopt_impl!</span>(Both, TcpCongestion, libc::IPPROTO_TCP, libc::TCP_CONGESTION, OsString&lt;[u8; TCP_CA_NAME_MAX]&gt;);
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Enable or disable the receiving of the `SCM_CREDENTIALS` control
+    /// message.
+    </span>PassCred, Both, libc::SOL_SOCKET, libc::SO_PASSCRED, bool);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;freebsd&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// This option allows the caller to set the TCP congestion control
+    /// algorithm to be used,  on a per-socket basis.
+    </span>TcpCongestion, Both, libc::IPPROTO_TCP, libc::TCP_CONGESTION, OsString&lt;[u8; TCP_CA_NAME_MAX]&gt;);
 <span class="attr">#[cfg(any(
     target_os = <span class="string">&quot;android&quot;</span>,
     target_os = <span class="string">&quot;ios&quot;</span>,
@@ -975,7 +1543,12 @@
     target_os = <span class="string">&quot;macos&quot;</span>,
     target_os = <span class="string">&quot;netbsd&quot;</span>,
 ))]
-</span><span class="macro">sockopt_impl!</span>(Both, Ipv4PacketInfo, libc::IPPROTO_IP, libc::IP_PKTINFO, bool);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Pass an `IP_PKTINFO` ancillary message that contains a pktinfo
+    /// structure that supplies some information about the incoming packet.
+    </span>Ipv4PacketInfo, Both, libc::IPPROTO_IP, libc::IP_PKTINFO, bool);
 <span class="attr">#[cfg(any(
     target_os = <span class="string">&quot;android&quot;</span>,
     target_os = <span class="string">&quot;freebsd&quot;</span>,
@@ -985,7 +1558,12 @@
     target_os = <span class="string">&quot;netbsd&quot;</span>,
     target_os = <span class="string">&quot;openbsd&quot;</span>,
 ))]
-</span><span class="macro">sockopt_impl!</span>(Both, Ipv6RecvPacketInfo, libc::IPPROTO_IPV6, libc::IPV6_RECVPKTINFO, bool);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// Set delivery of the `IPV6_PKTINFO` control message on incoming
+    /// datagrams.
+    </span>Ipv6RecvPacketInfo, Both, libc::IPPROTO_IPV6, libc::IPV6_RECVPKTINFO, bool);
 <span class="attr">#[cfg(any(
     target_os = <span class="string">&quot;freebsd&quot;</span>,
     target_os = <span class="string">&quot;ios&quot;</span>,
@@ -993,7 +1571,12 @@
     target_os = <span class="string">&quot;netbsd&quot;</span>,
     target_os = <span class="string">&quot;openbsd&quot;</span>,
 ))]
-</span><span class="macro">sockopt_impl!</span>(Both, Ipv4RecvIf, libc::IPPROTO_IP, libc::IP_RECVIF, bool);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// The `recvmsg(2)` call returns a `struct sockaddr_dl` corresponding to
+    /// the interface on which the packet was received.
+    </span>Ipv4RecvIf, Both, libc::IPPROTO_IP, libc::IP_RECVIF, bool);
 <span class="attr">#[cfg(any(
     target_os = <span class="string">&quot;freebsd&quot;</span>,
     target_os = <span class="string">&quot;ios&quot;</span>,
@@ -1001,13 +1584,76 @@
     target_os = <span class="string">&quot;netbsd&quot;</span>,
     target_os = <span class="string">&quot;openbsd&quot;</span>,
 ))]
-</span><span class="macro">sockopt_impl!</span>(Both, Ipv4RecvDstAddr, libc::IPPROTO_IP, libc::IP_RECVDSTADDR, bool);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// The `recvmsg(2)` call will return the destination IP address for a UDP
+    /// datagram.
+    </span>Ipv4RecvDstAddr, Both, libc::IPPROTO_IP, libc::IP_RECVDSTADDR, bool);
 <span class="attr">#[cfg(target_os = <span class="string">&quot;linux&quot;</span>)]
-</span><span class="macro">sockopt_impl!</span>(Both, UdpGsoSegment, libc::SOL_UDP, libc::UDP_SEGMENT, libc::c_int);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    #[allow(missing_docs)]
+    </span><span class="comment">// Not documented by Linux!
+    </span>UdpGsoSegment, Both, libc::SOL_UDP, libc::UDP_SEGMENT, libc::c_int);
 <span class="attr">#[cfg(target_os = <span class="string">&quot;linux&quot;</span>)]
-</span><span class="macro">sockopt_impl!</span>(Both, UdpGroSegment, libc::IPPROTO_UDP, libc::UDP_GRO, bool);
+#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    #[allow(missing_docs)]
+    </span><span class="comment">// Not documented by Linux!
+    </span>UdpGroSegment, Both, libc::IPPROTO_UDP, libc::UDP_GRO, bool);
+<span class="attr">#[cfg(target_os = <span class="string">&quot;linux&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Configures the behavior of time-based transmission of packets, for use
+    /// with the `TxTime` control message.
+    </span>TxTime, Both, libc::SOL_SOCKET, libc::SO_TXTIME, libc::sock_txtime);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;fuchsia&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Indicates that an unsigned 32-bit value ancillary message (cmsg) should
+    /// be attached to received skbs indicating the number of packets dropped by
+    /// the socket since its creation.
+    </span>RxqOvfl, Both, libc::SOL_SOCKET, libc::SO_RXQ_OVFL, libc::c_int);
+<span class="attr">#[cfg(feature = <span class="string">&quot;net&quot;</span>)]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;net&quot;</span>)))]
+    </span><span class="doccomment">/// The socket is restricted to sending and receiving IPv6 packets only.
+    </span>Ipv6V6Only, Both, libc::IPPROTO_IPV6, libc::IPV6_V6ONLY, bool);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Enable extended reliable error message passing.
+    </span>Ipv4RecvErr, Both, libc::IPPROTO_IP, libc::IP_RECVERR, bool);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Control receiving of asynchronous error options.
+    </span>Ipv6RecvErr, Both, libc::IPPROTO_IPV6, libc::IPV6_RECVERR, bool);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;freebsd&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Set or retrieve the current time-to-live field that is used in every
+    /// packet sent from this socket.
+    </span>Ipv4Ttl, Both, libc::IPPROTO_IP, libc::IP_TTL, libc::c_int);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;freebsd&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Set the unicast hop limit for the socket.
+    </span>Ipv6Ttl, Both, libc::IPPROTO_IPV6, libc::IPV6_UNICAST_HOPS, libc::c_int);
+<span class="attr">#[cfg(any(target_os = <span class="string">&quot;ios&quot;</span>, target_os = <span class="string">&quot;macos&quot;</span>))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Set &quot;don&#39;t fragment packet&quot; flag on the IP packet.
+    </span>IpDontFrag, Both, libc::IPPROTO_IP, libc::IP_DONTFRAG, bool);
+<span class="attr">#[cfg(any(
+    target_os = <span class="string">&quot;android&quot;</span>,
+    target_os = <span class="string">&quot;ios&quot;</span>,
+    target_os = <span class="string">&quot;linux&quot;</span>,
+    target_os = <span class="string">&quot;macos&quot;</span>,
+))]
+</span><span class="macro">sockopt_impl!</span>(
+    <span class="doccomment">/// Set &quot;don&#39;t fragment packet&quot; flag on the IPv6 packet.
+    </span>Ipv6DontFrag, Both, libc::IPPROTO_IPV6, libc::IPV6_DONTFRAG, bool);
 
-<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+<span class="attr">#[allow(missing_docs)]
+</span><span class="comment">// Not documented by Linux!
+</span><span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
 #[derive(Copy, Clone, Debug)]
 </span><span class="kw">pub struct </span>AlgSetAeadAuthSize;
 
@@ -1029,7 +1675,9 @@
     }
 }
 
-<span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+<span class="attr">#[allow(missing_docs)]
+</span><span class="comment">// Not documented by Linux!
+</span><span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
 #[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>AlgSetKey&lt;T&gt;(::std::marker::PhantomData&lt;T&gt;);
 
@@ -1063,9 +1711,9 @@
  */
 
 </span><span class="doccomment">/// Helper trait that describes what is expected from a `GetSockOpt` getter.
-</span><span class="kw">unsafe trait </span>Get&lt;T&gt; {
+</span><span class="kw">trait </span>Get&lt;T&gt; {
     <span class="doccomment">/// Returns an uninitialized value.
-    </span><span class="kw">unsafe fn </span>uninit() -&gt; <span class="self">Self</span>;
+    </span><span class="kw">fn </span>uninit() -&gt; <span class="self">Self</span>;
     <span class="doccomment">/// Returns a pointer to the stored value. This pointer will be passed to the system&#39;s
     /// `getsockopt` call (`man 3p getsockopt`, argument `option_value`).
     </span><span class="kw">fn </span>ffi_ptr(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">*mut </span>c_void;
@@ -1077,7 +1725,7 @@
 }
 
 <span class="doccomment">/// Helper trait that describes what is expected from a `SetSockOpt` setter.
-</span><span class="kw">unsafe trait </span>Set&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+</span><span class="kw">trait </span>Set&lt;<span class="lifetime">&#39;a</span>, T&gt; {
     <span class="doccomment">/// Initialize the setter with a given value.
     </span><span class="kw">fn </span>new(val: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T) -&gt; <span class="self">Self</span>;
     <span class="doccomment">/// Returns a pointer to the stored value. This pointer will be passed to the system&#39;s
@@ -1094,8 +1742,8 @@
     val: MaybeUninit&lt;T&gt;,
 }
 
-<span class="kw">unsafe impl</span>&lt;T&gt; Get&lt;T&gt; <span class="kw">for </span>GetStruct&lt;T&gt; {
-    <span class="kw">unsafe fn </span>uninit() -&gt; <span class="self">Self </span>{
+<span class="kw">impl</span>&lt;T&gt; Get&lt;T&gt; <span class="kw">for </span>GetStruct&lt;T&gt; {
+    <span class="kw">fn </span>uninit() -&gt; <span class="self">Self </span>{
         GetStruct {
             len: mem::size_of::&lt;T&gt;() <span class="kw">as </span>socklen_t,
             val: MaybeUninit::uninit(),
@@ -1121,7 +1769,7 @@
     ptr: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T,
 }
 
-<span class="kw">unsafe impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; Set&lt;<span class="lifetime">&#39;a</span>, T&gt; <span class="kw">for </span>SetStruct&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; Set&lt;<span class="lifetime">&#39;a</span>, T&gt; <span class="kw">for </span>SetStruct&lt;<span class="lifetime">&#39;a</span>, T&gt; {
     <span class="kw">fn </span>new(ptr: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T) -&gt; SetStruct&lt;<span class="lifetime">&#39;a</span>, T&gt; {
         SetStruct { ptr }
     }
@@ -1141,8 +1789,8 @@
     val: MaybeUninit&lt;c_int&gt;,
 }
 
-<span class="kw">unsafe impl </span>Get&lt;bool&gt; <span class="kw">for </span>GetBool {
-    <span class="kw">unsafe fn </span>uninit() -&gt; <span class="self">Self </span>{
+<span class="kw">impl </span>Get&lt;bool&gt; <span class="kw">for </span>GetBool {
+    <span class="kw">fn </span>uninit() -&gt; <span class="self">Self </span>{
         GetBool {
             len: mem::size_of::&lt;c_int&gt;() <span class="kw">as </span>socklen_t,
             val: MaybeUninit::uninit(),
@@ -1168,9 +1816,9 @@
     val: c_int,
 }
 
-<span class="kw">unsafe impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Set&lt;<span class="lifetime">&#39;a</span>, bool&gt; <span class="kw">for </span>SetBool {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Set&lt;<span class="lifetime">&#39;a</span>, bool&gt; <span class="kw">for </span>SetBool {
     <span class="kw">fn </span>new(val: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>bool) -&gt; SetBool {
-        SetBool { val: <span class="kw">if </span><span class="kw-2">*</span>val { <span class="number">1 </span>} <span class="kw">else </span>{ <span class="number">0 </span>} }
+        SetBool { val: i32::from(<span class="kw-2">*</span>val) }
     }
 
     <span class="kw">fn </span>ffi_ptr(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">*const </span>c_void {
@@ -1188,8 +1836,8 @@
     val: MaybeUninit&lt;u8&gt;,
 }
 
-<span class="kw">unsafe impl </span>Get&lt;u8&gt; <span class="kw">for </span>GetU8 {
-    <span class="kw">unsafe fn </span>uninit() -&gt; <span class="self">Self </span>{
+<span class="kw">impl </span>Get&lt;u8&gt; <span class="kw">for </span>GetU8 {
+    <span class="kw">fn </span>uninit() -&gt; <span class="self">Self </span>{
         GetU8 {
             len: mem::size_of::&lt;u8&gt;() <span class="kw">as </span>socklen_t,
             val: MaybeUninit::uninit(),
@@ -1215,9 +1863,9 @@
     val: u8,
 }
 
-<span class="kw">unsafe impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Set&lt;<span class="lifetime">&#39;a</span>, u8&gt; <span class="kw">for </span>SetU8 {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Set&lt;<span class="lifetime">&#39;a</span>, u8&gt; <span class="kw">for </span>SetU8 {
     <span class="kw">fn </span>new(val: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>u8) -&gt; SetU8 {
-        SetU8 { val: <span class="kw-2">*</span>val <span class="kw">as </span>u8 }
+        SetU8 { val: <span class="kw-2">*</span>val }
     }
 
     <span class="kw">fn </span>ffi_ptr(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">*const </span>c_void {
@@ -1235,8 +1883,8 @@
     val: MaybeUninit&lt;c_int&gt;,
 }
 
-<span class="kw">unsafe impl </span>Get&lt;usize&gt; <span class="kw">for </span>GetUsize {
-    <span class="kw">unsafe fn </span>uninit() -&gt; <span class="self">Self </span>{
+<span class="kw">impl </span>Get&lt;usize&gt; <span class="kw">for </span>GetUsize {
+    <span class="kw">fn </span>uninit() -&gt; <span class="self">Self </span>{
         GetUsize {
             len: mem::size_of::&lt;c_int&gt;() <span class="kw">as </span>socklen_t,
             val: MaybeUninit::uninit(),
@@ -1262,7 +1910,7 @@
     val: c_int,
 }
 
-<span class="kw">unsafe impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Set&lt;<span class="lifetime">&#39;a</span>, usize&gt; <span class="kw">for </span>SetUsize {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Set&lt;<span class="lifetime">&#39;a</span>, usize&gt; <span class="kw">for </span>SetUsize {
     <span class="kw">fn </span>new(val: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>usize) -&gt; SetUsize {
         SetUsize { val: <span class="kw-2">*</span>val <span class="kw">as </span>c_int }
     }
@@ -1282,8 +1930,8 @@
     val: MaybeUninit&lt;T&gt;,
 }
 
-<span class="kw">unsafe impl</span>&lt;T: AsMut&lt;[u8]&gt;&gt; Get&lt;OsString&gt; <span class="kw">for </span>GetOsString&lt;T&gt; {
-    <span class="kw">unsafe fn </span>uninit() -&gt; <span class="self">Self </span>{
+<span class="kw">impl</span>&lt;T: AsMut&lt;[u8]&gt;&gt; Get&lt;OsString&gt; <span class="kw">for </span>GetOsString&lt;T&gt; {
+    <span class="kw">fn </span>uninit() -&gt; <span class="self">Self </span>{
         GetOsString {
             len: mem::size_of::&lt;T&gt;() <span class="kw">as </span>socklen_t,
             val: MaybeUninit::uninit(),
@@ -1310,7 +1958,7 @@
     val: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>OsStr,
 }
 
-<span class="kw">unsafe impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Set&lt;<span class="lifetime">&#39;a</span>, OsString&gt; <span class="kw">for </span>SetOsString&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Set&lt;<span class="lifetime">&#39;a</span>, OsString&gt; <span class="kw">for </span>SetOsString&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="kw">fn </span>new(val: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>OsString) -&gt; SetOsString {
         SetOsString { val: val.as_os_str() }
     }
