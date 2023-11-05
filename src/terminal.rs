@@ -3,7 +3,7 @@
 use crate::{
     coord,
     coord::Vec2,
-    error::{AlreadyRunning, Error, ErrorKind, ServicesOff},
+    error::{AlreadyRunning, Error, ErrorKind, ServicesOff, TaskJoinError},
     event,
     event::{Event, Reactor},
     screen::{renderer, Screen, ScreenData},
@@ -152,7 +152,7 @@ impl Builder {
         let _ = shared.screen().cleanup().await;
 
         // Matches the error of events task result.
-        if let Err(error) = events_ret? {
+        if let Err(error) = events_ret.map_err(TaskJoinError::new)? {
             match error.kind() {
                 ErrorKind::ServicesOff(_) => (),
                 _ => Err(error)?,
@@ -160,7 +160,7 @@ impl Builder {
         }
 
         // Matches the error of renderer task result.
-        if let Err(error) = renderer_ret? {
+        if let Err(error) = renderer_ret.map_err(TaskJoinError::new)? {
             match error.kind() {
                 ErrorKind::ServicesOff(_) => (),
                 _ => Err(error)?,
@@ -168,7 +168,7 @@ impl Builder {
         }
 
         // Finally returns main task return value.
-        Ok(main_ret?)
+        Ok(main_ret.map_err(TaskJoinError::new)?)
     }
 
     /// Finds the initial size of the terminal.
