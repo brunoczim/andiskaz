@@ -1,7 +1,6 @@
 //! This module exports error types used by the terminal handles.
 
 use std::{
-    any::Any,
     error::Error as ErrorTrait,
     fmt,
     num::ParseIntError,
@@ -62,7 +61,7 @@ impl fmt::Display for ClipboardError {
 #[derive(Debug)]
 enum TaskJoinErrorKind {
     /// Task panicked.
-    Panic(String, Box<dyn Any + Send + 'static>),
+    Panic { message: String, payload: Option<String> },
     /// Other kind of error.
     Other(JoinError),
 }
@@ -83,7 +82,18 @@ impl TaskJoinError {
         }
         Self {
             kind: match inner.try_into_panic() {
-                Ok(payload) => TaskJoinErrorKind::Panic(message, payload),
+                Ok(payload) => TaskJoinErrorKind::Panic {
+                    message,
+                    payload: if let Some(panic_msg) =
+                        payload.downcast_ref::<&str>()
+                    {
+                        Some((*panic_msg).to_owned())
+                    } else if let Ok(panic_msg) = payload.downcast::<String>() {
+                        Some(*panic_msg)
+                    } else {
+                        None
+                    },
+                },
                 Err(error) => TaskJoinErrorKind::Other(error),
             },
         }
@@ -93,12 +103,9 @@ impl TaskJoinError {
 impl fmt::Display for TaskJoinError {
     fn fmt(&self, fmtr: &mut fmt::Formatter) -> fmt::Result {
         match &self.kind {
-            TaskJoinErrorKind::Panic(message, payload) => {
+            TaskJoinErrorKind::Panic { message, payload } => {
                 write!(fmtr, "{}", message)?;
-                if let Some(panic_msg) = payload.downcast_ref::<&str>() {
-                    write!(fmtr, ": {}", panic_msg)?;
-                } else if let Some(panic_msg) = payload.downcast_ref::<String>()
-                {
+                if let Some(panic_msg) = payload {
                     write!(fmtr, ": {}", panic_msg)?;
                 }
                 Ok(())
@@ -148,7 +155,7 @@ pub enum ErrorKind {
 
 impl ErrorKind {
     /// Returns this error kind as a trait object.
-    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send) {
+    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send + Sync) {
         match self {
             ErrorKind::AlreadyRunning(error) => error,
             ErrorKind::ServicesOff(error) => error,
@@ -233,7 +240,7 @@ impl Error {
     }
 
     /// Returns this error as a trait object.
-    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send) {
+    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send + Sync) {
         self.kind.as_dyn()
     }
 
