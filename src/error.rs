@@ -61,7 +61,7 @@ impl fmt::Display for ClipboardError {
 #[derive(Debug)]
 enum TaskJoinErrorKind {
     /// Task panicked.
-    Panic(String, Option<String>),
+    Panic { message: String, payload: Option<String> },
     /// Other kind of error.
     Other(JoinError),
 }
@@ -82,16 +82,18 @@ impl TaskJoinError {
         }
         Self {
             kind: match inner.try_into_panic() {
-                Ok(payload) => TaskJoinErrorKind::Panic(
+                Ok(payload) => TaskJoinErrorKind::Panic {
                     message,
-                    if let Some(panic_msg) = payload.downcast_ref::<&str>() {
+                    payload: if let Some(panic_msg) =
+                        payload.downcast_ref::<&str>()
+                    {
                         Some((*panic_msg).to_owned())
                     } else if let Ok(panic_msg) = payload.downcast::<String>() {
                         Some(*panic_msg)
                     } else {
                         None
                     },
-                ),
+                },
                 Err(error) => TaskJoinErrorKind::Other(error),
             },
         }
@@ -101,7 +103,7 @@ impl TaskJoinError {
 impl fmt::Display for TaskJoinError {
     fn fmt(&self, fmtr: &mut fmt::Formatter) -> fmt::Result {
         match &self.kind {
-            TaskJoinErrorKind::Panic(message, payload) => {
+            TaskJoinErrorKind::Panic { message, payload } => {
                 write!(fmtr, "{}", message)?;
                 if let Some(panic_msg) = payload {
                     write!(fmtr, ": {}", panic_msg)?;
