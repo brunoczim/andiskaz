@@ -479,7 +479,7 @@
 </span><span class="kw">use crate</span>::{
     coord,
     coord::Vec2,
-    error::{AlreadyRunning, Error, ErrorKind, ServicesOff},
+    error::{AlreadyRunning, Error, ErrorKind, ServicesOff, TaskJoinError},
     event,
     event::{Event, Reactor},
     screen::{renderer, Screen, ScreenData},
@@ -628,7 +628,7 @@
         </span><span class="kw">let _ </span>= shared.screen().cleanup().<span class="kw">await</span>;
 
         <span class="comment">// Matches the error of events task result.
-        </span><span class="kw">if let </span><span class="prelude-val">Err</span>(error) = events_ret<span class="question-mark">? </span>{
+        </span><span class="kw">if let </span><span class="prelude-val">Err</span>(error) = events_ret.map_err(TaskJoinError::new)<span class="question-mark">? </span>{
             <span class="kw">match </span>error.kind() {
                 ErrorKind::ServicesOff(<span class="kw">_</span>) =&gt; (),
                 <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(error)<span class="question-mark">?</span>,
@@ -636,7 +636,7 @@
         }
 
         <span class="comment">// Matches the error of renderer task result.
-        </span><span class="kw">if let </span><span class="prelude-val">Err</span>(error) = renderer_ret<span class="question-mark">? </span>{
+        </span><span class="kw">if let </span><span class="prelude-val">Err</span>(error) = renderer_ret.map_err(TaskJoinError::new)<span class="question-mark">? </span>{
             <span class="kw">match </span>error.kind() {
                 ErrorKind::ServicesOff(<span class="kw">_</span>) =&gt; (),
                 <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(error)<span class="question-mark">?</span>,
@@ -644,7 +644,7 @@
         }
 
         <span class="comment">// Finally returns main task return value.
-        </span><span class="prelude-val">Ok</span>(main_ret<span class="question-mark">?</span>)
+        </span><span class="prelude-val">Ok</span>(main_ret.map_err(TaskJoinError::new)<span class="question-mark">?</span>)
     }
 
     <span class="doccomment">/// Finds the initial size of the terminal.

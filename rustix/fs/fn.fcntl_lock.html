@@ -3,8 +3,8 @@
 sets the <code>l_len</code> field to 0, which is a special case that means the entire
 file should be locked.</p>
 <p>Unlike <code>flock</code>-style locks, <code>fcntl</code>-style locks are process-associated,
-meaning that they don’t guard against being acquired by two threads in
-the same process.</p>
+meaning that they don’t guard against being acquired by two threads in the
+same process.</p>
 <h2 id="references"><a href="#references">References</a></h2>
 <ul>
 <li><a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/fcntl.html">POSIX</a></li>
