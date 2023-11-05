@@ -315,10 +315,16 @@
 <a href="#315" id="315">315</a>
 <a href="#316" id="316">316</a>
 <a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module exports error types used by the terminal handles.
 
 </span><span class="kw">use </span>std::{
-    any::Any,
     error::Error <span class="kw">as </span>ErrorTrait,
     fmt,
     num::ParseIntError,
@@ -379,7 +385,7 @@
 </span><span class="attr">#[derive(Debug)]
 </span><span class="kw">enum </span>TaskJoinErrorKind {
     <span class="doccomment">/// Task panicked.
-    </span>Panic(String, Box&lt;<span class="kw">dyn </span>Any + Send + <span class="lifetime">&#39;static</span>&gt;),
+    </span>Panic { message: String, payload: <span class="prelude-ty">Option</span>&lt;String&gt; },
     <span class="doccomment">/// Other kind of error.
     </span>Other(JoinError),
 }
@@ -400,7 +406,18 @@
         }
         <span class="self">Self </span>{
             kind: <span class="kw">match </span>inner.try_into_panic() {
-                <span class="prelude-val">Ok</span>(payload) =&gt; TaskJoinErrorKind::Panic(message, payload),
+                <span class="prelude-val">Ok</span>(payload) =&gt; TaskJoinErrorKind::Panic {
+                    message,
+                    payload: <span class="kw">if let </span><span class="prelude-val">Some</span>(panic_msg) =
+                        payload.downcast_ref::&lt;<span class="kw-2">&amp;</span>str&gt;()
+                    {
+                        <span class="prelude-val">Some</span>((<span class="kw-2">*</span>panic_msg).to_owned())
+                    } <span class="kw">else if let </span><span class="prelude-val">Ok</span>(panic_msg) = payload.downcast::&lt;String&gt;() {
+                        <span class="prelude-val">Some</span>(<span class="kw-2">*</span>panic_msg)
+                    } <span class="kw">else </span>{
+                        <span class="prelude-val">None
+                    </span>},
+                },
                 <span class="prelude-val">Err</span>(error) =&gt; TaskJoinErrorKind::Other(error),
             },
         }
@@ -410,12 +427,9 @@
 <span class="kw">impl </span>fmt::Display <span class="kw">for </span>TaskJoinError {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, fmtr: <span class="kw-2">&amp;mut </span>fmt::Formatter) -&gt; fmt::Result {
         <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.kind {
-            TaskJoinErrorKind::Panic(message, payload) =&gt; {
+            TaskJoinErrorKind::Panic { message, payload } =&gt; {
                 <span class="macro">write!</span>(fmtr, <span class="string">&quot;{}&quot;</span>, message)<span class="question-mark">?</span>;
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(panic_msg) = payload.downcast_ref::&lt;<span class="kw-2">&amp;</span>str&gt;() {
-                    <span class="macro">write!</span>(fmtr, <span class="string">&quot;: {}&quot;</span>, panic_msg)<span class="question-mark">?</span>;
-                } <span class="kw">else if let </span><span class="prelude-val">Some</span>(panic_msg) = payload.downcast_ref::&lt;String&gt;()
-                {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(panic_msg) = payload {
                     <span class="macro">write!</span>(fmtr, <span class="string">&quot;: {}&quot;</span>, panic_msg)<span class="question-mark">?</span>;
                 }
                 <span class="prelude-val">Ok</span>(())
@@ -465,7 +479,7 @@
 
 <span class="kw">impl </span>ErrorKind {
     <span class="doccomment">/// Returns this error kind as a trait object.
-    </span><span class="kw">pub fn </span>as_dyn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>ErrorTrait + <span class="lifetime">&#39;static </span>+ Send) {
+    </span><span class="kw">pub fn </span>as_dyn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>ErrorTrait + <span class="lifetime">&#39;static </span>+ Send + Sync) {
         <span class="kw">match </span><span class="self">self </span>{
             ErrorKind::AlreadyRunning(error) =&gt; error,
             ErrorKind::ServicesOff(error) =&gt; error,
@@ -550,7 +564,7 @@
     }
 
     <span class="doccomment">/// Returns this error as a trait object.
-    </span><span class="kw">pub fn </span>as_dyn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>ErrorTrait + <span class="lifetime">&#39;static </span>+ Send) {
+    </span><span class="kw">pub fn </span>as_dyn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>ErrorTrait + <span class="lifetime">&#39;static </span>+ Send + Sync) {
         <span class="self">self</span>.kind.as_dyn()
     }
 
