@@ -4,6 +4,7 @@ use std::{
     error::Error as ErrorTrait,
     fmt,
     num::ParseIntError,
+    panic,
     string::FromUtf8Error,
 };
 use tokio::{io, task::JoinError};
@@ -57,70 +58,32 @@ impl fmt::Display for ClipboardError {
     }
 }
 
-/// Kind of a an error that might happen joining a task.
-#[derive(Debug)]
-enum TaskJoinErrorKind {
-    /// Task panicked.
-    Panic { message: String, payload: Option<String> },
-    /// Other kind of error.
-    Other(JoinError),
-}
-
 /// Error that might happen joining a task.
 #[derive(Debug)]
 pub struct TaskJoinError {
-    /// Actual data.
-    kind: TaskJoinErrorKind,
+    /// Actual error.
+    inner: JoinError,
 }
 
 impl TaskJoinError {
     /// Creates an error from tokio's join error.
     pub(crate) fn new(inner: JoinError) -> Self {
-        let mut message = String::new();
-        if inner.is_panic() {
-            message = inner.to_string();
-        }
-        Self {
-            kind: match inner.try_into_panic() {
-                Ok(payload) => TaskJoinErrorKind::Panic {
-                    message,
-                    payload: if let Some(panic_msg) =
-                        payload.downcast_ref::<&str>()
-                    {
-                        Some((*panic_msg).to_owned())
-                    } else if let Ok(panic_msg) = payload.downcast::<String>() {
-                        Some(*panic_msg)
-                    } else {
-                        None
-                    },
-                },
-                Err(error) => TaskJoinErrorKind::Other(error),
-            },
+        match inner.try_into_panic() {
+            Ok(payload) => panic::resume_unwind(payload),
+            Err(inner) => Self { inner },
         }
     }
 }
 
 impl fmt::Display for TaskJoinError {
     fn fmt(&self, fmtr: &mut fmt::Formatter) -> fmt::Result {
-        match &self.kind {
-            TaskJoinErrorKind::Panic { message, payload } => {
-                write!(fmtr, "{}", message)?;
-                if let Some(panic_msg) = payload {
-                    write!(fmtr, ": {}", panic_msg)?;
-                }
-                Ok(())
-            },
-            TaskJoinErrorKind::Other(inner) => write!(fmtr, "{}", inner),
-        }
+        fmt::Display::fmt(&self.inner, fmtr)
     }
 }
 
 impl ErrorTrait for TaskJoinError {
     fn source(&self) -> Option<&(dyn ErrorTrait + 'static)> {
-        match &self.kind {
-            TaskJoinErrorKind::Other(inner) => Some(inner),
-            _ => None,
-        }
+        Some(&self.inner)
     }
 }
 
