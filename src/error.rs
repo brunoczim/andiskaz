@@ -1,6 +1,7 @@
 //! This module exports error types used by the terminal handles.
 
 use std::{
+    any::Any,
     error::Error as ErrorTrait,
     fmt,
     num::ParseIntError,
@@ -57,6 +58,65 @@ impl fmt::Display for ClipboardError {
     }
 }
 
+/// Kind of a an error that might happen joining a task.
+#[derive(Debug)]
+enum TaskJoinErrorKind {
+    /// Task panicked.
+    Panic(String, Box<dyn Any + Send + 'static>),
+    /// Other kind of error.
+    Other(JoinError),
+}
+
+/// Error that might happen joining a task.
+#[derive(Debug)]
+pub struct TaskJoinError {
+    /// Actual data.
+    kind: TaskJoinErrorKind,
+}
+
+impl TaskJoinError {
+    /// Creates an error from tokio's join error.
+    pub(crate) fn new(inner: JoinError) -> Self {
+        let mut message = String::new();
+        if inner.is_panic() {
+            message = inner.to_string();
+        }
+        Self {
+            kind: match inner.try_into_panic() {
+                Ok(payload) => TaskJoinErrorKind::Panic(message, payload),
+                Err(error) => TaskJoinErrorKind::Other(error),
+            },
+        }
+    }
+}
+
+impl fmt::Display for TaskJoinError {
+    fn fmt(&self, fmtr: &mut fmt::Formatter) -> fmt::Result {
+        match &self.kind {
+            TaskJoinErrorKind::Panic(message, payload) => {
+                write!(fmtr, "{}", message)?;
+                if let Some(panic_msg) = payload.downcast_ref::<&str>() {
+                    write!(fmtr, ": {}", panic_msg)?;
+                } else if let Some(panic_msg) = payload.downcast_ref::<String>()
+                {
+                    write!(fmtr, ": {}", panic_msg)?;
+                }
+                Ok(())
+            },
+            TaskJoinErrorKind::Other(inner) => write!(fmtr, "{}", inner),
+        }
+    }
+}
+
+impl ErrorTrait for TaskJoinError {
+    fn source(&self) -> Option<&(dyn ErrorTrait + 'static)> {
+        match &self.kind {
+            TaskJoinErrorKind::Other(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
 #[cfg(feature = "clipboard")]
 impl ErrorTrait for ClipboardError {}
 
@@ -76,8 +136,9 @@ pub enum ErrorKind {
     ParseInt(ParseIntError),
     /// This is an string from UTF-8 conversion error.
     Utf8(FromUtf8Error),
-    /// This is an error from a bad join.
-    Join(JoinError),
+    /// This is an error from failing to join a task, either because it was
+    /// cancelled, or because it panicked.
+    TaskJoin(TaskJoinError),
     /// This is an error that may happen accessing clipboard.
     #[cfg(feature = "clipboard")]
     Clipboard(ClipboardError),
@@ -87,7 +148,7 @@ pub enum ErrorKind {
 
 impl ErrorKind {
     /// Returns this error kind as a trait object.
-    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send + Sync) {
+    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send) {
         match self {
             ErrorKind::AlreadyRunning(error) => error,
             ErrorKind::ServicesOff(error) => error,
@@ -95,7 +156,7 @@ impl ErrorKind {
             ErrorKind::Fmt(error) => error,
             ErrorKind::ParseInt(error) => error,
             ErrorKind::Utf8(error) => error,
-            ErrorKind::Join(error) => error,
+            ErrorKind::TaskJoin(error) => error,
             #[cfg(feature = "clipboard")]
             ErrorKind::Clipboard(error) => error,
             ErrorKind::Custom(error) => &**error,
@@ -133,15 +194,15 @@ impl From<FromUtf8Error> for ErrorKind {
     }
 }
 
-impl From<fmt::Error> for ErrorKind {
-    fn from(error: fmt::Error) -> Self {
-        ErrorKind::Fmt(error)
+impl From<TaskJoinError> for ErrorKind {
+    fn from(error: TaskJoinError) -> Self {
+        ErrorKind::TaskJoin(error)
     }
 }
 
-impl From<JoinError> for ErrorKind {
-    fn from(error: JoinError) -> Self {
-        ErrorKind::Join(error)
+impl From<fmt::Error> for ErrorKind {
+    fn from(error: fmt::Error) -> Self {
+        ErrorKind::Fmt(error)
     }
 }
 
@@ -161,7 +222,7 @@ impl From<Box<dyn ErrorTrait + Send + Sync>> for ErrorKind {
 /// An error that may happen when executing an operation on the terminal.
 #[derive(Debug)]
 pub struct Error {
-    /// Kind of the error. Wrapped in a Box to reduce the stack size.
+    /// Error kind. Wrapped in a Box to reduce the stack size.
     kind: Box<ErrorKind>,
 }
 
@@ -172,7 +233,7 @@ impl Error {
     }
 
     /// Returns this error as a trait object.
-    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send + Sync) {
+    pub fn as_dyn(&self) -> &(dyn ErrorTrait + 'static + Send) {
         self.kind.as_dyn()
     }
 
@@ -236,8 +297,8 @@ impl From<fmt::Error> for Error {
     }
 }
 
-impl From<JoinError> for Error {
-    fn from(error: JoinError) -> Self {
+impl From<TaskJoinError> for Error {
+    fn from(error: TaskJoinError) -> Self {
         Self::new(ErrorKind::from(error))
     }
 }
